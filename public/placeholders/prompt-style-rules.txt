@@ -1,0 +1,2 @@
+Global image prompt rule for nbmecalc:
+Generate clean editorial background images only. Do not embed any typography inside the image. No readable text, no letters, no numbers, no labels, no charts with axis labels, no UI copy, no book titles, no logos, no brand names, no watermarks, no badges. Leave any paper, notebook, screen, calendar, sticky note, clock, or label surface blank or represented with abstract non-readable shapes only. All copy, labels, prices, scores, dates, and captions will be added later in code as HTML overlays.

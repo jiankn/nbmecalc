@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 158 64% 52%; /* mint-500 */
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  /* Selection */
+  ::selection {
+    background: #34D399;
+    color: #fff;
+  }
+}
+
+@layer components {
+  /* Pill button base */
+  .btn-pill {
+    @apply inline-flex items-center justify-center rounded-full font-semibold transition-all duration-200 ease-out;
+  }
+
+  /* Mint hero gradient (subtle) */
+  .hero-bg {
+    background: #34D399;
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.18) 0%, transparent 35%),
+      radial-gradient(circle at 80% 100%, rgba(0, 0, 0, 0.06) 0%, transparent 40%);
+  }
+
+  /* iPhone Dynamic Island */
+  .dynamic-island {
+    background: #000;
+    border-radius: 100px;
+  }
+
+  /* Glow for highlight */
+  .mint-glow {
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.15), 0 8px 32px rgba(52, 211, 153, 0.25);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Pretty number tabular */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Print styles for /report — turn a styled web page into a clean printable
+ * PDF when the user hits "Save as PDF" from the browser's print dialog.
+ *
+ * Strategy:
+ *   - Hide app chrome (nav, footer, cookie banner, share / print buttons).
+ *   - Force white backgrounds and dark text to save ink and avoid weird
+ *     gradient bleeding.
+ *   - A4 + Letter friendly margins; we let the browser pick page size.
+ *   - `break-inside: avoid` on key cards keeps them from being split
+ *     across pages.
+ * ------------------------------------------------------------------------- */
+@media print {
+  /* Hide all the global chrome — Tailwind's `print:hidden` covers most cases
+     but our PageShell renders Nav / Footer / CookieBanner without that class.
+     Targeting the elements directly is more reliable than rewriting them. */
+  nav,
+  footer,
+  [data-cookie-banner],
+  [aria-label="Close"] {
+    display: none !important;
+  }
+
+  /* Strip page margins set by Tailwind container — we want the report to
+     fill the print page edge to edge minus the user's printer margins. */
+  body {
+    background: #fff !important;
+  }
+
+  /* Avoid weird color shifts when printing. */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hint to the browser: try ~0.5in margins. User can override in dialog. */
+  @page {
+    margin: 0.5in;
+  }
+}

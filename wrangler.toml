@@ -1,0 +1,43 @@
+name = "nbmecalc"
+compatibility_date = "2025-01-17"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+# ---------------------------------------------------------------
+# D1 — primary application database.
+#
+# `database_id` is a real id ONLY in production. For local dev we run
+# `wrangler pages dev --d1=DB` (or `wrangler d1 migrations apply ... --local`)
+# which uses miniflare's on-disk SQLite under `.wrangler/state/`, ignoring
+# the `database_id` value. Before first prod deploy:
+#
+#   1. npx wrangler d1 create nbmecalc-prod
+#   2. paste the returned id below
+#   3. npx wrangler d1 migrations apply nbmecalc-prod --remote
+# ---------------------------------------------------------------
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nbmecalc-prod"
+database_id = "60a55dbb-08d9-497d-8000-647b5829cbff"
+migrations_dir = "lib/db/migrations"
+
+# ---------------------------------------------------------------
+# R2 — PDF cache + arbitrary blob storage. Not yet wired into code;
+# PDFs are currently re-rendered on demand from the prediction snapshot.
+# ---------------------------------------------------------------
+#
+# [[r2_buckets]]
+# binding = "REPORTS"
+# bucket_name = "nbmecalc-reports"
+
+# ---------------------------------------------------------------
+# Non-secret environment variables. Secrets go via `wrangler secret put`.
+# ---------------------------------------------------------------
+#
+[vars]
+NEXT_PUBLIC_SITE_URL = "https://nbmecalc.pages.dev"
+#
+# SMTP_HOST = "mail.removexif.com"
+# SMTP_PORT = "25"
+# SMTP_FROM = "noreply@nbmecalc.com"

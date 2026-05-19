@@ -1,0 +1,1013 @@
+/* eslint-disable jsx-a11y/alt-text */
+import type { Key } from "react";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Svg,
+  Line,
+  Circle,
+  Path,
+  G,
+} from "@react-pdf/renderer";
+import type { PredictionResult, PracticeExam } from "@/lib/data";
+
+/**
+ * Server-rendered PDF version of the premium report.
+ *
+ * This file uses @react-pdf/renderer primitives (Document, Page, View, Text,
+ * Svg, …) — NOT regular DOM elements. The web view (`report-view.tsx`) and
+ * this PDF view are deliberately separate components because:
+ *
+ *   1. PDF primitives use a small Yoga-flexbox subset; they can't consume
+ *      Tailwind classes, CSS variables, oklch colors, or animations.
+ *   2. We want explicit page breaks and a stable footer with page numbers,
+ *      which the web view doesn't need.
+ *   3. The web view can grow more interactive (charts, hover states) without
+ *      breaking PDF rendering.
+ *
+ * Both views read from the same `PredictionResult` so the numbers stay
+ * locked together.
+ */
+
+// @react-pdf/renderer's TypeScript declarations omit React's special-cased
+// `key` prop on its primitive components. We patch it back in here via
+// declaration merging so we can use `<View key={…}>` etc. inside `.map()`
+// without resorting to `// @ts-expect-error` on every line.
+declare module "@react-pdf/renderer" {
+  interface ViewProps {
+    key?: Key | null;
+  }
+  interface TextProps {
+    key?: Key | null;
+  }
+  interface GProps {
+    key?: Key | null;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Theme — mirrors the on-screen mint palette but rendered with PDF-safe hex
+// values (no oklch, no CSS variables).
+// ---------------------------------------------------------------------------
+const COLOR = {
+  ink: "#111827",
+  textMuted: "#6B7280",
+  textSubtle: "#9CA3AF",
+  divider: "#E5E7EB",
+  surface: "#F9FAFB",
+  mint: "#34D399",
+  mintDark: "#0F766E",
+  mintBg: "#ECFDF5",
+  mintBorder: "#A7F3D0",
+  amber: "#F59E0B",
+  amberBg: "#FEF3C7",
+  amberBorder: "#FDE68A",
+  red: "#DC2626",
+  redBg: "#FEE2E2",
+  redBorder: "#FECACA",
+  green: "#16A34A",
+  cardBorder: "#D1D5DB",
+} as const;
+
+const PASS_THRESHOLD: Record<PredictionResult["step"], number> = {
+  step1: 196,
+  step2: 214,
+  step3: 198,
+};
+
+const STEP_LABEL: Record<PredictionResult["step"], string> = {
+  step1: "Step 1",
+  step2: "Step 2 CK",
+  step3: "Step 3",
+};
+
+const styles = StyleSheet.create({
+  page: {
+    paddingTop: 40,
+    paddingBottom: 56,
+    paddingHorizontal: 40,
+    fontFamily: "Helvetica",
+    fontSize: 10,
+    color: COLOR.ink,
+    lineHeight: 1.45,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    marginBottom: 18,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: COLOR.divider,
+  },
+  brand: { fontSize: 11, fontFamily: "Helvetica-Bold", color: COLOR.mintDark },
+  brandSub: { fontSize: 9, color: COLOR.textMuted },
+  premiumBadge: {
+    fontSize: 8,
+    fontFamily: "Helvetica-Bold",
+    color: COLOR.mintDark,
+    backgroundColor: COLOR.mintBg,
+    borderWidth: 1,
+    borderColor: COLOR.mintBorder,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 99,
+  },
+  title: { fontSize: 22, fontFamily: "Helvetica-Bold", marginBottom: 4 },
+  subtitle: { fontSize: 10, color: COLOR.textMuted, marginBottom: 18 },
+  sectionTitle: {
+    fontSize: 13,
+    fontFamily: "Helvetica-Bold",
+    marginTop: 14,
+    marginBottom: 6,
+  },
+  sectionDesc: { fontSize: 9.5, color: COLOR.textMuted, marginBottom: 8 },
+  card: {
+    borderWidth: 1,
+    borderColor: COLOR.cardBorder,
+    borderRadius: 10,
+    padding: 12,
+  },
+  cardMint: {
+    borderWidth: 1,
+    borderColor: COLOR.mintBorder,
+    borderRadius: 10,
+    padding: 12,
+    backgroundColor: COLOR.mintBg,
+    marginBottom: 14,
+  },
+  cardAmber: {
+    borderWidth: 1,
+    borderColor: COLOR.amberBorder,
+    borderRadius: 10,
+    padding: 12,
+    backgroundColor: COLOR.amberBg,
+    marginBottom: 14,
+  },
+  // Hero score block
+  hero: {
+    flexDirection: "row",
+    borderWidth: 1.5,
+    borderColor: COLOR.ink,
+    borderRadius: 12,
+    overflow: "hidden",
+    marginBottom: 14,
+  },
+  heroLeft: {
+    flex: 2,
+    backgroundColor: COLOR.ink,
+    padding: 18,
+  },
+  heroLabel: { fontSize: 8.5, color: COLOR.mint, fontFamily: "Helvetica-Bold" },
+  heroScore: {
+    fontSize: 56,
+    fontFamily: "Helvetica-Bold",
+    color: "#FFFFFF",
+    marginTop: 6,
+    marginBottom: 4,
+  },
+  heroCi: { fontSize: 9, color: "#D1D5DB" },
+  heroRight: { flex: 3, padding: 16, justifyContent: "center" },
+  heroMargin: { fontSize: 11, fontFamily: "Helvetica-Bold" },
+  // Pass probability strip
+  passRow: { flexDirection: "row", gap: 10, marginBottom: 14 },
+  passProbCard: {
+    flex: 1,
+    borderWidth: 1.5,
+    borderColor: COLOR.cardBorder,
+    borderRadius: 10,
+    padding: 12,
+    alignItems: "center",
+  },
+  passNum: { fontSize: 36, fontFamily: "Helvetica-Bold" },
+  passBand: { fontSize: 10, fontFamily: "Helvetica-Bold", marginTop: 2 },
+  // Tables
+  th: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: COLOR.textMuted,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  td: { fontSize: 10 },
+  tableRow: {
+    flexDirection: "row",
+    paddingVertical: 4,
+    borderTopWidth: 1,
+    borderTopColor: COLOR.divider,
+  },
+  // KPI grid
+  kpiGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
+  kpiCell: { flexBasis: "48%", paddingVertical: 4 },
+  kpiLabel: {
+    fontSize: 8,
+    color: COLOR.textMuted,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  kpiValue: { fontSize: 20, fontFamily: "Helvetica-Bold", marginTop: 2 },
+  // Footer
+  pageFooter: {
+    position: "absolute",
+    left: 40,
+    right: 40,
+    bottom: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontSize: 8,
+    color: COLOR.textSubtle,
+  },
+});
+
+// ---------------------------------------------------------------------------
+// Public component — call from the API route with renderToBuffer / renderToStream.
+// ---------------------------------------------------------------------------
+export function ReportPdf({
+  result,
+  exams,
+  sessionId,
+  purchasedAt,
+}: {
+  result: PredictionResult;
+  exams: PracticeExam[];
+  sessionId: string;
+  purchasedAt: Date;
+}) {
+  const stepLabel = STEP_LABEL[result.step];
+  const threshold = PASS_THRESHOLD[result.step];
+  const margin = result.pointEstimate - threshold;
+  const band = passBand(result.passProbability);
+
+  const sortedSubjects = [...result.cohortSubjectAverages].sort(
+    (a, b) => a.cohortAverage - b.cohortAverage
+  );
+  const planSubjects = result.personalizedWeakSubjects?.doublyWeak.length
+    ? result.personalizedWeakSubjects.doublyWeak
+    : sortedSubjects.slice(0, 3).map((s) => s.name);
+  const plan = buildStudyPlan(planSubjects);
+
+  const issued = purchasedAt.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+
+  return (
+    <Document
+      title={`${stepLabel} Score Prediction Report`}
+      author="nbmecalc"
+      subject="USMLE practice exam prediction"
+      keywords="USMLE NBME UWSA Step prediction"
+    >
+      {/* ─── Page 1: cover + headline numbers ─── */}
+      <Page size="A4" style={styles.page} wrap>
+        <Header />
+
+        <Text style={styles.title}>Your {stepLabel} Score Prediction</Text>
+        <Text style={styles.subtitle}>
+          Issued {issued} · Session {sessionId.slice(0, 16)}…
+        </Text>
+
+        <View style={styles.hero}>
+          <View style={styles.heroLeft}>
+            <Text style={styles.heroLabel}>
+              PREDICTED {stepLabel.toUpperCase()}
+            </Text>
+            <Text style={styles.heroScore}>{result.pointEstimate}</Text>
+            <Text style={styles.heroCi}>
+              95% CI · {result.ciLower} – {result.ciUpper}
+            </Text>
+          </View>
+          <View style={styles.heroRight}>
+            <Text
+              style={{
+                fontSize: 9,
+                color: COLOR.textMuted,
+                marginBottom: 4,
+              }}
+            >
+              MARGIN VS. PASS THRESHOLD ({threshold})
+            </Text>
+            <Text
+              style={{
+                ...styles.heroMargin,
+                color: margin >= 0 ? COLOR.green : COLOR.red,
+              }}
+            >
+              {margin >= 0 ? "+" : ""}
+              {margin} pts {margin >= 0 ? "above passing" : "below passing"}
+            </Text>
+            <Text
+              style={{ fontSize: 9, color: COLOR.textMuted, marginTop: 6 }}
+            >
+              {result.cohortNote}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.passRow}>
+          <View
+            style={{
+              ...styles.passProbCard,
+              backgroundColor: bandBg(band.tone),
+              borderColor: bandBorder(band.tone),
+            }}
+          >
+            <Text style={styles.kpiLabel}>Pass probability</Text>
+            <Text style={styles.passNum}>
+              {Math.round(result.passProbability * 100)}%
+            </Text>
+            <Text style={{ ...styles.passBand, color: bandText(band.tone) }}>
+              {band.label}
+            </Text>
+          </View>
+          <View style={{ flex: 2, ...styles.card }}>
+            <Text
+              style={{
+                fontSize: 11,
+                fontFamily: "Helvetica-Bold",
+                marginBottom: 4,
+              }}
+            >
+              What this means
+            </Text>
+            <Text style={{ marginBottom: 6 }}>{band.explainer}</Text>
+            <Text style={{ fontSize: 8.5, color: COLOR.textMuted }}>
+              We cap pass probability at 99%. Even a +30 pt margin can fail on
+              test day from illness, anxiety, or an unusual block.
+            </Text>
+          </View>
+        </View>
+
+        <Text style={styles.sectionTitle}>Practice exams used</Text>
+        <View style={styles.card}>
+          <View style={{ flexDirection: "row", marginBottom: 4 }}>
+            <Text style={{ ...styles.th, flex: 3 }}>Source</Text>
+            <Text style={{ ...styles.th, flex: 1, textAlign: "right" }}>
+              Score
+            </Text>
+            <Text style={{ ...styles.th, flex: 1, textAlign: "right" }}>
+              Days ago
+            </Text>
+          </View>
+          {exams.map((e) => (
+            <View key={e.id} style={styles.tableRow}>
+              <Text style={{ ...styles.td, flex: 3 }}>
+                {formatExamLabel(e)}
+              </Text>
+              <Text
+                style={{
+                  ...styles.td,
+                  flex: 1,
+                  textAlign: "right",
+                  fontFamily: "Helvetica-Bold",
+                }}
+              >
+                {e.score}
+                {isPercentSource(e.source) ? "%" : ""}
+              </Text>
+              <Text style={{ ...styles.td, flex: 1, textAlign: "right" }}>
+                {e.takenDaysAgo ?? "—"}
+              </Text>
+            </View>
+          ))}
+        </View>
+
+        <PageFooter sessionId={sessionId} />
+      </Page>
+
+      {/* ─── Page 2: analytics + cohort ─── */}
+      <Page size="A4" style={styles.page} wrap>
+        <Header />
+
+        {result.scoreTrajectory.points.length >= 2 && (
+          <TrajectoryBlock trajectory={result.scoreTrajectory} />
+        )}
+
+        {result.sourceInsight.rows.length >= 2 && (
+          <SourceBlock insight={result.sourceInsight} />
+        )}
+
+        {result.targetGap && <TargetGapBlock gap={result.targetGap} />}
+
+        {result.postponeRecommendation.show && (
+          <PostponeBlock rec={result.postponeRecommendation} />
+        )}
+
+        {result.personalizedWeakSubjects && (
+          <PersonalizedWeakBlock data={result.personalizedWeakSubjects} />
+        )}
+
+        <CohortTableBlock
+          subjects={sortedSubjects}
+          note={result.cohortSubjectAveragesNote}
+        />
+
+        <PageFooter sessionId={sessionId} />
+      </Page>
+
+      {/* ─── Page 3: 14-day plan + methodology ─── */}
+      <Page size="A4" style={styles.page} wrap>
+        <Header />
+        <Text style={styles.sectionTitle}>Your 14-day priority plan</Text>
+        <Text style={styles.sectionDesc}>
+          {result.personalizedWeakSubjects?.doublyWeak.length
+            ? "Built around the subjects you flagged that also run weak in the cohort: "
+            : "Built around the cohort's typical weak spots at your score band: "}
+          {planSubjects.join(", ")}.
+        </Text>
+        <View style={{ gap: 6 }}>
+          {plan.map((task, i) => (
+            <View
+              key={i}
+              style={{
+                flexDirection: "row",
+                borderWidth: 1,
+                borderColor: COLOR.cardBorder,
+                borderRadius: 6,
+                padding: 8,
+              }}
+              wrap={false}
+            >
+              <Text
+                style={{
+                  width: 50,
+                  fontFamily: "Helvetica-Bold",
+                  color: COLOR.mintDark,
+                }}
+              >
+                Day {i + 1}
+              </Text>
+              <Text style={{ flex: 1, fontSize: 9.5 }}>{task}</Text>
+            </View>
+          ))}
+        </View>
+
+        <Text style={styles.sectionTitle}>Methodology</Text>
+        <Text style={{ fontSize: 9.5, marginBottom: 4 }}>
+          Equating tables: each practice source is mapped to a Step-equivalent
+          score using vendor-published equating where available, and otherwise
+          through a regression on a community dataset of {">"} 5,000 paired
+          (practice → real-exam) outcomes. Recent NBME forms (28+) are
+          weighted 1.4× because they best mirror current exam difficulty.
+        </Text>
+        <Text style={{ fontSize: 9.5, marginBottom: 4 }}>
+          Confidence interval: 95% CI is computed via residual standard error
+          across the cohort at your predicted band, then widened slightly for
+          single-source predictions to reflect lower information.
+        </Text>
+        <Text style={{ fontSize: 9.5 }}>
+          Limitations: the model can&apos;t see your sleep, stamina, anxiety,
+          or test-day variance. Real outcomes regularly fall ±10 pts from any
+          model — never plan strictly around the point estimate.
+        </Text>
+
+        <PageFooter sessionId={sessionId} />
+      </Page>
+    </Document>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Sub-blocks — kept inline; never exported.
+// ---------------------------------------------------------------------------
+
+function Header() {
+  return (
+    <View style={styles.header} fixed>
+      <View>
+        <Text style={styles.brand}>nbmecalc</Text>
+        <Text style={styles.brandSub}>USMLE Step Score Predictor</Text>
+      </View>
+      <Text style={styles.premiumBadge}>PREMIUM REPORT</Text>
+    </View>
+  );
+}
+
+function PageFooter({ sessionId }: { sessionId: string }) {
+  return (
+    <View style={styles.pageFooter} fixed>
+      <Text>nbmecalc.com · Session {sessionId.slice(0, 12)}…</Text>
+      <Text
+        render={({ pageNumber, totalPages }) =>
+          `Page ${pageNumber} / ${totalPages}`
+        }
+      />
+    </View>
+  );
+}
+
+function TrajectoryBlock({
+  trajectory,
+}: {
+  trajectory: PredictionResult["scoreTrajectory"];
+}) {
+  const points = trajectory.points;
+  const scores = points.map((p) => p.equated);
+  const min = Math.min(...scores) - 4;
+  const max = Math.max(...scores) + 4;
+  const range = Math.max(1, max - min);
+  const w = 480;
+  const h = 96;
+  const padX = 24;
+  const padY = 16;
+  const usableW = w - padX * 2;
+  const usableH = h - padY * 2;
+
+  const x = (i: number) =>
+    points.length === 1
+      ? padX + usableW / 2
+      : padX + (i / (points.length - 1)) * usableW;
+  const y = (score: number) => padY + ((max - score) / range) * usableH;
+  const linePath = points
+    .map(
+      (p, i) =>
+        `${i === 0 ? "M" : "L"} ${x(i).toFixed(1)} ${y(p.equated).toFixed(1)}`
+    )
+    .join(" ");
+
+  return (
+    <View style={{ marginBottom: 14 }} wrap={false}>
+      <Text style={styles.sectionTitle}>Your score trajectory</Text>
+      <Text style={styles.sectionDesc}>{trajectory.insight}</Text>
+      <View style={styles.card}>
+        <Svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: 96 }}>
+          <Line
+            x1={padX}
+            x2={w - padX}
+            y1={h - padY}
+            y2={h - padY}
+            stroke={COLOR.divider}
+          />
+          {trajectory.slopePer30Days !== null && (
+            <Path
+              d={linePath}
+              stroke={COLOR.mint}
+              strokeWidth={2.5}
+              fill="none"
+            />
+          )}
+          {points.map((p, i) => (
+            <G key={i}>
+              <Circle
+                cx={x(i)}
+                cy={y(p.equated)}
+                r={4}
+                fill={COLOR.mint}
+                stroke="#FFFFFF"
+                strokeWidth={1.5}
+              />
+            </G>
+          ))}
+        </Svg>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 4,
+          }}
+        >
+          {points.map((p, i) => (
+            <View key={i} style={{ alignItems: "center" }}>
+              <Text
+                style={{ fontSize: 8.5, fontFamily: "Helvetica-Bold" }}
+              >
+                {p.equated}
+              </Text>
+              <Text style={{ fontSize: 7.5, color: COLOR.textMuted }}>
+                {p.label}
+              </Text>
+            </View>
+          ))}
+        </View>
+        {trajectory.slopePer30Days !== null && (
+          <Text
+            style={{
+              fontSize: 9,
+              marginTop: 6,
+              color:
+                trajectory.trend === "improving"
+                  ? COLOR.green
+                  : trajectory.trend === "declining"
+                  ? COLOR.red
+                  : COLOR.textMuted,
+              fontFamily: "Helvetica-Bold",
+            }}
+          >
+            Slope: {trajectory.slopePer30Days >= 0 ? "+" : ""}
+            {trajectory.slopePer30Days} pts / 30 days
+          </Text>
+        )}
+      </View>
+    </View>
+  );
+}
+
+function SourceBlock({
+  insight,
+}: {
+  insight: PredictionResult["sourceInsight"];
+}) {
+  return (
+    <View style={{ marginBottom: 14 }} wrap={false}>
+      <Text style={styles.sectionTitle}>How your sources compare</Text>
+      {insight.insight && (
+        <Text style={styles.sectionDesc}>{insight.insight}</Text>
+      )}
+      <View style={styles.card}>
+        <View style={{ flexDirection: "row", marginBottom: 4 }}>
+          <Text style={{ ...styles.th, flex: 3 }}>Source</Text>
+          <Text style={{ ...styles.th, flex: 1, textAlign: "right" }}>
+            # Exams
+          </Text>
+          <Text style={{ ...styles.th, flex: 1, textAlign: "right" }}>
+            Avg equated
+          </Text>
+        </View>
+        {insight.rows.map((r) => (
+          <View
+            key={r.source}
+            style={{
+              flexDirection: "row",
+              paddingVertical: 3,
+              borderTopWidth: 1,
+              borderTopColor: COLOR.divider,
+            }}
+          >
+            <Text style={{ ...styles.td, flex: 3 }}>{r.label}</Text>
+            <Text style={{ ...styles.td, flex: 1, textAlign: "right" }}>
+              {r.count}
+            </Text>
+            <Text
+              style={{
+                ...styles.td,
+                flex: 1,
+                textAlign: "right",
+                fontFamily: "Helvetica-Bold",
+              }}
+            >
+              {r.averageEquated}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function TargetGapBlock({
+  gap,
+}: {
+  gap: NonNullable<PredictionResult["targetGap"]>;
+}) {
+  const ahead = gap.gap >= 0;
+  return (
+    <View style={ahead ? styles.cardMint : styles.cardAmber} wrap={false}>
+      <Text style={{ ...styles.sectionTitle, marginTop: 0 }}>Target gap</Text>
+      <View style={styles.kpiGrid}>
+        <View style={styles.kpiCell}>
+          <Text style={styles.kpiLabel}>Current</Text>
+          <Text style={styles.kpiValue}>{gap.current}</Text>
+        </View>
+        <View style={styles.kpiCell}>
+          <Text style={styles.kpiLabel}>Gap</Text>
+          <Text
+            style={{
+              ...styles.kpiValue,
+              color: ahead ? COLOR.green : COLOR.amber,
+            }}
+          >
+            {ahead ? "+" : ""}
+            {gap.gap}
+          </Text>
+        </View>
+        <View style={styles.kpiCell}>
+          <Text style={styles.kpiLabel}>At test day</Text>
+          <Text style={styles.kpiValue}>{gap.projectedAtExam ?? "—"}</Text>
+        </View>
+        <View style={styles.kpiCell}>
+          <Text style={styles.kpiLabel}>Days to target</Text>
+          <Text style={styles.kpiValue}>
+            {gap.daysToTargetAtPace ?? "—"}
+          </Text>
+        </View>
+      </View>
+      <Text style={{ fontSize: 9.5, marginTop: 6 }}>{gap.insight}</Text>
+    </View>
+  );
+}
+
+function PostponeBlock({
+  rec,
+}: {
+  rec: PredictionResult["postponeRecommendation"];
+}) {
+  const scenarios = [rec.onSchedule, rec.postponed14d, rec.postponed28d];
+  return (
+    <View style={{ marginBottom: 14 }} wrap={false}>
+      <Text style={styles.sectionTitle}>Should you postpone?</Text>
+      <Text style={styles.sectionDesc}>{rec.insight}</Text>
+      <View style={{ flexDirection: "row", gap: 8 }}>
+        {scenarios.map((s, i) => (
+          <View
+            key={i}
+            style={{
+              flex: 1,
+              borderWidth: 1.5,
+              borderColor: i === 0 ? COLOR.cardBorder : COLOR.mintBorder,
+              backgroundColor: i === 0 ? "#FFFFFF" : COLOR.mintBg,
+              borderRadius: 8,
+              padding: 10,
+            }}
+          >
+            <Text style={styles.kpiLabel}>
+              {i === 0 ? "On schedule" : `Postpone ${s.daysAdded} days`}
+            </Text>
+            <Text
+              style={{
+                fontSize: 22,
+                fontFamily: "Helvetica-Bold",
+                marginTop: 2,
+              }}
+            >
+              {Math.round(s.projectedPassProbability * 100)}%
+            </Text>
+            <Text style={{ fontSize: 9, color: COLOR.textMuted }}>
+              pass probability
+            </Text>
+            <Text
+              style={{ fontSize: 8.5, marginTop: 4, color: COLOR.textMuted }}
+            >
+              Projected score:{" "}
+              <Text
+                style={{ fontFamily: "Helvetica-Bold", color: COLOR.ink }}
+              >
+                {s.projectedScore}
+              </Text>
+            </Text>
+          </View>
+        ))}
+      </View>
+      <Text style={{ fontSize: 8.5, color: COLOR.textMuted, marginTop: 6 }}>
+        Postponed-scenario uplift uses your measured trajectory or a
+        conservative typical rate, capped at +12 pts to reflect diminishing
+        returns.
+      </Text>
+    </View>
+  );
+}
+
+function PersonalizedWeakBlock({
+  data,
+}: {
+  data: NonNullable<PredictionResult["personalizedWeakSubjects"]>;
+}) {
+  return (
+    <View style={styles.cardMint} wrap={false}>
+      <Text style={{ ...styles.sectionTitle, marginTop: 0 }}>
+        Your priority subjects
+      </Text>
+      <Text style={{ fontSize: 9.5, marginBottom: 6 }}>{data.insight}</Text>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+        {data.selfReported.map((name) => {
+          const doubly = data.doublyWeak.includes(name);
+          return (
+            <View
+              key={name}
+              style={{
+                borderWidth: 1,
+                borderColor: doubly ? COLOR.redBorder : COLOR.cardBorder,
+                backgroundColor: doubly ? COLOR.redBg : "#FFFFFF",
+                paddingHorizontal: 8,
+                paddingVertical: 3,
+                borderRadius: 99,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 8.5,
+                  fontFamily: "Helvetica-Bold",
+                  color: doubly ? COLOR.red : COLOR.ink,
+                }}
+              >
+                {name}
+                {doubly ? "  · PRIORITY" : ""}
+              </Text>
+            </View>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+function CohortTableBlock({
+  subjects,
+  note,
+}: {
+  subjects: PredictionResult["cohortSubjectAverages"];
+  note: string;
+}) {
+  return (
+    <View style={{ marginBottom: 14 }} wrap={false}>
+      <Text style={styles.sectionTitle}>
+        Cohort subject averages (for context)
+      </Text>
+      <Text style={styles.sectionDesc}>{note}</Text>
+      <View style={styles.card}>
+        <View style={{ flexDirection: "row", marginBottom: 4 }}>
+          <Text style={{ ...styles.th, flex: 3 }}>Subject</Text>
+          <Text style={{ ...styles.th, flex: 1, textAlign: "right" }}>
+            Cohort avg
+          </Text>
+          <Text style={{ ...styles.th, flex: 2, textAlign: "right" }}>
+            Cohort signal
+          </Text>
+        </View>
+        {subjects.map((s, i) => {
+          const isCohortWeak = s.cohortWeakness;
+          const isCohortBottom = i < 2 && !s.cohortWeakness;
+          const isStrong = i >= subjects.length - 2;
+          const label = isCohortWeak
+            ? "Cohort weak spot"
+            : isCohortBottom
+            ? "Below cohort mean"
+            : isStrong
+            ? "Cohort strong"
+            : "Mid cohort";
+          const color = isCohortWeak
+            ? COLOR.red
+            : isCohortBottom
+            ? COLOR.amber
+            : isStrong
+            ? COLOR.green
+            : COLOR.textMuted;
+          return (
+            <View
+              key={s.name}
+              style={{
+                flexDirection: "row",
+                paddingVertical: 3,
+                borderTopWidth: 1,
+                borderTopColor: COLOR.divider,
+              }}
+            >
+              <Text style={{ ...styles.td, flex: 3 }}>{s.name}</Text>
+              <Text
+                style={{
+                  ...styles.td,
+                  flex: 1,
+                  textAlign: "right",
+                  fontFamily: "Helvetica-Bold",
+                }}
+              >
+                {Math.round(s.cohortAverage)}%
+              </Text>
+              <Text
+                style={{
+                  ...styles.td,
+                  flex: 2,
+                  textAlign: "right",
+                  color,
+                  fontFamily: "Helvetica-Bold",
+                }}
+              >
+                {label}
+              </Text>
+            </View>
+          );
+        })}
+      </View>
+      <Text style={{ fontSize: 8.5, color: COLOR.textMuted, marginTop: 4 }}>
+        Labels describe the cohort at your predicted band — not your individual
+        performance.
+      </Text>
+    </View>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Pure helpers — kept inline so the PDF builder is self-contained.
+// ---------------------------------------------------------------------------
+
+type BandTone = "green" | "mint" | "amber" | "red";
+
+function passBand(prob: number): {
+  label: string;
+  tone: BandTone;
+  explainer: string;
+} {
+  if (prob >= 0.95)
+    return {
+      label: "Very strong",
+      tone: "green",
+      explainer:
+        "Comfortably above the line. Focus on stamina and refining weak topics rather than cramming new content.",
+    };
+  if (prob >= 0.85)
+    return {
+      label: "Strong",
+      tone: "green",
+      explainer:
+        "On track to pass. Maintain momentum and shore up your weakest two subjects.",
+    };
+  if (prob >= 0.7)
+    return {
+      label: "Likely pass",
+      tone: "mint",
+      explainer:
+        "Likely to pass, but the margin is thinner than you might want. Add focused review on weak subjects.",
+    };
+  if (prob >= 0.5)
+    return {
+      label: "Borderline",
+      tone: "amber",
+      explainer:
+        "Close to a coin flip. Consider postponing if your timeline allows, or aggressively shore up the weakest 2-3 subjects.",
+    };
+  return {
+    label: "Risk of failing",
+    tone: "red",
+    explainer:
+      "High risk. Strongly consider rescheduling and rebuilding the weakest subjects from foundations.",
+  };
+}
+
+function bandBg(tone: BandTone) {
+  switch (tone) {
+    case "green":
+    case "mint":
+      return COLOR.mintBg;
+    case "amber":
+      return COLOR.amberBg;
+    case "red":
+      return COLOR.redBg;
+  }
+}
+function bandBorder(tone: BandTone) {
+  switch (tone) {
+    case "green":
+    case "mint":
+      return COLOR.mintBorder;
+    case "amber":
+      return COLOR.amberBorder;
+    case "red":
+      return COLOR.redBorder;
+  }
+}
+function bandText(tone: BandTone) {
+  switch (tone) {
+    case "green":
+      return COLOR.green;
+    case "mint":
+      return COLOR.mintDark;
+    case "amber":
+      return COLOR.amber;
+    case "red":
+      return COLOR.red;
+  }
+}
+
+function isPercentSource(s: PracticeExam["source"]) {
+  return s === "FREE120" || s === "AMBOSS" || s === "CMS";
+}
+
+function formatExamLabel(e: PracticeExam) {
+  if (e.source === "NBME") return `NBME Form ${e.formNumber ?? "?"}`;
+  if (e.source === "UWSA1") return "UWSA 1";
+  if (e.source === "UWSA2") return "UWSA 2";
+  if (e.source === "FREE120") return "Free 120";
+  if (e.source === "AMBOSS") return `AMBOSS ${e.formNumber ?? ""}`.trim();
+  if (e.source === "CMS") return `CMS ${e.formNumber ?? ""}`.trim();
+  return e.source;
+}
+
+function buildStudyPlan(weakSubjects: string[]): string[] {
+  if (weakSubjects.length === 0) {
+    weakSubjects = ["foundations", "high-yield gaps", "biostatistics"];
+  }
+  const [s1, s2, s3] = [
+    weakSubjects[0],
+    weakSubjects[1] ?? weakSubjects[0],
+    weakSubjects[2] ?? weakSubjects[0],
+  ];
+  return [
+    `Foundations review: ${s1}. Read First Aid chapter + 40 UWorld Qs (untimed).`,
+    `Foundations review: ${s2}. Read First Aid chapter + 40 UWorld Qs (untimed).`,
+    `Mixed-block UWorld, 80 Qs timed. Review every wrong answer carefully.`,
+    `${s3} deep-dive: Boards & Beyond / Sketchy videos + 40 UWorld Qs.`,
+    `Mixed-block UWorld, 80 Qs timed. Log weak topics — re-test them on Day 6.`,
+    `Spaced repetition: re-do every flagged / wrong Q from Day 3 and Day 5.`,
+    `REST DAY. Light review only. Walk, hydrate, sleep 8+ hours.`,
+    `Take a fresh NBME form (one you haven't seen). Time it strictly.`,
+    `Review the NBME wrongs. Update your weak-subject list.`,
+    `Mixed-block UWorld, 80 Qs timed. Aim for >= 75 % correct.`,
+    `Pharmacology + Biostatistics quick-hit (high yield per hour).`,
+    `Mixed-block UWorld, 80 Qs timed. Final accuracy push.`,
+    `Last NBME or UWSA. Final calibration. Do NOT cram new content after this.`,
+    `REST. No new study. Confirm test-day logistics. Sleep 8+ hours.`,
+  ];
+}
