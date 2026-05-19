@@ -14,7 +14,12 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
+const siteUrl = "https://nbmecalc.com";
+const defaultOgImage = "/images/feature-score-range.png";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  applicationName: "NBMEcalc",
   title: "NBMEcalc — Predict Your USMLE Step Score in 5 Seconds",
   description:
     "Free USMLE Step score predictor. Drop your NBME, UWSA, or Free 120 scores. Get an accurate prediction with 95% confidence interval. Built by med students, for med students.",
@@ -29,6 +34,9 @@ export const metadata: Metadata = {
     "free 120 to step",
   ],
   authors: [{ name: "NBMEcalc team" }],
+  creator: "NBMEcalc",
+  publisher: "NBMEcalc",
+  category: "education",
   icons: {
     icon: "/icon.svg",
     apple: "/apple-icon.svg",
@@ -41,14 +49,33 @@ export const metadata: Metadata = {
     siteName: "NBMEcalc",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: defaultOgImage,
+        width: 2400,
+        height: 1792,
+        alt: "NBMEcalc USMLE Step score predictor",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Predict Your USMLE Step Score in 5 Seconds",
     description:
       "Free, multi-source NBME / UWSA / Free 120 predictor with confidence intervals.",
+    images: [defaultOgImage],
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { loadReportFromSession } from "@/lib/session-report";
@@ -10,6 +11,13 @@ import { ReportView } from "@/components/report-view";
  */
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Report — NBMEcalc",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 type RouteParams = Promise<{ session_id: string }>;
 
