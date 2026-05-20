@@ -43,31 +43,48 @@ export async function GET(req: Request): Promise<Response> {
     return redirect(req, "/login", "missing_token");
   }
 
-  const db = getDb();
-  if (!db) {
-    return redirect(req, "/login", "service_unavailable");
+  // Top-level try/catch so an underlying D1 exception (e.g. missing table,
+  // schema drift) becomes a visible `error=internal` redirect with a logged
+  // stack trace, instead of a bare "Internal Server Error" with no clue.
+  try {
+    const db = getDb();
+    if (!db) {
+      console.error("[/api/auth/verify] D1 binding missing");
+      return redirect(req, "/login", "service_unavailable");
+    }
+
+    const result = await consumeMagicLink(db, token);
+    if (!result.ok) {
+      return redirect(req, "/login", result.reason);
+    }
+
+    const sid = await createSession(db, result.user.id, {
+      ip: getClientIp(req),
+      userAgent: req.headers.get("user-agent"),
+    });
+
+    // Build redirect with Set-Cookie. NextResponse.redirect doesn't easily
+    // accept extra headers in all runtimes, so use the lower-level form.
+    const dest = new URL(result.nextPath ?? safeNext, req.url);
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: dest.toString(),
+        "Set-Cookie": buildSessionCookie(sid, {
+          secure: url.protocol === "https:",
+        }),
+      },
+    });
+  } catch (err) {
+    // Surface as much detail as we safely can to the server logs. The
+    // browser only sees a generic `error=internal` so we don't leak schema.
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error("[/api/auth/verify] unhandled error", {
+      message,
+      stack,
+      tokenPrefix: token.slice(0, 8),
+    });
+    return redirect(req, "/login", "internal");
   }
-
-  const result = await consumeMagicLink(db, token);
-  if (!result.ok) {
-    return redirect(req, "/login", result.reason);
-  }
-
-  const sid = await createSession(db, result.user.id, {
-    ip: getClientIp(req),
-    userAgent: req.headers.get("user-agent"),
-  });
-
-  // Build redirect with Set-Cookie. NextResponse.redirect doesn't easily
-  // accept extra headers in all runtimes, so use the lower-level form.
-  const dest = new URL(result.nextPath ?? safeNext, req.url);
-  return new Response(null, {
-    status: 302,
-    headers: {
-      Location: dest.toString(),
-      "Set-Cookie": buildSessionCookie(sid, {
-        secure: url.protocol === "https:",
-      }),
-    },
-  });
 }

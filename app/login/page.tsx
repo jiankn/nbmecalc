@@ -14,6 +14,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   expired: "This link expired. Request a new one below.",
   already_used: "This link was already used. Request a new one below.",
   service_unavailable: "Auth service is briefly unavailable — try again.",
+  internal: "We hit an unexpected error signing you in. Please request a new link.",
 };
 
 function LoginFormInner() {
