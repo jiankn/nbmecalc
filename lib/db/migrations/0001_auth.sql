@@ -1,6 +1,10 @@
 -- Add Magic Link auth tables (users, magic_links, sessions)
 -- Per PRD §7.4 + §8.1
-CREATE TABLE `users` (
+--
+-- All statements use IF NOT EXISTS so this migration can be safely re-run
+-- against a database where tables were created out-of-band (e.g. early
+-- manual `wrangler d1 execute --file=…` runs, before CI took over).
+CREATE TABLE IF NOT EXISTS `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`email` text NOT NULL,
 	`name` text,
@@ -16,10 +20,10 @@ CREATE TABLE `users` (
 	`utm_campaign` text
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint
-CREATE INDEX `idx_users_email` ON `users` (`email`);--> statement-breakpoint
-CREATE INDEX `idx_users_pro_tier` ON `users` (`pro_tier`);--> statement-breakpoint
-CREATE TABLE `magic_links` (
+CREATE UNIQUE INDEX IF NOT EXISTS `users_email_unique` ON `users` (`email`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_users_email` ON `users` (`email`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_users_pro_tier` ON `users` (`pro_tier`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `magic_links` (
 	`token` text PRIMARY KEY NOT NULL,
 	`email` text NOT NULL,
 	`expires_at` integer NOT NULL,
@@ -30,9 +34,9 @@ CREATE TABLE `magic_links` (
 	`created_at` integer NOT NULL
 );
 --> statement-breakpoint
-CREATE INDEX `idx_magic_links_email` ON `magic_links` (`email`);--> statement-breakpoint
-CREATE INDEX `idx_magic_links_expires` ON `magic_links` (`expires_at`);--> statement-breakpoint
-CREATE TABLE `sessions` (
+CREATE INDEX IF NOT EXISTS `idx_magic_links_email` ON `magic_links` (`email`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_magic_links_expires` ON `magic_links` (`expires_at`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `sessions` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text NOT NULL,
 	`expires_at` integer NOT NULL,
@@ -42,5 +46,5 @@ CREATE TABLE `sessions` (
 	`user_agent` text
 );
 --> statement-breakpoint
-CREATE INDEX `idx_sessions_user` ON `sessions` (`user_id`);--> statement-breakpoint
-CREATE INDEX `idx_sessions_expires` ON `sessions` (`expires_at`);
+CREATE INDEX IF NOT EXISTS `idx_sessions_user` ON `sessions` (`user_id`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_sessions_expires` ON `sessions` (`expires_at`);

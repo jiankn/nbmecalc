@@ -1,4 +1,4 @@
-CREATE TABLE `events` (
+CREATE TABLE IF NOT EXISTS `events` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text,
 	`type` text NOT NULL,
@@ -7,10 +7,10 @@ CREATE TABLE `events` (
 	`created_at` integer NOT NULL
 );
 --> statement-breakpoint
-CREATE INDEX `idx_events_user` ON `events` (`user_id`);--> statement-breakpoint
-CREATE INDEX `idx_events_type` ON `events` (`type`);--> statement-breakpoint
-CREATE INDEX `idx_events_created` ON `events` (`created_at`);--> statement-breakpoint
-CREATE TABLE `predictions` (
+CREATE INDEX IF NOT EXISTS `idx_events_user` ON `events` (`user_id`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_events_type` ON `events` (`type`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_events_created` ON `events` (`created_at`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `predictions` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text,
 	`step` text NOT NULL,
@@ -32,15 +32,15 @@ CREATE TABLE `predictions` (
 	`utm_medium` text
 );
 --> statement-breakpoint
-CREATE INDEX `idx_predictions_user` ON `predictions` (`user_id`);--> statement-breakpoint
-CREATE INDEX `idx_predictions_created` ON `predictions` (`created_at`);--> statement-breakpoint
-CREATE TABLE `rate_limits` (
+CREATE INDEX IF NOT EXISTS `idx_predictions_user` ON `predictions` (`user_id`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_predictions_created` ON `predictions` (`created_at`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `rate_limits` (
 	`key` text PRIMARY KEY NOT NULL,
 	`count` integer NOT NULL,
 	`reset_at` integer NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `reports` (
+CREATE TABLE IF NOT EXISTS `reports` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text,
 	`prediction_id` text NOT NULL,
@@ -53,6 +53,6 @@ CREATE TABLE `reports` (
 	`created_at` integer NOT NULL
 );
 --> statement-breakpoint
-CREATE INDEX `idx_reports_user` ON `reports` (`user_id`);--> statement-breakpoint
-CREATE INDEX `idx_reports_prediction` ON `reports` (`prediction_id`);--> statement-breakpoint
-CREATE INDEX `idx_reports_stripe_session` ON `reports` (`stripe_session_id`);
+CREATE INDEX IF NOT EXISTS `idx_reports_user` ON `reports` (`user_id`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_reports_prediction` ON `reports` (`prediction_id`);--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS `idx_reports_stripe_session` ON `reports` (`stripe_session_id`);
