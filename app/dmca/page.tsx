@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     "How to submit a DMCA takedown notice and counter-notice for content on nbmecalc.com.",
   alternates: { canonical: "https://nbmecalc.com/dmca" },
   robots: { index: true, follow: true },
+  openGraph: {
+    title: "DMCA Notice — NBMEcalc",
+    description:
+      "How to submit a DMCA takedown notice and counter-notice for content on nbmecalc.com.",
+    url: "https://nbmecalc.com/dmca",
+    type: "website",
+  },
 };
 
 export default function DMCAPage() {

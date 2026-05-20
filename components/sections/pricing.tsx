@@ -165,7 +165,7 @@ export function Pricing() {
                 className={cn(
                   "relative rounded-3xl border p-8 transition-all duration-300 flex flex-col",
                   plan.highlight
-                    ? "border-mint-400 bg-white shadow-xl shadow-mint-500/10 scale-[1.03] z-10"
+                    ? "border-mint-400 bg-white shadow-xl shadow-mint-500/10 md:scale-[1.03] z-10"
                     : "border-gray-200 bg-white hover:shadow-lg"
                 )}
               >

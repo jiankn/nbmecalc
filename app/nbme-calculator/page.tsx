@@ -26,6 +26,14 @@ export const metadata: Metadata = {
       "What the NBME is, which form to take, and how to convert your three-digit equivalent into a real Step prediction.",
     url: "https://nbmecalc.com/nbme-calculator",
     type: "website",
+    images: [
+      {
+        url: "/images/feature-score-range.png",
+        width: 2400,
+        height: 1792,
+        alt: "NBMEcalc USMLE Step score predictor",
+      },
+    ],
   },
 };
 

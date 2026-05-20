@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     "How NBMEcalc collects, uses, and protects your personal data. GDPR & CCPA compliant. We never sell your data.",
   alternates: { canonical: "https://nbmecalc.com/privacy" },
   robots: { index: true, follow: true },
+  openGraph: {
+    title: "Privacy Policy — NBMEcalc",
+    description:
+      "How NBMEcalc collects, uses, and protects your personal data. GDPR & CCPA compliant. We never sell your data.",
+    url: "https://nbmecalc.com/privacy",
+    type: "website",
+  },
 };
 
 export default function PrivacyPage() {

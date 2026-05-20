@@ -26,6 +26,14 @@ export const metadata: Metadata = {
       "Convert your NBME, UWSA, and Free 120 practice scores into a Step 1 / Step 2 CK prediction with confidence interval.",
     url: "https://nbmecalc.com/nbme-score-calculator",
     type: "website",
+    images: [
+      {
+        url: "/images/feature-score-range.png",
+        width: 2400,
+        height: 1792,
+        alt: "NBMEcalc USMLE Step score predictor",
+      },
+    ],
   },
 };
 

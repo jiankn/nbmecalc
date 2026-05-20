@@ -49,7 +49,7 @@ export function CookieBanner() {
     <div
       role="dialog"
       aria-live="polite"
-      className="fixed bottom-4 right-4 z-[90] max-w-[400px] animate-slide-up"
+      className="fixed bottom-4 left-4 right-4 z-[90] max-w-[400px] ml-auto animate-slide-up"
     >
       <div className="rounded-2xl bg-white border border-gray-200 shadow-2xl p-5">
         <div className="flex items-start gap-3 mb-3">

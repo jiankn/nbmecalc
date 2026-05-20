@@ -25,6 +25,14 @@ export const metadata: Metadata = {
       "Predict your USMLE Step 3 score from UWSA Step 3 and Free 120. Includes CCS-portion guidance and timing advice for intern year.",
     url: "https://nbmecalc.com/step-3-predictor",
     type: "website",
+    images: [
+      {
+        url: "/images/feature-score-range.png",
+        width: 2400,
+        height: 1792,
+        alt: "NBMEcalc USMLE Step score predictor",
+      },
+    ],
   },
 };
 

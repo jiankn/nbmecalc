@@ -9,6 +9,13 @@ export const metadata: Metadata = {
   description:
     "Email the NBMEcalc team for support, partnerships, press, or bug reports. We read every message.",
   alternates: { canonical: "https://nbmecalc.com/contact" },
+  openGraph: {
+    title: "Contact — Get in Touch | NBMEcalc",
+    description:
+      "Email the NBMEcalc team for support, partnerships, press, or bug reports. We read every message.",
+    url: "https://nbmecalc.com/contact",
+    type: "website",
+  },
 };
 
 const channels = [

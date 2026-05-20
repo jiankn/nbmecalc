@@ -205,12 +205,13 @@ export async function POST(req: Request) {
       mode: plan.mode,
       line_items: [{ price: priceId, quantity: 1 }],
       // Single Report → land on /report/<session_id> so the user instantly
-      // sees their unlocked report. Pro → /account (built in C2-B).
+      // sees their unlocked report. Pro subscriptions → /checkout/success
+      // (then nudge into /dashboard once Magic Link login is complete).
       success_url:
         plan.key === "single"
           ? `${site}/report/{CHECKOUT_SESSION_ID}`
-          : `${site}/account?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${site}/pricing?canceled=1`,
+          : `${site}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${site}/checkout/cancel`,
       metadata,
       allow_promotion_codes: true,
       // Surface the email back to us in webhooks + Stripe dashboard.

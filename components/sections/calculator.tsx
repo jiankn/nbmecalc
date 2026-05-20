@@ -181,7 +181,7 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
         </div>
 
         {/* Calculator card */}
-        <div className="rounded-3xl bg-white p-6 sm:p-10 shadow-lg border border-gray-100">
+        <div className="rounded-3xl bg-white p-6 sm:p-10 shadow-lg border border-gray-100 overflow-x-hidden">
           {/* Step picker */}
           <label className="block text-sm font-semibold text-gray-700 mb-3">
             Select your exam

@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     "Our policy on affiliate links and sponsored content. FTC-compliant disclosure.",
   alternates: { canonical: "https://nbmecalc.com/affiliate-disclosure" },
   robots: { index: true, follow: true },
+  openGraph: {
+    title: "Affiliate Disclosure — NBMEcalc",
+    description:
+      "Our policy on affiliate links and sponsored content. FTC-compliant disclosure.",
+    url: "https://nbmecalc.com/affiliate-disclosure",
+    type: "website",
+  },
 };
 
 export default function AffiliateDisclosurePage() {

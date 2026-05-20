@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     "Terms governing your use of NBMEcalc — the USMLE Step score predictor. Subscription, refund, and acceptable use policies.",
   alternates: { canonical: "https://nbmecalc.com/terms" },
   robots: { index: true, follow: true },
+  openGraph: {
+    title: "Terms of Service — NBMEcalc",
+    description:
+      "Terms governing your use of NBMEcalc — the USMLE Step score predictor. Subscription, refund, and acceptable use policies.",
+    url: "https://nbmecalc.com/terms",
+    type: "website",
+  },
 };
 
 export default function TermsPage() {

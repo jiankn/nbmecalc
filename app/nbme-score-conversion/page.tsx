@@ -28,6 +28,14 @@ export const metadata: Metadata = {
       "Free NBME conversion tables and instant calculator. Trusted by 10,000+ med students.",
     url: "https://nbmecalc.com/nbme-score-conversion",
     type: "article",
+    images: [
+      {
+        url: "/images/feature-score-range.png",
+        width: 2400,
+        height: 1792,
+        alt: "NBMEcalc USMLE Step score predictor",
+      },
+    ],
   },
 };
 

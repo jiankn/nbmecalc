@@ -12,6 +12,13 @@ export const metadata: Metadata = {
   description:
     "Why we built NBMEcalc, who reviews our algorithm, and our principles for honest USMLE Step score prediction. Not affiliated with NBME.",
   alternates: { canonical: "https://nbmecalc.com/about" },
+  openGraph: {
+    title: "About — Built by Med Students, Reviewed by Doctors | NBMEcalc",
+    description:
+      "Why we built NBMEcalc, who reviews our algorithm, and our principles for honest USMLE Step score prediction.",
+    url: "https://nbmecalc.com/about",
+    type: "website",
+  },
 };
 
 const principles = [

@@ -179,6 +179,97 @@ export type EventRow = typeof events.$inferSelect;
 export type NewEventRow = typeof events.$inferInsert;
 
 // ---------------------------------------------------------------------------
+// users — Magic Link accounts. Created lazily on first successful verify.
+// ---------------------------------------------------------------------------
+
+export const users = sqliteTable(
+  "users",
+  {
+    /** nanoid(12). */
+    id: text("id").primaryKey(),
+    email: text("email").notNull().unique(),
+    name: text("name"),
+
+    /** NULL | "monthly" | "annual". Updated by Stripe webhook. */
+    proTier: text("pro_tier"),
+    proStartedAt: integer("pro_started_at"),
+    proExpiresAt: integer("pro_expires_at"),
+    stripeCustomerId: text("stripe_customer_id"),
+
+    createdAt: integer("created_at").notNull(),
+    updatedAt: integer("updated_at").notNull(),
+    deletedAt: integer("deleted_at"),
+
+    /** Attribution (best-effort, captured at first login). */
+    source: text("source"),
+    utmSource: text("utm_source"),
+    utmCampaign: text("utm_campaign"),
+  },
+  (t) => ({
+    byEmail: index("idx_users_email").on(t.email),
+    byProTier: index("idx_users_pro_tier").on(t.proTier),
+  })
+);
+
+export type UserRow = typeof users.$inferSelect;
+export type NewUserRow = typeof users.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// magic_links — one-time login tokens. Consumed on verify, then deleted.
+// ---------------------------------------------------------------------------
+
+export const magicLinks = sqliteTable(
+  "magic_links",
+  {
+    /** UUID v4. Sent in the email link. */
+    token: text("token").primaryKey(),
+    email: text("email").notNull(),
+    /** unix ms — link must be verified before this time. */
+    expiresAt: integer("expires_at").notNull(),
+    /** unix ms when consumed; null means still active. */
+    usedAt: integer("used_at"),
+    ip: text("ip"),
+    userAgent: text("user_agent"),
+    /** Optional next path so user lands where they intended. */
+    nextPath: text("next_path"),
+    createdAt: integer("created_at").notNull(),
+  },
+  (t) => ({
+    byEmail: index("idx_magic_links_email").on(t.email),
+    byExpires: index("idx_magic_links_expires").on(t.expiresAt),
+  })
+);
+
+export type MagicLinkRow = typeof magicLinks.$inferSelect;
+export type NewMagicLinkRow = typeof magicLinks.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// sessions — HttpOnly cookie sessions. Server-side state for revocability.
+// ---------------------------------------------------------------------------
+
+export const sessions = sqliteTable(
+  "sessions",
+  {
+    /** Opaque session id stored in `nb_session` cookie. */
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull(),
+    /** unix ms */
+    expiresAt: integer("expires_at").notNull(),
+    createdAt: integer("created_at").notNull(),
+    lastSeenAt: integer("last_seen_at").notNull(),
+    ip: text("ip"),
+    userAgent: text("user_agent"),
+  },
+  (t) => ({
+    byUser: index("idx_sessions_user").on(t.userId),
+    byExpires: index("idx_sessions_expires").on(t.expiresAt),
+  })
+);
+
+export type SessionRow = typeof sessions.$inferSelect;
+export type NewSessionRow = typeof sessions.$inferInsert;
+
+// ---------------------------------------------------------------------------
 // Shared helpers
 // ---------------------------------------------------------------------------
 
@@ -194,4 +285,7 @@ export const tables = {
   reports,
   rateLimits,
   events,
+  users,
+  magicLinks,
+  sessions,
 };

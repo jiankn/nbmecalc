@@ -18,6 +18,14 @@ export const metadata: Metadata = {
       "Transparent USMLE score predictor pricing. Cancel anytime. Real medical advisors review every algorithm change.",
     url: "https://nbmecalc.com/pricing",
     type: "website",
+    images: [
+      {
+        url: "/images/feature-score-range.png",
+        width: 2400,
+        height: 1792,
+        alt: "NBMEcalc USMLE Step score predictor",
+      },
+    ],
   },
 };
 
@@ -94,9 +102,59 @@ function CheckOrDash({ on }: { on: boolean }) {
   return <span className="text-gray-300 mx-auto block w-fit" aria-label="Not included">—</span>;
 }
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "NBMEcalc Pricing",
+  url: "https://nbmecalc.com/pricing",
+  description:
+    "Transparent USMLE score predictor pricing. Cancel anytime.",
+  mainEntity: {
+    "@type": "Product",
+    name: "NBMEcalc USMLE Step Score Predictor",
+    description:
+      "Multi-source USMLE Step score predictor with confidence intervals, PDF reports, and personalized study plans.",
+    brand: { "@type": "Brand", name: "NBMEcalc" },
+    offers: [
+      {
+        "@type": "Offer",
+        name: "Free Tier",
+        price: "0",
+        priceCurrency: "USD",
+        url: "https://nbmecalc.com/pricing",
+        availability: "https://schema.org/InStock",
+      },
+      {
+        "@type": "Offer",
+        name: "Single Report",
+        price: "14.99",
+        priceCurrency: "USD",
+        url: "https://nbmecalc.com/pricing",
+        availability: "https://schema.org/InStock",
+      },
+      {
+        "@type": "Offer",
+        name: "Pro Monthly",
+        price: "9.99",
+        priceCurrency: "USD",
+        url: "https://nbmecalc.com/pricing",
+        availability: "https://schema.org/InStock",
+        priceSpecification: {
+          "@type": "UnitPriceSpecification",
+          billingDuration: "P1M",
+        },
+      },
+    ],
+  },
+};
+
 export default function PricingPage() {
   return (
     <PageShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <PageHero
         badge="Pricing"
         title="Simple, transparent pricing"

@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   description:
     "Press resources, brand assets, founder bios, and approved quotes for journalists writing about NBMEcalc.",
   alternates: { canonical: "https://nbmecalc.com/press" },
+  openGraph: {
+    title: "Press Kit — NBMEcalc",
+    description:
+      "Press resources, brand assets, founder bios, and approved quotes for journalists writing about NBMEcalc.",
+    url: "https://nbmecalc.com/press",
+    type: "website",
+  },
 };
 
 const quickFacts = [

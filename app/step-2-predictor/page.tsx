@@ -26,6 +26,14 @@ export const metadata: Metadata = {
       "Predict your USMLE Step 2 CK score from NBME, UWSA, Free 120, AMBOSS, and CMS Form inputs. Specialty-matching context included.",
     url: "https://nbmecalc.com/step-2-predictor",
     type: "website",
+    images: [
+      {
+        url: "/images/feature-score-range.png",
+        width: 2400,
+        height: 1792,
+        alt: "NBMEcalc USMLE Step score predictor",
+      },
+    ],
   },
 };
 

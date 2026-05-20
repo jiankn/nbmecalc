@@ -26,6 +26,14 @@ export const metadata: Metadata = {
       "Calculate your USMLE Step 1 pass probability from any combination of NBME, UWSA, and Free 120 scores.",
     url: "https://nbmecalc.com/step-1-predictor",
     type: "website",
+    images: [
+      {
+        url: "/images/feature-score-range.png",
+        width: 2400,
+        height: 1792,
+        alt: "NBMEcalc USMLE Step score predictor",
+      },
+    ],
   },
 };
 
