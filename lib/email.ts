@@ -2,20 +2,17 @@
  * Email transport.
  *
  * Runs on Cloudflare Workers (Edge runtime) so we cannot use nodemailer / raw
- * TCP. Instead we POST to MailChannels (free for Cloudflare Workers) and fall
- * back to logging the message if MailChannels rejects it (e.g. domain DKIM/SPF
- * not yet configured during early bootstrap).
+ * TCP. We POST to a Postal server's HTTP API (https://docs.postalserver.io/
+ * developer/api).
  *
- * MailChannels docs:
- *   https://developers.cloudflare.com/email-routing/email-workers/send-email-workers/
- *   https://api.mailchannels.net/tx/v1/documentation
+ * Required env vars (set as Cloudflare Pages secrets):
+ *   POSTAL_API_URL  Full URL to the Postal `send/message` endpoint,
+ *                   e.g. https://mail.removexif.com/api/v1/send/message
+ *   POSTAL_API_KEY  Postal API credential value (the X-Server-API-Key header)
+ *   SMTP_FROM       Verified sender address, e.g. noreply@nbmecalc.com
  *
- * Production checklist:
- *   1. Add SPF record to nbmecalc.com:
- *        v=spf1 include:relay.mailchannels.net ~all
- *   2. (Recommended) Add DKIM via MailChannels' DKIM API; otherwise messages
- *      may be flagged as spam by Gmail/Outlook.
- *   3. Verify SMTP_FROM points to a noreply@ address on the verified domain.
+ * Postal returns 200 with { status: "success", data: { message_id, messages } }
+ * on success, or { status: "error", data: { code, message } } on failure.
  */
 
 export type EmailRecipient = string | string[];
@@ -31,7 +28,7 @@ export interface EmailMessage {
 
 export interface SendEmailResult {
   ok: boolean;
-  /** true when the message was queued upstream; false when we logged-only. */
+  /** true when the message was accepted by the upstream API. */
   delivered: boolean;
   /** Provider message id, when available. */
   messageId?: string;
@@ -39,72 +36,84 @@ export interface SendEmailResult {
   error?: string;
 }
 
-const MAILCHANNELS_ENDPOINT = "https://api.mailchannels.net/tx/v1/send";
+interface PostalResponse {
+  status?: string;
+  data?: {
+    message_id?: string;
+    code?: string;
+    message?: string;
+    messages?: Record<string, { id: number; token: string }>;
+  };
+}
 
 function readEnv(name: string): string | undefined {
   const value = process.env[name];
   return value && value.trim().length > 0 ? value.trim() : undefined;
 }
 
-function toRecipientArray(to: EmailRecipient): Array<{ email: string }> {
-  if (Array.isArray(to)) return to.map((email) => ({ email }));
-  return [{ email: to }];
+function toRecipientArray(to: EmailRecipient): string[] {
+  return Array.isArray(to) ? to : [to];
 }
 
 /**
- * Sends an email through MailChannels. Always resolves — never throws — so
- * callers can decide whether to surface the failure to the end user (e.g. show
- * a generic "we'll be in touch" message) or block the response.
+ * Sends an email through Postal. Always resolves — never throws — so callers
+ * can decide whether to surface failures to the end user.
  */
 export async function sendEmail(message: EmailMessage): Promise<SendEmailResult> {
+  const endpoint = readEnv("POSTAL_API_URL");
+  const apiKey = readEnv("POSTAL_API_KEY");
   const fromAddress = readEnv("SMTP_FROM") ?? "noreply@nbmecalc.com";
-  const fromName = "NBMEcalc";
+
+  if (!endpoint || !apiKey) {
+    const missing = !endpoint ? "POSTAL_API_URL" : "POSTAL_API_KEY";
+    console.error(`[email] missing required env var: ${missing}`);
+    return {
+      ok: false,
+      delivered: false,
+      error: `Email transport not configured (missing ${missing})`,
+    };
+  }
 
   const payload = {
-    personalizations: [
-      {
-        to: toRecipientArray(message.to),
-        ...(message.headers ? { headers: message.headers } : {}),
-      },
-    ],
-    from: { email: fromAddress, name: fromName },
-    ...(message.replyTo ? { reply_to: { email: message.replyTo } } : {}),
+    from: `NBMEcalc <${fromAddress}>`,
+    to: toRecipientArray(message.to),
     subject: message.subject,
-    content: [
-      ...(message.text
-        ? [{ type: "text/plain", value: message.text }]
-        : []),
-      { type: "text/html", value: message.html },
-    ],
+    html_body: message.html,
+    ...(message.text ? { plain_body: message.text } : {}),
+    ...(message.replyTo ? { reply_to: message.replyTo } : {}),
+    ...(message.headers ? { headers: message.headers } : {}),
   };
 
   try {
-    const res = await fetch(MAILCHANNELS_ENDPOINT, {
+    const res = await fetch(endpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Server-API-Key": apiKey,
+      },
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
-      const errorText = await res.text().catch(() => "");
-      console.error(
-        "[email] MailChannels rejected message",
-        res.status,
-        errorText.slice(0, 500)
-      );
+    const body = (await res.json().catch(() => null)) as PostalResponse | null;
+
+    // Postal returns HTTP 200 even on logical failures; the real status lives
+    // in the JSON body's `status` field.
+    if (!res.ok || !body || body.status !== "success") {
+      const code = body?.data?.code ?? `http_${res.status}`;
+      const detail = body?.data?.message ?? "Postal API rejected message";
+      console.error("[email] Postal rejected message", { code, detail });
       return {
         ok: false,
         delivered: false,
-        error: `MailChannels ${res.status}: ${errorText.slice(0, 200)}`,
+        error: `${code}: ${detail}`,
       };
     }
 
-    const messageId =
-      res.headers.get("x-message-id") ??
-      res.headers.get("message-id") ??
-      undefined;
-
-    return { ok: true, delivered: true, messageId };
+    return {
+      ok: true,
+      delivered: true,
+      messageId: body.data?.message_id,
+    };
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
     console.error("[email] send failed", error);
