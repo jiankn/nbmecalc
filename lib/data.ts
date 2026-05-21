@@ -621,7 +621,7 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     color: "#34D399",
     scoreRange: [200, 300],
     unit: "score",
-    defaultScore: 240,
+    defaultScore: 215,
     hint: "3-digit equated NBME score",
   },
   {
@@ -630,7 +630,7 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     color: "#A78BFA",
     scoreRange: [180, 300],
     unit: "score",
-    defaultScore: 240,
+    defaultScore: 220,
     hint: "Runs ~5 pts hot vs real Step",
   },
   {
@@ -639,7 +639,7 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     color: "#A78BFA",
     scoreRange: [180, 300],
     unit: "score",
-    defaultScore: 240,
+    defaultScore: 220,
     hint: "Runs ~2 pts hot vs real Step",
   },
   {
@@ -648,7 +648,7 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     color: "#FBBF24",
     scoreRange: [40, 100],
     unit: "percent",
-    defaultScore: 75,
+    defaultScore: 68,
     hint: "Percent correct (most predictive single form)",
   },
   {
@@ -657,7 +657,7 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     color: "#60A5FA",
     scoreRange: [30, 100],
     unit: "percent",
-    defaultScore: 65,
+    defaultScore: 58,
     hint: "AMBOSS Self-Assessment % correct (runs ~5 pts hot)",
   },
   {
@@ -666,7 +666,7 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     color: "#F87171",
     scoreRange: [40, 300],
     unit: "score",
-    defaultScore: 75,
+    defaultScore: 68,
     hint: "Subject form: enter % correct OR equated 3-digit if available",
   },
 ];

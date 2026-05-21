@@ -41,9 +41,9 @@ function isValidScore(score: number, source: ExamSource): boolean {
 export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind } = {}) {
   const [step, setStep] = useState<StepKind>(defaultStep);
   const [exams, setExams] = useState<PracticeExam[]>([
-    { id: "1", source: "NBME", formNumber: 30, score: 230, takenDaysAgo: 21 },
-    { id: "2", source: "NBME", formNumber: 31, score: 240, takenDaysAgo: 10 },
-    { id: "3", source: "UWSA2", score: 248, takenDaysAgo: 3 },
+    { id: "1", source: "NBME", formNumber: 30, score: 210, takenDaysAgo: 21 },
+    { id: "2", source: "NBME", formNumber: 31, score: 215, takenDaysAgo: 10 },
+    { id: "3", source: "UWSA2", score: 220, takenDaysAgo: 3 },
   ]);
   const [daysUntil, setDaysUntil] = useState(14);
   const [targetScore, setTargetScore] = useState<number | undefined>(undefined);
