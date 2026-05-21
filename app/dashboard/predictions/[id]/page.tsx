@@ -14,6 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import type { PredictionResult, PracticeExam } from "@/lib/data";
 
+export const runtime = "edge";
+
 interface PredictionDetail {
   id: string;
   step: string;
