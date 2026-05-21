@@ -75,6 +75,7 @@ export async function GET(req: Request, context: RouteContext): Promise<Response
       resultSnapshot: JSON.parse(row.resultSnapshot),
       algorithmVersion: row.algorithmVersion,
       reportSessionId,
+      archivedAt: row.archivedAt,
     },
   });
 }

@@ -10,6 +10,8 @@ import {
   BarChart3,
   Calendar,
   Loader2,
+  Archive,
+  ArchiveRestore,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { PredictionResult, PracticeExam } from "@/lib/data";
@@ -30,6 +32,7 @@ interface PredictionDetail {
   resultSnapshot: PredictionResult;
   algorithmVersion: string;
   reportSessionId: string | null;
+  archivedAt: number | null;
 }
 
 function stepLabel(step: string): string {
@@ -55,6 +58,7 @@ export default function PredictionDetailPage() {
   const [prediction, setPrediction] = useState<PredictionDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [archiving, setArchiving] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -101,6 +105,25 @@ export default function PredictionDetailPage() {
 
   const result = prediction.resultSnapshot;
   const passPercent = Math.round(prediction.passProbability * 100);
+  const isArchived = prediction.archivedAt !== null;
+
+  async function toggleArchive() {
+    if (!prediction || archiving) return;
+    setArchiving(true);
+    try {
+      const res = await fetch(
+        `/api/user/predictions/${prediction.id}/archive`,
+        { method: isArchived ? "DELETE" : "POST" }
+      );
+      if (res.ok) {
+        setPrediction((p) =>
+          p ? { ...p, archivedAt: isArchived ? null : Date.now() } : p
+        );
+      }
+    } finally {
+      setArchiving(false);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -121,8 +144,27 @@ export default function PredictionDetailPage() {
           <p className="text-sm text-gray-500 mt-0.5">
             {formatDate(prediction.createdAt)} · Algorithm{" "}
             {prediction.algorithmVersion}
+            {isArchived && (
+              <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600">
+                <Archive className="h-3 w-3" /> Archived
+              </span>
+            )}
           </p>
         </div>
+        <button
+          onClick={toggleArchive}
+          disabled={archiving}
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition disabled:opacity-40"
+        >
+          {archiving ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : isArchived ? (
+            <ArchiveRestore className="h-4 w-4" />
+          ) : (
+            <Archive className="h-4 w-4" />
+          )}
+          {isArchived ? "Restore" : "Archive"}
+        </button>
       </div>
 
       {/* Score cards */}

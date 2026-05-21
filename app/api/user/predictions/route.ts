@@ -7,7 +7,7 @@
  * 401 if no valid session.
  */
 import { NextResponse } from "next/server";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, isNull, isNotNull, and } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
 import { predictions } from "@/lib/db/schema";
 import { loadSession } from "@/lib/auth/session";
@@ -33,6 +33,8 @@ export async function GET(req: Request): Promise<Response> {
   const offsetRaw = Number(url.searchParams.get("offset") ?? 0);
   const limit = Math.max(1, Math.min(MAX_LIMIT, Number.isFinite(limitRaw) ? limitRaw : DEFAULT_LIMIT));
   const offset = Math.max(0, Number.isFinite(offsetRaw) ? offsetRaw : 0);
+  // ?archived=true returns only archived predictions; default returns only active.
+  const showArchived = url.searchParams.get("archived") === "true";
 
   const rows = await db
     .select({
@@ -43,9 +45,15 @@ export async function GET(req: Request): Promise<Response> {
       ciUpper: predictions.ciUpper,
       passProbability: predictions.passProbability,
       createdAt: predictions.createdAt,
+      archivedAt: predictions.archivedAt,
     })
     .from(predictions)
-    .where(eq(predictions.userId, session.user.id))
+    .where(
+      and(
+        eq(predictions.userId, session.user.id),
+        showArchived ? isNotNull(predictions.archivedAt) : isNull(predictions.archivedAt)
+      )
+    )
     .orderBy(desc(predictions.createdAt))
     .limit(limit)
     .offset(offset);

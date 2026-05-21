@@ -61,9 +61,6 @@ export const predictions = sqliteTable(
     daysUntilExam: integer("days_until_exam"),
 
     // --- Output fields denormalized for cheap querying ---
-    // Full PredictionResult is also stored in result_snapshot below, but
-    // these columns let us run aggregate queries (e.g. mean pass_probability
-    // by step over last 7 days) without parsing JSON in SQL.
     pointEstimate: integer("point_estimate").notNull(),
     ciLower: integer("ci_lower").notNull(),
     ciUpper: integer("ci_upper").notNull(),
@@ -81,14 +78,20 @@ export const predictions = sqliteTable(
     userAgent: text("user_agent"),
     referrer: text("referrer"),
 
-    // --- UTM / source attribution. Useful for ROAS analysis later. ---
+    // --- UTM / source attribution. ---
     utmSource: text("utm_source"),
     utmCampaign: text("utm_campaign"),
     utmMedium: text("utm_medium"),
+
+    /** unix ms — set when user "deletes" (archives) a prediction.
+     *  Null means visible. Non-null means hidden from the dashboard list.
+     *  True deletion happens via /api/user/delete (GDPR right-to-erasure). */
+    archivedAt: integer("archived_at"),
   },
   (t) => ({
     byUser: index("idx_predictions_user").on(t.userId),
     byCreated: index("idx_predictions_created").on(t.createdAt),
+    byArchived: index("idx_predictions_archived").on(t.archivedAt),
   })
 );
 
