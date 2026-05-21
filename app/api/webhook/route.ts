@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { getDb, type Db } from "@/lib/db/client";
-import { events, users } from "@/lib/db/schema";
+import { events, users, reports } from "@/lib/db/schema";
 import { getPlan, type PlanKey } from "@/lib/plans";
 
 export const runtime = "edge";
@@ -94,17 +94,43 @@ async function handleEvent(event: Stripe.Event): Promise<void> {
 
   switch (event.type) {
     case "checkout.session.completed": {
-      // Single Report payments land here. The /report page already does
-      // direct lookup against Stripe for the unlock, but we record the
-      // event for analytics.
       const session = event.data.object as Stripe.Checkout.Session;
+      const plan = session.metadata?.plan ?? "unknown";
+
+      // Write a reports row for Single Report purchases so the dashboard
+      // can link back to the full report page.
+      if (plan === "single" && session.payment_status === "paid") {
+        const predictionId = session.metadata?.predictionId;
+        const userId = session.metadata?.userId ?? null;
+        if (predictionId) {
+          try {
+            await db.insert(reports).values({
+              id: crypto.randomUUID(),
+              userId,
+              predictionId,
+              stripeSessionId: session.id,
+              stripePaymentIntent:
+                typeof session.payment_intent === "string"
+                  ? session.payment_intent
+                  : null,
+              amountPaid: session.amount_total ?? 1499,
+              currency: session.currency ?? "usd",
+              createdAt: Date.now(),
+            });
+          } catch (err) {
+            // Idempotent: if the row already exists (retry), swallow.
+            console.error("[stripe-webhook] reports insert failed", err);
+          }
+        }
+      }
+
       await recordEvent(db, {
         userId: (session.metadata?.userId as string | undefined) ?? null,
         type: "checkout_completed",
         payload: {
           eventId: event.id,
           stripeSessionId: session.id,
-          plan: session.metadata?.plan ?? "unknown",
+          plan,
           mode: session.mode,
           paymentStatus: session.payment_status,
           amountTotal: session.amount_total,

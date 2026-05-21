@@ -11,7 +11,7 @@
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
-import { predictions } from "@/lib/db/schema";
+import { predictions, reports } from "@/lib/db/schema";
 import { loadSession } from "@/lib/auth/session";
 
 export const runtime = "edge";
@@ -45,6 +45,21 @@ export async function GET(req: Request, context: RouteContext): Promise<Response
     return NextResponse.json({ error: "Prediction not found." }, { status: 404 });
   }
 
+  // Check if there's a paid report linked to this prediction.
+  let reportSessionId: string | null = null;
+  try {
+    const reportRows = await db
+      .select({ stripeSessionId: reports.stripeSessionId })
+      .from(reports)
+      .where(eq(reports.predictionId, id))
+      .limit(1);
+    if (reportRows[0]) {
+      reportSessionId = reportRows[0].stripeSessionId;
+    }
+  } catch {
+    // Non-critical — if reports table doesn't exist yet, just skip.
+  }
+
   return NextResponse.json({
     prediction: {
       id: row.id,
@@ -59,6 +74,7 @@ export async function GET(req: Request, context: RouteContext): Promise<Response
       daysUntilExam: row.daysUntilExam,
       resultSnapshot: JSON.parse(row.resultSnapshot),
       algorithmVersion: row.algorithmVersion,
+      reportSessionId,
     },
   });
 }

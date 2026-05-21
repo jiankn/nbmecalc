@@ -29,6 +29,7 @@ interface PredictionDetail {
   daysUntilExam: number | null;
   resultSnapshot: PredictionResult;
   algorithmVersion: string;
+  reportSessionId: string | null;
 }
 
 function stepLabel(step: string): string {
@@ -226,6 +227,43 @@ export default function PredictionDetailPage() {
           <p className="text-gray-600">
             {result.postponeRecommendation.insight}
           </p>
+        </section>
+      )}
+
+      {/* Report access */}
+      {prediction.reportSessionId ? (
+        <section className="rounded-3xl bg-mint-50 border border-mint-200 p-6">
+          <h2 className="text-lg font-bold mb-2">Your Full Report</h2>
+          <p className="text-sm text-gray-700 mb-4">
+            You purchased the full report for this prediction. View it online
+            or download the PDF.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button size="md" asChild>
+              <Link href={`/report/${prediction.reportSessionId}`}>
+                View full report
+              </Link>
+            </Button>
+            <Button variant="outline" size="md" asChild>
+              <a
+                href={`/api/report/${prediction.reportSessionId}/pdf`}
+                download
+              >
+                Download PDF
+              </a>
+            </Button>
+          </div>
+        </section>
+      ) : (
+        <section className="rounded-3xl bg-gray-50 border border-gray-200 p-6">
+          <h2 className="text-lg font-bold mb-2">Unlock Full Report</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            Get your downloadable PDF with a 14-day study plan, subject
+            weakness map, and score trajectory analysis.
+          </p>
+          <Button size="md" asChild>
+            <Link href="/#calculator">Get Report — $14.99</Link>
+          </Button>
         </section>
       )}
 
