@@ -99,27 +99,29 @@ export default function DashboardOverview() {
         ) : (
           <ul className="divide-y divide-gray-100">
             {predictions.map((p) => (
-              <li
-                key={p.id}
-                className="py-4 flex items-center justify-between gap-3"
-              >
-                <div>
-                  <div className="font-bold text-gray-950">
-                    {STEP_LABEL[p.step]}
+              <li key={p.id}>
+                <Link
+                  href={`/dashboard/predictions/${p.id}`}
+                  className="py-4 flex items-center justify-between gap-3 hover:bg-mint-50/30 -mx-2 px-2 rounded-xl transition"
+                >
+                  <div>
+                    <div className="font-bold text-gray-950">
+                      {STEP_LABEL[p.step]}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {new Date(p.createdAt).toLocaleDateString()} ·{" "}
+                      {(p.passProbability * 100).toFixed(0)}% pass
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-500">
-                    {new Date(p.createdAt).toLocaleDateString()} ·{" "}
-                    {(p.passProbability * 100).toFixed(0)}% pass
+                  <div className="text-right">
+                    <div className="font-mono font-bold text-mint-700 text-lg">
+                      {p.pointEstimate}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {p.ciLower} – {p.ciUpper}
+                    </div>
                   </div>
-                </div>
-                <div className="text-right">
-                  <div className="font-mono font-bold text-mint-700 text-lg">
-                    {p.pointEstimate}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {p.ciLower} – {p.ciUpper}
-                  </div>
-                </div>
+                </Link>
               </li>
             ))}
           </ul>

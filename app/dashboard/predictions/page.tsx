@@ -88,7 +88,11 @@ export default function PredictionsHistoryPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {rows.map((r) => (
-                  <tr key={r.id} className="hover:bg-mint-50/30 transition">
+                  <tr
+                    key={r.id}
+                    className="hover:bg-mint-50/30 transition cursor-pointer"
+                    onClick={() => (window.location.href = `/dashboard/predictions/${r.id}`)}
+                  >
                     <td className="px-5 py-3 text-gray-700">
                       {new Date(r.createdAt).toLocaleDateString()}
                     </td>

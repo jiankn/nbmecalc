@@ -1,0 +1,64 @@
+/**
+ * GET /api/user/predictions/[id]
+ *
+ * Returns a single prediction's full data for the authenticated user.
+ * Includes input_exams and result_snapshot so the dashboard detail page
+ * can render the complete prediction without re-running the model.
+ *
+ * 401 if not authenticated, 404 if the prediction doesn't exist or
+ * doesn't belong to this user.
+ */
+import { NextResponse } from "next/server";
+import { and, eq } from "drizzle-orm";
+import { getDb } from "@/lib/db/client";
+import { predictions } from "@/lib/db/schema";
+import { loadSession } from "@/lib/auth/session";
+
+export const runtime = "edge";
+
+type RouteContext = { params: Promise<{ id: string }> };
+
+export async function GET(req: Request, context: RouteContext): Promise<Response> {
+  const db = getDb();
+  if (!db) {
+    return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
+  }
+
+  const session = await loadSession(db, req);
+  if (!session) {
+    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+  }
+
+  const { id } = await context.params;
+  if (!id || id.length > 64) {
+    return NextResponse.json({ error: "Invalid prediction id." }, { status: 400 });
+  }
+
+  const rows = await db
+    .select()
+    .from(predictions)
+    .where(and(eq(predictions.id, id), eq(predictions.userId, session.user.id)))
+    .limit(1);
+
+  const row = rows[0];
+  if (!row) {
+    return NextResponse.json({ error: "Prediction not found." }, { status: 404 });
+  }
+
+  return NextResponse.json({
+    prediction: {
+      id: row.id,
+      step: row.step,
+      pointEstimate: row.pointEstimate,
+      ciLower: row.ciLower,
+      ciUpper: row.ciUpper,
+      passProbability: row.passProbability,
+      createdAt: row.createdAt,
+      inputExams: JSON.parse(row.inputExams),
+      inputOptions: row.inputOptions ? JSON.parse(row.inputOptions) : null,
+      daysUntilExam: row.daysUntilExam,
+      resultSnapshot: JSON.parse(row.resultSnapshot),
+      algorithmVersion: row.algorithmVersion,
+    },
+  });
+}
