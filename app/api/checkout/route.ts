@@ -4,6 +4,7 @@ import { getPlan, type PlanKey } from "@/lib/plans";
 import type { PracticeExam, StepKind, ExamSource } from "@/lib/data";
 import { getDb } from "@/lib/db/client";
 import { events } from "@/lib/db/schema";
+import { loadSession } from "@/lib/auth/session";
 
 export const runtime = "edge";
 
@@ -159,6 +160,37 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unknown plan." }, { status: 400 });
   }
 
+  // Pro subscriptions REQUIRE an authenticated user. Without a user id we
+  // can't grant the Pro entitlement when the webhook fires (we'd have a
+  // paid customer with nowhere to attach the tier). Single Report stays
+  // anonymous-friendly because the `/report/<session_id>` URL is itself
+  // the bearer token for that purchase.
+  const db = getDb();
+  let authedUser:
+    | { id: string; email: string; stripeCustomerId: string | null }
+    | null = null;
+  if (plan.mode === "subscription") {
+    if (!db) {
+      return NextResponse.json(
+        { error: "Service unavailable. Try again shortly." },
+        { status: 503 }
+      );
+    }
+    const session = await loadSession(db, req);
+    if (!session) {
+      // Front-end will catch this and bounce to /login?next=/pricing.
+      return NextResponse.json(
+        { error: "Sign in to subscribe to Pro." },
+        { status: 401 }
+      );
+    }
+    authedUser = {
+      id: session.user.id,
+      email: session.user.email,
+      stripeCustomerId: session.user.stripeCustomerId,
+    };
+  }
+
   const priceId = process.env[plan.stripePriceEnvKey];
   if (!priceId) {
     return NextResponse.json(
@@ -186,6 +218,13 @@ export async function POST(req: Request) {
   if (parsed.predictionId) {
     metadata.predictionId = parsed.predictionId;
   }
+  // For Pro subscriptions we MUST pass through the user id — the webhook
+  // uses it to find which row to flip `pro_tier` on. (We don't trust
+  // customer_email matching alone: a user could subscribe with a different
+  // payment-time email than their account email.)
+  if (authedUser) {
+    metadata.userId = authedUser.id;
+  }
 
   // Sanity-check size limit (Stripe enforces 500 chars/key).
   for (const [k, v] of Object.entries(metadata)) {
@@ -201,12 +240,14 @@ export async function POST(req: Request) {
   const stripe = getStripe();
 
   try {
-    const session = await stripe.checkout.sessions.create({
+    // Build the Checkout session params, branching on subscription vs
+    // one-time. Subscriptions need to bind to a Stripe Customer so the
+    // webhook can find us later; one-time payments stay anonymous.
+    const sessionParams: Parameters<
+      typeof stripe.checkout.sessions.create
+    >[0] = {
       mode: plan.mode,
       line_items: [{ price: priceId, quantity: 1 }],
-      // Single Report → land on /report/<session_id> so the user instantly
-      // sees their unlocked report. Pro subscriptions → /checkout/success
-      // (then nudge into /dashboard once Magic Link login is complete).
       success_url:
         plan.key === "single"
           ? `${site}/report/{CHECKOUT_SESSION_ID}`
@@ -214,9 +255,30 @@ export async function POST(req: Request) {
       cancel_url: `${site}/checkout/cancel`,
       metadata,
       allow_promotion_codes: true,
-      // Surface the email back to us in webhooks + Stripe dashboard.
-      customer_creation: plan.mode === "payment" ? "if_required" : undefined,
-    });
+    };
+
+    if (authedUser) {
+      // Subscription path: reuse the existing Stripe Customer if we already
+      // created one; otherwise prefill the email and Stripe will create a
+      // new customer (returned in the webhook). We also stash userId on
+      // the subscription itself, since the `customer.subscription.*`
+      // webhook events don't include the parent checkout's metadata.
+      if (authedUser.stripeCustomerId) {
+        sessionParams.customer = authedUser.stripeCustomerId;
+      } else {
+        sessionParams.customer_email = authedUser.email;
+      }
+      sessionParams.subscription_data = {
+        metadata: { userId: authedUser.id, plan: plan.key },
+      };
+      // Help users self-serve receipts; Stripe will email a receipt for the
+      // initial subscription invoice automatically when this is on.
+      sessionParams.client_reference_id = authedUser.id;
+    } else if (plan.mode === "payment") {
+      sessionParams.customer_creation = "if_required";
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
 
     if (!session.url) {
       return NextResponse.json(
@@ -226,12 +288,11 @@ export async function POST(req: Request) {
     }
 
     // Funnel event — best-effort, never blocks the redirect.
-    const db = getDb();
     if (db) {
       try {
         await db.insert(events).values({
           id: crypto.randomUUID(),
-          userId: null,
+          userId: authedUser?.id ?? null,
           type: "checkout_started",
           payload: JSON.stringify({
             plan: plan.key,

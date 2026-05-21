@@ -1,22 +1,55 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/lib/auth/use-session";
 import { cn } from "@/lib/utils";
 
-const plans = [
+type FreePlan = {
+  kind: "free";
+  name: string;
+  description: string;
+  price: string;
+  cta: string;
+  ctaHref: string;
+  features: string[];
+  excluded: string[];
+};
+
+type SinglePlan = {
+  kind: "single";
+  name: string;
+  description: string;
+  price: string;
+  cta: string;
+  ctaHref: string;
+  features: string[];
+  excluded: string[];
+};
+
+type ProPlan = {
+  kind: "pro";
+  name: string;
+  description: string;
+  priceMonthly: string;
+  priceAnnual: string;
+  features: string[];
+  excluded: string[];
+};
+
+type PlanCard = FreePlan | SinglePlan | ProPlan;
+
+const plans: PlanCard[] = [
   {
+    kind: "free",
     name: "Free",
     description: "Try your first prediction — no account needed.",
     price: "$0",
-    period: "forever",
     cta: "Start Free",
     ctaHref: "/#calculator",
-    ctaVariant: "outline" as const,
-    disabled: false,
-    highlight: false,
     features: [
       "1 score prediction",
       "95% confidence interval",
@@ -31,19 +64,15 @@ const plans = [
     ],
   },
   {
+    kind: "single",
     name: "Single Report",
     description: "One complete PDF with your full breakdown.",
     price: "$14.99",
-    period: "one-time",
     // We deliberately send users back to the calculator instead of straight
     // to Stripe: a report without inputs is useless, so the funnel is
     // calculate → see prediction → unlock from PaywallModal.
     cta: "Calculate to unlock",
     ctaHref: "/#calculator",
-    ctaVariant: "primary" as const,
-    disabled: false,
-    highlight: false,
-    badge: null,
     features: [
       "Everything in Free",
       "Downloadable PDF report",
@@ -51,25 +80,14 @@ const plans = [
       "Subject-level weakness map",
       "Score trajectory analysis",
     ],
-    excluded: [
-      "Multi-Step tracking",
-      "Unlimited refreshes",
-    ],
+    excluded: ["Multi-Step tracking", "Unlimited refreshes"],
   },
   {
+    kind: "pro",
     name: "Pro",
     description: "For serious Step prep — track every practice exam.",
     priceMonthly: "$9.99",
     priceAnnual: "$79",
-    period: "mo",
-    // Pro requires accounts + KV storage + email — wired in C2-B.
-    // For now the card is visible but the CTA is a disabled waitlist stub.
-    cta: "Join waitlist",
-    ctaHref: "/#calculator",
-    ctaVariant: "mint" as const,
-    disabled: true,
-    highlight: true,
-    badge: "Coming Soon",
     features: [
       "Everything in Single Report",
       "Unlimited predictions & refreshes",
@@ -87,6 +105,57 @@ export function Pricing() {
   // then discover the "Save 33%" annual deal by toggling.
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const annual = billing === "annual";
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const session = useSession();
+  const router = useRouter();
+
+  const isPro =
+    session.status === "authed" && Boolean(session.user.proTier);
+
+  /**
+   * Kick off Pro checkout. Anon users bounce to /login first; the session
+   * cookie is needed so the webhook can match Stripe customer → our user.
+   */
+  async function startProCheckout() {
+    if (submitting) return;
+    setError(null);
+
+    if (session.status === "anon") {
+      router.push("/login?next=/pricing");
+      return;
+    }
+    if (session.status === "loading") {
+      // Avoid double-clicks while we still don't know the auth state.
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: annual ? "pro_annual" : "pro_monthly" }),
+      });
+      const json = (await res.json()) as { url?: string; error?: string };
+
+      if (res.status === 401) {
+        router.push("/login?next=/pricing");
+        return;
+      }
+      if (!res.ok || !json.url) {
+        setError(
+          json.error ?? "Couldn't start checkout. Please try again."
+        );
+        setSubmitting(false);
+        return;
+      }
+      window.location.href = json.url;
+    } catch {
+      setError("Network error. Please try again.");
+      setSubmitting(false);
+    }
+  }
 
   return (
     <section id="pricing" className="py-20 lg:py-28 bg-gray-50">
@@ -142,38 +211,39 @@ export function Pricing() {
           </span>
         </div>
 
+        {error && (
+          <div className="max-w-md mx-auto mb-6 rounded-2xl bg-rose-50 border border-rose-200 p-4 text-sm text-rose-900">
+            {error}
+          </div>
+        )}
+
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
           {plans.map((plan) => {
-            const isPro = plan.name === "Pro";
-            const displayPrice = isPro
-              ? annual
-                ? plan.priceAnnual
-                : plan.priceMonthly
-              : plan.price;
-            const displayPeriod = isPro
-              ? annual
-                ? "/yr"
-                : "/mo"
-              : plan.period === "one-time"
-              ? ""
-              : "";
+            const isProCard = plan.kind === "pro";
+            const displayPrice =
+              plan.kind === "pro"
+                ? annual
+                  ? plan.priceAnnual
+                  : plan.priceMonthly
+                : plan.price;
+            const displayPeriod = isProCard ? (annual ? "/yr" : "/mo") : "";
 
             return (
               <div
                 key={plan.name}
                 className={cn(
                   "relative rounded-3xl border p-8 transition-all duration-300 flex flex-col",
-                  plan.highlight
+                  isProCard
                     ? "border-mint-400 bg-white shadow-xl shadow-mint-500/10 md:scale-[1.03] z-10"
                     : "border-gray-200 bg-white hover:shadow-lg"
                 )}
               >
-                {plan.highlight && plan.badge && (
+                {isProCard && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                     <span className="inline-flex items-center gap-1 rounded-full bg-mint-500 px-4 py-1.5 text-xs font-bold text-white shadow-sm">
                       <Sparkles className="h-3.5 w-3.5" />
-                      {plan.badge}
+                      Most popular
                     </span>
                   </div>
                 )}
@@ -194,30 +264,55 @@ export function Pricing() {
                       {displayPeriod}
                     </span>
                   )}
-                  {plan.period === "one-time" && (
+                  {plan.kind === "single" && (
                     <span className="ml-2 text-xs font-semibold text-gray-400">
                       one-time
                     </span>
                   )}
-                  {isPro && annual && (
+                  {isProCard && annual && (
                     <div className="mt-1 text-sm text-gray-500">
                       That&apos;s ~$6.58/mo — less than one coffee a week
                     </div>
                   )}
                 </div>
 
-                {plan.disabled ? (
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full mb-8"
-                    disabled
-                  >
-                    {plan.cta}
-                  </Button>
+                {/* CTA. Pro needs custom logic (auth check + POST); the
+                    others are plain Links. */}
+                {plan.kind === "pro" ? (
+                  isPro ? (
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="w-full mb-8"
+                      asChild
+                    >
+                      <Link href="/dashboard/billing">Manage subscription</Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="mint"
+                      size="lg"
+                      className="w-full mb-8 inline-flex items-center justify-center gap-2"
+                      onClick={startProCheckout}
+                      disabled={
+                        submitting || session.status === "loading"
+                      }
+                    >
+                      {submitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Redirecting…
+                        </>
+                      ) : (
+                        <>
+                          Subscribe {annual ? "yearly" : "monthly"}
+                        </>
+                      )}
+                    </Button>
+                  )
                 ) : (
                   <Button
-                    variant={plan.ctaVariant}
+                    variant={plan.kind === "single" ? "primary" : "outline"}
                     size="lg"
                     className="w-full mb-8"
                     asChild
@@ -239,7 +334,9 @@ export function Pricing() {
                       className="flex items-start gap-2.5 text-sm text-gray-400"
                     >
                       <Check className="h-4 w-4 mt-0.5 shrink-0 text-gray-300" />
-                      <span className="line-through decoration-gray-300">{f}</span>
+                      <span className="line-through decoration-gray-300">
+                        {f}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -250,8 +347,8 @@ export function Pricing() {
 
         <p className="text-center text-xs text-gray-400 mt-10 max-w-xl mx-auto">
           All prices in USD. Digital products are non-refundable. Pro
-          subscriptions can be canceled anytime — you keep access until the end
-          of your billing period.
+          subscriptions can be canceled anytime — you keep access until the
+          end of your billing period.
         </p>
       </div>
     </section>
