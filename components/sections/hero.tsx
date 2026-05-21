@@ -21,6 +21,22 @@ export function Hero() {
   const active = STEPS.find((s) => s.key === activeStep)!;
 
   const scrollToCalculator = () => {
+    // Dispatch a custom event with the hero score so the Calculator can
+    // pick it up and pre-fill the first exam row. This avoids prop drilling
+    // across unrelated component trees (Hero and Calculator are siblings
+    // rendered by the page, not parent-child).
+    const numericScore = Number(score);
+    if (score.trim() && Number.isFinite(numericScore) && numericScore > 0) {
+      window.dispatchEvent(
+        new CustomEvent("hero-score", {
+          detail: {
+            score: numericScore,
+            step: activeStep === "free120" ? "step2" : activeStep === "step3" ? "step3" : activeStep === "step1" ? "step1" : "step2",
+            source: activeStep === "free120" ? "FREE120" : activeStep === "step3" ? "UWSA1" : "NBME",
+          },
+        })
+      );
+    }
     const el = document.getElementById("calculator");
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };

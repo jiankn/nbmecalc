@@ -50,6 +50,41 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
   const [weakSubjects, setWeakSubjects] = useState<string[]>([]);
   const [result, setResult] = useState<PredictionResult | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
+
+  // Listen for the Hero's "Predict My Score" button. When the user enters
+  // a score in the hero and clicks, we receive it here and inject it into
+  // the first exam row + switch to the matching step tab. This eliminates
+  // the "I already typed my score, why do I have to type it again?" pain.
+  useEffect(() => {
+    function handleHeroScore(e: Event) {
+      const detail = (e as CustomEvent).detail as {
+        score: number;
+        step: StepKind;
+        source: ExamSource;
+      } | undefined;
+      if (!detail) return;
+
+      setStep(detail.step);
+      setExams((prev) => {
+        const updated = [...prev];
+        // Overwrite the first row with the hero's input.
+        const meta = EXAM_SOURCES.find((s) => s.key === detail.source);
+        updated[0] = {
+          ...updated[0],
+          id: updated[0]?.id ?? "1",
+          source: detail.source,
+          score: detail.score,
+          formNumber: detail.source === "NBME" ? (detail.step === "step1" ? 30 : 31) : undefined,
+          takenDaysAgo: updated[0]?.takenDaysAgo ?? 7,
+        };
+        return updated;
+      });
+      // Clear any stale result so the user sees fresh state.
+      setResult(null);
+    }
+    window.addEventListener("hero-score", handleHeroScore);
+    return () => window.removeEventListener("hero-score", handleHeroScore);
+  }, []);
   // Server-issued id for the last persisted prediction. Threaded into
   // /api/checkout metadata so the eventual order row links back to the
   // exact funnel row. Cleared whenever any input changes (the persisted
