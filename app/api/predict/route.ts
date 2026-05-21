@@ -39,6 +39,7 @@ import {
 import { getDb } from "@/lib/db/client";
 import { events, predictions } from "@/lib/db/schema";
 import { checkRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
+import { loadSession } from "@/lib/auth/session";
 
 export const runtime = "edge";
 
@@ -249,12 +250,25 @@ export async function POST(req: Request): Promise<Response> {
   const predictionId = crypto.randomUUID();
   const now = Date.now();
 
+  // Best-effort session read: if the user is logged in, attach their id
+  // so the prediction shows up in /dashboard/predictions. Anonymous users
+  // still get their prediction — it just won't be linked to an account.
+  let userId: string | null = null;
+  if (db) {
+    try {
+      const session = await loadSession(db, req);
+      if (session) userId = session.user.id;
+    } catch {
+      // Swallow — don't block prediction on auth failures.
+    }
+  }
+
   if (db) {
     try {
       await db.batch([
         db.insert(predictions).values({
           id: predictionId,
-          userId: null,
+          userId,
           step: parsed.step,
           inputExams: JSON.stringify(parsed.exams),
           inputOptions: parsed.options ? JSON.stringify(parsed.options) : null,
@@ -275,7 +289,7 @@ export async function POST(req: Request): Promise<Response> {
         }),
         db.insert(events).values({
           id: crypto.randomUUID(),
-          userId: null,
+          userId,
           type: "predict",
           payload: JSON.stringify({
             predictionId,
