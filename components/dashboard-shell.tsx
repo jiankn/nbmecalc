@@ -3,8 +3,17 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, History, TrendingUp, Settings, CreditCard, LogOut, Sparkles } from "lucide-react";
+import {
+  LayoutDashboard,
+  History,
+  TrendingUp,
+  Settings,
+  CreditCard,
+  LogOut,
+  Sparkles,
+} from "lucide-react";
 import { Logo } from "@/components/logo";
+import { invalidateSession, type SessionUser } from "@/lib/auth/use-session";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -15,17 +24,19 @@ const navItems = [
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
 ];
 
-export interface DashboardUser {
-  id: string;
-  email: string;
-  name: string | null;
-  proTier: string | null;
-  proExpiresAt: number | null;
-}
+// Re-exported for downstream pages that still import this name. Same shape
+// as the SessionUser the /api/auth/me hook returns.
+export type DashboardUser = SessionUser;
 
 /**
- * Client-side dashboard layout. Handles auth gating: fetches /api/user/me
- * (predictions endpoint returns 401 if no session); on 401 redirects to login.
+ * Client-side dashboard layout. Auth-gates by calling /api/auth/me directly
+ * so we get real user data (name, pro tier, email) for the chrome — not a
+ * synthesized blank user. On 401, redirects to /login with a `next` param.
+ *
+ * Note: We don't go through the shared `useSession` hook here because the
+ * dashboard needs hard-redirect-on-anon semantics (the marketing-site nav
+ * tolerates anon as a normal state). Calling /api/auth/me directly keeps
+ * those two flows decoupled.
  */
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -34,31 +45,41 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    // Probe with the predictions endpoint (cheap, returns 401 when unauth).
-    fetch("/api/user/predictions?limit=1")
+    let alive = true;
+    fetch("/api/auth/me", { credentials: "same-origin", cache: "no-store" })
       .then(async (res) => {
+        if (!alive) return;
         if (res.status === 401) {
           router.replace(`/login?next=${encodeURIComponent(pathname)}`);
           return;
         }
-        // For now we don't have a /api/user/me endpoint — synthesize from
-        // the cookie-side info. In future: separate endpoint.
-        setUser({
-          id: "",
-          email: "",
-          name: null,
-          proTier: null,
-          proExpiresAt: null,
-        });
+        if (!res.ok) {
+          // 5xx — bounce to login rather than wedge the dashboard chrome
+          // in a half-loaded state.
+          router.replace("/login");
+          return;
+        }
+        const json = (await res.json()) as { user?: DashboardUser };
+        if (json.user) {
+          setUser(json.user);
+        } else {
+          router.replace("/login");
+        }
       })
       .catch(() => {
-        router.replace("/login");
+        if (alive) router.replace("/login");
       })
-      .finally(() => setChecking(false));
+      .finally(() => {
+        if (alive) setChecking(false);
+      });
+    return () => {
+      alive = false;
+    };
   }, [pathname, router]);
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
+    invalidateSession();
     router.replace("/");
   }
 
@@ -71,6 +92,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) return null;
+
+  const displayName = user.name || user.email.split("@")[0];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -87,6 +110,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 Pro
               </span>
             )}
+            <span
+              className="hidden sm:inline text-sm text-gray-600 truncate max-w-[180px]"
+              title={user.email}
+            >
+              {displayName}
+            </span>
             <button
               onClick={logout}
               className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-1.5 text-sm font-semibold text-gray-700 hover:border-gray-400 hover:bg-white transition"
