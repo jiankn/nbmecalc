@@ -21,7 +21,17 @@ type RouteContext = { params: Promise<{ session_id: string }> };
 
 export async function GET(_req: Request, context: RouteContext) {
   const { session_id } = await context.params;
-  const loaded = await loadReportFromSession(session_id);
+
+  let loaded;
+  try {
+    loaded = await loadReportFromSession(session_id);
+  } catch (err) {
+    console.error("[pdf] loadReportFromSession failed", err);
+    return new Response(
+      JSON.stringify({ error: "Failed to load report data", detail: String(err) }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
 
   if (loaded.status === "not_found") {
     return new Response("Not found", { status: 404 });
@@ -41,17 +51,30 @@ export async function GET(_req: Request, context: RouteContext) {
 
   const { data } = loaded;
 
-  // @react-pdf/renderer's `pdf()` builder works in both Node and Workers.
-  // `.toBlob()` returns a standard Blob, which Response can stream directly
-  // to the client without us having to allocate a Buffer.
-  const blob = await pdf(
-    ReportPdf({
-      result: data.result,
-      exams: data.exams,
-      sessionId: data.sessionId,
-      purchasedAt: data.purchasedAt,
-    })
-  ).toBlob();
+  // @react-pdf/renderer's `pdf()` builder works in both Node and Workers
+  // (with nodejs_compat). `.toBlob()` returns a standard Blob, which
+  // Response can stream directly to the client.
+  let blob: Blob;
+  try {
+    blob = await pdf(
+      ReportPdf({
+        result: data.result,
+        exams: data.exams,
+        sessionId: data.sessionId,
+        purchasedAt: data.purchasedAt,
+      })
+    ).toBlob();
+  } catch (err) {
+    console.error("[pdf] react-pdf render failed", err);
+    return new Response(
+      JSON.stringify({
+        error: "PDF generation failed",
+        detail: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
 
   // Filename embeds the predicted score so users can find their report in
   // their Downloads folder months later. We sanitise to ASCII only.
