@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, X, ArrowRight, Lock, Share2, Sparkles, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useSession } from "@/lib/auth/use-session";
 import {
   predictStepScore,
   EXAM_SOURCES,
@@ -692,15 +694,23 @@ function PaywallModal({
    *  after the last Predict click. Checkout works fine either way. */
   predictionId: string | null;
 }) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<"single" | "pro" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Pro is a subscription so we have a billing-period choice. Default to
+  // monthly because the lower headline number reduces sticker shock; the
+  // toggle right under the price reveals the annual savings.
+  const [proBilling, setProBilling] = useState<"monthly" | "annual">(
+    "monthly"
+  );
+  const session = useSession();
+  const router = useRouter();
 
   // Hand off to /api/checkout, which creates a Stripe Checkout Session and
   // returns the hosted-page URL. We redirect the *whole window* (not fetch)
   // because Stripe blocks iframe embedding and we want users to land on a
   // top-level secure page.
   const handleSingle = async () => {
-    setLoading(true);
+    setLoading("single");
     setError(null);
     try {
       const res = await fetch("/api/checkout", {
@@ -722,12 +732,59 @@ function PaywallModal({
         throw new Error(json.error ?? "Could not start checkout.");
       }
       window.location.href = json.url;
-      // We intentionally leave `loading` true — the page will navigate away.
+      // We intentionally leave `loading` set — the page will navigate away.
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not start checkout.");
-      setLoading(false);
+      setLoading(null);
     }
   };
+
+  // Pro path: Stripe needs to attach the resulting subscription to a known
+  // user, so we require sign-in first. Anon users get bounced to /login
+  // and on return the modal will be reopened by the calculator (the
+  // predictionId is on the URL via PaywallModal's parent state).
+  const handlePro = async () => {
+    setError(null);
+
+    if (session.status === "loading") {
+      // Avoid double-clicks while we don't yet know auth state.
+      return;
+    }
+    if (session.status === "anon") {
+      // Land back on the calculator after sign-in. The predictionId persists
+      // as long as inputs aren't mutated; user can re-open the paywall.
+      router.push("/login?next=/#calculator");
+      return;
+    }
+
+    setLoading("pro");
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plan: proBilling === "annual" ? "pro_annual" : "pro_monthly",
+          // We pass the prediction context so we have it on the order
+          // for support / analytics; subscriptions don't strictly need it.
+          ...(predictionId ? { predictionId } : {}),
+        }),
+      });
+      const json = (await res.json()) as { url?: string; error?: string };
+      if (res.status === 401) {
+        router.push("/login?next=/#calculator");
+        return;
+      }
+      if (!res.ok || !json.url) {
+        throw new Error(json.error ?? "Could not start checkout.");
+      }
+      window.location.href = json.url;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not start checkout.");
+      setLoading(null);
+    }
+  };
+
+  const isPro = session.status === "authed" && Boolean(session.user.proTier);
 
   return (
     <div
@@ -763,7 +820,7 @@ function PaywallModal({
           {/* Single Report — active CTA */}
           <button
             onClick={handleSingle}
-            disabled={loading}
+            disabled={loading !== null}
             className="w-full text-left rounded-2xl border-2 border-mint-500 bg-mint-50 p-5 transition hover:bg-mint-100 disabled:opacity-60 disabled:cursor-wait"
           >
             <div className="flex items-start justify-between gap-4">
@@ -784,7 +841,7 @@ function PaywallModal({
               </ul>
             </div>
             <div className="mt-3 text-sm font-semibold text-mint-700 flex items-center gap-1.5">
-              {loading ? (
+              {loading === "single" ? (
                 <>Redirecting to secure checkout…</>
               ) : (
                 <>
@@ -794,28 +851,98 @@ function PaywallModal({
             </div>
           </button>
 
-          {/* Pro — Coming Soon (C2-B will wire this up) */}
-          <div className="relative rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 p-5">
-            <span className="absolute -top-2.5 right-4 inline-flex items-center rounded-full bg-gray-900 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
-              Coming Soon
-            </span>
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <div className="font-bold text-gray-700">Pro</div>
-                <div className="text-2xl font-extrabold tabular-nums text-gray-400">
-                  $9.99
-                  <span className="text-sm font-medium text-gray-400">/mo</span>
+          {/* Pro subscription — wired up. */}
+          <div className="relative rounded-2xl border-2 border-gray-200 bg-white p-5 hover:border-mint-300 transition">
+            <div className="flex items-start justify-between gap-4 mb-3">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="font-bold">Pro</span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-mint-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-mint-800">
+                    Best for serious prep
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl font-extrabold tabular-nums">
+                    {proBilling === "annual" ? "$79" : "$9.99"}
+                  </span>
+                  <span className="text-sm font-medium text-gray-500">
+                    {proBilling === "annual" ? "/yr" : "/mo"}
+                  </span>
+                  {proBilling === "annual" && (
+                    <span className="text-xs font-bold text-mint-700">
+                      Save 33%
+                    </span>
+                  )}
                 </div>
               </div>
+
+              {/* Tiny billing toggle inline — enough surface to flip the
+                  decision without taking the user out to /pricing. */}
+              <div
+                className="inline-flex items-center rounded-full bg-gray-100 p-0.5 text-xs font-semibold shrink-0"
+                role="tablist"
+                aria-label="Pro billing period"
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={proBilling === "monthly"}
+                  onClick={() => setProBilling("monthly")}
+                  className={cn(
+                    "px-2.5 py-1 rounded-full transition",
+                    proBilling === "monthly"
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
+                  )}
+                >
+                  Monthly
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={proBilling === "annual"}
+                  onClick={() => setProBilling("annual")}
+                  className={cn(
+                    "px-2.5 py-1 rounded-full transition",
+                    proBilling === "annual"
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
+                  )}
+                >
+                  Annual
+                </button>
+              </div>
             </div>
-            <ul className="text-xs text-gray-500 space-y-1 mb-4">
-              <li>· Unlimited predictions for Step 1, 2, 3</li>
+
+            <ul className="text-xs text-gray-700 space-y-1 mb-4">
+              <li>· Everything in Single Report</li>
+              <li>· Unlimited predictions for Step 1, 2 CK, 3</li>
               <li>· Live timeline + email reminders</li>
               <li>· Priority support</li>
             </ul>
-            <Button variant="outline" size="md" className="w-full" disabled>
-              Join waitlist (launching soon)
-            </Button>
+
+            {isPro ? (
+              // Already subscribed — make this transparent. They probably
+              // hit the paywall on a stale tab; tell them they're good.
+              <div className="rounded-xl bg-mint-50 border border-mint-200 p-3 text-xs text-mint-900">
+                You&apos;re already on Pro — your full report is ready in
+                your dashboard. Refresh this page to unlock it here.
+              </div>
+            ) : (
+              <Button
+                variant="outline"
+                size="md"
+                className="w-full"
+                onClick={handlePro}
+                disabled={loading !== null || session.status === "loading"}
+              >
+                {loading === "pro"
+                  ? "Redirecting to secure checkout…"
+                  : session.status === "anon"
+                  ? `Subscribe ${proBilling} — sign in next`
+                  : `Subscribe ${proBilling}`}
+              </Button>
+            )}
           </div>
         </div>
 
