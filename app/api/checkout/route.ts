@@ -165,30 +165,33 @@ export async function POST(req: Request) {
   // paid customer with nowhere to attach the tier). Single Report stays
   // anonymous-friendly because the `/report/<session_id>` URL is itself
   // the bearer token for that purchase.
+  //
+  // However, for BOTH paths we attempt to load the session (best-effort)
+  // so we can prefill the email on the Stripe Checkout page — saves the
+  // user from typing it again.
   const db = getDb();
   let authedUser:
     | { id: string; email: string; stripeCustomerId: string | null }
     | null = null;
-  if (plan.mode === "subscription") {
-    if (!db) {
-      return NextResponse.json(
-        { error: "Service unavailable. Try again shortly." },
-        { status: 503 }
-      );
-    }
+
+  if (db) {
     const session = await loadSession(db, req);
-    if (!session) {
-      // Front-end will catch this and bounce to /login?next=/pricing.
-      return NextResponse.json(
-        { error: "Sign in to subscribe to Pro." },
-        { status: 401 }
-      );
+    if (session) {
+      authedUser = {
+        id: session.user.id,
+        email: session.user.email,
+        stripeCustomerId: session.user.stripeCustomerId,
+      };
     }
-    authedUser = {
-      id: session.user.id,
-      email: session.user.email,
-      stripeCustomerId: session.user.stripeCustomerId,
-    };
+  }
+
+  // Pro subscriptions hard-require auth — can't grant entitlement without
+  // a user id. Single Report is fine anonymous.
+  if (plan.mode === "subscription" && !authedUser) {
+    return NextResponse.json(
+      { error: "Sign in to subscribe to Pro." },
+      { status: 401 }
+    );
   }
 
   const priceId = process.env[plan.stripePriceEnvKey];
@@ -258,23 +261,27 @@ export async function POST(req: Request) {
     };
 
     if (authedUser) {
-      // Subscription path: reuse the existing Stripe Customer if we already
-      // created one; otherwise prefill the email and Stripe will create a
-      // new customer (returned in the webhook). We also stash userId on
-      // the subscription itself, since the `customer.subscription.*`
-      // webhook events don't include the parent checkout's metadata.
+      // Prefill email on the Checkout page so the user doesn't retype it.
+      // If we already have a Stripe Customer for this user, bind to it
+      // (Stripe will skip the email field entirely). Otherwise just prefill.
       if (authedUser.stripeCustomerId) {
         sessionParams.customer = authedUser.stripeCustomerId;
       } else {
         sessionParams.customer_email = authedUser.email;
       }
-      sessionParams.subscription_data = {
-        metadata: { userId: authedUser.id, plan: plan.key },
-      };
-      // Help users self-serve receipts; Stripe will email a receipt for the
-      // initial subscription invoice automatically when this is on.
       sessionParams.client_reference_id = authedUser.id;
+
+      // Subscription-specific: stash userId on the subscription metadata
+      // since `customer.subscription.*` webhook events don't include the
+      // parent checkout's metadata.
+      if (plan.mode === "subscription") {
+        sessionParams.subscription_data = {
+          metadata: { userId: authedUser.id, plan: plan.key },
+        };
+      }
     } else if (plan.mode === "payment") {
+      // Anonymous single-report purchase — let Stripe create a customer
+      // record so receipts can be emailed.
       sessionParams.customer_creation = "if_required";
     }
 
