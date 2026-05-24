@@ -200,7 +200,7 @@ export function ReportView({
           </div>
           <div className="mt-2 text-sm font-semibold">{band.label}</div>
         </div>
-        <div className="md:col-span-2 rounded-3xl border-2 border-gray-200 p-6 print:border-gray-300 print:p-4">
+        <div className="md:col-span-2 print:col-span-2 rounded-3xl border-2 border-gray-200 p-6 print:border-gray-300 print:p-4">
           <h3 className="font-bold mb-2 flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-mint-600" />
             What this means
