@@ -13,7 +13,7 @@ import { ReportPdf } from "@/components/report-pdf";
 import { pdf } from "@react-pdf/renderer";
 import { predictStepScore, type PracticeExam } from "@/lib/data";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 const PREVIEW_EXAMS: PracticeExam[] = [

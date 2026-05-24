@@ -17,6 +17,7 @@ import { PageShell } from "@/components/page-shell";
 import { ReportView } from "@/components/report-view";
 import { predictStepScore, type PracticeExam } from "@/lib/data";
 
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 const PREVIEW_EXAMS: PracticeExam[] = [
