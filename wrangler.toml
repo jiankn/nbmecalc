@@ -22,6 +22,10 @@ database_name = "nbmecalc-prod"
 database_id = "60a55dbb-08d9-497d-8000-647b5829cbff"
 migrations_dir = "lib/db/migrations"
 
+[[services]]
+binding = "PDF_RENDERER"
+service = "nbmecalc-pdf-renderer"
+
 # ---------------------------------------------------------------
 # R2 — PDF cache + arbitrary blob storage. Not yet wired into code;
 # PDFs are currently re-rendered on demand from the prediction snapshot.

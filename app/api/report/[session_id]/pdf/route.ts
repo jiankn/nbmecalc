@@ -20,6 +20,15 @@ export const dynamic = "force-dynamic";
 type RouteContext = { params: Promise<{ session_id: string }> };
 
 const PDF_RENDERER_PATH = "/api/_pdf-renderer/render";
+const PDF_RENDERER_SERVICE_TARGET = `service-binding:PDF_RENDERER${PDF_RENDERER_PATH}`;
+
+interface PdfRendererBinding {
+  fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+}
+
+type CloudflareRuntimeEnv = Record<string, unknown> & {
+  PDF_RENDERER?: PdfRendererBinding;
+};
 
 export async function GET(_req: Request, context: RouteContext) {
   const { session_id } = await context.params;
@@ -108,46 +117,72 @@ async function renderWithPdfWorker(
   const siteUrl =
     readRuntimeEnv("NEXT_PUBLIC_SITE_URL") ?? new URL(req.url).origin;
   const rendererUrl = resolveRendererUrl(siteUrl);
-  const target = describeRendererTarget(rendererUrl);
   const secret = readRuntimeEnv("PDF_RENDERER_SECRET");
-  if (!secret) return { ok: false, reason: "missing-secret", target };
+  if (!secret) {
+    return {
+      ok: false,
+      reason: "missing-secret",
+      target: describeRendererTarget(rendererUrl),
+    };
+  }
+
   const reportUrl = new URL(`/report/${encodeURIComponent(sessionId)}`, siteUrl);
+  const body = JSON.stringify({
+    reportUrl: reportUrl.toString(),
+    filename,
+  });
+  const headers = {
+    "Content-Type": "application/json",
+    "X-PDF-Renderer-Secret": secret,
+  };
+  const binding = readPdfRendererBinding();
+
+  if (binding) {
+    try {
+      const res = await binding.fetch(
+        new Request(new URL(PDF_RENDERER_PATH, "https://pdf-renderer.internal"), {
+          method: "POST",
+          headers,
+          body,
+          signal: AbortSignal.timeout(30_000),
+        })
+      );
+
+      if (res.ok) {
+        return await pdfWorkerResponse(res, filename, PDF_RENDERER_SERVICE_TARGET);
+      }
+
+      console.error("[pdf] renderer service binding failed", res.status, await res.text());
+    } catch (err) {
+      console.error("[pdf] renderer service binding unavailable", err);
+    }
+  }
 
   try {
     const res = await fetch(rendererUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-PDF-Renderer-Secret": secret,
-      },
-      body: JSON.stringify({
-        reportUrl: reportUrl.toString(),
-        filename,
-      }),
+      headers,
+      body,
       signal: AbortSignal.timeout(30_000),
     });
 
     if (!res.ok) {
       console.error("[pdf] renderer worker failed", res.status, await res.text());
-      return { ok: false, reason: `renderer-http-${res.status}`, target };
+      return {
+        ok: false,
+        reason: `renderer-http-${res.status}`,
+        target: describeRendererTarget(rendererUrl),
+      };
     }
 
-    const body = await res.arrayBuffer();
-    return {
-      ok: true,
-      response: new Response(body, {
-        status: 200,
-        headers: {
-          "Content-Type": "application/pdf",
-          "Content-Disposition": `attachment; filename="${filename}"`,
-          "Cache-Control": "private, no-store, max-age=0",
-          "X-PDF-Renderer": "browser-worker",
-        },
-      }),
-    };
+    return await pdfWorkerResponse(res, filename, describeRendererTarget(rendererUrl));
   } catch (err) {
     console.error("[pdf] renderer worker unavailable", err);
-    return { ok: false, reason: "renderer-unavailable", target };
+    return {
+      ok: false,
+      reason: "renderer-unavailable",
+      target: describeRendererTarget(rendererUrl),
+    };
   }
 }
 
@@ -155,11 +190,18 @@ function readRuntimeEnv(name: string): string | undefined {
   const fromProcess = process.env[name];
   if (fromProcess) return fromProcess;
 
-  const env = getOptionalRequestContext()?.env as
-    | Record<string, unknown>
-    | undefined;
+  const env = getRuntimeEnv();
   const value = env?.[name];
   return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
+function readPdfRendererBinding(): PdfRendererBinding | undefined {
+  const binding = getRuntimeEnv()?.PDF_RENDERER;
+  return binding && typeof binding.fetch === "function" ? binding : undefined;
+}
+
+function getRuntimeEnv(): CloudflareRuntimeEnv | undefined {
+  return getOptionalRequestContext()?.env as CloudflareRuntimeEnv | undefined;
 }
 
 function resolveRendererUrl(siteUrl: string): string {
@@ -187,4 +229,25 @@ function describeRendererTarget(value: string): string {
   } catch {
     return "invalid-url";
   }
+}
+
+async function pdfWorkerResponse(
+  res: Response,
+  filename: string,
+  target: string
+): Promise<PdfWorkerResult> {
+  const body = await res.arrayBuffer();
+  return {
+    ok: true,
+    response: new Response(body, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="${filename}"`,
+        "Cache-Control": "private, no-store, max-age=0",
+        "X-PDF-Renderer": "browser-worker",
+        "X-PDF-Renderer-Target": target,
+      },
+    }),
+  };
 }
