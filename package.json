@@ -12,10 +12,12 @@
     "pages:build": "npx @cloudflare/next-on-pages",
     "preview": "npm run pages:build && npx wrangler pages dev .vercel/output/static --compatibility-flags=nodejs_compat",
     "deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name=nbmecalc",
+    "deploy:pdf-worker": "npx wrangler deploy --config workers/pdf-renderer/wrangler.toml",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@cloudflare/puppeteer": "^1.0.6",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-slot": "^1.1.1",

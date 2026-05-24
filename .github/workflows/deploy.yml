@@ -51,6 +51,32 @@ jobs:
         run: |
           yes | npx wrangler d1 migrations apply nbmecalc-prod --remote
 
+      - name: Prepare PDF renderer shared secret
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          PDF_RENDERER_SECRET="$(printf "%s" "$CLOUDFLARE_API_TOKEN" | sha256sum | awk '{print $1}')"
+          echo "::add-mask::$PDF_RENDERER_SECRET"
+          echo "PDF_RENDERER_SECRET=$PDF_RENDERER_SECRET" >> "$GITHUB_ENV"
+
+      - name: Deploy PDF renderer Worker
+        uses: cloudflare/wrangler-action@v3
+        continue-on-error: true
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --config workers/pdf-renderer/wrangler.toml
+
+      - name: Configure PDF renderer secrets
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PDF_RENDERER_SECRET: ${{ env.PDF_RENDERER_SECRET }}
+        run: |
+          printf "%s" "$PDF_RENDERER_SECRET" | npx wrangler secret put PDF_RENDERER_SECRET --config workers/pdf-renderer/wrangler.toml
+          printf "%s" "$PDF_RENDERER_SECRET" | npx wrangler pages secret put PDF_RENDERER_SECRET --project-name=nbmecalc
+
       - name: Build for Cloudflare Pages
         run: npx @cloudflare/next-on-pages
         env:

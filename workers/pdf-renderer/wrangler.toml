@@ -1,0 +1,15 @@
+name = "nbmecalc-pdf-renderer"
+main = "src/index.ts"
+compatibility_date = "2025-01-17"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+routes = [
+  { pattern = "nbmecalc.com/api/_pdf-renderer", zone_name = "nbmecalc.com" }
+]
+
+[browser]
+binding = "BROWSER"
+
+[vars]
+SITE_URL = "https://nbmecalc.com"

@@ -12,11 +12,14 @@
  */
 import { loadReportFromSession } from "@/lib/session-report";
 import { createReportPdf } from "@/lib/report-pdf-edge";
+import { getSiteUrl } from "@/lib/stripe";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 type RouteContext = { params: Promise<{ session_id: string }> };
+
+const PDF_RENDERER_PATH = "/api/_pdf-renderer";
 
 export async function GET(_req: Request, context: RouteContext) {
   const { session_id } = await context.params;
@@ -50,6 +53,14 @@ export async function GET(_req: Request, context: RouteContext) {
 
   const { data } = loaded;
 
+  // Filename embeds the predicted score so users can find their report in
+  // their Downloads folder months later. We sanitise to ASCII only.
+  const stepLabel = data.step.toUpperCase();
+  const filename = `nbmecalc-${stepLabel}-${data.result.pointEstimate}.pdf`;
+
+  const rendered = await renderWithPdfWorker(data.sessionId, filename);
+  if (rendered) return rendered;
+
   let pdfBytes: Uint8Array;
   try {
     pdfBytes = createReportPdf(data);
@@ -65,10 +76,6 @@ export async function GET(_req: Request, context: RouteContext) {
     );
   }
 
-  // Filename embeds the predicted score so users can find their report in
-  // their Downloads folder months later. We sanitise to ASCII only.
-  const stepLabel = data.step.toUpperCase();
-  const filename = `nbmecalc-${stepLabel}-${data.result.pointEstimate}.pdf`;
   const body = pdfBytes.buffer.slice(
     pdfBytes.byteOffset,
     pdfBytes.byteOffset + pdfBytes.byteLength
@@ -79,10 +86,58 @@ export async function GET(_req: Request, context: RouteContext) {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="${filename}"`,
+      "X-PDF-Renderer": "edge-fallback",
       // Private because each PDF is keyed to a specific paid session.
       // 1-hour browser cache so the second click is instant if they're on
       // a flaky connection; the data is regenerated server-side after that.
       "Cache-Control": "private, max-age=3600",
     },
   });
+}
+
+async function renderWithPdfWorker(
+  sessionId: string,
+  filename: string
+): Promise<Response | null> {
+  const secret = process.env.PDF_RENDERER_SECRET;
+  if (!secret) return null;
+
+  const siteUrl = getSiteUrl();
+  const rendererUrl =
+    process.env.PDF_RENDERER_URL ?? new URL(PDF_RENDERER_PATH, siteUrl).toString();
+  const reportUrl = new URL(`/report/${encodeURIComponent(sessionId)}`, siteUrl);
+
+  try {
+    const res = await fetch(rendererUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-PDF-Renderer-Secret": secret,
+      },
+      body: JSON.stringify({
+        reportUrl: reportUrl.toString(),
+        filename,
+      }),
+      signal: AbortSignal.timeout(30_000),
+    });
+
+    if (!res.ok) {
+      console.error("[pdf] renderer worker failed", res.status, await res.text());
+      return null;
+    }
+
+    const body = await res.arrayBuffer();
+    return new Response(body, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="${filename}"`,
+        "Cache-Control": "private, max-age=3600",
+        "X-PDF-Renderer": "browser-worker",
+      },
+    });
+  } catch (err) {
+    console.error("[pdf] renderer worker unavailable", err);
+    return null;
+  }
 }

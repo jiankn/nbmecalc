@@ -10,9 +10,9 @@ Free USMLE Step score predictor. Drop your NBME, UWSA, Free 120, AMBOSS, or CMS 
 - **Fonts**: Plus Jakarta Sans (display + body), JetBrains Mono (numbers)
 - **Hosting**: Cloudflare Pages (edge runtime, `@cloudflare/next-on-pages`)
 - **Database**: Cloudflare D1 (Drizzle ORM)
-- **PDF**: `@react-pdf/renderer` rendered on the edge
+- **PDF**: Cloudflare Browser Rendering Worker, with an edge-safe fallback PDF
 - **Payments**: Stripe Checkout
-- **Email**: Postal SMTP for magic-link email delivery
+- **Email**: Postal HTTP API for magic-link email delivery
 - **Tests**: Vitest (pure-logic units in `lib/**`)
 
 ## Quick Start
@@ -59,7 +59,9 @@ nbmecalc/
 ├── lib/
 │   ├── utils.ts            # cn() helper
 │   ├── data.ts             # NBME conversion logic + types
-│   └── email.ts            # SMTP email delivery
+│   └── email.ts            # Postal HTTP email delivery
+├── workers/
+│   └── pdf-renderer/       # Cloudflare Browser Rendering PDF Worker
 ├── public/
 │   └── placeholders/       # AI image placeholders + prompts
 ├── tailwind.config.ts      # Mint color scale + animations
@@ -160,6 +162,20 @@ npx wrangler d1 migrations apply nbmecalc-prod --local
 
 Migrations are committed to `lib/db/migrations/` so production deploys don't need drizzle-kit on the server — they just `wrangler d1 migrations apply --remote`.
 
+## PDF Renderer Worker
+
+Premium report downloads use a separate Cloudflare Worker at `workers/pdf-renderer`. The Worker uses Cloudflare Browser Rendering (`@cloudflare/puppeteer`) to open the styled report page and export a color PDF with `printBackground: true`.
+
+GitHub Actions deploys the Worker and the Pages app from this repository. It derives a shared `PDF_RENDERER_SECRET` from the existing `CLOUDFLARE_API_TOKEN` and writes it to both Cloudflare targets during deployment. If Worker deployment or secret configuration fails, `/api/report/[session_id]/pdf` falls back to the edge-safe text PDF generator instead of failing the purchase flow.
+
+The Cloudflare API token used by GitHub Actions needs permissions for:
+
+- Cloudflare Pages edit
+- Workers Scripts edit
+- Workers Browser Rendering
+- Zone route edit for `nbmecalc.com/api/_pdf-renderer`
+- Account read
+
 ## Tests
 
 ```bash
@@ -169,19 +185,17 @@ npm run test:watch # watch mode
 
 Vitest covers `lib/data.ts` (prediction + personalized analytics) and `lib/rate-limit.ts` (fail-open + bucket counting). The DB and Next route handlers are exercised end-to-end via `npm run preview` (wrangler) — there are no jsdom/React-side unit tests yet.
 
-## Email Delivery (Postal SMTP)
+## Email Delivery (Postal HTTP API)
 
-Magic-link login emails are sent through Postal SMTP. Configure these variables in local `.env.local` and in **Cloudflare Pages → Settings → Environment variables** for production.
+Magic-link login emails are sent through Postal's HTTP API. Configure these variables in local `.env.local` and in Cloudflare Pages environment variables for production.
 
 ```bash
-SMTP_HOST=mail.removexif.com
-SMTP_PORT=25
-SMTP_USER=removexif/jkn-mail-server
-SMTP_PASSWORD=your-postal-smtp-password
+POSTAL_API_URL=https://mail.removexif.com/api/v1/send/message
+POSTAL_API_KEY=your-postal-api-key
 SMTP_FROM=noreply@nbmecalc.com
 ```
 
-Use Cloudflare secret variables for `SMTP_PASSWORD`. Keep `SMTP_FROM` aligned with the current project domain.
+Use Cloudflare secret variables for `POSTAL_API_KEY`. Keep `SMTP_FROM` aligned with the current project domain.
 
 ## SEO Targets (KD < 15)
 
