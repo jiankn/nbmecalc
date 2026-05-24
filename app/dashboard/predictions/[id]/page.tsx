@@ -300,8 +300,10 @@ export default function PredictionDetailPage() {
         <section className="rounded-3xl bg-gray-50 border border-gray-200 p-6">
           <h2 className="text-lg font-bold mb-2">Unlock Full Report</h2>
           <p className="text-sm text-gray-600 mb-4">
-            Get your downloadable PDF with a 14-day study plan, subject
-            weakness map, and score trajectory analysis.
+            Get your downloadable PDF: sit-or-postpone recommendation, the 3
+            highest-leverage moves for your input pattern, anti-patterns to
+            avoid, cohort mirror, and an honest list of what we can&apos;t
+            predict.
           </p>
           <Button size="md" asChild>
             <Link href="/#calculator">Get Report — $14.99</Link>

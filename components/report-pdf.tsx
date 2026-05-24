@@ -12,7 +12,17 @@ import {
   Path,
   G,
 } from "@react-pdf/renderer";
-import type { PredictionResult, PracticeExam } from "@/lib/data";
+import type {
+  AntiPatterns,
+  CohortMirror,
+  HighLeverageMoves,
+  HonestUncertainty,
+  OneDecision,
+  PracticeExam,
+  PredictionResult,
+  RiskProfile,
+  TestDayProtocol,
+} from "@/lib/data";
 
 /**
  * Server-rendered PDF version of the premium report.
@@ -244,10 +254,6 @@ export function ReportPdf({
   const sortedSubjects = [...result.cohortSubjectAverages].sort(
     (a, b) => a.cohortAverage - b.cohortAverage
   );
-  const planSubjects = result.personalizedWeakSubjects?.doublyWeak.length
-    ? result.personalizedWeakSubjects.doublyWeak
-    : sortedSubjects.slice(0, 3).map((s) => s.name);
-  const plan = buildStudyPlan(planSubjects);
 
   const issued = purchasedAt.toLocaleDateString("en-US", {
     year: "numeric",
@@ -379,9 +385,42 @@ export function ReportPdf({
         <PageFooter sessionId={sessionId} />
       </Page>
 
-      {/* ─── Page 2: analytics + cohort ─── */}
+      {/* ─── Page 2: PRIMARY DECISION-GRADE MODULES ─── */}
+      {/* Order mirrors the on-screen report: risk → decision → leverage
+          moves → cohort context → anti-patterns → test-day routine.
+          react-pdf will auto-break to a new page if these overflow A4. */}
       <Page size="A4" style={styles.page} wrap>
         <Header />
+        <Text style={styles.title}>Decision-grade analysis</Text>
+        <Text style={styles.subtitle}>
+          Six modules answering the questions you&apos;ve been agonizing over.
+        </Text>
+
+        <RiskProfileBlock profile={result.riskProfile} />
+        <OneDecisionBlock decision={result.oneDecision} />
+        {result.highLeverageMoves.items.length > 0 && (
+          <HighLeverageMovesBlock moves={result.highLeverageMoves} />
+        )}
+        {result.cohortMirror.buckets.length > 0 && (
+          <CohortMirrorBlock mirror={result.cohortMirror} />
+        )}
+        {result.antiPatterns.items.length > 0 && (
+          <AntiPatternsBlock patterns={result.antiPatterns} />
+        )}
+        {result.testDayProtocol.show && (
+          <TestDayProtocolBlock protocol={result.testDayProtocol} />
+        )}
+
+        <PageFooter sessionId={sessionId} />
+      </Page>
+
+      {/* ─── Page 3: Supporting analytics + Honest uncertainty + Methodology ─── */}
+      <Page size="A4" style={styles.page} wrap>
+        <Header />
+        <Text style={styles.title}>Supporting analytics</Text>
+        <Text style={styles.subtitle}>
+          The numbers behind the recommendation above.
+        </Text>
 
         {result.scoreTrajectory.points.length >= 2 && (
           <TrajectoryBlock trajectory={result.scoreTrajectory} />
@@ -393,10 +432,6 @@ export function ReportPdf({
 
         {result.targetGap && <TargetGapBlock gap={result.targetGap} />}
 
-        {result.postponeRecommendation.show && (
-          <PostponeBlock rec={result.postponeRecommendation} />
-        )}
-
         {result.personalizedWeakSubjects && (
           <PersonalizedWeakBlock data={result.personalizedWeakSubjects} />
         )}
@@ -406,45 +441,7 @@ export function ReportPdf({
           note={result.cohortSubjectAveragesNote}
         />
 
-        <PageFooter sessionId={sessionId} />
-      </Page>
-
-      {/* ─── Page 3: 14-day plan + methodology ─── */}
-      <Page size="A4" style={styles.page} wrap>
-        <Header />
-        <Text style={styles.sectionTitle}>Your 14-day priority plan</Text>
-        <Text style={styles.sectionDesc}>
-          {result.personalizedWeakSubjects?.doublyWeak.length
-            ? "Built around the subjects you flagged that also run weak in the cohort: "
-            : "Built around the cohort's typical weak spots at your score band: "}
-          {planSubjects.join(", ")}.
-        </Text>
-        <View style={{ gap: 6 }}>
-          {plan.map((task, i) => (
-            <View
-              key={i}
-              style={{
-                flexDirection: "row",
-                borderWidth: 1,
-                borderColor: COLOR.cardBorder,
-                borderRadius: 6,
-                padding: 8,
-              }}
-              wrap={false}
-            >
-              <Text
-                style={{
-                  width: 50,
-                  fontFamily: "Helvetica-Bold",
-                  color: COLOR.mintDark,
-                }}
-              >
-                Day {i + 1}
-              </Text>
-              <Text style={{ flex: 1, fontSize: 9.5 }}>{task}</Text>
-            </View>
-          ))}
-        </View>
+        <HonestUncertaintyBlock uncertainty={result.honestUncertainty} />
 
         <Text style={styles.sectionTitle}>Methodology</Text>
         <Text style={{ fontSize: 9.5, marginBottom: 4 }}>
@@ -700,66 +697,6 @@ function TargetGapBlock({
   );
 }
 
-function PostponeBlock({
-  rec,
-}: {
-  rec: PredictionResult["postponeRecommendation"];
-}) {
-  const scenarios = [rec.onSchedule, rec.postponed14d, rec.postponed28d];
-  return (
-    <View style={{ marginBottom: 14 }} wrap={false}>
-      <Text style={styles.sectionTitle}>Should you postpone?</Text>
-      <Text style={styles.sectionDesc}>{rec.insight}</Text>
-      <View style={{ flexDirection: "row", gap: 8 }}>
-        {scenarios.map((s, i) => (
-          <View
-            key={i}
-            style={{
-              flex: 1,
-              borderWidth: 1.5,
-              borderColor: i === 0 ? COLOR.cardBorder : COLOR.mintBorder,
-              backgroundColor: i === 0 ? "#FFFFFF" : COLOR.mintBg,
-              borderRadius: 8,
-              padding: 10,
-            }}
-          >
-            <Text style={styles.kpiLabel}>
-              {i === 0 ? "On schedule" : `Postpone ${s.daysAdded} days`}
-            </Text>
-            <Text
-              style={{
-                fontSize: 22,
-                fontFamily: "Helvetica-Bold",
-                marginTop: 2,
-              }}
-            >
-              {Math.round(s.projectedPassProbability * 100)}%
-            </Text>
-            <Text style={{ fontSize: 9, color: COLOR.textMuted }}>
-              pass probability
-            </Text>
-            <Text
-              style={{ fontSize: 8.5, marginTop: 4, color: COLOR.textMuted }}
-            >
-              Projected score:{" "}
-              <Text
-                style={{ fontFamily: "Helvetica-Bold", color: COLOR.ink }}
-              >
-                {s.projectedScore}
-              </Text>
-            </Text>
-          </View>
-        ))}
-      </View>
-      <Text style={{ fontSize: 8.5, color: COLOR.textMuted, marginTop: 6 }}>
-        Postponed-scenario uplift uses your measured trajectory or a
-        conservative typical rate, capped at +12 pts to reflect diminishing
-        returns.
-      </Text>
-    </View>
-  );
-}
-
 function PersonalizedWeakBlock({
   data,
 }: {
@@ -890,6 +827,629 @@ function CohortTableBlock({
 }
 
 // ---------------------------------------------------------------------------
+// Premium-report PDF blocks — the seven decision-grade modules. Each renders
+// unconditionally where it makes sense; the parent gates the empty-input
+// edge cases with `.length > 0` / `.show` checks so the PDF stays compact
+// when there is genuinely nothing to say.
+// ---------------------------------------------------------------------------
+
+const RISK_TONE_PDF: Record<
+  RiskProfile["shape"],
+  { border: string; bg: string; label: string }
+> = {
+  asymmetric_downside: {
+    border: COLOR.amberBorder,
+    bg: COLOR.amberBg,
+    label: "Asymmetric downside",
+  },
+  asymmetric_upside: {
+    border: COLOR.mintBorder,
+    bg: COLOR.mintBg,
+    label: "Asymmetric upside",
+  },
+  tight_balanced: {
+    border: COLOR.mintBorder,
+    bg: COLOR.mintBg,
+    label: "Tight & balanced",
+  },
+  wide_balanced: {
+    border: COLOR.cardBorder,
+    bg: COLOR.surface,
+    label: "Wide & balanced",
+  },
+};
+
+function RiskProfileBlock({ profile }: { profile: RiskProfile }) {
+  const tone = RISK_TONE_PDF[profile.shape];
+  return (
+    <View
+      style={{
+        borderWidth: 1.5,
+        borderColor: tone.border,
+        backgroundColor: tone.bg,
+        borderRadius: 10,
+        padding: 12,
+        marginBottom: 14,
+      }}
+      wrap={false}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          marginBottom: 8,
+        }}
+      >
+        <Text style={{ ...styles.sectionTitle, marginTop: 0, marginBottom: 0 }}>
+          Your risk profile
+        </Text>
+        <Text
+          style={{
+            fontSize: 8,
+            fontFamily: "Helvetica-Bold",
+            color: COLOR.ink,
+            backgroundColor: "#FFFFFF",
+            borderWidth: 1,
+            borderColor: tone.border,
+            paddingHorizontal: 6,
+            paddingVertical: 2,
+            borderRadius: 99,
+          }}
+        >
+          {tone.label}
+        </Text>
+      </View>
+
+      <View
+        style={{ flexDirection: "row", gap: 8, marginBottom: 8 }}
+      >
+        {[
+          { label: "Floor", value: String(profile.floor), highlight: false },
+          {
+            label: "Spread",
+            value: `${profile.spread} pts`,
+            sub: `${profile.spreadVsTypical} than typical`,
+            highlight: true,
+          },
+          { label: "Ceiling", value: String(profile.ceiling), highlight: false },
+        ].map((cell, i) => (
+          <View
+            key={i}
+            style={{
+              flex: 1,
+              borderWidth: cell.highlight ? 1.5 : 0,
+              borderColor: COLOR.cardBorder,
+              backgroundColor: cell.highlight ? "#FFFFFF" : "transparent",
+              borderRadius: 8,
+              paddingVertical: 6,
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.kpiLabel}>{cell.label}</Text>
+            <Text style={{ ...styles.kpiValue, fontSize: 18 }}>
+              {cell.value}
+            </Text>
+            {cell.sub && (
+              <Text
+                style={{
+                  fontSize: 7.5,
+                  color: COLOR.textMuted,
+                  marginTop: 1,
+                  textTransform: "uppercase",
+                  letterSpacing: 0.4,
+                }}
+              >
+                {cell.sub}
+              </Text>
+            )}
+          </View>
+        ))}
+      </View>
+
+      <Text
+        style={{ fontSize: 10, fontFamily: "Helvetica-Bold", marginBottom: 3 }}
+      >
+        {profile.headline}
+      </Text>
+      <Text style={{ fontSize: 9.5, color: COLOR.ink }}>{profile.rootCause}</Text>
+    </View>
+  );
+}
+
+function OneDecisionBlock({ decision }: { decision: OneDecision }) {
+  // Tone palette: dark band for prominent recommendations, light card for
+  // need_more_data so it doesn't look like a real action when it isn't.
+  const isMore = decision.recommendation === "need_more_data";
+  const tone = (() => {
+    switch (decision.recommendation) {
+      case "sit_as_scheduled":
+        return {
+          bg: COLOR.mintBg,
+          border: COLOR.mintBorder,
+          accent: COLOR.mintDark,
+        };
+      case "postpone_14d":
+        return {
+          bg: COLOR.amberBg,
+          border: COLOR.amberBorder,
+          accent: COLOR.amber,
+        };
+      case "postpone_28d":
+        return { bg: COLOR.redBg, border: COLOR.redBorder, accent: COLOR.red };
+      case "need_more_data":
+      default:
+        return {
+          bg: COLOR.surface,
+          border: COLOR.cardBorder,
+          accent: COLOR.textMuted,
+        };
+    }
+  })();
+
+  return (
+    <View
+      style={{
+        borderWidth: 1.5,
+        borderColor: tone.border,
+        backgroundColor: tone.bg,
+        borderRadius: 10,
+        padding: 14,
+        marginBottom: 14,
+      }}
+      wrap={false}
+    >
+      <Text
+        style={{
+          fontSize: 8.5,
+          fontFamily: "Helvetica-Bold",
+          color: tone.accent,
+          textTransform: "uppercase",
+          letterSpacing: 0.8,
+          marginBottom: 4,
+        }}
+      >
+        {isMore ? "Need more data" : "Our recommendation"} ·{" "}
+        {decision.confidence} confidence
+      </Text>
+      <Text
+        style={{
+          fontSize: 15,
+          fontFamily: "Helvetica-Bold",
+          marginBottom: 8,
+          lineHeight: 1.3,
+        }}
+      >
+        {decision.headline}
+      </Text>
+
+      {decision.reasons.length > 0 && (
+        <View style={{ marginBottom: decision.reverseTriggers.length > 0 ? 8 : 0 }}>
+          <Text
+            style={{
+              fontSize: 8,
+              fontFamily: "Helvetica-Bold",
+              color: COLOR.textMuted,
+              textTransform: "uppercase",
+              letterSpacing: 0.5,
+              marginBottom: 3,
+            }}
+          >
+            Why
+          </Text>
+          {decision.reasons.map((r, i) => (
+            <View
+              key={i}
+              style={{ flexDirection: "row", marginBottom: 2 }}
+            >
+              <Text style={{ fontSize: 9.5, color: tone.accent, width: 10 }}>
+                →
+              </Text>
+              <Text style={{ fontSize: 9.5, flex: 1 }}>{r}</Text>
+            </View>
+          ))}
+        </View>
+      )}
+
+      {decision.reverseTriggers.length > 0 && (
+        <View
+          style={{
+            borderTopWidth: 1,
+            borderTopColor: tone.border,
+            paddingTop: 6,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 8,
+              fontFamily: "Helvetica-Bold",
+              color: COLOR.textMuted,
+              textTransform: "uppercase",
+              letterSpacing: 0.5,
+              marginBottom: 3,
+            }}
+          >
+            We&apos;d reverse this if
+          </Text>
+          {decision.reverseTriggers.map((r, i) => (
+            <View key={i} style={{ flexDirection: "row", marginBottom: 2 }}>
+              <Text style={{ fontSize: 9, color: COLOR.textMuted, width: 10 }}>
+                ·
+              </Text>
+              <Text style={{ fontSize: 9, color: COLOR.ink, flex: 1 }}>
+                {r}
+              </Text>
+            </View>
+          ))}
+        </View>
+      )}
+    </View>
+  );
+}
+
+function HighLeverageMovesBlock({ moves }: { moves: HighLeverageMoves }) {
+  return (
+    <View style={{ marginBottom: 14 }} wrap={false}>
+      <Text style={styles.sectionTitle}>Your 3 highest-leverage moves</Text>
+      <Text style={styles.sectionDesc}>
+        Ranked by expected impact for your specific input pattern.
+      </Text>
+      <View style={{ gap: 6 }}>
+        {moves.items.map((m) => (
+          <View
+            key={m.rank}
+            style={{
+              borderWidth: 1,
+              borderColor: COLOR.cardBorder,
+              borderRadius: 8,
+              padding: 10,
+              flexDirection: "row",
+              gap: 10,
+            }}
+            wrap={false}
+          >
+            <View
+              style={{
+                width: 26,
+                height: 26,
+                borderRadius: 8,
+                backgroundColor: COLOR.mintBg,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: "Helvetica-Bold",
+                  color: COLOR.mintDark,
+                  fontSize: 13,
+                }}
+              >
+                {m.rank}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 11,
+                  fontFamily: "Helvetica-Bold",
+                  marginBottom: 3,
+                }}
+              >
+                {m.title}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 8,
+                  color: COLOR.mintDark,
+                  fontFamily: "Helvetica-Bold",
+                  marginBottom: 3,
+                }}
+              >
+                IMPACT: {m.expectedImpact.toUpperCase()}
+              </Text>
+              <Text style={{ fontSize: 9.5, marginBottom: 3 }}>{m.why}</Text>
+              <Text
+                style={{ fontSize: 8.5, fontStyle: "italic", color: COLOR.mintDark }}
+              >
+                When: {m.when}
+              </Text>
+            </View>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function CohortMirrorBlock({ mirror }: { mirror: CohortMirror }) {
+  const maxPct = Math.max(...mirror.buckets.map((b) => b.percentage), 0.01);
+  return (
+    <View style={{ marginBottom: 14 }} wrap={false}>
+      <Text style={styles.sectionTitle}>Cohort mirror</Text>
+      <Text style={styles.sectionDesc}>{mirror.cohortDescription}</Text>
+      <View style={styles.card}>
+        <View style={{ gap: 4 }}>
+          {mirror.buckets.map((bucket, i) => {
+            const widthPct = Math.max(2, (bucket.percentage / maxPct) * 100);
+            return (
+              <View
+                key={i}
+                style={{ flexDirection: "row", alignItems: "center", gap: 6 }}
+              >
+                <Text
+                  style={{
+                    width: 56,
+                    fontSize: 9,
+                    fontFamily: "Helvetica-Bold",
+                    textAlign: "right",
+                  }}
+                >
+                  {bucket.range}
+                </Text>
+                <View
+                  style={{
+                    flex: 1,
+                    height: 14,
+                    backgroundColor: COLOR.divider,
+                    borderRadius: 3,
+                    overflow: "hidden",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: `${widthPct}%`,
+                      height: "100%",
+                      backgroundColor: bucket.isYourProjection
+                        ? COLOR.mint
+                        : "#9CA3AF",
+                      borderRadius: 3,
+                    }}
+                  />
+                </View>
+                <Text
+                  style={{
+                    width: 32,
+                    fontSize: 9,
+                    fontFamily: "Helvetica-Bold",
+                    textAlign: "right",
+                  }}
+                >
+                  {Math.round(bucket.percentage * 100)}%
+                </Text>
+                {bucket.isYourProjection && (
+                  <Text
+                    style={{
+                      fontSize: 7.5,
+                      fontFamily: "Helvetica-Bold",
+                      color: COLOR.mintDark,
+                      width: 32,
+                    }}
+                  >
+                    ← YOU
+                  </Text>
+                )}
+                {!bucket.isYourProjection && <View style={{ width: 32 }} />}
+              </View>
+            );
+          })}
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 8,
+            paddingTop: 8,
+            borderTopWidth: 1,
+            borderTopColor: COLOR.divider,
+            gap: 12,
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <Text style={styles.kpiLabel}>Projected median</Text>
+            <Text style={{ ...styles.kpiValue, fontSize: 16 }}>
+              {mirror.median}
+            </Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.kpiLabel}>Your percentile</Text>
+            <Text style={{ ...styles.kpiValue, fontSize: 16 }}>
+              {mirror.yourPercentile}
+              <Text style={{ fontSize: 10, color: COLOR.textMuted }}>th</Text>
+            </Text>
+          </View>
+        </View>
+      </View>
+      <Text style={{ fontSize: 8.5, color: COLOR.textMuted, marginTop: 4 }}>
+        {mirror.disclaimer}
+      </Text>
+    </View>
+  );
+}
+
+function AntiPatternsBlock({ patterns }: { patterns: AntiPatterns }) {
+  return (
+    <View style={{ marginBottom: 14 }} wrap={false}>
+      <Text style={styles.sectionTitle}>Don&apos;t do these</Text>
+      <Text style={styles.sectionDesc}>
+        Counter-intuitive but data-backed. Reddit won&apos;t tell you these.
+      </Text>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+        {patterns.items.map((p, i) => (
+          <View
+            key={i}
+            style={{
+              flexBasis: "48%",
+              borderWidth: 1,
+              borderColor: COLOR.redBorder,
+              backgroundColor: COLOR.redBg,
+              borderRadius: 8,
+              padding: 8,
+            }}
+            wrap={false}
+          >
+            <Text
+              style={{
+                fontSize: 10,
+                fontFamily: "Helvetica-Bold",
+                color: COLOR.red,
+                marginBottom: 3,
+              }}
+            >
+              ✕ {p.title}
+            </Text>
+            <Text style={{ fontSize: 9, marginBottom: 3 }}>{p.reason}</Text>
+            <Text
+              style={{ fontSize: 8, color: COLOR.textMuted, fontStyle: "italic" }}
+            >
+              Based on: {p.basedOn}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function TestDayProtocolBlock({ protocol }: { protocol: TestDayProtocol }) {
+  const columns: { title: string; items: string[]; accent: string }[] = [
+    { title: "DAY −1", items: protocol.dayMinusOne, accent: COLOR.amber },
+    { title: "DAY 0", items: protocol.dayZero, accent: COLOR.mintDark },
+    { title: "DON'T", items: protocol.doNots, accent: COLOR.red },
+  ];
+  return (
+    <View
+      style={{
+        borderWidth: 1.5,
+        borderColor: COLOR.mintBorder,
+        backgroundColor: COLOR.mintBg,
+        borderRadius: 10,
+        padding: 12,
+        marginBottom: 14,
+      }}
+      wrap={false}
+    >
+      <Text style={{ ...styles.sectionTitle, marginTop: 0 }}>
+        Test-day protocol
+      </Text>
+      <Text style={styles.sectionDesc}>
+        Operational defaults from high scorers — adapt to your own routine.
+      </Text>
+      <View style={{ flexDirection: "row", gap: 10 }}>
+        {columns.map((col) => (
+          <View key={col.title} style={{ flex: 1 }}>
+            <Text
+              style={{
+                fontSize: 9,
+                fontFamily: "Helvetica-Bold",
+                color: col.accent,
+                marginBottom: 4,
+                letterSpacing: 0.6,
+              }}
+            >
+              {col.title}
+            </Text>
+            {col.items.map((s, i) => (
+              <View
+                key={i}
+                style={{ flexDirection: "row", marginBottom: 3 }}
+              >
+                <Text
+                  style={{ fontSize: 8.5, color: col.accent, width: 8 }}
+                >
+                  ·
+                </Text>
+                <Text style={{ fontSize: 8.5, flex: 1, lineHeight: 1.35 }}>
+                  {s}
+                </Text>
+              </View>
+            ))}
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function HonestUncertaintyBlock({
+  uncertainty,
+}: {
+  uncertainty: HonestUncertainty;
+}) {
+  return (
+    <View
+      style={{
+        borderWidth: 1,
+        borderColor: COLOR.cardBorder,
+        borderRadius: 10,
+        padding: 12,
+        marginBottom: 14,
+      }}
+      wrap={false}
+    >
+      <Text style={{ ...styles.sectionTitle, marginTop: 0 }}>
+        Honest uncertainty
+      </Text>
+      <Text style={styles.sectionDesc}>
+        Every other tool tells you they&apos;re right. We tell you when
+        we&apos;re probably wrong.
+      </Text>
+      <View style={{ flexDirection: "row", gap: 14, marginBottom: 6 }}>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              fontSize: 9,
+              fontFamily: "Helvetica-Bold",
+              marginBottom: 4,
+            }}
+          >
+            What we can&apos;t predict
+          </Text>
+          {uncertainty.cannotPredict.map((s, i) => (
+            <View key={i} style={{ flexDirection: "row", marginBottom: 2 }}>
+              <Text style={{ fontSize: 8.5, color: COLOR.textMuted, width: 8 }}>
+                ·
+              </Text>
+              <Text style={{ fontSize: 8.5, flex: 1 }}>{s}</Text>
+            </View>
+          ))}
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              fontSize: 9,
+              fontFamily: "Helvetica-Bold",
+              marginBottom: 4,
+            }}
+          >
+            When we&apos;d be wrong about you
+          </Text>
+          {uncertainty.whenWedBeWrong.map((s, i) => (
+            <View key={i} style={{ flexDirection: "row", marginBottom: 2 }}>
+              <Text style={{ fontSize: 8.5, color: COLOR.amber, width: 8 }}>
+                ·
+              </Text>
+              <Text style={{ fontSize: 8.5, flex: 1 }}>{s}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+      <Text
+        style={{
+          fontSize: 8,
+          color: COLOR.textMuted,
+          marginTop: 4,
+          paddingTop: 4,
+          borderTopWidth: 1,
+          borderTopColor: COLOR.divider,
+        }}
+      >
+        {uncertainty.notAffiliatedNote}
+      </Text>
+    </View>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Pure helpers — kept inline so the PDF builder is self-contained.
 // ---------------------------------------------------------------------------
 
@@ -985,29 +1545,3 @@ function formatExamLabel(e: PracticeExam) {
   return e.source;
 }
 
-function buildStudyPlan(weakSubjects: string[]): string[] {
-  if (weakSubjects.length === 0) {
-    weakSubjects = ["foundations", "high-yield gaps", "biostatistics"];
-  }
-  const [s1, s2, s3] = [
-    weakSubjects[0],
-    weakSubjects[1] ?? weakSubjects[0],
-    weakSubjects[2] ?? weakSubjects[0],
-  ];
-  return [
-    `Foundations review: ${s1}. Read First Aid chapter + 40 UWorld Qs (untimed).`,
-    `Foundations review: ${s2}. Read First Aid chapter + 40 UWorld Qs (untimed).`,
-    `Mixed-block UWorld, 80 Qs timed. Review every wrong answer carefully.`,
-    `${s3} deep-dive: Boards & Beyond / Sketchy videos + 40 UWorld Qs.`,
-    `Mixed-block UWorld, 80 Qs timed. Log weak topics — re-test them on Day 6.`,
-    `Spaced repetition: re-do every flagged / wrong Q from Day 3 and Day 5.`,
-    `REST DAY. Light review only. Walk, hydrate, sleep 8+ hours.`,
-    `Take a fresh NBME form (one you haven't seen). Time it strictly.`,
-    `Review the NBME wrongs. Update your weak-subject list.`,
-    `Mixed-block UWorld, 80 Qs timed. Aim for >= 75 % correct.`,
-    `Pharmacology + Biostatistics quick-hit (high yield per hour).`,
-    `Mixed-block UWorld, 80 Qs timed. Final accuracy push.`,
-    `Last NBME or UWSA. Final calibration. Do NOT cram new content after this.`,
-    `REST. No new study. Confirm test-day logistics. Sleep 8+ hours.`,
-  ];
-}

@@ -36,8 +36,52 @@
  * version stored alongside the input snapshot lets us re-render a past
  * report under its original algorithm by branching on this string.
  */
-export const ALGORITHM_VERSION = "v1.0" as const;
+export const ALGORITHM_VERSION = "v1.1" as const;
 export type AlgorithmVersion = typeof ALGORITHM_VERSION;
+
+// Premium-report module types are defined in `./report-modules` to keep the
+// algorithm file small. We re-export them here so existing consumers (UI,
+// PDF, session-report) only need to import from "@/lib/data".
+import {
+  buildAntiPatterns,
+  buildCohortMirror,
+  buildHighLeverageMoves,
+  buildHonestUncertainty,
+  buildOneDecision,
+  buildRiskProfile,
+  buildTestDayProtocol,
+} from "./report-modules";
+import type {
+  AntiPatterns,
+  CohortMirror,
+  HighLeverageMoves,
+  HonestUncertainty,
+  OneDecision,
+  RiskProfile,
+  TestDayProtocol,
+} from "./report-modules";
+
+export type {
+  AntiPattern,
+  AntiPatterns,
+  CohortMirror,
+  CohortMirrorBucket,
+  HighLeverageMove,
+  HighLeverageMoves,
+  HonestUncertainty,
+  OneDecision,
+  RiskProfile,
+  TestDayProtocol,
+} from "./report-modules";
+export {
+  buildAntiPatterns,
+  buildCohortMirror,
+  buildHighLeverageMoves,
+  buildHonestUncertainty,
+  buildOneDecision,
+  buildRiskProfile,
+  buildTestDayProtocol,
+} from "./report-modules";
 
 export type ExamSource =
   | "NBME"
@@ -101,6 +145,26 @@ export interface PredictionResult {
   postponeRecommendation: PostponeRecommendation;
   /** Self-reported weak subjects ∩ cohort weakness, when user provided any. */
   personalizedWeakSubjects: PersonalizedWeakSubjects | null;
+  // -------------------------------------------------------------------------
+  // Premium-report modules. These run unconditionally so the report renderer
+  // never has to defensively check for missing fields. They build on top of
+  // the basic analytics above and surface the decision-grade content that
+  // makes the paid report worth more than a prettier free preview.
+  // -------------------------------------------------------------------------
+  /** Floor/ceiling shape + asymmetry analysis. */
+  riskProfile: RiskProfile;
+  /** One concrete sit/postpone recommendation + reverse triggers. */
+  oneDecision: OneDecision;
+  /** Up to 5 "do NOT" rules derived from the user's input pattern. */
+  antiPatterns: AntiPatterns;
+  /** Top 3 highest-leverage moves the user should make next. */
+  highLeverageMoves: HighLeverageMoves;
+  /** Test-day protocol; `show` is false unless test is within 7 days. */
+  testDayProtocol: TestDayProtocol;
+  /** Model-projected distribution of likely final scores. */
+  cohortMirror: CohortMirror;
+  /** Honest list of what we can't predict + when we'd be wrong. */
+  honestUncertainty: HonestUncertainty;
 }
 
 // ---------------------------------------------------------------------------
@@ -482,24 +546,90 @@ export function predictStepScore(
     cohortSubjectAverages
   );
 
+  // 6. Premium-report modules (always computed; UI gates on `show` flags).
+  const ciLower = point - ciHalfWidth;
+  const ciUpper = point + ciHalfWidth;
+  const inputCount = exams.length;
+
+  const riskProfile = buildRiskProfile({
+    point,
+    ciLower,
+    ciUpper,
+    exams,
+    step,
+    sourceInsight,
+    inputCount,
+  });
+  const oneDecision = buildOneDecision({
+    point,
+    passProbability: passProb,
+    postponeRecommendation,
+    inputCount,
+    freshness,
+    daysUntilExam,
+    scoreTrajectory,
+    targetGap,
+    step,
+  });
+  const antiPatterns = buildAntiPatterns({
+    exams,
+    step,
+    daysUntilExam,
+    scoreTrajectory,
+    passProbability: passProb,
+    inputCount,
+  });
+  const highLeverageMoves = buildHighLeverageMoves({
+    exams,
+    step,
+    daysUntilExam,
+    scoreTrajectory,
+    passProbability: passProb,
+    inputCount,
+    personalizedWeakSubjects,
+  });
+  const testDayProtocol = buildTestDayProtocol({ daysUntilExam, step });
+  const cohortMirror = buildCohortMirror({
+    point,
+    ciLower,
+    ciUpper,
+    step,
+    exams,
+    daysUntilExam,
+    scoreTrajectory,
+    inputCount,
+  });
+  const honestUncertainty = buildHonestUncertainty({
+    exams,
+    scoreTrajectory,
+    sourceInsight,
+  });
+
   return {
     step,
     pointEstimate: point,
-    ciLower: point - ciHalfWidth,
-    ciUpper: point + ciHalfWidth,
+    ciLower,
+    ciUpper,
     passProbability: passProb,
     cohortSize: COHORT_SIZE,
     cohortNote: COHORT_NOTE,
     cohortSubjectAverages,
     cohortSubjectAveragesNote:
       "These are cohort averages at this score level — they reflect what students at your predicted score typically score by subject. They are NOT a personalized estimate of YOUR subject performance.",
-    inputCount: exams.length,
+    inputCount,
     freshness,
     scoreTrajectory,
     sourceInsight,
     targetGap,
     postponeRecommendation,
     personalizedWeakSubjects,
+    riskProfile,
+    oneDecision,
+    antiPatterns,
+    highLeverageMoves,
+    testDayProtocol,
+    cohortMirror,
+    honestUncertainty,
   };
 }
 
@@ -532,6 +662,42 @@ function emptyResult(step: StepKind): PredictionResult {
       insight: "",
     },
     personalizedWeakSubjects: null,
+    riskProfile: {
+      shape: "tight_balanced",
+      floor: 0,
+      ceiling: 0,
+      spread: 0,
+      spreadVsTypical: "typical",
+      headline: "Add at least one practice exam to see your risk profile.",
+      rootCause: "",
+    },
+    oneDecision: {
+      recommendation: "need_more_data",
+      confidence: "low",
+      headline: "Add a practice exam before we make a recommendation.",
+      reasons: [],
+      reverseTriggers: [],
+    },
+    antiPatterns: { items: [] },
+    highLeverageMoves: { items: [] },
+    testDayProtocol: {
+      show: false,
+      dayMinusOne: [],
+      dayZero: [],
+      doNots: [],
+    },
+    cohortMirror: {
+      cohortDescription: "",
+      buckets: [],
+      median: 0,
+      yourPercentile: 0,
+      disclaimer: "",
+    },
+    honestUncertainty: {
+      cannotPredict: [],
+      whenWedBeWrong: [],
+      notAffiliatedNote: "",
+    },
   };
 }
 

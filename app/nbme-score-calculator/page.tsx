@@ -385,8 +385,9 @@ export default function NbmeScoreCalculatorPage() {
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
             The calculator is right above. Enter your latest scores in under a
-            minute. If you want a printable PDF report with a 14-day study
-            plan, upgrade for a one-time $14.99.
+            minute. If you want a printable PDF report with a sit-or-postpone
+            recommendation and your 3 highest-leverage moves, upgrade for a
+            one-time $14.99.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="primary" size="lg" asChild>

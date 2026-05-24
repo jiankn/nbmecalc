@@ -870,9 +870,9 @@ function PaywallModal({
                 </div>
               </div>
               <ul className="text-xs text-gray-700 space-y-1 shrink-0">
-                <li>✓ Full report</li>
-                <li>✓ 14-day plan</li>
-                <li>✓ Subject map</li>
+                <li>✓ Sit-or-postpone call</li>
+                <li>✓ 3 highest-leverage moves</li>
+                <li>✓ Cohort mirror + PDF</li>
               </ul>
             </div>
             <div className="mt-3 text-sm font-semibold text-mint-700 flex items-center gap-1.5">

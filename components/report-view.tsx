@@ -1,26 +1,42 @@
 import Link from "next/link";
 import {
   Activity,
+  AlertTriangle,
   Calendar,
   CalendarClock,
+  CheckCircle2,
+  Compass,
+  HelpCircle,
   Info,
   LineChart,
+  ListChecks,
   Printer as _Printer,
+  ShieldAlert,
+  ShieldCheck,
   Target,
   TrendingDown,
   TrendingUp,
   Trophy,
+  Users,
+  XCircle,
+  Zap,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ReportPrintButton } from "@/components/report-print-button";
 import type {
+  AntiPatterns,
+  CohortMirror,
+  HighLeverageMoves,
+  HonestUncertainty,
+  OneDecision,
   PersonalizedWeakSubjects,
-  PostponeRecommendation,
   PracticeExam,
   PredictionResult,
+  RiskProfile,
   ScoreTrajectory,
   SourceInsight,
   TargetGap,
+  TestDayProtocol,
 } from "@/lib/data";
 
 void _Printer; // keep lucide tree-shake happy if we relocate later
@@ -114,17 +130,6 @@ export function ReportView({
   const sortedSubjects = [...result.cohortSubjectAverages].sort(
     (a, b) => a.cohortAverage - b.cohortAverage
   );
-  // Prefer the user's self-reported ∩ cohort weakness when available;
-  // otherwise fall back to the cohort-weakest three so the plan still has
-  // a defensible anchor.
-  const planSubjectSource =
-    result.personalizedWeakSubjects?.doublyWeak &&
-    result.personalizedWeakSubjects.doublyWeak.length > 0
-      ? result.personalizedWeakSubjects.doublyWeak
-      : sortedSubjects
-          .slice(0, Math.min(3, sortedSubjects.length))
-          .map((s) => s.name);
-  const plan = buildStudyPlan(planSubjectSource);
 
   return (
     <article className="container max-w-5xl py-12 print:py-4 print:max-w-none">
@@ -209,6 +214,28 @@ export function ReportView({
         </div>
       </section>
 
+      {/* === PRIMARY DECISION-GRADE MODULES === */}
+      {/* Order matters: Risk → Decision → Cohort → Moves → Anti-Patterns → Day Protocol.
+          Each module answers one specific question the user has been agonizing over.
+          Trajectory / Source / Target Gap are kept below as supporting analytics. */}
+      <RiskProfileSection profile={result.riskProfile} />
+      <OneDecisionSection decision={result.oneDecision} />
+      {result.cohortMirror.buckets.length > 0 && (
+        <CohortMirrorSection mirror={result.cohortMirror} />
+      )}
+      {result.highLeverageMoves.items.length > 0 && (
+        <HighLeverageMovesSection moves={result.highLeverageMoves} />
+      )}
+      {result.antiPatterns.items.length > 0 && (
+        <AntiPatternsSection patterns={result.antiPatterns} />
+      )}
+      {result.testDayProtocol.show && (
+        <TestDayProtocolSection protocol={result.testDayProtocol} />
+      )}
+
+      {/* === SUPPORTING ANALYTICS === */}
+      <SupportingDivider />
+
       {/* Score trajectory — only useful with ≥2 exams */}
       {result.scoreTrajectory.points.length >= 2 && (
         <TrajectorySection trajectory={result.scoreTrajectory} />
@@ -222,10 +249,9 @@ export function ReportView({
       {/* Target gap — only when user supplied a target score */}
       {result.targetGap && <TargetGapSection gap={result.targetGap} />}
 
-      {/* Postpone vs. on-schedule decision — only when pass prob < 0.7 */}
-      {result.postponeRecommendation.show && (
-        <PostponeSection rec={result.postponeRecommendation} />
-      )}
+      {/* Postpone-vs-sit decision is now surfaced by OneDecisionSection above
+          — we no longer render the standalone postpone card here to avoid
+          duplicating the same recommendation in two places. */}
 
       {/* Personalized priority subjects — only when user self-reported */}
       {result.personalizedWeakSubjects && (
@@ -292,33 +318,11 @@ export function ReportView({
         </p>
       </section>
 
-      {/* 14-day study plan */}
-      <section className="mb-8 print:break-before-page print:break-inside-auto">
-        <h2 className="text-2xl font-extrabold mb-2 flex items-center gap-2">
-          <Calendar className="h-6 w-6 text-mint-600" />
-          Your 14-day priority plan
-        </h2>
-        <p className="text-sm text-gray-600 mb-5">
-          {result.personalizedWeakSubjects?.doublyWeak.length
-            ? "Built around the subjects you flagged that also run weak in the cohort: "
-            : "Built around the cohort’s typical weak spots at your score band: "}
-          <strong>{planSubjectSource.join(", ")}</strong>. Adjust if your test
-          day is closer than 14 days out.
-        </p>
-        <ol className="space-y-2">
-          {plan.map((task, i) => (
-            <li
-              key={i}
-              className="flex gap-3 rounded-2xl border border-gray-200 p-4 print:border-gray-300 print:p-3 print:break-inside-avoid"
-            >
-              <span className="font-mono font-bold text-mint-700 w-16 shrink-0">
-                Day {i + 1}
-              </span>
-              <span className="text-gray-700">{task}</span>
-            </li>
-          ))}
-        </ol>
-      </section>
+      {/* === HONEST UNCERTAINTY === */}
+      {/* Final trust anchor: explicitly list what we can't predict + when we'd
+          be wrong about this user. Counter-intuitive but the highest-trust
+          section — nobody else does this. */}
+      <HonestUncertaintySection uncertainty={result.honestUncertainty} />
 
       {/* Methodology */}
       <section className="rounded-3xl bg-gray-50 p-6 text-sm text-gray-600 print:bg-white print:border print:border-gray-300 print:p-4 print:break-inside-avoid">
@@ -355,41 +359,6 @@ export function ReportView({
       </footer>
     </article>
   );
-}
-
-/**
- * 14-day plan template. We use the user's three weakest cohort subjects to
- * personalize day 1, 2, and 4. The rest is structural — mixed blocks,
- * deliberate rest, fresh NBME calibration.
- *
- * If the user has no weak subjects (edge case: empty cohort data), we fall
- * back to a generic UWorld-driven plan.
- */
-function buildStudyPlan(weakSubjects: string[]): string[] {
-  if (weakSubjects.length === 0) {
-    weakSubjects = ["foundations", "high-yield gaps", "biostatistics"];
-  }
-  const [s1, s2, s3] = [
-    weakSubjects[0],
-    weakSubjects[1] ?? weakSubjects[0],
-    weakSubjects[2] ?? weakSubjects[0],
-  ];
-  return [
-    `Foundations review: ${s1}. Read First Aid chapter + 40 UWorld Qs (untimed).`,
-    `Foundations review: ${s2}. Read First Aid chapter + 40 UWorld Qs (untimed).`,
-    `Mixed-block UWorld, 80 Qs timed. Review every wrong answer carefully — your "why" matters more than the "what".`,
-    `${s3} deep-dive: Boards & Beyond / Sketchy videos + 40 UWorld Qs.`,
-    `Mixed-block UWorld, 80 Qs timed. Log weak topics in a spreadsheet — you'll re-test them on Day 6.`,
-    `Spaced repetition: re-do every flagged / wrong Q from Day 3 and Day 5.`,
-    `REST DAY. Light review only — Anki or Sketchy. Walk, hydrate, sleep 8+ hours.`,
-    `Take a fresh NBME form (one you haven't seen). Time it strictly. This is your calibration.`,
-    `Review the NBME wrongs. Update your weak-subject list if new gaps emerged.`,
-    `Mixed-block UWorld, 80 Qs timed. Focus on stamina; aim for ≥ 75 % correct.`,
-    `Pharmacology + Biostatistics quick-hit (these subjects have outsized point yield per hour).`,
-    `Mixed-block UWorld, 80 Qs timed. Final accuracy push — review wrongs the same day.`,
-    `Last NBME or UWSA. This is your final calibration. Do NOT cram new content after this.`,
-    `REST. No new study. Confirm test-day logistics (route, ID, snacks). Sleep 8+ hours.`,
-  ];
 }
 
 // ---------------------------------------------------------------------------
@@ -595,58 +564,6 @@ function TargetGapSection({ gap }: { gap: TargetGap }) {
   );
 }
 
-function PostponeSection({ rec }: { rec: PostponeRecommendation }) {
-  const scenarios = [rec.onSchedule, rec.postponed14d, rec.postponed28d];
-  return (
-    <section className="mb-8 print:break-inside-avoid">
-      <h2 className="text-2xl font-extrabold mb-2 flex items-center gap-2">
-        <CalendarClock className="h-6 w-6 text-mint-600" />
-        Should you postpone?
-      </h2>
-      <p className="text-sm text-gray-700 mb-4">{rec.insight}</p>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {scenarios.map((s, i) => {
-          const isOnSchedule = i === 0;
-          return (
-            <div
-              key={i}
-              className={`rounded-2xl border-2 p-5 print:p-4 ${
-                isOnSchedule
-                  ? "border-gray-200 bg-white"
-                  : "border-mint-200 bg-mint-50/30"
-              }`}
-            >
-              <div className="text-xs uppercase tracking-wider text-gray-500 mb-1">
-                {isOnSchedule
-                  ? "On schedule"
-                  : `Postpone ${s.daysAdded} days`}
-              </div>
-              <div className="text-4xl font-black tabular-nums">
-                {Math.round(s.projectedPassProbability * 100)}%
-              </div>
-              <div className="mt-1 text-sm text-gray-600">
-                pass probability
-              </div>
-              <div className="mt-3 text-xs text-gray-500">
-                Projected score:{" "}
-                <span className="font-mono font-semibold text-gray-700">
-                  {s.projectedScore}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <p className="mt-3 text-xs text-gray-500">
-        Postponed-scenario scores assume a study uplift in line with your
-        measured trajectory (or a conservative typical rate if your exams
-        aren&apos;t dated). The uplift is capped at +12 pts to reflect real
-        diminishing returns.
-      </p>
-    </section>
-  );
-}
-
 function PersonalizedWeakSection({ data }: { data: PersonalizedWeakSubjects }) {
   return (
     <section className="mb-8 rounded-3xl border-2 border-mint-200 bg-mint-50/30 p-6 print:p-4 print:break-inside-avoid">
@@ -673,6 +590,482 @@ function PersonalizedWeakSection({ data }: { data: PersonalizedWeakSubjects }) {
           );
         })}
       </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Premium-report SECTIONS — the seven decision-grade modules wired to
+// `lib/report-modules.ts`. These render unconditionally (with empty-state
+// gating in the parent) so the report layout is stable even on degenerate
+// inputs. Each section answers one specific user question (PRD product
+// strategy review).
+// ---------------------------------------------------------------------------
+
+function SupportingDivider() {
+  return (
+    <div className="my-12 flex items-center gap-4 print:my-6 print:break-after-avoid">
+      <div className="flex-1 h-px bg-gray-200" />
+      <span className="text-xs uppercase tracking-widest text-gray-400 font-semibold">
+        Supporting analytics
+      </span>
+      <div className="flex-1 h-px bg-gray-200" />
+    </div>
+  );
+}
+
+const RISK_TONE: Record<
+  RiskProfile["shape"],
+  { wrap: string; iconColor: string; badge: string; label: string }
+> = {
+  asymmetric_downside: {
+    wrap: "border-amber-300 bg-amber-50/40",
+    iconColor: "text-amber-600",
+    badge: "bg-amber-100 text-amber-800",
+    label: "Asymmetric downside",
+  },
+  asymmetric_upside: {
+    wrap: "border-emerald-300 bg-emerald-50/40",
+    iconColor: "text-emerald-600",
+    badge: "bg-emerald-100 text-emerald-800",
+    label: "Asymmetric upside",
+  },
+  tight_balanced: {
+    wrap: "border-mint-300 bg-mint-50/40",
+    iconColor: "text-mint-700",
+    badge: "bg-mint-100 text-mint-800",
+    label: "Tight & balanced",
+  },
+  wide_balanced: {
+    wrap: "border-gray-300 bg-gray-50/40",
+    iconColor: "text-gray-700",
+    badge: "bg-gray-100 text-gray-800",
+    label: "Wide & balanced",
+  },
+};
+
+function RiskProfileSection({ profile }: { profile: RiskProfile }) {
+  const tone = RISK_TONE[profile.shape];
+  return (
+    <section
+      className={`mb-8 rounded-3xl border-2 p-6 lg:p-8 print:p-4 print:break-inside-avoid ${tone.wrap}`}
+    >
+      <div className="flex items-baseline justify-between gap-3 mb-3 flex-wrap">
+        <h2 className="text-2xl font-extrabold flex items-center gap-2">
+          <Compass className={`h-6 w-6 ${tone.iconColor}`} />
+          Your risk profile
+        </h2>
+        <span
+          className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold ${tone.badge}`}
+        >
+          {tone.label}
+        </span>
+      </div>
+
+      <div className="grid grid-cols-3 gap-3 my-6 items-stretch">
+        <div className="text-center py-3">
+          <div className="text-xs uppercase tracking-wider text-gray-500 mb-1">
+            Floor
+          </div>
+          <div className="text-3xl font-black tabular-nums">{profile.floor}</div>
+        </div>
+        <div className="text-center px-3 py-3 rounded-2xl bg-white border-2 border-gray-300">
+          <div className="text-xs uppercase tracking-wider text-gray-500 mb-1">
+            Spread
+          </div>
+          <div className="text-3xl font-black tabular-nums">{profile.spread} pts</div>
+          <div className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">
+            {profile.spreadVsTypical} than typical
+          </div>
+        </div>
+        <div className="text-center py-3">
+          <div className="text-xs uppercase tracking-wider text-gray-500 mb-1">
+            Ceiling
+          </div>
+          <div className="text-3xl font-black tabular-nums">
+            {profile.ceiling}
+          </div>
+        </div>
+      </div>
+
+      <p className="text-base font-bold text-gray-900 mb-2 leading-snug">
+        {profile.headline}
+      </p>
+      <p className="text-sm text-gray-700 leading-relaxed">{profile.rootCause}</p>
+    </section>
+  );
+}
+
+const DECISION_TONE: Record<
+  OneDecision["recommendation"],
+  {
+    wrap: string;
+    isLight: boolean;
+    iconWrap: string;
+    Icon: typeof CheckCircle2;
+  }
+> = {
+  sit_as_scheduled: {
+    wrap:
+      "bg-gradient-to-br from-mint-500 to-mint-600 text-white border-mint-600 print:bg-mint-50 print:text-gray-900 print:border-mint-300",
+    isLight: false,
+    iconWrap: "bg-white/20 print:bg-mint-100",
+    Icon: CheckCircle2,
+  },
+  postpone_14d: {
+    wrap:
+      "bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-600 print:bg-amber-50 print:text-gray-900 print:border-amber-300",
+    isLight: false,
+    iconWrap: "bg-white/20 print:bg-amber-100",
+    Icon: CalendarClock,
+  },
+  postpone_28d: {
+    wrap:
+      "bg-gradient-to-br from-orange-600 to-red-600 text-white border-red-700 print:bg-red-50 print:text-gray-900 print:border-red-300",
+    isLight: false,
+    iconWrap: "bg-white/20 print:bg-red-100",
+    Icon: ShieldAlert,
+  },
+  need_more_data: {
+    wrap: "bg-gray-100 text-gray-900 border-gray-300",
+    isLight: true,
+    iconWrap: "bg-white",
+    Icon: HelpCircle,
+  },
+};
+
+function OneDecisionSection({ decision }: { decision: OneDecision }) {
+  const tone = DECISION_TONE[decision.recommendation];
+  const Icon = tone.Icon;
+  const subtle = tone.isLight ? "text-gray-600" : "text-white/85 print:text-gray-600";
+  const body = tone.isLight ? "text-gray-800" : "text-white/95 print:text-gray-800";
+  const divider = tone.isLight
+    ? "border-gray-300"
+    : "border-white/30 print:border-gray-300";
+
+  return (
+    <section
+      className={`mb-8 rounded-3xl border-2 p-6 lg:p-8 print:p-4 print:break-inside-avoid ${tone.wrap}`}
+    >
+      <div className="flex items-center gap-3 mb-1">
+        <div className={`p-2 rounded-xl ${tone.iconWrap}`}>
+          <Icon className="h-5 w-5" />
+        </div>
+        <span className={`text-xs uppercase tracking-widest font-bold ${subtle}`}>
+          Our recommendation · {decision.confidence} confidence
+        </span>
+      </div>
+      <h2 className="text-2xl lg:text-3xl font-black tracking-tight mt-3 mb-4 leading-tight">
+        {decision.headline}
+      </h2>
+
+      {decision.reasons.length > 0 && (
+        <div className="mb-5">
+          <div
+            className={`text-xs uppercase tracking-wider font-bold mb-2 ${subtle}`}
+          >
+            Why
+          </div>
+          <ul className="space-y-2">
+            {decision.reasons.map((r, i) => (
+              <li key={i} className={`flex gap-2 text-sm leading-relaxed ${body}`}>
+                <span className="opacity-70 shrink-0">→</span>
+                <span>{r}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {decision.reverseTriggers.length > 0 && (
+        <div className={`pt-4 border-t ${divider}`}>
+          <div
+            className={`text-xs uppercase tracking-wider font-bold mb-2 ${subtle}`}
+          >
+            We&apos;d reverse this if
+          </div>
+          <ul className="space-y-1.5">
+            {decision.reverseTriggers.map((r, i) => (
+              <li key={i} className={`flex gap-2 text-sm ${body}`}>
+                <span className="opacity-60 shrink-0">·</span>
+                <span>{r}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function CohortMirrorSection({ mirror }: { mirror: CohortMirror }) {
+  // Scale bar widths against the largest bucket so the chart reads visually
+  // even when the projected median bucket is itself small.
+  const maxPct = Math.max(...mirror.buckets.map((b) => b.percentage), 0.01);
+
+  return (
+    <section className="mb-8 print:break-inside-avoid">
+      <h2 className="text-2xl font-extrabold mb-2 flex items-center gap-2 flex-wrap">
+        <Users className="h-6 w-6 text-mint-600" />
+        Cohort mirror
+        <span className="inline-flex items-center rounded-full bg-mint-100 px-2 py-0.5 text-[10px] font-bold uppercase text-mint-800 tracking-wider">
+          Model-projected
+        </span>
+      </h2>
+      <p className="text-sm text-gray-700 mb-4 leading-relaxed">
+        {mirror.cohortDescription}
+      </p>
+
+      <div className="rounded-3xl border-2 border-gray-200 bg-white p-5 lg:p-6 print:border-gray-300 print:p-4">
+        <div className="space-y-2">
+          {mirror.buckets.map((bucket, i) => {
+            const widthPct = (bucket.percentage / maxPct) * 100;
+            return (
+              <div key={i} className="flex items-center gap-3">
+                <div className="w-24 shrink-0 text-right font-mono text-sm font-bold text-gray-900 tabular-nums">
+                  {bucket.range}
+                </div>
+                <div className="flex-1 h-8 rounded-lg bg-gray-100 overflow-hidden relative">
+                  <div
+                    className={`h-full rounded-lg ${
+                      bucket.isYourProjection
+                        ? "bg-gradient-to-r from-mint-500 to-mint-600"
+                        : "bg-gray-300"
+                    }`}
+                    style={{ width: `${Math.max(2, widthPct)}%` }}
+                  />
+                  {bucket.isYourProjection && (
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-mint-800 uppercase tracking-wider whitespace-nowrap">
+                      ← Your projection
+                    </div>
+                  )}
+                </div>
+                <div className="w-12 shrink-0 text-right text-sm font-bold tabular-nums text-gray-700">
+                  {Math.round(bucket.percentage * 100)}%
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-5 pt-4 border-t border-gray-100 grid grid-cols-2 gap-4">
+          <div>
+            <div className="text-xs uppercase tracking-wider text-gray-500">
+              Projected median
+            </div>
+            <div className="text-2xl font-black tabular-nums">{mirror.median}</div>
+          </div>
+          <div>
+            <div className="text-xs uppercase tracking-wider text-gray-500">
+              Your percentile in this cohort
+            </div>
+            <div className="text-2xl font-black tabular-nums">
+              {mirror.yourPercentile}
+              <span className="text-base text-gray-400 font-bold">th</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+        {mirror.disclaimer}
+      </p>
+    </section>
+  );
+}
+
+function HighLeverageMovesSection({ moves }: { moves: HighLeverageMoves }) {
+  return (
+    <section className="mb-8 print:break-inside-avoid">
+      <h2 className="text-2xl font-extrabold mb-2 flex items-center gap-2">
+        <Zap className="h-6 w-6 text-mint-600" />
+        Your 3 highest-leverage moves
+      </h2>
+      <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+        Ranked by expected impact for your specific input pattern. Skip the
+        rest of the internet — these are the moves that will actually move
+        the needle.
+      </p>
+
+      <ol className="space-y-3">
+        {moves.items.map((m) => (
+          <li
+            key={m.rank}
+            className="rounded-2xl border-2 border-gray-200 bg-white p-5 print:p-4 print:break-inside-avoid"
+          >
+            <div className="flex items-baseline gap-3 mb-2">
+              <div className="shrink-0 w-9 h-9 rounded-xl bg-mint-100 text-mint-800 font-black text-lg flex items-center justify-center">
+                {m.rank}
+              </div>
+              <h3 className="font-bold text-lg leading-tight">{m.title}</h3>
+            </div>
+            <div className="ml-12 space-y-2">
+              <div className="inline-flex items-center rounded-full bg-mint-100 px-2.5 py-0.5 text-xs font-bold text-mint-800">
+                Impact: {m.expectedImpact}
+              </div>
+              <p className="text-sm text-gray-700 leading-relaxed">{m.why}</p>
+              <p className="text-xs italic text-mint-700">When: {m.when}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+function AntiPatternsSection({ patterns }: { patterns: AntiPatterns }) {
+  return (
+    <section className="mb-8 print:break-inside-avoid">
+      <h2 className="text-2xl font-extrabold mb-2 flex items-center gap-2">
+        <XCircle className="h-6 w-6 text-rose-600" />
+        Don&apos;t do these (yes, really)
+      </h2>
+      <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+        Counter-intuitive but data-backed. Reddit won&apos;t tell you these
+        — everyone there is selling something.
+      </p>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        {patterns.items.map((p, i) => (
+          <div
+            key={i}
+            className="rounded-2xl border-2 border-rose-200 bg-rose-50/40 p-5 print:p-4 print:break-inside-avoid"
+          >
+            <div className="flex items-start gap-2 mb-2">
+              <XCircle className="h-5 w-5 text-rose-600 shrink-0 mt-0.5" />
+              <h3 className="font-bold leading-tight">{p.title}</h3>
+            </div>
+            <p className="text-sm text-gray-700 mb-3 leading-relaxed">
+              {p.reason}
+            </p>
+            <p className="text-xs text-rose-700/80 italic">
+              Based on: {p.basedOn}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TestDayProtocolSection({ protocol }: { protocol: TestDayProtocol }) {
+  return (
+    <section className="mb-8 rounded-3xl border-2 border-mint-300 bg-mint-50/30 p-6 lg:p-8 print:p-4 print:break-inside-avoid">
+      <h2 className="text-2xl font-extrabold mb-2 flex items-center gap-2">
+        <ShieldCheck className="h-6 w-6 text-mint-700" />
+        Test-day protocol
+      </h2>
+      <p className="text-sm text-gray-700 mb-5 leading-relaxed">
+        Specific routines from high scorers. Operational defaults you can
+        adapt — not medical advice.
+      </p>
+
+      <div className="grid gap-5 lg:grid-cols-3">
+        <div>
+          <h3 className="font-bold mb-3 flex items-center gap-2 text-amber-800">
+            <Calendar className="h-4 w-4" /> Day −1
+          </h3>
+          <ul className="space-y-2">
+            {protocol.dayMinusOne.map((s, i) => (
+              <li
+                key={i}
+                className="text-sm text-gray-800 leading-relaxed flex gap-2"
+              >
+                <span className="shrink-0 text-mint-600">·</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="font-bold mb-3 flex items-center gap-2 text-mint-800">
+            <Calendar className="h-4 w-4" /> Day 0
+          </h3>
+          <ul className="space-y-2">
+            {protocol.dayZero.map((s, i) => (
+              <li
+                key={i}
+                className="text-sm text-gray-800 leading-relaxed flex gap-2"
+              >
+                <span className="shrink-0 text-mint-600">·</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="font-bold mb-3 flex items-center gap-2 text-rose-700">
+            <XCircle className="h-4 w-4" /> Don&apos;t
+          </h3>
+          <ul className="space-y-2">
+            {protocol.doNots.map((s, i) => (
+              <li
+                key={i}
+                className="text-sm text-gray-800 leading-relaxed flex gap-2"
+              >
+                <span className="shrink-0 text-rose-600">×</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HonestUncertaintySection({
+  uncertainty,
+}: {
+  uncertainty: HonestUncertainty;
+}) {
+  return (
+    <section className="mb-8 rounded-3xl border-2 border-gray-300 bg-white p-6 lg:p-8 print:p-4 print:break-inside-avoid">
+      <h2 className="text-2xl font-extrabold mb-2 flex items-center gap-2">
+        <AlertTriangle className="h-6 w-6 text-amber-500" />
+        Honest uncertainty
+      </h2>
+      <p className="text-sm text-gray-600 mb-5 leading-relaxed">
+        Every other tool will tell you they&apos;re right. We tell you when
+        we&apos;re probably wrong.
+      </p>
+
+      <div className="grid gap-6 md:grid-cols-2 mb-5">
+        <div>
+          <h3 className="font-bold mb-2 flex items-center gap-2 text-gray-900">
+            <ListChecks className="h-4 w-4 text-gray-500" /> What we can&apos;t
+            predict
+          </h3>
+          <ul className="space-y-1.5">
+            {uncertainty.cannotPredict.map((s, i) => (
+              <li key={i} className="text-sm text-gray-700 flex gap-2">
+                <span className="shrink-0 text-gray-400">·</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 className="font-bold mb-2 flex items-center gap-2 text-gray-900">
+            <AlertTriangle className="h-4 w-4 text-amber-500" /> When we&apos;d
+            be wrong about you
+          </h3>
+          <ul className="space-y-1.5">
+            {uncertainty.whenWedBeWrong.map((s, i) => (
+              <li key={i} className="text-sm text-gray-700 flex gap-2">
+                <span className="shrink-0 text-amber-500">·</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <p className="text-xs text-gray-500 leading-relaxed pt-4 border-t border-gray-100">
+        {uncertainty.notAffiliatedNote}
+      </p>
     </section>
   );
 }

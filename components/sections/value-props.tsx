@@ -36,27 +36,29 @@ const cards = [
     visual: null,
   },
   {
-    title: "Personalized Final Push",
-    body: "Get a day-by-day study plan based on your weak subjects and days left until exam. Free preview, full plan in the PDF report.",
+    title: "A Decision, Not Just A Number",
+    body: "Should you sit or postpone? What 3 moves actually shift your score? Which Reddit-favorite tactics will hurt you? The paid report answers — and tells you when it would be wrong.",
     image: "/images/feature-study-plan.jpg",
     imageAlt: "Blank study planner with pastel sticky notes on a warm wooden desk",
     icon: Calendar,
     iconBg: "bg-mint-100/95 text-mint-700",
     visual: (
-      <div className="absolute left-5 top-5 z-10 flex max-w-[230px] flex-wrap gap-2 rotate-2">
-        {["Weak areas", "Day 7", "Final push"].map((label, i) => (
-          <div
-            key={label}
-            className={cn(
-              "rounded-full px-3 py-1.5 text-[10px] font-bold shadow-sm backdrop-blur",
-              i === 0 && "bg-mint-100/95 text-mint-800",
-              i === 1 && "bg-white/90 text-gray-800",
-              i === 2 && "bg-red-100/95 text-red-700"
-            )}
-          >
-            {label}
-          </div>
-        ))}
+      <div className="absolute left-5 top-5 z-10 flex max-w-[240px] flex-wrap gap-2 rotate-2">
+        {["Sit / postpone", "3 high-leverage moves", "Don't do these"].map(
+          (label, i) => (
+            <div
+              key={label}
+              className={cn(
+                "rounded-full px-3 py-1.5 text-[10px] font-bold shadow-sm backdrop-blur",
+                i === 0 && "bg-mint-100/95 text-mint-800",
+                i === 1 && "bg-white/90 text-gray-800",
+                i === 2 && "bg-red-100/95 text-red-700"
+              )}
+            >
+              {label}
+            </div>
+          )
+        )}
       </div>
     ),
   },

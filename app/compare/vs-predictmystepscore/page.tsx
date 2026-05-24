@@ -101,7 +101,10 @@ export default function VsPMSSPage() {
             <li>Multi-source aggregation (5 input types vs 2)</li>
             <li>95% confidence interval — no other tool offers this</li>
             <li>Free unlimited predictions without signup</li>
-            <li>Per-subject weakness map with a personalized 14-day plan</li>
+            <li>
+              Paid report tells you whether to sit or postpone — and the 3
+              highest-leverage moves for your specific input pattern
+            </li>
             <li>Modern mobile UX — install as a PWA</li>
             <li>Methodology document with reviewer signoff</li>
           </ul>
@@ -111,7 +114,8 @@ export default function VsPMSSPage() {
             <p className="text-gray-700">
               If you want a single-source NBME → Step 2 CK lookup, both work.
               If you want multi-source aggregation, a confidence interval, and
-              a study plan tailored to your weak rotations, choose NBMEcalc.
+              a paid report that makes a sit-or-postpone call plus tells you
+              what to actually <em>do</em> next, choose NBMEcalc.
             </p>
           </div>
         </div>
