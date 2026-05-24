@@ -19,7 +19,7 @@ export const dynamic = "force-dynamic";
 
 type RouteContext = { params: Promise<{ session_id: string }> };
 
-const PDF_RENDERER_PATH = "/api/_pdf-renderer";
+const PDF_RENDERER_PATH = "/api/_pdf-renderer/render";
 
 export async function GET(_req: Request, context: RouteContext) {
   const { session_id } = await context.params;

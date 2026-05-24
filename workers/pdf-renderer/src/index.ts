@@ -11,17 +11,25 @@ interface RenderRequest {
   filename?: string;
 }
 
-const PDF_ROUTE = "/api/_pdf-renderer";
+const PDF_ROUTE_BASE = "/api/_pdf-renderer";
+const PDF_RENDER_ROUTE = `${PDF_ROUTE_BASE}/render`;
+const PDF_HEALTH_ROUTE = `${PDF_ROUTE_BASE}/health`;
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
-    if (request.method === "GET" && url.pathname === `${PDF_ROUTE}/health`) {
-      return new Response("ok", { status: 200 });
+    if (request.method === "GET" && url.pathname === PDF_HEALTH_ROUTE) {
+      return json(
+        {
+          ok: true,
+          browserBinding: Boolean(env.BROWSER),
+        },
+        200
+      );
     }
 
-    if (request.method !== "POST" || url.pathname !== PDF_ROUTE) {
+    if (request.method !== "POST" || url.pathname !== PDF_RENDER_ROUTE) {
       return new Response("Not found", { status: 404 });
     }
 
@@ -53,7 +61,11 @@ export default {
       browser = await puppeteer.launch(env.BROWSER);
       const page = await browser.newPage();
       await page.setViewport({ width: 1280, height: 1600, deviceScaleFactor: 1 });
-      await page.goto(reportUrl.toString(), { waitUntil: "networkidle0" });
+      await page.goto(reportUrl.toString(), {
+        waitUntil: "domcontentloaded",
+        timeout: 45_000,
+      });
+      await page.waitForSelector("article", { timeout: 20_000 });
       await page.emulateMediaType("print");
 
       const pdf = await page.pdf({

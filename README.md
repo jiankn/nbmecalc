@@ -164,9 +164,9 @@ Migrations are committed to `lib/db/migrations/` so production deploys don't nee
 
 ## PDF Renderer Worker
 
-Premium report downloads use a separate Cloudflare Worker at `workers/pdf-renderer`. The Worker uses Cloudflare Browser Rendering (`@cloudflare/puppeteer`) to open the styled report page and export a color PDF with `printBackground: true`.
+Premium report downloads use a separate Cloudflare Worker at `workers/pdf-renderer`. The Worker is routed at `/api/_pdf-renderer/*` and uses Cloudflare Browser Rendering (`@cloudflare/puppeteer`) to open the styled report page and export a color PDF with `printBackground: true`.
 
-GitHub Actions deploys the Worker and the Pages app from this repository. It derives a shared `PDF_RENDERER_SECRET` from the existing `CLOUDFLARE_API_TOKEN` and writes it to both Cloudflare targets during deployment. If Worker deployment or secret configuration fails, `/api/report/[session_id]/pdf` falls back to the edge-safe text PDF generator instead of failing the purchase flow.
+GitHub Actions deploys the Worker and the Pages app from this repository. It derives a shared `PDF_RENDERER_SECRET` from the existing `CLOUDFLARE_API_TOKEN` and writes it to both Cloudflare targets during deployment. If the Worker is unavailable at runtime, `/api/report/[session_id]/pdf` falls back to the edge-safe text PDF generator instead of failing the purchase flow.
 
 The Cloudflare API token used by GitHub Actions needs permissions for:
 

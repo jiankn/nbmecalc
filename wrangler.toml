@@ -37,7 +37,7 @@ migrations_dir = "lib/db/migrations"
 #
 [vars]
 NEXT_PUBLIC_SITE_URL = "https://nbmecalc.com"
-PDF_RENDERER_URL = "https://nbmecalc.com/api/_pdf-renderer"
+PDF_RENDERER_URL = "https://nbmecalc.com/api/_pdf-renderer/render"
 #
 # SMTP_HOST = "mail.removexif.com"
 # SMTP_PORT = "25"
