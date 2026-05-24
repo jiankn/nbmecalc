@@ -88,6 +88,7 @@ export async function GET(_req: Request, context: RouteContext) {
       "Content-Disposition": `attachment; filename="${filename}"`,
       "X-PDF-Renderer": "edge-fallback",
       "X-PDF-Fallback-Reason": rendered.reason,
+      "X-PDF-Renderer-Target": rendered.target,
       // Private because each PDF is keyed to a specific paid session.
       // No-store prevents stale fallback PDFs from masking a fixed renderer.
       "Cache-Control": "private, no-store, max-age=0",
@@ -97,19 +98,19 @@ export async function GET(_req: Request, context: RouteContext) {
 
 type PdfWorkerResult =
   | { ok: true; response: Response }
-  | { ok: false; reason: string };
+  | { ok: false; reason: string; target: string };
 
 async function renderWithPdfWorker(
   req: Request,
   sessionId: string,
   filename: string
 ): Promise<PdfWorkerResult> {
-  const secret = readRuntimeEnv("PDF_RENDERER_SECRET");
-  if (!secret) return { ok: false, reason: "missing-secret" };
-
   const siteUrl =
     readRuntimeEnv("NEXT_PUBLIC_SITE_URL") ?? new URL(req.url).origin;
   const rendererUrl = resolveRendererUrl(siteUrl);
+  const target = describeRendererTarget(rendererUrl);
+  const secret = readRuntimeEnv("PDF_RENDERER_SECRET");
+  if (!secret) return { ok: false, reason: "missing-secret", target };
   const reportUrl = new URL(`/report/${encodeURIComponent(sessionId)}`, siteUrl);
 
   try {
@@ -128,7 +129,7 @@ async function renderWithPdfWorker(
 
     if (!res.ok) {
       console.error("[pdf] renderer worker failed", res.status, await res.text());
-      return { ok: false, reason: `renderer-http-${res.status}` };
+      return { ok: false, reason: `renderer-http-${res.status}`, target };
     }
 
     const body = await res.arrayBuffer();
@@ -146,7 +147,7 @@ async function renderWithPdfWorker(
     };
   } catch (err) {
     console.error("[pdf] renderer worker unavailable", err);
-    return { ok: false, reason: "renderer-unavailable" };
+    return { ok: false, reason: "renderer-unavailable", target };
   }
 }
 
@@ -177,4 +178,13 @@ function resolveRendererUrl(siteUrl: string): string {
   }
 
   return url.toString();
+}
+
+function describeRendererTarget(value: string): string {
+  try {
+    const url = new URL(value);
+    return `${url.origin}${url.pathname}`;
+  } catch {
+    return "invalid-url";
+  }
 }
