@@ -12,7 +12,7 @@
  */
 import { loadReportFromSession } from "@/lib/session-report";
 import { ReportPdf } from "@/components/report-pdf";
-import { pdf } from "@react-pdf/renderer";
+import { renderToBuffer } from "@react-pdf/renderer";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -51,19 +51,18 @@ export async function GET(_req: Request, context: RouteContext) {
 
   const { data } = loaded;
 
-  // @react-pdf/renderer's `pdf()` builder works in both Node and Workers
-  // (with nodejs_compat). `.toBlob()` returns a standard Blob, which
-  // Response can stream directly to the client.
-  let blob: Blob;
+  // renderToBuffer is the server-side API that returns a Node.js Buffer.
+  // Works on Cloudflare Workers with nodejs_compat flag enabled.
+  let buffer: Buffer;
   try {
-    blob = await pdf(
+    buffer = await renderToBuffer(
       ReportPdf({
         result: data.result,
         exams: data.exams,
         sessionId: data.sessionId,
         purchasedAt: data.purchasedAt,
       })
-    ).toBlob();
+    );
   } catch (err) {
     console.error("[pdf] react-pdf render failed", err);
     return new Response(
@@ -81,7 +80,7 @@ export async function GET(_req: Request, context: RouteContext) {
   const stepLabel = data.step.toUpperCase();
   const filename = `nbmecalc-${stepLabel}-${data.result.pointEstimate}.pdf`;
 
-  return new Response(blob, {
+  return new Response(new Uint8Array(buffer), {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",

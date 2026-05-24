@@ -10,7 +10,7 @@
  * Checkout. Pair with `/report/preview` for the web-view counterpart.
  */
 import { ReportPdf } from "@/components/report-pdf";
-import { pdf } from "@react-pdf/renderer";
+import { renderToBuffer } from "@react-pdf/renderer";
 import { predictStepScore, type PracticeExam } from "@/lib/data";
 
 export const runtime = "edge";
@@ -32,16 +32,16 @@ export async function GET() {
     selfReportedWeakSubjects: ["Biostatistics", "Pharmacology", "Pathology"],
   });
 
-  let blob: Blob;
+  let buffer: Buffer;
   try {
-    blob = await pdf(
+    buffer = await renderToBuffer(
       ReportPdf({
         result,
         exams: PREVIEW_EXAMS,
         sessionId: "cs_preview_dev_only",
         purchasedAt: new Date(),
       })
-    ).toBlob();
+    );
   } catch (err) {
     console.error("[pdf-preview] render failed", err);
     return new Response(
@@ -54,7 +54,7 @@ export async function GET() {
     );
   }
 
-  return new Response(blob, {
+  return new Response(new Uint8Array(buffer), {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",
