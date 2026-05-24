@@ -91,8 +91,8 @@ export function ValueProps() {
                   sizes="(min-width: 768px) 33vw, 100vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/90 to-white/10" />
-                <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
                 {card.visual}
                 <div className="relative z-10 flex h-full min-h-[430px] flex-col justify-end p-8">
                   <div className={cn("inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-4 shadow-sm backdrop-blur", card.iconBg)}>
