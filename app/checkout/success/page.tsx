@@ -5,6 +5,8 @@ import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
 import { ScoreFeedbackOptIn } from "@/components/score-feedback-opt-in";
 
+export const runtime = "edge";
+
 export const metadata: Metadata = {
   title: "Payment Successful — Your Report Is On the Way | NBMEcalc",
   description:

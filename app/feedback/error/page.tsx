@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
 
+export const runtime = "edge";
+
 export const metadata: Metadata = {
   title: "Feedback Link Error | NBMEcalc",
   robots: { index: false, follow: false },
