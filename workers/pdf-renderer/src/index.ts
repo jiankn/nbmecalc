@@ -70,6 +70,7 @@ export default {
 
       const pdf = await page.pdf({
         format: "Letter",
+        landscape: true,
         printBackground: true,
         preferCSSPageSize: false,
         margin: {
