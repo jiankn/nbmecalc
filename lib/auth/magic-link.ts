@@ -7,7 +7,7 @@
  */
 import { and, eq, isNull } from "drizzle-orm";
 import type { Db } from "@/lib/db/client";
-import { magicLinks, users, type UserRow } from "@/lib/db/schema";
+import { magicLinks, users } from "@/lib/db/schema";
 
 export const MAGIC_LINK_TTL_MS = 60 * 60 * 1000; // 1 hour
 export const MIN_RESEND_INTERVAL_MS = 60 * 1000; // 1 minute per email
@@ -79,13 +79,18 @@ export async function consumeMagicLink(
   db: Db,
   token: string
 ): Promise<
-  | { ok: true; user: UserRow; nextPath: string | null }
+  | { ok: true; user: { id: string }; nextPath: string | null }
   | { ok: false; reason: "not_found" | "expired" | "already_used" }
 > {
   const now = Date.now();
 
   const rows = await db
-    .select()
+    .select({
+      email: magicLinks.email,
+      expiresAt: magicLinks.expiresAt,
+      usedAt: magicLinks.usedAt,
+      nextPath: magicLinks.nextPath,
+    })
     .from(magicLinks)
     .where(eq(magicLinks.token, token))
     .limit(1);
@@ -104,16 +109,20 @@ export async function consumeMagicLink(
 
   // Get or create the user.
   const existing = await db
-    .select()
+    .select({ id: users.id })
     .from(users)
     .where(eq(users.email, link.email))
     .limit(1);
 
-  let user: UserRow;
+  let user: { id: string };
   if (existing[0]) {
     user = existing[0];
     // Touch updated_at on every login.
-    await db.update(users).set({ updatedAt: now }).where(eq(users.id, user.id));
+    await db
+      .update(users)
+      .set({ updatedAt: now })
+      .where(eq(users.id, user.id))
+      .catch(() => {});
   } else {
     const id = newUserId();
     await db.insert(users).values({
@@ -124,8 +133,7 @@ export async function consumeMagicLink(
       updatedAt: now,
       source: "magic_link",
     });
-    const fresh = await db.select().from(users).where(eq(users.id, id)).limit(1);
-    user = fresh[0]!;
+    user = { id };
   }
 
   return { ok: true, user, nextPath: link.nextPath };

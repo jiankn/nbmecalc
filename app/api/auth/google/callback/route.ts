@@ -114,7 +114,10 @@ export async function GET(req: Request): Promise<Response> {
   try {
     const now = Date.now();
     const existing = await db
-      .select()
+      .select({
+        id: users.id,
+        name: users.name,
+      })
       .from(users)
       .where(eq(users.email, profile.email))
       .limit(1);
@@ -126,7 +129,7 @@ export async function GET(req: Request): Promise<Response> {
       if (!existing[0].name && profile.name) {
         updates.name = profile.name;
       }
-      await db.update(users).set(updates).where(eq(users.id, userId));
+      await db.update(users).set(updates).where(eq(users.id, userId)).catch(() => {});
     } else {
       userId = newUserId();
       await db.insert(users).values({

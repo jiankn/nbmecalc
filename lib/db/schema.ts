@@ -314,7 +314,6 @@ export const sessions = sqliteTable(
     expiresAt: integer("expires_at").notNull(),
     createdAt: integer("created_at").notNull(),
     lastSeenAt: integer("last_seen_at").notNull(),
-    examDate: integer("exam_date"),
     ip: text("ip"),
     userAgent: text("user_agent"),
   },

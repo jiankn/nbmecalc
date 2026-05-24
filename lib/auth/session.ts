@@ -70,7 +70,17 @@ export function readSessionCookie(req: Request): string | null {
 
 export interface AuthenticatedSession {
   sessionId: string;
-  user: UserRow;
+  user: Pick<
+    UserRow,
+    | "id"
+    | "email"
+    | "name"
+    | "proTier"
+    | "proExpiresAt"
+    | "stripeCustomerId"
+    | "createdAt"
+    | "deletedAt"
+  >;
 }
 
 /**
@@ -88,8 +98,19 @@ export async function loadSession(
   const now = Date.now();
   const rows = await db
     .select({
-      session: sessions,
-      user: users,
+      session: {
+        id: sessions.id,
+      },
+      user: {
+        id: users.id,
+        email: users.email,
+        name: users.name,
+        proTier: users.proTier,
+        proExpiresAt: users.proExpiresAt,
+        stripeCustomerId: users.stripeCustomerId,
+        createdAt: users.createdAt,
+        deletedAt: users.deletedAt,
+      },
     })
     .from(sessions)
     .innerJoin(users, eq(sessions.userId, users.id))
@@ -118,15 +139,22 @@ export async function createSession(
 ): Promise<string> {
   const id = crypto.randomUUID();
   const now = Date.now();
-  await db.insert(sessions).values({
+  const values = {
     id,
     userId,
     expiresAt: now + SESSION_TTL_MS,
     createdAt: now,
     lastSeenAt: now,
-    ip: meta.ip ?? null,
-    userAgent: meta.userAgent ?? null,
-  });
+  };
+  try {
+    await db.insert(sessions).values({
+      ...values,
+      ip: meta.ip ?? null,
+      userAgent: meta.userAgent ?? null,
+    });
+  } catch {
+    await db.insert(sessions).values(values);
+  }
   return id;
 }
 
