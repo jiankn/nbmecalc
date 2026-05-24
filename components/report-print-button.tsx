@@ -15,19 +15,30 @@ import { Button } from "@/components/ui/button";
  * doesn't include phantom buttons.
  */
 export function ReportPrintButton({ sessionId }: { sessionId: string }) {
-  const pdfHref = `/api/report/${encodeURIComponent(sessionId)}/pdf`;
-
   function printReport() {
     window.print();
   }
 
+  function downloadPdf() {
+    const url = new URL(
+      `/api/report/${encodeURIComponent(sessionId)}/pdf`,
+      window.location.origin
+    );
+    url.searchParams.set("t", Date.now().toString());
+    window.location.assign(url.toString());
+  }
+
   return (
     <div className="flex gap-2 print:hidden">
-      <Button asChild variant="primary" size="md" className="shrink-0">
-        <a href={pdfHref} download>
-          <Download className="h-4 w-4 mr-2" />
-          Download PDF
-        </a>
+      <Button
+        type="button"
+        variant="primary"
+        size="md"
+        onClick={downloadPdf}
+        className="shrink-0"
+      >
+        <Download className="h-4 w-4 mr-2" />
+        Download PDF
       </Button>
       <Button
         type="button"

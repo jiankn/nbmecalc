@@ -12,7 +12,7 @@
  */
 import { loadReportFromSession } from "@/lib/session-report";
 import { createReportPdf } from "@/lib/report-pdf-edge";
-import { getSiteUrl } from "@/lib/stripe";
+import { getOptionalRequestContext } from "@cloudflare/next-on-pages";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -58,8 +58,8 @@ export async function GET(_req: Request, context: RouteContext) {
   const stepLabel = data.step.toUpperCase();
   const filename = `nbmecalc-${stepLabel}-${data.result.pointEstimate}.pdf`;
 
-  const rendered = await renderWithPdfWorker(data.sessionId, filename);
-  if (rendered) return rendered;
+  const rendered = await renderWithPdfWorker(_req, data.sessionId, filename);
+  if (rendered.ok) return rendered.response;
 
   let pdfBytes: Uint8Array;
   try {
@@ -87,24 +87,31 @@ export async function GET(_req: Request, context: RouteContext) {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="${filename}"`,
       "X-PDF-Renderer": "edge-fallback",
+      "X-PDF-Fallback-Reason": rendered.reason,
       // Private because each PDF is keyed to a specific paid session.
-      // 1-hour browser cache so the second click is instant if they're on
-      // a flaky connection; the data is regenerated server-side after that.
-      "Cache-Control": "private, max-age=3600",
+      // No-store prevents stale fallback PDFs from masking a fixed renderer.
+      "Cache-Control": "private, no-store, max-age=0",
     },
   });
 }
 
+type PdfWorkerResult =
+  | { ok: true; response: Response }
+  | { ok: false; reason: string };
+
 async function renderWithPdfWorker(
+  req: Request,
   sessionId: string,
   filename: string
-): Promise<Response | null> {
-  const secret = process.env.PDF_RENDERER_SECRET;
-  if (!secret) return null;
+): Promise<PdfWorkerResult> {
+  const secret = readRuntimeEnv("PDF_RENDERER_SECRET");
+  if (!secret) return { ok: false, reason: "missing-secret" };
 
-  const siteUrl = getSiteUrl();
+  const siteUrl =
+    readRuntimeEnv("NEXT_PUBLIC_SITE_URL") ?? new URL(req.url).origin;
   const rendererUrl =
-    process.env.PDF_RENDERER_URL ?? new URL(PDF_RENDERER_PATH, siteUrl).toString();
+    readRuntimeEnv("PDF_RENDERER_URL") ??
+    new URL(PDF_RENDERER_PATH, siteUrl).toString();
   const reportUrl = new URL(`/report/${encodeURIComponent(sessionId)}`, siteUrl);
 
   try {
@@ -123,21 +130,35 @@ async function renderWithPdfWorker(
 
     if (!res.ok) {
       console.error("[pdf] renderer worker failed", res.status, await res.text());
-      return null;
+      return { ok: false, reason: `renderer-http-${res.status}` };
     }
 
     const body = await res.arrayBuffer();
-    return new Response(body, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${filename}"`,
-        "Cache-Control": "private, max-age=3600",
-        "X-PDF-Renderer": "browser-worker",
-      },
-    });
+    return {
+      ok: true,
+      response: new Response(body, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/pdf",
+          "Content-Disposition": `attachment; filename="${filename}"`,
+          "Cache-Control": "private, no-store, max-age=0",
+          "X-PDF-Renderer": "browser-worker",
+        },
+      }),
+    };
   } catch (err) {
     console.error("[pdf] renderer worker unavailable", err);
-    return null;
+    return { ok: false, reason: "renderer-unavailable" };
   }
+}
+
+function readRuntimeEnv(name: string): string | undefined {
+  const fromProcess = process.env[name];
+  if (fromProcess) return fromProcess;
+
+  const env = getOptionalRequestContext()?.env as
+    | Record<string, unknown>
+    | undefined;
+  const value = env?.[name];
+  return typeof value === "string" && value.length > 0 ? value : undefined;
 }
