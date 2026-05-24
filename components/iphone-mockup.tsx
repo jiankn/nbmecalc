@@ -43,7 +43,7 @@ export function IPhoneMockup({
           >
             {/* Dynamic Island */}
             <div className="absolute left-1/2 top-2 -translate-x-1/2 z-20 flex items-center justify-center">
-              <div className="dynamic-island h-[34px] w-[120px]" />
+              <div className="dynamic-island h-[34px] w-[84px]" />
             </div>
 
             {/* Status bar (time + icons) */}
