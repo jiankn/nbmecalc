@@ -5,6 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 
 routes = [
+  { pattern = "nbmecalc.com/api/_pdf-renderer", zone_name = "nbmecalc.com" },
   { pattern = "nbmecalc.com/api/_pdf-renderer/*", zone_name = "nbmecalc.com" }
 ]
 

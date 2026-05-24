@@ -109,9 +109,7 @@ async function renderWithPdfWorker(
 
   const siteUrl =
     readRuntimeEnv("NEXT_PUBLIC_SITE_URL") ?? new URL(req.url).origin;
-  const rendererUrl =
-    readRuntimeEnv("PDF_RENDERER_URL") ??
-    new URL(PDF_RENDERER_PATH, siteUrl).toString();
+  const rendererUrl = resolveRendererUrl(siteUrl);
   const reportUrl = new URL(`/report/${encodeURIComponent(sessionId)}`, siteUrl);
 
   try {
@@ -161,4 +159,21 @@ function readRuntimeEnv(name: string): string | undefined {
     | undefined;
   const value = env?.[name];
   return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
+function resolveRendererUrl(siteUrl: string): string {
+  const configured = readRuntimeEnv("PDF_RENDERER_URL");
+  let url: URL;
+
+  try {
+    url = new URL(configured ?? PDF_RENDERER_PATH, siteUrl);
+  } catch {
+    url = new URL(PDF_RENDERER_PATH, siteUrl);
+  }
+
+  if (url.pathname.replace(/\/$/, "") === "/api/_pdf-renderer") {
+    url.pathname = PDF_RENDERER_PATH;
+  }
+
+  return url.toString();
 }

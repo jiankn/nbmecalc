@@ -29,7 +29,7 @@ export default {
       );
     }
 
-    if (request.method !== "POST" || url.pathname !== PDF_RENDER_ROUTE) {
+    if (request.method !== "POST" || !isRenderPath(url.pathname)) {
       return new Response("Not found", { status: 404 });
     }
 
@@ -120,6 +120,11 @@ function validateReportUrl(value: string | undefined, siteUrl: string): URL | nu
   if (parsed.origin !== site.origin) return null;
   if (!parsed.pathname.startsWith("/report/cs_")) return null;
   return parsed;
+}
+
+function isRenderPath(pathname: string): boolean {
+  const normalized = pathname.replace(/\/$/, "");
+  return normalized === PDF_ROUTE_BASE || normalized === PDF_RENDER_ROUTE;
 }
 
 function sanitizeFilename(value: string): string {
