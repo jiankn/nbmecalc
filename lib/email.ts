@@ -81,7 +81,10 @@ export async function sendEmail(message: EmailMessage): Promise<SendEmailResult>
     html_body: message.html,
     ...(message.text ? { plain_body: message.text } : {}),
     ...(message.replyTo ? { reply_to: message.replyTo } : {}),
-    ...(message.headers ? { headers: message.headers } : {}),
+    headers: {
+      "BIMI-Selector": "v=BIMI1; s=default;",
+      ...(message.headers ?? {}),
+    },
   };
 
   try {

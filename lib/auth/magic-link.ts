@@ -148,6 +148,8 @@ export function renderMagicLinkEmail(args: {
   expiresInMinutes: number;
 }): { html: string; text: string } {
   const { verifyUrl, expiresInMinutes } = args;
+  const siteUrl = new URL(verifyUrl).origin;
+  const logoUrl = new URL("/brand/oauth-logo.png", siteUrl).toString();
 
   const text = [
     "Sign in to NBMEcalc",
@@ -163,13 +165,24 @@ export function renderMagicLinkEmail(args: {
   ].join("\n");
 
   const html = `<!doctype html>
-<html><head><meta charset="utf-8"/></head>
+<html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
 <body style="margin:0;padding:0;background:#f9fafb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#111827;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">Your secure NBMEcalc sign-in link expires in ${expiresInMinutes} minutes.</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr><td align="center" style="padding:40px 16px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;">
         <tr><td style="padding:32px;">
-          <h1 style="margin:0 0 16px;font-size:22px;font-weight:800;">Sign in to NBMEcalc</h1>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px;">
+            <tr>
+              <td style="vertical-align:middle;padding:0 12px 0 0;">
+                <img src="${logoUrl}" width="44" height="44" alt="NBMEcalc" style="display:block;border:0;outline:none;text-decoration:none;border-radius:12px;"/>
+              </td>
+              <td style="vertical-align:middle;font-size:24px;line-height:1;font-weight:800;letter-spacing:-0.4px;color:#0f172a;">
+                NBMEcalc
+              </td>
+            </tr>
+          </table>
+          <h1 style="margin:0 0 16px;font-size:22px;line-height:1.25;font-weight:800;color:#111827;">Sign in to NBMEcalc</h1>
           <p style="margin:0 0 24px;color:#374151;line-height:1.6;">
             Click the button below to sign in. The link expires in <strong>${expiresInMinutes} minutes</strong> and can only be used once.
           </p>
