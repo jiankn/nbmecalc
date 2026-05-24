@@ -171,7 +171,8 @@ function resolveRendererUrl(siteUrl: string): string {
     url = new URL(PDF_RENDERER_PATH, siteUrl);
   }
 
-  if (url.pathname.replace(/\/$/, "") === "/api/_pdf-renderer") {
+  const normalizedPath = url.pathname.replace(/\/$/, "");
+  if (!normalizedPath || normalizedPath === "/api/_pdf-renderer") {
     url.pathname = PDF_RENDERER_PATH;
   }
 

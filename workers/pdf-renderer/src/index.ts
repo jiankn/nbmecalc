@@ -124,7 +124,11 @@ function validateReportUrl(value: string | undefined, siteUrl: string): URL | nu
 
 function isRenderPath(pathname: string): boolean {
   const normalized = pathname.replace(/\/$/, "");
-  return normalized === PDF_ROUTE_BASE || normalized === PDF_RENDER_ROUTE;
+  return (
+    normalized === "" ||
+    normalized === PDF_ROUTE_BASE ||
+    normalized === PDF_RENDER_ROUTE
+  );
 }
 
 function sanitizeFilename(value: string): string {
