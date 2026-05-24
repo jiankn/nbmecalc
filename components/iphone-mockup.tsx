@@ -10,7 +10,7 @@ interface IPhoneMockupProps {
 /**
  * iPhone 17 Pro style mockup frame.
  * Pure CSS — no images required.
- * Inner content area: 320×680 (3:6.5 ratio approx).
+ * Screen aspect matches iPhone 16 Pro logical points (393 × 852).
  */
 export function IPhoneMockup({
   className,
@@ -24,22 +24,22 @@ export function IPhoneMockup({
         tilt && "rotate-[-2deg]",
         className
       )}
-      style={{ width: 360, maxWidth: "100%" }}
+      style={{ width: 320, maxWidth: "100%" }}
     >
       {/* Outer titanium frame */}
       <div
-        className="relative rounded-[60px] p-[3px] shadow-2xl"
+        className="relative rounded-[55px] p-[3px] shadow-2xl"
         style={{
           background:
             "linear-gradient(180deg, #c8c8c9 0%, #8a8a8d 30%, #5d5d60 60%, #2a2a2c 100%)",
         }}
       >
         {/* Inner bezel */}
-        <div className="rounded-[57px] p-[10px] bg-black">
+        <div className="rounded-[52px] p-[10px] bg-black">
           {/* Screen */}
           <div
-            className="relative overflow-hidden rounded-[47px] bg-white"
-            style={{ aspectRatio: "9 / 19.5" }}
+            className="relative overflow-hidden rounded-[42px] bg-white"
+            style={{ aspectRatio: "393 / 852" }}
           >
             {/* Dynamic Island */}
             <div className="absolute left-1/2 top-2 -translate-x-1/2 z-20 flex items-center justify-center">
