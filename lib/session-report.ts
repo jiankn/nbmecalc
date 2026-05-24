@@ -33,6 +33,8 @@ export interface ReportData {
   daysUntil?: number;
   targetScore?: number;
   weakSubjects?: string[];
+  predictionId?: string;
+  customerEmail?: string;
   /** Stripe session creation timestamp (ms since epoch). Used as "issued at". */
   purchasedAt: Date;
 }
@@ -110,6 +112,9 @@ export async function loadReportFromSession(
       daysUntil,
       targetScore,
       weakSubjects,
+      predictionId: metadata.predictionId,
+      customerEmail:
+        session.customer_details?.email ?? session.customer_email ?? undefined,
       purchasedAt: new Date(session.created * 1000),
     },
   };

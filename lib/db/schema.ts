@@ -34,6 +34,7 @@ import {
   real,
   sqliteTable,
   text,
+  uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 
 // ---------------------------------------------------------------------------
@@ -121,6 +122,12 @@ export const reports = sqliteTable(
 
     emailSentAt: integer("email_sent_at"),
     downloadCount: integer("download_count").notNull().default(0),
+    customerEmail: text("customer_email"),
+    examDate: integer("exam_date"),
+    scoreReleaseDate: integer("score_release_date"),
+    scoreFeedbackOptIn: integer("score_feedback_opt_in").notNull().default(0),
+    scoreFeedbackReminderSentAt: integer("score_feedback_reminder_sent_at"),
+    scoreFeedbackLastSubmittedAt: integer("score_feedback_last_submitted_at"),
 
     createdAt: integer("created_at").notNull(),
   },
@@ -133,6 +140,53 @@ export const reports = sqliteTable(
 
 export type ReportRow = typeof reports.$inferSelect;
 export type NewReportRow = typeof reports.$inferInsert;
+
+export const scoreReports = sqliteTable(
+  "score_reports",
+  {
+    id: text("id").primaryKey(),
+    reportId: text("report_id"),
+    predictionId: text("prediction_id"),
+    stripeSessionId: text("stripe_session_id").notNull(),
+    userId: text("user_id"),
+    email: text("email"),
+    step: text("step", { enum: ["step1", "step2", "step3"] }),
+    predictedScore: integer("predicted_score"),
+    ciLower: integer("ci_lower"),
+    ciUpper: integer("ci_upper"),
+    passProbability: real("pass_probability"),
+    examDate: integer("exam_date"),
+    scoreReleaseDate: integer("score_release_date"),
+    optedInAt: integer("opted_in_at"),
+    optInSource: text("opt_in_source"),
+    reminderSentAt: integer("reminder_sent_at"),
+    reminderEmailId: text("reminder_email_id"),
+    lastReminderError: text("last_reminder_error"),
+    actualScore: integer("actual_score"),
+    passFail: text("pass_fail", { enum: ["pass", "fail"] }),
+    scoreBand: text("score_band"),
+    scoreReportUrl: text("score_report_url"),
+    tier: text("tier").notNull().default("self_reported"),
+    source: text("source"),
+    ip: text("ip"),
+    userAgent: text("user_agent"),
+    submittedAt: integer("submitted_at"),
+    createdAt: integer("created_at").notNull(),
+    updatedAt: integer("updated_at").notNull(),
+  },
+  (t) => ({
+    byStripeSession: uniqueIndex("idx_score_reports_stripe_session").on(
+      t.stripeSessionId
+    ),
+    byPrediction: index("idx_score_reports_prediction").on(t.predictionId),
+    byRelease: index("idx_score_reports_release").on(t.scoreReleaseDate),
+    bySubmitted: index("idx_score_reports_submitted").on(t.submittedAt),
+    byEmail: index("idx_score_reports_email").on(t.email),
+  })
+);
+
+export type ScoreReportRow = typeof scoreReports.$inferSelect;
+export type NewScoreReportRow = typeof scoreReports.$inferInsert;
 
 // ---------------------------------------------------------------------------
 // rate_limits — fixed-window counter keyed by an arbitrary string.
@@ -260,6 +314,7 @@ export const sessions = sqliteTable(
     expiresAt: integer("expires_at").notNull(),
     createdAt: integer("created_at").notNull(),
     lastSeenAt: integer("last_seen_at").notNull(),
+    examDate: integer("exam_date"),
     ip: text("ip"),
     userAgent: text("user_agent"),
   },
@@ -288,6 +343,7 @@ export const tables = {
   reports,
   rateLimits,
   events,
+  scoreReports,
   users,
   magicLinks,
   sessions,

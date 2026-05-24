@@ -253,7 +253,7 @@ export async function POST(req: Request) {
       line_items: [{ price: priceId, quantity: 1 }],
       success_url:
         plan.key === "single"
-          ? `${site}/report/{CHECKOUT_SESSION_ID}`
+          ? `${site}/checkout/success?session_id={CHECKOUT_SESSION_ID}`
           : `${site}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${site}/checkout/cancel`,
       metadata,

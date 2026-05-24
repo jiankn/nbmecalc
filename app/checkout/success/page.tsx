@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CheckCircle2, Mail, Download } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
+import { ScoreFeedbackOptIn } from "@/components/score-feedback-opt-in";
 
 export const metadata: Metadata = {
   title: "Payment Successful — Your Report Is On the Way | NBMEcalc",
@@ -12,7 +13,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://nbmecalc.com/checkout/success" },
 };
 
-export default function CheckoutSuccessPage() {
+type PageSearchParams = Promise<{ session_id?: string }>;
+
+export default async function CheckoutSuccessPage({
+  searchParams,
+}: {
+  searchParams: PageSearchParams;
+}) {
+  const { session_id } = await searchParams;
+  const reportHref = session_id ? `/report/${encodeURIComponent(session_id)}` : "/";
+
   return (
     <PageShell>
       <section className="py-20 lg:py-28 bg-mint-50/40 min-h-[60vh]">
@@ -64,11 +74,15 @@ export default function CheckoutSuccessPage() {
                     Your report page is ready. Bookmark it for future access.
                   </p>
                   <Button variant="outline" size="md" asChild>
-                    <Link href="/">View my report</Link>
+                    <Link href={reportHref}>View my report</Link>
                   </Button>
                 </div>
               </div>
             </div>
+
+            {session_id?.startsWith("cs_") && (
+              <ScoreFeedbackOptIn sessionId={session_id} />
+            )}
 
             <div className="space-y-3 text-sm text-gray-600">
               <p>

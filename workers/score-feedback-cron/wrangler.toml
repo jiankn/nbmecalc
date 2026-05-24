@@ -1,0 +1,11 @@
+name = "nbmecalc-score-feedback-cron"
+main = "src/index.ts"
+compatibility_date = "2025-01-17"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[triggers]
+crons = ["0 15 * * *"]
+
+[vars]
+SITE_URL = "https://nbmecalc.com"

@@ -81,6 +81,21 @@ jobs:
         run: |
           printf "%s" "$PDF_RENDERER_SECRET" | npx wrangler secret put PDF_RENDERER_SECRET --config workers/pdf-renderer/wrangler.toml
 
+      - name: Deploy score feedback Cron Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler deploy --config workers/score-feedback-cron/wrangler.toml
+
+      - name: Configure score feedback Cron Worker secret
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PDF_RENDERER_SECRET: ${{ env.PDF_RENDERER_SECRET }}
+        run: |
+          printf "%s" "score-feedback:$PDF_RENDERER_SECRET" | npx wrangler secret put SCORE_FEEDBACK_SECRET --config workers/score-feedback-cron/wrangler.toml
+
       - name: Configure Pages PDF renderer secret
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -88,6 +103,14 @@ jobs:
           PDF_RENDERER_SECRET: ${{ env.PDF_RENDERER_SECRET }}
         run: |
           printf "%s" "$PDF_RENDERER_SECRET" | npx wrangler pages secret put PDF_RENDERER_SECRET --project-name=nbmecalc
+
+      - name: Configure Pages score feedback secret
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PDF_RENDERER_SECRET: ${{ env.PDF_RENDERER_SECRET }}
+        run: |
+          printf "%s" "score-feedback:$PDF_RENDERER_SECRET" | npx wrangler pages secret put SCORE_FEEDBACK_SECRET --project-name=nbmecalc
 
       - name: Remove stale Pages PDF renderer URL secret
         env:

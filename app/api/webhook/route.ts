@@ -115,6 +115,8 @@ async function handleEvent(event: Stripe.Event): Promise<void> {
                   : null,
               amountPaid: session.amount_total ?? 1499,
               currency: session.currency ?? "usd",
+              customerEmail:
+                session.customer_details?.email ?? session.customer_email ?? null,
               createdAt: Date.now(),
             });
           } catch (err) {
