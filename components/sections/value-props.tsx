@@ -87,6 +87,7 @@ export function ValueProps() {
                   src={card.image}
                   alt={card.imageAlt}
                   fill
+                  quality={100}
                   sizes="(min-width: 768px) 33vw, 100vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
