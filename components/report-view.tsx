@@ -159,7 +159,7 @@ export function ReportView({
       </header>
 
       {/* Score hero */}
-      <section className="rounded-3xl border-2 border-mint-200 bg-mint-50/40 p-8 mb-8 print:border-gray-300 print:bg-white print:p-6 print:break-inside-avoid">
+      <section className="rounded-3xl border-2 border-mint-200 bg-mint-50/40 p-8 mb-8 print:p-6 print:break-inside-avoid">
         <div className="flex items-baseline gap-3 mb-2 flex-wrap">
           <div className="text-6xl font-black tabular-nums">
             {result.pointEstimate}
@@ -325,7 +325,7 @@ export function ReportView({
       <HonestUncertaintySection uncertainty={result.honestUncertainty} />
 
       {/* Methodology */}
-      <section className="rounded-3xl bg-gray-50 p-6 text-sm text-gray-600 print:bg-white print:border print:border-gray-300 print:p-4 print:break-inside-avoid">
+      <section className="rounded-3xl bg-gray-50 p-6 text-sm text-gray-600 print:p-4 print:break-inside-avoid">
         <h3 className="font-bold mb-2 text-gray-900 flex items-center gap-2">
           <Info className="h-4 w-4" />
           About this prediction
@@ -707,23 +707,23 @@ const DECISION_TONE: Record<
 > = {
   sit_as_scheduled: {
     wrap:
-      "bg-gradient-to-br from-mint-500 to-mint-600 text-white border-mint-600 print:bg-mint-50 print:text-gray-900 print:border-mint-300",
+      "bg-gradient-to-br from-mint-500 to-mint-600 text-white border-mint-600",
     isLight: false,
-    iconWrap: "bg-white/20 print:bg-mint-100",
+    iconWrap: "bg-white/20",
     Icon: CheckCircle2,
   },
   postpone_14d: {
     wrap:
-      "bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-600 print:bg-amber-50 print:text-gray-900 print:border-amber-300",
+      "bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-600",
     isLight: false,
-    iconWrap: "bg-white/20 print:bg-amber-100",
+    iconWrap: "bg-white/20",
     Icon: CalendarClock,
   },
   postpone_28d: {
     wrap:
-      "bg-gradient-to-br from-orange-600 to-red-600 text-white border-red-700 print:bg-red-50 print:text-gray-900 print:border-red-300",
+      "bg-gradient-to-br from-orange-600 to-red-600 text-white border-red-700",
     isLight: false,
-    iconWrap: "bg-white/20 print:bg-red-100",
+    iconWrap: "bg-white/20",
     Icon: ShieldAlert,
   },
   need_more_data: {
@@ -737,11 +737,11 @@ const DECISION_TONE: Record<
 function OneDecisionSection({ decision }: { decision: OneDecision }) {
   const tone = DECISION_TONE[decision.recommendation];
   const Icon = tone.Icon;
-  const subtle = tone.isLight ? "text-gray-600" : "text-white/85 print:text-gray-600";
-  const body = tone.isLight ? "text-gray-800" : "text-white/95 print:text-gray-800";
+  const subtle = tone.isLight ? "text-gray-600" : "text-white/85";
+  const body = tone.isLight ? "text-gray-800" : "text-white/95";
   const divider = tone.isLight
     ? "border-gray-300"
-    : "border-white/30 print:border-gray-300";
+    : "border-white/30";
 
   return (
     <section
