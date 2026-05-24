@@ -11,8 +11,7 @@
  * report URL after purchase" UX).
  */
 import { loadReportFromSession } from "@/lib/session-report";
-import { ReportPdf } from "@/components/report-pdf";
-import { renderToBuffer } from "@react-pdf/renderer";
+import { createReportPdf } from "@/lib/report-pdf-edge";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -51,20 +50,11 @@ export async function GET(_req: Request, context: RouteContext) {
 
   const { data } = loaded;
 
-  // renderToBuffer is the server-side API that returns a Node.js Buffer.
-  // Works on Cloudflare Workers with nodejs_compat flag enabled.
-  let buffer: Buffer;
+  let pdfBytes: Uint8Array;
   try {
-    buffer = await renderToBuffer(
-      ReportPdf({
-        result: data.result,
-        exams: data.exams,
-        sessionId: data.sessionId,
-        purchasedAt: data.purchasedAt,
-      })
-    );
+    pdfBytes = createReportPdf(data);
   } catch (err) {
-    console.error("[pdf] react-pdf render failed", err);
+    console.error("[pdf] render failed", err);
     return new Response(
       JSON.stringify({
         error: "PDF generation failed",
@@ -79,8 +69,12 @@ export async function GET(_req: Request, context: RouteContext) {
   // their Downloads folder months later. We sanitise to ASCII only.
   const stepLabel = data.step.toUpperCase();
   const filename = `nbmecalc-${stepLabel}-${data.result.pointEstimate}.pdf`;
+  const body = pdfBytes.buffer.slice(
+    pdfBytes.byteOffset,
+    pdfBytes.byteOffset + pdfBytes.byteLength
+  ) as ArrayBuffer;
 
-  return new Response(new Uint8Array(buffer), {
+  return new Response(body, {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",

@@ -9,9 +9,8 @@
  * Use it to eyeball PDF layout changes without going through Stripe
  * Checkout. Pair with `/report/preview` for the web-view counterpart.
  */
-import { ReportPdf } from "@/components/report-pdf";
-import { renderToBuffer } from "@react-pdf/renderer";
 import { predictStepScore, type PracticeExam } from "@/lib/data";
+import { createReportPdf } from "@/lib/report-pdf-edge";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -32,16 +31,18 @@ export async function GET() {
     selfReportedWeakSubjects: ["Biostatistics", "Pharmacology", "Pathology"],
   });
 
-  let buffer: Buffer;
+  let pdfBytes: Uint8Array;
   try {
-    buffer = await renderToBuffer(
-      ReportPdf({
-        result,
-        exams: PREVIEW_EXAMS,
-        sessionId: "cs_preview_dev_only",
-        purchasedAt: new Date(),
-      })
-    );
+    pdfBytes = createReportPdf({
+      result,
+      exams: PREVIEW_EXAMS,
+      step: "step2",
+      daysUntil: 12,
+      targetScore: 255,
+      weakSubjects: ["Biostatistics", "Pharmacology", "Pathology"],
+      sessionId: "cs_preview_dev_only",
+      purchasedAt: new Date(),
+    });
   } catch (err) {
     console.error("[pdf-preview] render failed", err);
     return new Response(
@@ -54,7 +55,12 @@ export async function GET() {
     );
   }
 
-  return new Response(new Uint8Array(buffer), {
+  const body = pdfBytes.buffer.slice(
+    pdfBytes.byteOffset,
+    pdfBytes.byteOffset + pdfBytes.byteLength
+  ) as ArrayBuffer;
+
+  return new Response(body, {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",
