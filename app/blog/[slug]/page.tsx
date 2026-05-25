@@ -47,9 +47,9 @@ export async function generateMetadata({
       tags: post.tags,
       images: [
         {
-          url: "/images/feature-score-range.png",
-          width: 2400,
-          height: 1792,
+          url: `/blog/og/${post.slug}`,
+          width: 1200,
+          height: 630,
           alt: post.title,
         },
       ],
@@ -174,6 +174,24 @@ export default async function BlogPostPage({
                   })}
                 </span>
               )}
+            </div>
+          </div>
+        </section>
+
+        {/* Hero cover image — generated programmatically per post.
+            Same image used by social shares + blog index card cover. */}
+        <section className="bg-white pt-8 lg:pt-12">
+          <div className="container max-w-4xl">
+            <div className="relative aspect-[1200/630] w-full overflow-hidden rounded-3xl border border-gray-200 shadow-sm bg-mint-50">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/blog/og/${p.slug}`}
+                alt={p.title}
+                width={1200}
+                height={630}
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
             </div>
           </div>
         </section>

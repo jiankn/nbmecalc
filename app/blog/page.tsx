@@ -68,48 +68,107 @@ export default function BlogIndexPage() {
         </div>
       </section>
 
-      {/* Post list */}
+      {/* Post grid with cover thumbnails */}
       <section className="py-16 lg:py-20 bg-gray-50">
-        <div className="container max-w-4xl">
+        <div className="container max-w-6xl">
           {posts.length === 0 ? (
             <p className="text-center text-gray-600">No articles yet.</p>
           ) : (
-            <ul className="space-y-6">
-              {posts.map((post) => (
-                <li key={post.slug}>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="block rounded-3xl bg-white border border-gray-200 p-6 lg:p-8 hover:border-mint-400 hover:shadow-lg transition group"
-                  >
-                    <div className="flex items-center gap-2 text-xs font-semibold text-mint-700 uppercase tracking-wider mb-3">
-                      <Tag className="h-3 w-3" />
-                      {CATEGORY_LABELS[post.category]}
+            <>
+              {/* Featured post — large card spanning two columns */}
+              {posts[0] && (
+                <Link
+                  href={`/blog/${posts[0].slug}`}
+                  className="block rounded-3xl bg-white border border-gray-200 overflow-hidden hover:border-mint-400 hover:shadow-xl transition group mb-8"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-2">
+                    <div className="relative aspect-[1200/630] lg:aspect-auto bg-mint-50 overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`/blog/og/${posts[0].slug}`}
+                        alt={posts[0].title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                        loading="eager"
+                      />
                     </div>
-                    <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-950 mb-3 group-hover:text-mint-700 transition">
-                      {post.title}
-                    </h2>
-                    <p className="text-gray-600 mb-4 leading-relaxed">
-                      {post.description}
-                    </p>
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
-                      <span>{post.author}</span>
-                      <span>·</span>
-                      <time dateTime={post.publishedAt}>
-                        {new Date(post.publishedAt).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </time>
-                      <span className="inline-flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {post.readingTime} min read
-                      </span>
+                    <div className="p-6 lg:p-10 flex flex-col justify-center">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-mint-700 uppercase tracking-wider mb-3">
+                        <Tag className="h-3 w-3" />
+                        {CATEGORY_LABELS[posts[0].category]}
+                        <span className="ml-2 rounded-full bg-mint-500 text-white px-2 py-0.5 text-[10px]">
+                          Featured
+                        </span>
+                      </div>
+                      <h2 className="text-2xl lg:text-3xl xl:text-4xl font-extrabold tracking-tight text-gray-950 mb-3 group-hover:text-mint-700 transition text-balance">
+                        {posts[0].title}
+                      </h2>
+                      <p className="text-gray-600 mb-5 leading-relaxed">
+                        {posts[0].description}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
+                        <span className="font-semibold text-gray-900">
+                          {posts[0].author}
+                        </span>
+                        <span>·</span>
+                        <time dateTime={posts[0].publishedAt}>
+                          {new Date(posts[0].publishedAt).toLocaleDateString(
+                            "en-US",
+                            { year: "numeric", month: "long", day: "numeric" }
+                          )}
+                        </time>
+                        <span className="inline-flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {posts[0].readingTime} min read
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              )}
+
+              {/* Standard grid of remaining posts */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {posts.slice(1).map((post) => (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className="group block rounded-2xl overflow-hidden bg-white border border-gray-200 hover:border-mint-400 hover:shadow-lg transition"
+                  >
+                    <div className="relative aspect-[1200/630] bg-mint-50 overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`/blog/og/${post.slug}`}
+                        alt={post.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="p-5">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-mint-700 uppercase tracking-wider mb-2">
+                        <Tag className="h-3 w-3" />
+                        {CATEGORY_LABELS[post.category]}
+                      </div>
+                      <h3 className="text-lg font-bold leading-snug text-gray-950 group-hover:text-mint-700 transition mb-2 text-balance">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 leading-relaxed line-clamp-2 mb-3">
+                        {post.description}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                        <span className="font-semibold text-gray-700">
+                          {post.author}
+                        </span>
+                        <span>·</span>
+                        <span className="inline-flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {post.readingTime} min
+                        </span>
+                      </div>
                     </div>
                   </Link>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </section>

@@ -4,6 +4,7 @@
  */
 import type { BlogBlock } from "@/lib/blog/posts";
 import { Info, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { DataChart } from "@/components/data-chart";
 
 const TONE_STYLES: Record<
   "info" | "warning" | "success",
@@ -104,6 +105,17 @@ export function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
               </div>
             );
           }
+          case "chart":
+            return (
+              <DataChart
+                key={i}
+                variant={block.variant}
+                title={block.title}
+                caption={block.caption}
+                unit={block.unit}
+                data={block.data}
+              />
+            );
         }
       })}
     </div>
