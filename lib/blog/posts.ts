@@ -654,7 +654,6 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "score-conversion",
     tags: ["confidence-interval", "methodology", "accuracy"],
     readingTime: 7,
-    noindex: true,
     body: [
       {
         type: "p",
@@ -719,7 +718,6 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "step-2-tips",
     tags: ["step-2-ck", "subjects", "study-plan"],
     readingTime: 8,
-    noindex: true,
     body: [
       {
         type: "p",
@@ -794,7 +792,6 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "study-plans",
     tags: ["test-day", "step-1", "step-2-ck", "preparation"],
     readingTime: 6,
-    noindex: true,
     body: [
       {
         type: "p",
@@ -870,7 +867,6 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "study-plans",
     tags: ["amboss", "uworld", "qbank", "step-2-ck"],
     readingTime: 9,
-    noindex: true,
     body: [
       {
         type: "p",
@@ -956,7 +952,6 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "score-conversion",
     tags: ["average-score", "step-2-ck", "residency", "benchmarks"],
     readingTime: 7,
-    noindex: true,
     body: [
       {
         type: "p",
@@ -1085,7 +1080,6 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "study-plans",
     tags: ["img", "step-2-ck", "study-plan", "strategy"],
     readingTime: 11,
-    noindex: true,
     body: [
       {
         type: "p",
@@ -1180,7 +1174,6 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "step-2-tips",
     tags: ["high-yield", "step-2-ck", "study-plan"],
     readingTime: 8,
-    noindex: true,
     body: [
       {
         type: "p",
@@ -1295,7 +1288,6 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "study-plans",
     tags: ["step-3", "ccs", "study-plan"],
     readingTime: 11,
-    noindex: true,
     body: [
       {
         type: "p",
