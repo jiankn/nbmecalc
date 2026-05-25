@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { getDb, type Db } from "@/lib/db/client";
-import { events, users, reports } from "@/lib/db/schema";
+import { events, users, reports, predictions } from "@/lib/db/schema";
 import { getPlan, type PlanKey } from "@/lib/plans";
+import { sendReportEmail } from "@/lib/email-report";
 
 export const runtime = "edge";
 
@@ -122,6 +123,56 @@ async function handleEvent(event: Stripe.Event): Promise<void> {
           } catch (err) {
             // Idempotent: if the row already exists (retry), swallow.
             console.error("[stripe-webhook] reports insert failed", err);
+          }
+
+          // Send the report delivery email (best-effort, never blocks webhook ack).
+          const buyerEmail =
+            session.customer_details?.email ?? session.customer_email ?? null;
+          if (buyerEmail) {
+            try {
+              const predRows = await db
+                .select({
+                  step: predictions.step,
+                  pointEstimate: predictions.pointEstimate,
+                  ciLower: predictions.ciLower,
+                  ciUpper: predictions.ciUpper,
+                  passProbability: predictions.passProbability,
+                })
+                .from(predictions)
+                .where(eq(predictions.id, predictionId))
+                .limit(1);
+
+              const pred = predRows[0];
+              if (pred) {
+                const STEP_LABELS: Record<string, string> = {
+                  step1: "Step 1",
+                  step2: "Step 2 CK",
+                  step3: "Step 3",
+                };
+                const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://nbmecalc.com";
+                const emailResult = await sendReportEmail({
+                  sessionId: session.id,
+                  to: buyerEmail,
+                  stepLabel: STEP_LABELS[pred.step] ?? pred.step,
+                  pointEstimate: pred.pointEstimate,
+                  ciLower: pred.ciLower,
+                  ciUpper: pred.ciUpper,
+                  passProbability: pred.passProbability,
+                  siteUrl,
+                });
+                if (emailResult.ok) {
+                  await db
+                    .update(reports)
+                    .set({ emailSentAt: Date.now() })
+                    .where(eq(reports.stripeSessionId, session.id))
+                    .catch(() => {});
+                } else {
+                  console.error("[stripe-webhook] report email failed", emailResult.error);
+                }
+              }
+            } catch (emailErr) {
+              console.error("[stripe-webhook] report email error", emailErr);
+            }
           }
         }
       }

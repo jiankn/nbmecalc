@@ -4,6 +4,7 @@ import { CheckCircle2, Mail, Download } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
 import { ScoreFeedbackOptIn } from "@/components/score-feedback-opt-in";
+import { ResendReportEmail } from "@/components/resend-report-email";
 
 export const runtime = "edge";
 
@@ -50,7 +51,7 @@ export default async function CheckoutSuccessPage({
                     Check your inbox
                   </h2>
                   <p className="text-sm text-gray-700 leading-relaxed">
-                    We sent your PDF report and 14-day study plan to the email
+                    We&apos;re sending your full report to the email
                     associated with this purchase. If you don&apos;t see it
                     within 5 minutes, check your spam folder or contact{" "}
                     <a
@@ -64,6 +65,12 @@ export default async function CheckoutSuccessPage({
                 </div>
               </div>
             </div>
+
+            {session_id && (
+              <div className="mb-8">
+                <ResendReportEmail sessionId={session_id} variant="success-page" />
+              </div>
+            )}
 
             <div className="rounded-2xl bg-gray-50 border border-gray-200 p-5 mb-8 text-left">
               <div className="flex items-start gap-3">

@@ -14,6 +14,7 @@ import {
   ArchiveRestore,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ResendReportEmail } from "@/components/resend-report-email";
 import type { PredictionResult, PracticeExam } from "@/lib/data";
 
 export const runtime = "edge";
@@ -294,6 +295,9 @@ export default function PredictionDetailPage() {
                 Download PDF
               </a>
             </Button>
+          </div>
+          <div className="mt-4">
+            <ResendReportEmail sessionId={prediction.reportSessionId!} variant="dashboard" />
           </div>
         </section>
       ) : (

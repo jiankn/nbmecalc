@@ -58,7 +58,7 @@ const plans: PlanCard[] = [
     ],
     excluded: [
       "PDF report download",
-      "14-day study plan",
+      "Sit-or-postpone recommendation",
       "Multi-Step tracking",
       "Unlimited refreshes",
     ],
@@ -76,7 +76,7 @@ const plans: PlanCard[] = [
     features: [
       "Everything in Free",
       "Downloadable PDF report",
-      "14-day personalized study plan",
+      "Sit-or-postpone recommendation",
       "Subject-level weakness map",
       "Score trajectory analysis",
     ],

@@ -846,7 +846,7 @@ function PaywallModal({
             Unlock Your Full Step Report
           </h3>
           <p className="text-gray-600">
-            Get the complete PDF + 14-day study plan instantly.
+            Get your full personalized report + downloadable PDF instantly.
           </p>
         </div>
 
@@ -856,7 +856,7 @@ function PaywallModal({
           <button
             onClick={handleSingle}
             disabled={loading !== null}
-            className="w-full text-left rounded-2xl border-2 border-mint-500 bg-mint-50 p-5 transition hover:bg-mint-100 disabled:opacity-60 disabled:cursor-wait"
+            className="group w-full text-left rounded-2xl border-2 border-mint-500 bg-mint-50 p-5 transition hover:bg-mint-100 disabled:opacity-60 disabled:cursor-wait"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -875,14 +875,16 @@ function PaywallModal({
                 <li>✓ Cohort mirror + PDF</li>
               </ul>
             </div>
-            <div className="mt-3 text-sm font-semibold text-mint-700 flex items-center gap-1.5">
-              {loading === "single" ? (
-                <>Redirecting to secure checkout…</>
-              ) : (
-                <>
-                  Unlock now <ArrowRight className="h-4 w-4" />
-                </>
-              )}
+            <div className="mt-4 flex">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-mint-500 text-white px-5 py-2 text-sm font-bold shadow-sm transition group-hover:bg-mint-600">
+                {loading === "single" ? (
+                  <>Redirecting to checkout…</>
+                ) : (
+                  <>
+                    Get My Report <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
+              </span>
             </div>
           </button>
 
