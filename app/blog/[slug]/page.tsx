@@ -30,6 +30,12 @@ export async function generateMetadata({
     description: post.description,
     keywords: post.tags,
     alternates: { canonical: `https://nbmecalc.com/blog/${post.slug}` },
+    // Drafts (noindex) stay reachable from internal links but are hidden
+    // from Google search results until they meet the full E-E-A-T bar
+    // (medical reviewer sign-off, original data, infographics).
+    robots: post.noindex
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
     openGraph: {
       title: post.title,
       description: post.description,

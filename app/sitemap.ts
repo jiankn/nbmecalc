@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { BLOG_POSTS } from "@/lib/blog/posts";
 
 const SITE_URL = "https://nbmecalc.com";
 
@@ -58,9 +59,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/blog/category/study-plans`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
     { url: `${SITE_URL}/blog/category/step-1-tips`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
     { url: `${SITE_URL}/blog/category/step-2-tips`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${SITE_URL}/blog/how-to-read-nbme-score-report`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${SITE_URL}/blog/nbme-30-vs-31-vs-32-which-is-hardest`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${SITE_URL}/blog/step-2-ck-14-day-cram-plan`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+
+    // Blog posts — derived from BLOG_POSTS, drafts (noindex) are skipped so
+    // the sitemap stays consistent with each post's robots meta tag.
+    ...BLOG_POSTS.filter((p) => !p.noindex).map((p) => ({
+      url: `${SITE_URL}/blog/${p.slug}`,
+      lastModified: p.updatedAt ? new Date(p.updatedAt) : new Date(p.publishedAt),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
   ];
 
   return liveRoutes;
