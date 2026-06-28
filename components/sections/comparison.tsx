@@ -150,7 +150,7 @@ export function Comparison() {
           ))}
         </div>
 
-        <p className="text-xs text-gray-400 text-center mt-6">
+        <p className="text-xs text-gray-600 text-center mt-6">
           Comparison based on public information from each tool&apos;s landing
           page as of May 2026. Brand names are property of their respective
           owners.

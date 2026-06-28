@@ -213,9 +213,9 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
         {/* Calculator card */}
         <div className="rounded-3xl bg-white p-6 sm:p-10 shadow-lg border border-gray-100 overflow-x-hidden">
           {/* Step picker */}
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
+          <p className="block text-sm font-semibold text-gray-700 mb-3">
             Select your exam
-          </label>
+          </p>
           <div className="flex flex-wrap gap-2 mb-8">
             {STEPS.map((s) => (
               <button
@@ -234,12 +234,14 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
           </div>
 
           {/* Exams list */}
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
+          <p className="block text-sm font-semibold text-gray-700 mb-3">
             Your practice exams
-          </label>
+          </p>
           <div className="space-y-3 mb-4">
-            {exams.map((exam) => {
+            {exams.map((exam, examIndex) => {
               const meta = EXAM_SOURCES.find((s) => s.key === exam.source)!;
+              const controlIdPrefix = `practice-exam-${exam.id}`;
+              const examLabel = `practice exam ${examIndex + 1}`;
               return (
                 <div
                   key={exam.id}
@@ -249,7 +251,14 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
                     className="h-3 w-3 rounded-full shrink-0"
                     style={{ background: meta.color }}
                   />
+                  <label
+                    htmlFor={`${controlIdPrefix}-source`}
+                    className="sr-only"
+                  >
+                    Source for {examLabel}
+                  </label>
                   <select
+                    id={`${controlIdPrefix}-source`}
                     value={exam.source}
                     onChange={(e) =>
                       updateExam(exam.id, {
@@ -265,26 +274,42 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
                     ))}
                   </select>
                   {exam.source === "NBME" && (
-                    <select
-                      value={exam.formNumber || 30}
-                      onChange={(e) =>
-                        updateExam(exam.id, {
-                          formNumber: Number(e.target.value),
-                        })
-                      }
-                      className="bg-gray-50 rounded-md text-sm font-medium px-2 py-1 focus:outline-none cursor-pointer"
-                    >
-                      {NBME_FORM_NUMBERS.map((n) => (
-                        <option key={n} value={n}>
-                          Form {n}
-                        </option>
-                      ))}
-                    </select>
+                    <>
+                      <label
+                        htmlFor={`${controlIdPrefix}-form`}
+                        className="sr-only"
+                      >
+                        NBME form for {examLabel}
+                      </label>
+                      <select
+                        id={`${controlIdPrefix}-form`}
+                        value={exam.formNumber || 30}
+                        onChange={(e) =>
+                          updateExam(exam.id, {
+                            formNumber: Number(e.target.value),
+                          })
+                        }
+                        className="bg-gray-50 rounded-md text-sm font-medium px-2 py-1 focus:outline-none cursor-pointer"
+                      >
+                        {NBME_FORM_NUMBERS.map((n) => (
+                          <option key={n} value={n}>
+                            Form {n}
+                          </option>
+                        ))}
+                      </select>
+                    </>
                   )}
                   <span className="ml-auto text-xs text-gray-500">
                     {meta.unit === "percent" ? "% correct" : "Score"}
                   </span>
+                  <label
+                    htmlFor={`${controlIdPrefix}-score`}
+                    className="sr-only"
+                  >
+                    Score for {examLabel}
+                  </label>
                   <input
+                    id={`${controlIdPrefix}-score`}
                     type="number"
                     value={exam.score}
                     onChange={(e) =>
@@ -305,7 +330,14 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
                   {meta.unit === "percent" && (
                     <span className="text-xs text-gray-400 -ml-2">%</span>
                   )}
+                  <label
+                    htmlFor={`${controlIdPrefix}-days-ago`}
+                    className="sr-only"
+                  >
+                    Days since taking {examLabel}
+                  </label>
                   <input
+                    id={`${controlIdPrefix}-days-ago`}
                     type="number"
                     inputMode="numeric"
                     placeholder="d?"
@@ -324,7 +356,7 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
                     min={0}
                     max={365}
                   />
-                  <span className="text-[11px] text-gray-400 -ml-1.5">d ago</span>
+                  <span className="text-[11px] text-gray-600 -ml-1.5">d ago</span>
                   <button
                     onClick={() => removeExam(exam.id)}
                     className="text-gray-400 hover:text-red-600 transition p-1"
@@ -350,11 +382,15 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
           {/* Days until exam + optional target score */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div className="flex items-center justify-between gap-3">
-              <label className="text-sm font-semibold text-gray-700">
+              <label
+                htmlFor="days-until-exam"
+                className="text-sm font-semibold text-gray-700"
+              >
                 Days until your exam
               </label>
               <div className="flex items-center gap-2">
                 <input
+                  id="days-until-exam"
                   type="number"
                   value={daysUntil}
                   onChange={(e) => setDaysUntil(Number(e.target.value))}
@@ -367,15 +403,17 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
             </div>
             <div className="flex items-center justify-between gap-3">
               <label
+                htmlFor="target-score"
                 className="text-sm font-semibold text-gray-700"
                 title="Optional. Powers the Target Gap card in the full report."
               >
                 Target score{" "}
-                <span className="text-xs font-normal text-gray-400">
+                <span className="text-xs font-normal text-gray-600">
                   (optional)
                 </span>
               </label>
               <input
+                id="target-score"
                 type="number"
                 value={typeof targetScore === "number" ? targetScore : ""}
                 onChange={(e) => {

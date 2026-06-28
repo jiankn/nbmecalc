@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { getAllPostsSorted, CATEGORY_LABELS, type BlogCategory } from "@/lib/blog/posts";
+import { getBlogSummaryImage } from "@/lib/blog/images";
 import { Clock, Tag } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -85,7 +86,7 @@ export default function BlogIndexPage() {
                     <div className="relative aspect-[1200/630] lg:aspect-auto bg-mint-50 overflow-hidden">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={`/blog/og/${posts[0].slug}`}
+                        src={getBlogSummaryImage(posts[0].slug)}
                         alt={posts[0].title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                         loading="eager"
@@ -137,7 +138,7 @@ export default function BlogIndexPage() {
                     <div className="relative aspect-[1200/630] bg-mint-50 overflow-hidden">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={`/blog/og/${post.slug}`}
+                        src={getBlogSummaryImage(post.slug)}
                         alt={post.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"

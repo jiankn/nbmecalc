@@ -11,6 +11,10 @@ import {
   getPost,
   getRelatedPosts,
 } from "@/lib/blog/posts";
+import {
+  getBlogDetailImage,
+  getBlogSummaryImage,
+} from "@/lib/blog/images";
 
 export function generateStaticParams() {
   return BLOG_POSTS.map((p) => ({ slug: p.slug }));
@@ -47,7 +51,7 @@ export async function generateMetadata({
       tags: post.tags,
       images: [
         {
-          url: `/blog/og/${post.slug}`,
+          url: getBlogSummaryImage(post.slug),
           width: 1200,
           height: 630,
           alt: post.title,
@@ -90,6 +94,7 @@ export default async function BlogPostPage({
               name: "NBMEcalc",
               url: "https://nbmecalc.com",
             },
+            image: `https://nbmecalc.com${getBlogDetailImage(p.slug)}`,
             mainEntityOfPage: {
               "@type": "WebPage",
               "@id": `https://nbmecalc.com/blog/${p.slug}`,
@@ -178,17 +183,17 @@ export default async function BlogPostPage({
           </div>
         </section>
 
-        {/* Hero cover image — generated programmatically per post.
-            Same image used by social shares + blog index card cover. */}
+        {/* Dedicated article image; list cards and social previews use the
+            separately composed summary image. */}
         <section className="bg-white pt-8 lg:pt-12">
           <div className="container max-w-4xl">
-            <div className="relative aspect-[1200/630] w-full overflow-hidden rounded-3xl border border-gray-200 shadow-sm bg-mint-50">
+            <div className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl border border-gray-200 shadow-sm bg-mint-50">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`/blog/og/${p.slug}`}
+                src={getBlogDetailImage(p.slug)}
                 alt={p.title}
-                width={1200}
-                height={630}
+                width={1536}
+                height={1024}
                 className="w-full h-full object-cover"
                 loading="eager"
               />

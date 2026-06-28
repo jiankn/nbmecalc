@@ -15,7 +15,7 @@ export function LogoWall() {
         <p className="text-center text-sm font-medium text-gray-500 mb-6">
           Featured users from medical schools across the US, Caribbean & IMG hubs
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 opacity-70">
+        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           {schools.map((s) => (
             <span
               key={s}

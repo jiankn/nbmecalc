@@ -48,7 +48,9 @@ export function CookieBanner() {
   return (
     <div
       role="dialog"
+      aria-labelledby="cookie-banner-title"
       aria-live="polite"
+      data-cookie-banner
       className="fixed bottom-4 left-4 right-4 z-[90] max-w-[400px] ml-auto animate-slide-up"
     >
       <div className="rounded-2xl bg-white border border-gray-200 shadow-2xl p-5">
@@ -57,7 +59,9 @@ export function CookieBanner() {
             <Stethoscope className="h-4 w-4 text-mint-700" />
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="font-bold text-sm">Quick heads-up</h4>
+            <h2 id="cookie-banner-title" className="font-bold text-sm">
+              Quick heads-up
+            </h2>
           </div>
           <button
             onClick={dismiss}

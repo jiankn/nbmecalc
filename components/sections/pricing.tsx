@@ -201,7 +201,7 @@ export function Pricing() {
           <span
             className={cn(
               "text-sm font-semibold transition",
-              annual ? "text-gray-900" : "text-gray-400"
+              annual ? "text-gray-900" : "text-gray-600"
             )}
           >
             Annual
@@ -241,7 +241,7 @@ export function Pricing() {
               >
                 {isProCard && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-mint-500 px-4 py-1.5 text-xs font-bold text-white shadow-sm">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-mint-800 px-4 py-1.5 text-xs font-bold text-white shadow-sm">
                       <Sparkles className="h-3.5 w-3.5" />
                       Most popular
                     </span>
@@ -265,7 +265,7 @@ export function Pricing() {
                     </span>
                   )}
                   {plan.kind === "single" && (
-                    <span className="ml-2 text-xs font-semibold text-gray-400">
+                    <span className="ml-2 text-xs font-semibold text-gray-600">
                       one-time
                     </span>
                   )}
@@ -331,7 +331,7 @@ export function Pricing() {
                   {plan.excluded.map((f) => (
                     <li
                       key={f}
-                      className="flex items-start gap-2.5 text-sm text-gray-400"
+                      className="flex items-start gap-2.5 text-sm text-gray-600"
                     >
                       <Check className="h-4 w-4 mt-0.5 shrink-0 text-gray-300" />
                       <span className="line-through decoration-gray-300">
@@ -345,7 +345,7 @@ export function Pricing() {
           })}
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-10 max-w-xl mx-auto">
+        <p className="text-center text-xs text-gray-600 mt-10 max-w-xl mx-auto">
           All prices in USD. Digital products are non-refundable. Pro
           subscriptions can be canceled anytime — you keep access until the
           end of your billing period.

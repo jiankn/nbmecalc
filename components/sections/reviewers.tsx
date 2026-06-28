@@ -80,7 +80,7 @@ export function Reviewers() {
           ))}
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-8 max-w-2xl mx-auto">
+        <p className="text-center text-xs text-gray-600 mt-8 max-w-2xl mx-auto">
           Reviewer identities will be public once each advisor signs our public
           profile. Until then, we use placeholder names. We never claim
           unaffiliated endorsements.

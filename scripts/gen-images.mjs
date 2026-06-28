@@ -9,6 +9,7 @@
  * Usage:
  *   node scripts/gen-images.mjs                  # generate all missing
  *   node scripts/gen-images.mjs --force          # regenerate everything
+ *   node scripts/gen-images.mjs --concurrency=3  # run up to three tasks at once
  *   node scripts/gen-images.mjs reviewer-1       # only one name
  *   node scripts/gen-images.mjs --force blog-cover-nbme
  *
@@ -170,22 +171,25 @@ async function pathExists(p) {
 }
 
 async function generateOne(entry, apiKey, { force }) {
-  const promptPath = path.join(PROMPT_DIR, entry.promptFile);
-  const outPath = path.join(OUT_DIR, `${entry.name}.jpg`);
+  const outFile = entry.outputFile || `${entry.name}.jpg`;
+  const outPath = path.join(OUT_DIR, outFile);
 
   if (!force && (await pathExists(outPath))) {
-    console.log(`  ${c.dim("skip")}  ${entry.name}.jpg ${c.dim("(exists)")}`);
+    console.log(`  ${c.dim("skip")}  ${outFile} ${c.dim("(exists)")}`);
     return { name: entry.name, status: "skipped" };
   }
 
-  let prompt;
-  try {
-    prompt = (await fs.readFile(promptPath, "utf8")).trim();
-  } catch {
-    console.log(
-      `  ${c.yellow("warn")}  ${entry.name}  prompt file missing: ${entry.promptFile}`
-    );
-    return { name: entry.name, status: "missing-prompt" };
+  let prompt = entry.prompt?.trim();
+  if (!prompt) {
+    const promptPath = path.join(PROMPT_DIR, entry.promptFile);
+    try {
+      prompt = (await fs.readFile(promptPath, "utf8")).trim();
+    } catch {
+      console.log(
+        `  ${c.yellow("warn")}  ${entry.name}  prompt file missing: ${entry.promptFile}`
+      );
+      return { name: entry.name, status: "missing-prompt" };
+    }
   }
   if (!prompt) {
     console.log(`  ${c.yellow("warn")}  ${entry.name}  prompt file empty`);
@@ -197,9 +201,10 @@ async function generateOne(entry, apiKey, { force }) {
       console.log(`  ${c.cyan("gen ")}  ${entry.name}  (${entry.size})`);
       const task = await createTask(prompt, entry.size, apiKey);
       const imageUrl = await pollTask(task.id, apiKey, entry.name);
+      await fs.mkdir(path.dirname(outPath), { recursive: true });
       const bytes = await downloadImage(imageUrl, outPath);
       console.log(
-        `  ${c.green("ok  ")}  ${entry.name}.jpg ${c.dim(
+        `  ${c.green("ok  ")}  ${outFile} ${c.dim(
           `(${(bytes / 1024).toFixed(0)} KB)`
         )}`
       );
@@ -233,6 +238,13 @@ async function main() {
 
   const args = process.argv.slice(2);
   const force = args.includes("--force");
+  const concurrencyArg = args.find((arg) => arg.startsWith("--concurrency="));
+  const parsedConcurrency = concurrencyArg
+    ? Number.parseInt(concurrencyArg.split("=", 2)[1], 10)
+    : 1;
+  const concurrency = Number.isFinite(parsedConcurrency)
+    ? Math.min(Math.max(parsedConcurrency, 1), 6)
+    : 1;
   const filters = args.filter((a) => !a.startsWith("--"));
 
   await fs.mkdir(OUT_DIR, { recursive: true });
@@ -256,11 +268,17 @@ async function main() {
     )
   );
 
-  const results = [];
-  for (const entry of targets) {
-    const r = await generateOne(entry, apiKey, { force });
-    results.push(r);
+  const results = new Array(targets.length);
+  let nextTarget = 0;
+  async function worker() {
+    while (nextTarget < targets.length) {
+      const index = nextTarget++;
+      results[index] = await generateOne(targets[index], apiKey, { force });
+    }
   }
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, targets.length) }, () => worker())
+  );
 
   const summary = results.reduce((acc, r) => {
     acc[r.status] = (acc[r.status] || 0) + 1;

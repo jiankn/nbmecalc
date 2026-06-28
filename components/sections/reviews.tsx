@@ -106,7 +106,7 @@ export function Reviews() {
           ))}
         </div>
 
-        <p className="text-xs text-gray-400 text-center mt-8">
+        <p className="text-xs text-gray-600 text-center mt-8">
           Quotes paraphrased and used with permission. Click each card to view
           the original Reddit thread.
         </p>

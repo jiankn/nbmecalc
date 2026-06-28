@@ -2,6 +2,8 @@
 // Each entry maps to a file in /public/placeholders/*.prompt.txt
 // and produces /public/images/<name>.jpg
 
+import { blogImagePrompts } from "./blog-image-prompts.mjs";
+
 export const prompts = [
   // -------- Reviewers (square avatars 1:1) --------
   {
@@ -85,4 +87,7 @@ export const prompts = [
     promptFile: "blog-night-before.prompt.txt",
     size: "16:9",
   },
+
+  // -------- Blog article summary + detail images --------
+  ...blogImagePrompts,
 ];

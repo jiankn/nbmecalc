@@ -9,6 +9,7 @@ import {
   getPostsByCategory,
   type BlogCategory,
 } from "@/lib/blog/posts";
+import { getBlogSummaryImage } from "@/lib/blog/images";
 
 const CATEGORIES = Object.keys(CATEGORY_LABELS) as BlogCategory[];
 
@@ -110,7 +111,7 @@ export default async function BlogCategoryPage({
                   <div className="relative aspect-[1200/630] bg-mint-50 overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`/blog/og/${post.slug}`}
+                      src={getBlogSummaryImage(post.slug)}
                       alt={post.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
