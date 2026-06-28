@@ -7,19 +7,22 @@ import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "CMS Form Converter — Step 2 CK Subject-Level Predictor | NBMEcalc",
+  title: "CMS Form Score Conversion & NBME Forms Guide | NBMEcalc",
   description:
-    "Convert your NBME Comprehensive Clinical Science Self-Assessment (CMS Form) percentage into Step 2 CK subject-level predictions. Best for finding weak rotations.",
+    "Convert CMS form percentages into an independent subject-level estimate. Learn how NBME Clinical Science Mastery Series forms support Step 2 CK preparation.",
   keywords: [
+    "cms form score conversion",
+    "cms score conversion",
+    "nbme cms forms",
+    "cms exams",
     "cms form to step",
     "cms converter",
-    "comprehensive clinical science self assessment",
+    "clinical science mastery series",
     "shelf exam predictor",
-    "step 2 ck subject",
   ],
   alternates: { canonical: "https://nbmecalc.com/cms-converter" },
   openGraph: {
-    title: "CMS Form Converter — Step 2 CK Subject-Level Predictor",
+    title: "CMS Form Score Conversion & NBME Forms Guide",
     description:
       "Free converter from NBME CMS subject forms (shelf exams) to Step 2 CK subject estimates. Identify weak rotations before test day.",
     url: "https://nbmecalc.com/cms-converter",
@@ -47,11 +50,11 @@ const subjectMapping = [
 const faqs = [
   {
     q: "What is a CMS Form?",
-    a: "Comprehensive Clinical Science Self-Assessment (CMS) forms are NBME's subject-specific shelf exams: Internal Medicine, Surgery, Pediatrics, OB/GYN, Psychiatry, and Family Medicine. Each form covers one rotation.",
+    a: "CMS commonly refers to NBME's Clinical Science Mastery Series: subject-focused self-assessments for areas such as Medicine, Surgery, Pediatrics, OB/GYN, Psychiatry, and Family Medicine. They are different from the comprehensive CCSSA used for Step 2 CK readiness.",
   },
   {
     q: "Can CMS Forms predict an overall Step 2 CK score?",
-    a: "Not directly. CMS forms are subject-level only. Combine your CMS percentages with NBME 28-32 to get a calibrated overall Step 2 CK estimate.",
+    a: "Not directly. CMS forms are subject-focused and should not replace a comprehensive CCSSA. Combine CMS results with a recent CCSSA, UWSA, or Free 120 when estimating overall Step 2 CK readiness.",
   },
   {
     q: "What CMS Form percentage maps to a 250 Step 2 CK?",
@@ -59,7 +62,7 @@ const faqs = [
   },
   {
     q: "Are CMS Forms worth taking if I am studying for Step 2 CK directly?",
-    a: "Yes if you have weak rotations to diagnose. CMS forms surface subject gaps that get masked in NBME 28-32 averages. Take CMS Surgery if your surgery rotation felt rough.",
+    a: "They can help investigate a suspected weak subject. Choose the matching subject form, review the official performance feedback, and use the result to guide targeted study rather than treating it as a direct Step 2 CK score.",
   },
 ];
 
@@ -99,8 +102,8 @@ export default function CmsConverterPage() {
 
       <PageHero
         badge="CMS subject forms → Step 2 CK"
-        title="CMS Form Converter: Subject-Level Step 2 CK"
-        description="CMS forms (shelf exams) are NBME's per-rotation self-assessments. Use them alongside your NBMEs to find weak subjects before test day."
+        title="CMS Form Score Conversion and NBME Forms Guide"
+        description="Use Clinical Science Mastery Series results to investigate subject-level strengths and weaknesses. The calculator provides an independent estimate, not an official Step 2 CK conversion."
         size="md"
       />
 
@@ -169,22 +172,21 @@ export default function CmsConverterPage() {
           </div>
           <div className="space-y-4 text-gray-700 leading-relaxed">
             <p>
-              NBME 28-32 give you a <em>weighted average</em> across all
-              clinical subjects. A 235 NBME 30 might hide a brutal Pediatrics
-              gap because Internal Medicine is doing the heavy lifting.
+              A comprehensive CCSSA summarizes performance across clinical
+              subjects. A subject-focused CMS form can help investigate a
+              weakness that the overall result does not explain.
             </p>
             <p>
-              A targeted CMS Pediatrics form taken cold reveals exactly that
-              gap. Score 55% and you know to spend 10+ hours of dedicated time
-              on Peds before test day — directly improving your Step 2 CK by
-              3-5 points.
+              For example, a targeted Pediatrics CMS form can show whether a
+              low Pediatrics content-area result persists under a dedicated
+              set of questions. Use the official feedback to decide what to
+              review next.
             </p>
             <p>
-              <strong>Recommended workflow:</strong> if your NBME 30 weakness
-              map flags a subject ≤ 60%, take the matching CMS form within a
-              week to confirm. If the CMS confirms the gap, schedule targeted
-              study; if not, your NBME just had bad luck on that subject and
-              you can re-prioritize.
+              <strong>Recommended workflow:</strong> start with the content
+              areas in your official comprehensive score report, choose the
+              matching CMS subject, review the explanations, and then confirm
+              progress with a fresh comprehensive assessment.
             </p>
           </div>
         </div>

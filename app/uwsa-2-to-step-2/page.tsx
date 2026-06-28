@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "UWSA 2 to Step 2 CK Predictor — Free Score Calculator",
     description:
-      "Convert your UWSA 2 score into a calibrated Step 2 CK prediction. The most predictive UWSA, with 2-point inflation auto-corrected.",
+      "Convert your UWSA 2 score into an independent Step 2 CK estimate and combine it with a recent CCSSA or Free 120 result.",
     url: "https://nbmecalc.com/uwsa-2-to-step-2",
     type: "website",
     images: [
@@ -51,23 +51,23 @@ const conversionTable = [
 const faqs = [
   {
     q: "How accurate is UWSA 2 for Step 2 CK?",
-    a: "UWSA 2 is the most predictive of the two UWSAs. In our 1,247-pair validation set, the median absolute error was 4.5 points after applying the −2 bias correction.",
+    a: "A reproducible validation dataset is not currently published for this calculator, so we do not claim a verified UWSA 2 error rate. Use UWSA 2 with another recent assessment and interpret the full range.",
   },
   {
     q: "When should I take UWSA 2?",
-    a: "About 2-3 weeks before test day. UWSA 2 is best as a final calibration before NBME 32 and Free 120, both of which are slightly more predictive.",
+    a: "Use it late enough to reflect current preparation while leaving time to act on the result. Follow it with a fresh Step 2 CK CCSSA or Free 120 if your plan allows.",
   },
   {
     q: "Why does UWSA 2 over-predict less than UWSA 1?",
-    a: "UWSA 2 was re-equated more recently using a larger and more current cohort. It still runs ~2 points hot vs the real Step 2 CK, but UWSA 1 runs ~3-5 points hot.",
+    a: "We do not publish evidence for a universal fixed difference. The calculator treats UWSA 1 and UWSA 2 separately as an internal modelling choice.",
   },
   {
-    q: "Should I trust UWSA 2 more than NBME 32?",
-    a: "No. NBME 32 is more predictive in our dataset (MAE 3.8 vs UWSA 2 MAE 4.5). Use UWSA 2 alongside NBMEs, not as a replacement.",
+    q: "Should I trust UWSA 2 more than an NBME CCSSA?",
+    a: "Do not rank them from an unpublished accuracy table. Read the official CCSSA report first, then use UWSA 2 as another signal. Agreement across recent assessments is more useful than a fixed hierarchy.",
   },
   {
     q: "What UWSA 2 score predicts a 250 Step 2 CK?",
-    a: "Approximately UWSA 2 = 252-253 corresponds to a Step 2 CK estimate near 250 once the 2-point bias is removed.",
+    a: "There is no official one-to-one UWSA 2 conversion. Enter the score as one input and compare the resulting range with a recent CCSSA or Free 120 result.",
   },
 ];
 
@@ -193,9 +193,9 @@ export default function UWSA2ToStep2Page() {
           <ul className="space-y-3 text-gray-700">
             {[
               "Re-equated in 2024 against a current US MD + IMG cohort",
-              "Smaller bias (~+2 pts) than UWSA 1 (~+3-5 pts)",
+              "Separate internal source treatment from UWSA 1",
               "Question style closely mirrors current Step 2 CK shelf items",
-              "Median absolute error: 4.5 points (n=1,247 paired outcomes)",
+              "Independent estimate; no published holdout error rate",
             ].map((item) => (
               <li key={item} className="flex gap-3">
                 <CheckCircle2 className="h-5 w-5 text-mint-600 shrink-0 mt-0.5" />

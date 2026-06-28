@@ -8,12 +8,12 @@ import { Stats } from "@/components/sections/stats";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "About — Built by Med Students, Reviewed by Doctors | NBMEcalc",
+  title: "About NBMEcalc — Independent Score Planning Tool",
   description:
-    "Why we built NBMEcalc, who reviews our algorithm, and our principles for honest USMLE Step score prediction. Not affiliated with NBME.",
+    "Why NBMEcalc exists, what the independent model can and cannot claim, and how corrections and methodology changes are handled.",
   alternates: { canonical: "https://nbmecalc.com/about" },
   openGraph: {
-    title: "About — Built by Med Students, Reviewed by Doctors | NBMEcalc",
+    title: "About NBMEcalc — Independent Score Planning Tool",
     description:
       "Why we built NBMEcalc, who reviews our algorithm, and our principles for honest USMLE Step score prediction.",
     url: "https://nbmecalc.com/about",
@@ -40,7 +40,7 @@ const principles = [
   {
     icon: Sparkles,
     title: "Algorithm transparency",
-    body: "Pricing customers can read the methodology. Big algorithm changes get reviewed by practicing physicians before shipping.",
+    body: "The methodology and material changes are public. Claims without reproducible evidence are labelled as assumptions or removed.",
   },
 ];
 
@@ -52,8 +52,8 @@ const timeline = [
   },
   {
     year: "2026 Q1",
-    title: "Medical advisor team",
-    body: "Three practicing physicians joined as part-time reviewers to vet our conversion tables and study-plan logic.",
+    title: "Public methodology",
+    body: "Model assumptions, official-source checks, limitations, and material changes are documented for every visitor.",
   },
   {
     year: "2026 Q2",
@@ -72,8 +72,8 @@ export default function AboutPage() {
     <PageShell>
       <PageHero
         badge="About NBMEcalc"
-        title="Built by med students. Reviewed by doctors. Honest by design."
-        description="We&apos;re tired of black-box predictors and aggressive paywalls. NBMEcalc is what we wish existed when we sat for our first NBME."
+        title="An Independent Score Planning Tool"
+        description="NBMEcalc combines practice inputs into a planning range. It is not an official score report, and it does not claim a validated cohort until the underlying dataset can be reproduced."
         size="md"
       />
 

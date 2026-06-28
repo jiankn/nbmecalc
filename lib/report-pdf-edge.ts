@@ -14,7 +14,7 @@ const STEP_LABEL: Record<PredictionResult["step"], string> = {
 
 const PASS_THRESHOLD: Record<PredictionResult["step"], number> = {
   step1: 196,
-  step2: 214,
+  step2: 218,
   step3: 198,
 };
 
@@ -163,7 +163,12 @@ export function createReportPdf(data: ReportData): Uint8Array {
   writer.keyValue("Pass probability", formatPct(result.passProbability));
   writer.keyValue("Margin vs pass threshold", `${result.pointEstimate - threshold} pts (threshold ${threshold})`);
   writer.keyValue("Inputs used", `${result.inputCount} exam${result.inputCount === 1 ? "" : "s"}`);
-  writer.keyValue("Cohort basis", `${result.cohortSize.toLocaleString("en-US")} historical takers`);
+  writer.keyValue(
+    "Model basis",
+    result.cohortSize > 0
+      ? `${result.cohortSize.toLocaleString("en-US")} historical takers`
+      : "Independent model assumptions; no published validation cohort"
+  );
   writer.paragraph(result.cohortNote, { size: 8.5 });
 
   writer.subheading("Practice Exams Submitted");

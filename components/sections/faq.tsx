@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     q: "How accurate is your prediction?",
-    a: "Our median prediction error is ±10 points across our holdout validation set of 1,247 historical Step takers (data sourced from public Reddit megathreads on r/Step1 and r/Step2). Accuracy improves with more practice exam inputs — 3+ exams typically yields ±7 points.",
+    a: "We do not currently publish a reproducible holdout validation dataset, so we do not claim a verified median error. Treat the result as an independent planning estimate, compare it with official score reports, and make decisions from the full range rather than the midpoint alone.",
   },
   {
     q: "How do you calculate the confidence interval?",
@@ -57,7 +57,7 @@ export function FAQ() {
             Frequently Asked Questions
           </h2>
           <p className="text-base text-gray-500">
-            Updated May 17, 2026
+            Updated June 28, 2026
           </p>
         </div>
 

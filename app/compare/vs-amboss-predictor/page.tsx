@@ -37,7 +37,7 @@ const competitors = ["NBMEcalc", "AMBOSS Predictor"];
 
 const rows: CompareRow[] = [
   { feature: "Works without AMBOSS subscription", values: ["yes", "no"] },
-  { feature: "NBME 28-32 input", values: ["yes", "yes"] },
+  { feature: "Exam-specific NBME forms", values: ["yes", "yes"] },
   { feature: "UWSA 1 & 2 input", values: ["yes", "no"] },
   { feature: "Free 120 input", values: ["yes", "yes"] },
   { feature: "CMS Form subject input", values: ["yes", "no"] },

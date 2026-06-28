@@ -217,9 +217,9 @@ export default function Step1PredictorPage() {
             Step 1 pass-probability bands
           </h2>
           <p className="text-gray-600 text-lg max-w-3xl mb-10">
-            Based on regression against 1,247 paired NBME-to-Step-1 outcomes
-            (2022-2025 cohort). Numbers are the equated three-digit equivalent
-            of your latest NBME.
+            Independent model bands for planning only. Step 1 is pass/fail;
+            use the probability and readiness guidance in your official CBSSA
+            report as the primary source.
           </p>
 
           <div className="space-y-3">

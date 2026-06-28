@@ -4,6 +4,15 @@ const nextConfig = {
   images: {
     remotePatterns: [],
   },
+  async redirects() {
+    return [
+      {
+        source: "/nbme-:number(28|29|30|31|32)-conversion",
+        destination: "/nbme-score-conversion",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 // Wire Cloudflare bindings (D1, R2, KV) declared in wrangler.toml into

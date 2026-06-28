@@ -8,7 +8,9 @@ const SITE_URL = "https://nbmecalc.com";
  * Add new routes here as pages are created (PRD §6.1).
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  // Update only when search-visible content changes; build time is not a
+  // meaningful <lastmod> signal.
+  const now = new Date("2026-06-28");
 
   // Currently live pages
   const liveRoutes: MetadataRoute.Sitemap = [
@@ -25,6 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Stage A — marketing & legal
     { url: `${SITE_URL}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${SITE_URL}/methodology`, lastModified: now, changeFrequency: "monthly", priority: 0.65 },
     { url: `${SITE_URL}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
     { url: `${SITE_URL}/press`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE_URL}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
@@ -44,14 +47,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/compare/vs-predictmystepscore`, lastModified: now, changeFrequency: "monthly", priority: 0.65 },
     { url: `${SITE_URL}/compare/vs-amboss-predictor`, lastModified: now, changeFrequency: "monthly", priority: 0.65 },
     { url: `${SITE_URL}/compare/vs-nbcalc`, lastModified: now, changeFrequency: "monthly", priority: 0.65 },
-
-    // NBME long-tail programmatic pages (built 2026-05-20)
-    ...[28, 29, 30, 31, 32].map((n) => ({
-      url: `${SITE_URL}/nbme-${n}-conversion`,
-      lastModified: now,
-      changeFrequency: "weekly" as const,
-      priority: 0.75,
-    })),
 
     // Blog (built 2026-05-20)
     { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },

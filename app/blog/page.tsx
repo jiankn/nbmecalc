@@ -39,7 +39,7 @@ export default function BlogIndexPage() {
       <PageHero
         badge="USMLE blog"
         title="USMLE Prep Articles"
-        description="Free, evidence-based writing on Step 1, Step 2 CK, Step 3, NBME score interpretation, and study planning. Reviewed by practicing physicians."
+        description="Source-checked writing on Step 1, Step 2 CK, Step 3, NBME score interpretation, and study planning. Drafts stay out of search until reviewed."
         size="md"
       />
 

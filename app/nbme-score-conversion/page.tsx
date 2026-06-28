@@ -8,24 +8,23 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title:
-    "NBME Score Conversion — Predict Your Real USMLE Step Score | NBMEcalc",
+    "NBME Score Converter & Conversion Chart | NBMEcalc",
   description:
-    "Free NBME score conversion charts and calculator. Convert NBME 28, 29, 30, 31, 32 to estimated USMLE Step 1 (P/F) and Step 2 CK scores with confidence intervals. Updated 2026.",
+    "Use the free NBME score converter for Step 2 CK estimates and Step 1 pass probability. Supports current CCSSA and CBSSA form families with confidence intervals.",
   keywords: [
+    "nbme score converter",
     "nbme score conversion",
     "nbme to usmle conversion",
-    "nbme step 2 conversion",
+    "nbme score conversion step 2",
+    "nbme step 2 score converter",
     "nbme step 1 conversion",
     "nbme conversion chart",
-    "nbme 30 conversion",
-    "nbme 31 conversion",
-    "nbme 32 conversion",
   ],
   alternates: { canonical: "https://nbmecalc.com/nbme-score-conversion" },
   openGraph: {
-    title: "NBME Score Conversion — Convert NBME to Step 1 & Step 2 CK",
+    title: "NBME Score Converter & Conversion Chart",
     description:
-      "Free NBME conversion tables and instant calculator. Trusted by 10,000+ med students.",
+      "Convert NBME practice scores into an independent Step 2 CK estimate or Step 1 pass probability.",
     url: "https://nbmecalc.com/nbme-score-conversion",
     type: "article",
     images: [
@@ -78,7 +77,7 @@ const faqs = [
   },
   {
     q: "Which NBME forms are most predictive of my Step 2 CK score?",
-    a: "NBME 11, 12, 13, and 14 (released 2024-2026) are the most predictive — typically within 5 points of your real Step 2 CK score taken within 2 weeks. Older forms (1-10) trend lower than your actual score by 3-5 points.",
+    a: "Use a recent Comprehensive Clinical Science Self-Assessment (CCSSA) and read its official score report first. This independent converter is most useful when you combine more than one recent CCSSA result with UWSA or Free 120 rather than relying on a single form.",
   },
   {
     q: "Is the NBME score the same as a USMLE Step score?",
@@ -143,13 +142,36 @@ export default function NbmeScoreConversionPage() {
 
       <PageHero
         badge="NBME → Step conversion"
-        title="NBME Score Conversion: Convert Practice Tests to Real USMLE Scores"
-        description="Free, regression-backed conversion tables for NBME 28-32, plus an instant calculator that handles UWSA, Free 120, AMBOSS, and CMS Forms. Updated 2026 with 1,200+ verified outcome pairs."
+        title="NBME Score Converter and Conversion Chart"
+        description="Convert current Step 2 CK CCSSA scores into an independent estimate, or use Step 1 CBSSA scores to estimate pass probability. Add multiple recent inputs for a more useful confidence interval."
         size="md"
       />
 
       {/* Calculator first — high intent users want the tool */}
       <section id="calculator" className="bg-mint-50/30 py-8 lg:py-12 border-b border-gray-200">
+        <div className="container max-w-4xl mb-6">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5">
+              <h2 className="font-bold text-gray-950 mb-1">
+                Converting for Step 2 CK?
+              </h2>
+              <p className="text-sm text-gray-600">
+                Choose Step 2 CK and enter the CCSSA form number shown on your
+                NBME score report. Current supported forms are 9–15.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-gray-200 bg-white p-5">
+              <h2 className="font-bold text-gray-950 mb-1">
+                Checking Step 1 readiness?
+              </h2>
+              <p className="text-sm text-gray-600">
+                Choose Step 1 and enter your CBSSA result. Step 1 is pass/fail,
+                so the useful output is pass probability—not a predicted
+                transcript score.
+              </p>
+            </div>
+          </div>
+        </div>
         <Calculator />
       </section>
 
@@ -159,7 +181,7 @@ export default function NbmeScoreConversionPage() {
           <div className="mb-8">
             <div className="inline-flex items-center gap-2 rounded-full bg-mint-100 px-3 py-1 text-xs font-bold text-mint-800 mb-3">
               <TrendingUp className="h-3 w-3" />
-              Most accurate — 1,247 paired data points
+              Independent model — assumptions published
             </div>
             <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
               NBME to Step 2 CK Conversion Chart
@@ -226,9 +248,9 @@ export default function NbmeScoreConversionPage() {
           </div>
 
           <p className="text-xs text-gray-500 mt-4">
-            * Estimates assume the NBME was taken within 2 weeks of test day.
-            Older NBMEs (taken 4+ weeks out) typically under-predict by 3-5
-            points. 95% confidence interval: ±8 points.
+            * Independent estimates only. Timing, assessment family, and
+            agreement with other recent inputs affect the useful range. This
+            table does not replace the official NBME score report.
           </p>
         </div>
       </section>
@@ -304,10 +326,10 @@ export default function NbmeScoreConversionPage() {
               <div className="text-xs font-bold uppercase tracking-wider text-purple-700 mb-2">
                 UWSA 1 / UWSA 2
               </div>
-              <div className="text-3xl font-extrabold mb-1">−3 pts</div>
+              <div className="text-xl font-extrabold mb-1">Internal adjustment</div>
               <p className="text-sm text-gray-600 leading-relaxed">
-                UWSAs run 3-5 points hot vs NBMEs. Subtract before converting.
-                UWSA 2 is more predictive than UWSA 1.
+                UWSA inputs receive source-specific model treatment. No fixed
+                subtraction is an official conversion.
               </p>
             </div>
 
@@ -317,8 +339,9 @@ export default function NbmeScoreConversionPage() {
               </div>
               <div className="text-3xl font-extrabold mb-1">×2.4 + 110</div>
               <p className="text-sm text-gray-600 leading-relaxed">
-                A 70% on Free 120 ≈ NBME equivalent of 278. Free 120 is the
-                single most predictive form.
+                Free 120 is a useful late-stage readiness signal. Use it
+                alongside a recent NBME rather than treating any one input as
+                definitive.
               </p>
             </div>
 
@@ -326,10 +349,10 @@ export default function NbmeScoreConversionPage() {
               <div className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-2">
                 AMBOSS Self-Assessment
               </div>
-              <div className="text-3xl font-extrabold mb-1">−5 pts</div>
+              <div className="text-xl font-extrabold mb-1">Internal adjustment</div>
               <p className="text-sm text-gray-600 leading-relaxed">
-                AMBOSS SA tends to inflate. Subtract 5 from the predicted
-                score, or use our calculator which handles this automatically.
+                AMBOSS inputs receive an internal adjustment that has not been
+                published as a validated conversion.
               </p>
             </div>
           </div>
@@ -349,17 +372,17 @@ export default function NbmeScoreConversionPage() {
           </h2>
           <div className="prose prose-lg max-w-none text-gray-700">
             <p>
-              We aggregated <strong>1,247 paired data points</strong> from
-              three sources: (1) public r/Step2 score-report threads with
-              verifiable NBME and Step 2 CK scores, (2) user submissions on
-              this site after their real test, and (3) two published
-              correlation studies from US medical schools.
+              The current calculator uses piecewise score mappings,
+              source-specific adjustments, and recency weighting. These are
+              <strong> independent model assumptions</strong>, not official
+              NBME or USMLE conversion rules.
             </p>
             <p>
-              We fit a piecewise linear regression with bootstrapped 95%
-              confidence intervals. Outliers more than 3 standard deviations
-              from the regression line are excluded. The model is re-trained
-              quarterly as new submissions arrive.
+              A reproducible outcome dataset and holdout validation report are
+              not currently published. For that reason, we do not claim a
+              verified cohort size, median error, or form-specific accuracy
+              ranking. The public methodology page records the current
+              assumptions and material changes.
             </p>
             <p>
               <strong>What this is not:</strong> a guarantee. Test-day
@@ -372,10 +395,10 @@ export default function NbmeScoreConversionPage() {
 
           <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              "1,247 verified NBME ↔ Step 2 CK pairs",
-              "Updated quarterly",
-              "Outliers >3σ excluded",
-              "Reviewed by 3 practicing physicians",
+              "Official facts linked to primary sources",
+              "Assessment families kept separate",
+              "Uncertainty shown with every estimate",
+              "Public methodology and change log",
             ].map((bullet) => (
               <li key={bullet} className="flex items-start gap-2 text-sm">
                 <Check className="h-5 w-5 text-mint-600 shrink-0 mt-0.5" />

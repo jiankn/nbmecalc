@@ -74,6 +74,16 @@ export default async function BlogPostPage({
 
   return (
     <PageShell>
+      {p.noindex && (
+        <div className="border-b border-amber-200 bg-amber-50">
+          <div className="container max-w-4xl py-4 text-sm text-amber-950">
+            <strong>Editorial review in progress:</strong> this draft may
+            contain outdated score thresholds, assessment-form references, or
+            unsupported accuracy claims. It is excluded from search and should
+            not be used for exam decisions.
+          </div>
+        </div>
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

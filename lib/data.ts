@@ -6,8 +6,8 @@
  * an equated three-digit USMLE Step score, then a weighted average is taken
  * with a confidence interval.
  *
- * Calibration anchors (medians from public r/Step1, r/Step2, and AMBOSS-published
- * data, 2022-2025 cohort, validated against ~1,247 paired NBME → Step outcomes):
+ * Internal calibration anchors. These are model assumptions, not official
+ * NBME/USMLE conversions and not a published validation result:
  *
  *   NBME 240 → Step 2 CK ~250 (Step 1 P/F equiv ~240)
  *   UWSA2 250 → Step 2 CK ~248 (UWSA2 runs ~+2 hot)
@@ -17,7 +17,7 @@
  *
  * Pass thresholds:
  *   Step 1: 196 (pass/fail since 2022 — predicted 3-digit equivalent shown)
- *   Step 2 CK: 214
+ *   Step 2 CK: 218 (effective July 1, 2025)
  *   Step 3: 198
  *
  * This module is pure (no I/O, no globals beyond `Math` / `Date`). The
@@ -96,7 +96,7 @@ export type ScoreUnit = "score" | "percent";
 export interface PracticeExam {
   id: string;
   source: ExamSource;
-  /** For NBME / CMS: form number (e.g. NBME 28-32; CMS 6-8). */
+  /** For NBME / CMS: the form number shown on the user's score report. */
   formNumber?: number;
   /** Raw score in the source's native unit. */
   score: number;
@@ -305,8 +305,8 @@ const NBME_FORM_BIAS: Record<number, number> = {
  * Free 120 / AMBOSS percent-correct → equated 3-digit USMLE.
  * These are official-style percent-correct exams.
  *
- * Free 120 is the most predictive single form; AMBOSS Self-Assessment
- * runs ~5 points hot (over-predicts) per published validation.
+ * Free 120 is treated as a late-stage readiness signal; AMBOSS
+ * Self-Assessment receives a source-specific adjustment.
  */
 function percentToEquated(
   percent: number,
@@ -346,8 +346,8 @@ function uwsaToEquated(
  * CMS Form (subject-level NBME): treat each form as a single subject signal.
  * Lower predictive power; CI gets widened later for CMS-only inputs.
  *
- * Per source: CMS scores correlate with the equivalent comprehensive NBME
- * subject score with r ≈ 0.55 — much weaker than full NBME.
+ * CMS is treated as a subject-level signal, not a substitute for a
+ * comprehensive assessment. The mapping below is an internal assumption.
  */
 function cmsToEquated(rawScore: number, step: StepKind): number {
   // Map CMS percent-correct (most users report 0-100) to equated Step.
@@ -422,7 +422,7 @@ function passProbabilityLogistic(
 ): number {
   const threshold: Record<StepKind, number> = {
     step1: 196,
-    step2: 214,
+    step2: 218,
     step3: 198,
   };
   // σ grows with our own uncertainty (CI half-width) but never below 8.
@@ -531,7 +531,7 @@ export function computeBaseline(
   const passProb = passProbabilityLogistic(point, step, ciHalfWidth);
 
   // 5. Cohort subject averages (cohort-level reference shown in the preview).
-  const cohortSubjectAverages = getCohortSubjectAverages(step, point);
+  const cohortSubjectAverages = getCohortSubjectAverages();
   const ciLower = point - ciHalfWidth;
   const ciUpper = point + ciHalfWidth;
 
@@ -548,7 +548,7 @@ export function computeBaseline(
 }
 
 export const COHORT_SUBJECT_NOTE =
-  "These are cohort averages at this score level — they reflect what students at your predicted score typically score by subject. They are NOT a personalized estimate of YOUR subject performance.";
+  "Cohort subject comparisons are unavailable until a reproducible subject-level dataset is published.";
 
 export interface PredictionPreview {
   step: StepKind;
@@ -718,61 +718,15 @@ export function emptyResult(step: StepKind): PredictionResult {
 // 3. Cohort metadata (constants — not synthesized at runtime)
 // ---------------------------------------------------------------------------
 
-export const COHORT_SIZE = 1247;
+// No reproducible outcome dataset is currently shipped with this repository.
+// Keep this at zero until a versioned, auditable dataset and holdout report are
+// published alongside the model.
+export const COHORT_SIZE = 0;
 export const COHORT_NOTE =
-  "Calibrated from 1,247 paired NBME → Step outcomes (US MD seniors, 2022-2025).";
+  "Independent planning estimate based on explicit source and recency assumptions. A reproducible validation cohort is not yet published.";
 
-/**
- * Cohort-level subject averages by step + predicted-score band.
- * These are illustrative and clearly not personalized — the UI must label them.
- */
-function getCohortSubjectAverages(
-  step: StepKind,
-  predicted: number
-): CohortSubjectAverage[] {
-  if (step === "step1") {
-    if (predicted >= 240) {
-      return [
-        { name: "Pathology", cohortAverage: 82, cohortWeakness: false },
-        { name: "Pharmacology", cohortAverage: 78, cohortWeakness: false },
-        { name: "Microbiology", cohortAverage: 76, cohortWeakness: false },
-        { name: "Biochemistry", cohortAverage: 80, cohortWeakness: false },
-        { name: "Behavioral Science", cohortAverage: 70, cohortWeakness: true },
-      ];
-    }
-    return [
-      { name: "Pathology", cohortAverage: 70, cohortWeakness: false },
-      { name: "Pharmacology", cohortAverage: 65, cohortWeakness: false },
-      { name: "Microbiology", cohortAverage: 58, cohortWeakness: true },
-      { name: "Biochemistry", cohortAverage: 72, cohortWeakness: false },
-      { name: "Behavioral Science", cohortAverage: 68, cohortWeakness: false },
-    ];
-  }
-  if (step === "step2") {
-    if (predicted >= 250) {
-      return [
-        { name: "Internal Medicine", cohortAverage: 82, cohortWeakness: false },
-        { name: "Surgery", cohortAverage: 78, cohortWeakness: false },
-        { name: "OB/GYN", cohortAverage: 73, cohortWeakness: true },
-        { name: "Pediatrics", cohortAverage: 81, cohortWeakness: false },
-        { name: "Psychiatry", cohortAverage: 80, cohortWeakness: false },
-      ];
-    }
-    return [
-      { name: "Internal Medicine", cohortAverage: 72, cohortWeakness: false },
-      { name: "Surgery", cohortAverage: 68, cohortWeakness: false },
-      { name: "OB/GYN", cohortAverage: 60, cohortWeakness: true },
-      { name: "Pediatrics", cohortAverage: 74, cohortWeakness: false },
-      { name: "Psychiatry", cohortAverage: 70, cohortWeakness: false },
-    ];
-  }
-  // Step 3
-  return [
-    { name: "Foundations of Independent Practice", cohortAverage: 70, cohortWeakness: false },
-    { name: "Advanced Clinical Medicine (CCS)", cohortAverage: 65, cohortWeakness: true },
-    { name: "Biostatistics & Epi", cohortAverage: 72, cohortWeakness: false },
-    { name: "Patient Safety & Quality", cohortAverage: 68, cohortWeakness: false },
-  ];
+function getCohortSubjectAverages(): CohortSubjectAverage[] {
+  return [];
 }
 
 // ---------------------------------------------------------------------------
@@ -828,7 +782,7 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     scoreRange: [40, 100],
     unit: "percent",
     defaultScore: 68,
-    hint: "Percent correct (most predictive single form)",
+    hint: "Percent correct; best interpreted with another recent assessment",
   },
   {
     key: "AMBOSS",
@@ -851,25 +805,59 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
 ];
 
 /**
- * NBME form numbers currently published.
+ * Supported NBME comprehensive self-assessment forms by target exam.
+ *
+ * Keep the families separate: CBSSA prepares for Step 1, CCSSA for Step 2 CK,
+ * and CCMSA for Step 3. Mixing these form numbers changes the meaning of the
+ * score and is not a harmless UI detail.
  */
-export const NBME_FORM_NUMBERS = [28, 29, 30, 31, 32] as const;
+export const NBME_FORM_NUMBERS_BY_STEP: Record<
+  StepKind,
+  readonly number[]
+> = {
+  step1: [26, 27, 28, 29, 30, 31, 32],
+  step2: [9, 10, 11, 12, 13, 14, 15],
+  step3: [5, 6, 7],
+};
+
+export function getNbmeFormNumbers(step: StepKind): readonly number[] {
+  return NBME_FORM_NUMBERS_BY_STEP[step];
+}
+
+export function getDefaultNbmeFormNumber(step: StepKind): number {
+  const forms = getNbmeFormNumbers(step);
+  return forms[forms.length - 1];
+}
 
 /**
  * Canonical subject taxonomy per Step. Used by the calculator UI to render
- * "self-reported weak subjects" checkboxes that match the same names the
- * cohort table uses, so we can do exact-string intersection later.
- *
- * We pull the names directly from `getCohortSubjectAverages` with a neutral
- * mid-band score — only the names matter here, not the averages.
+ * self-reported weak-subject checkboxes. These labels are taxonomy only; they
+ * do not imply cohort averages or personalized subject inference.
  */
 export function getSubjectTaxonomy(step: StepKind): string[] {
-  const midBand: Record<StepKind, number> = {
-    step1: 230,
-    step2: 245,
-    step3: 220,
+  const taxonomy: Record<StepKind, string[]> = {
+    step1: [
+      "Pathology",
+      "Pharmacology",
+      "Microbiology",
+      "Biochemistry",
+      "Behavioral Science",
+    ],
+    step2: [
+      "Internal Medicine",
+      "Surgery",
+      "OB/GYN",
+      "Pediatrics",
+      "Psychiatry",
+    ],
+    step3: [
+      "Foundations of Independent Practice",
+      "Advanced Clinical Medicine (CCS)",
+      "Biostatistics & Epi",
+      "Patient Safety & Quality",
+    ],
   };
-  return getCohortSubjectAverages(step, midBand[step]).map((s) => s.name);
+  return taxonomy[step];
 }
 
 // ---------------------------------------------------------------------------
@@ -1047,7 +1035,7 @@ export function buildSourceInsight(
 
 function sourceComparisonHint(top: ExamSource, bottom: ExamSource): string {
   if (top === "UWSA1" && bottom === "NBME") {
-    return "UWSA1 is known to run hot vs NBME — your NBME numbers are the more honest read.";
+    return "UWSA1 receives an internal source adjustment. Compare it with the official report from the comprehensive assessment for your target exam.";
   }
   if (top === "AMBOSS" && bottom === "NBME") {
     return "AMBOSS Self-Assessment over-predicts by ~5 pts. Trust the NBME read.";
@@ -1108,8 +1096,9 @@ export function buildTargetGap(
 
 /**
  * Build a postpone-vs-on-schedule decision card. Uses the measured slope when
- * available, otherwise a conservative typical uplift (+6 pts / month) drawn
- * from r/Step2 self-reports. Always caps the per-window uplift at +12 pts to
+ * available, otherwise an internal fallback uplift (+6 pts / month). This is
+ * a planning assumption, not a validated population estimate. It is capped
+ * at +12 pts to
  * stay honest about diminishing returns.
  */
 export function buildPostponeRecommendation(
@@ -1173,6 +1162,14 @@ export function buildPersonalizedWeakSubjects(
   cohortSubjectAverages: CohortSubjectAverage[]
 ): PersonalizedWeakSubjects | null {
   if (!selfReported || selfReported.length === 0) return null;
+  if (cohortSubjectAverages.length === 0) {
+    return {
+      selfReported,
+      cohortWeakest: [],
+      doublyWeak: [],
+      insight: `These priorities are based on your self-report only: ${selfReported.join(", ")}. Cohort comparison is unavailable until a reproducible subject-level dataset is published.`,
+    };
+  }
 
   const cohortWeakest = cohortSubjectAverages
     .filter((s) => s.cohortWeakness)

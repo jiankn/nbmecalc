@@ -130,16 +130,27 @@ export function predictStepScore(
     personalizedWeakSubjects,
   });
   const testDayProtocol = buildTestDayProtocol({ daysUntilExam, step });
-  const cohortMirror = buildCohortMirror({
-    point,
-    ciLower,
-    ciUpper,
-    step,
-    exams,
-    daysUntilExam,
-    scoreTrajectory,
-    inputCount,
-  });
+  const cohortMirror =
+    COHORT_SIZE > 0
+      ? buildCohortMirror({
+          point,
+          ciLower,
+          ciUpper,
+          step,
+          exams,
+          daysUntilExam,
+          scoreTrajectory,
+          inputCount,
+        })
+      : {
+          cohortDescription:
+            "Cohort comparison is unavailable until a reproducible validation dataset is published.",
+          buckets: [],
+          median: 0,
+          yourPercentile: 0,
+          disclaimer:
+            "No cohort percentile is reported from unpublished synthetic data.",
+        };
   const honestUncertainty = buildHonestUncertainty({
     exams,
     scoreTrajectory,
