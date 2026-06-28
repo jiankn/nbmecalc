@@ -13,6 +13,11 @@ import { and, eq } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
 import { predictions, reports } from "@/lib/db/schema";
 import { loadSession } from "@/lib/auth/session";
+import type { PredictionResult } from "@/lib/data";
+
+// Free accounts may preview at most this many (weakest) cohort subjects.
+// Full 14-subject breakdown is a paid feature (PRD §5.2 / §7.1).
+const FREE_SUBJECT_PREVIEW = 2;
 
 export const runtime = "edge";
 
@@ -60,6 +65,24 @@ export async function GET(req: Request, context: RouteContext): Promise<Response
     // Non-critical — if reports table doesn't exist yet, just skip.
   }
 
+  // Entitlement to the full subject-level breakdown: Pro subscribers, or a
+  // one-off purchase (a paid report exists for this prediction). Everyone
+  // else gets a free preview of just the weakest subjects. Cropping here —
+  // not only in the UI — stops a non-paying user from pulling all 14 subjects
+  // straight from the API.
+  const entitledToFullReport =
+    Boolean(session.user.proTier) || reportSessionId !== null;
+
+  const resultSnapshot = JSON.parse(row.resultSnapshot) as PredictionResult;
+  const subjectsTotal = resultSnapshot.cohortSubjectAverages?.length ?? 0;
+  let subjectsTruncated = false;
+  if (!entitledToFullReport && subjectsTotal > FREE_SUBJECT_PREVIEW) {
+    resultSnapshot.cohortSubjectAverages = [...resultSnapshot.cohortSubjectAverages]
+      .sort((a, b) => a.cohortAverage - b.cohortAverage)
+      .slice(0, FREE_SUBJECT_PREVIEW);
+    subjectsTruncated = true;
+  }
+
   return NextResponse.json({
     prediction: {
       id: row.id,
@@ -72,10 +95,13 @@ export async function GET(req: Request, context: RouteContext): Promise<Response
       inputExams: JSON.parse(row.inputExams),
       inputOptions: row.inputOptions ? JSON.parse(row.inputOptions) : null,
       daysUntilExam: row.daysUntilExam,
-      resultSnapshot: JSON.parse(row.resultSnapshot),
+      resultSnapshot,
       algorithmVersion: row.algorithmVersion,
       reportSessionId,
       archivedAt: row.archivedAt,
+      pro: Boolean(session.user.proTier),
+      subjectsTotal,
+      subjectsTruncated,
     },
   });
 }
