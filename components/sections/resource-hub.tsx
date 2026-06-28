@@ -26,7 +26,7 @@ const featured = [
   {
     title: "UWSA vs NBME: Which Predicts Step Better?",
     excerpt:
-      "We pulled 1,200+ self-reports from r/Step1 and r/Step2 and ran the numbers. Results inside.",
+      "We compared UWSA and NBME self-reports from r/Step1 and r/Step2 to see which tracks Step scores better. Results inside.",
     href: "/blog/uwsa-vs-nbme",
     date: "MAY 5, 2026",
     readTime: "6 MIN READ",
