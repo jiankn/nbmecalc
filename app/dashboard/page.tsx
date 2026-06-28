@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sparkles, FileText, ArrowRight, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/lib/auth/use-session";
 
 interface PredictionRow {
   id: string;
@@ -21,9 +22,21 @@ const STEP_LABEL: Record<PredictionRow["step"], string> = {
   step3: "Step 3",
 };
 
+function planLabel(tier: string | null): string {
+  if (!tier) return "Free";
+  if (tier === "pro_monthly") return "Pro (Monthly)";
+  if (tier === "pro_annual") return "Pro (Annual)";
+  // Anything Stripe sends that we haven't mapped — still treat as Pro.
+  return "Pro";
+}
+
 export default function DashboardOverview() {
+  const session = useSession();
   const [predictions, setPredictions] = useState<PredictionRow[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const user = session.status === "authed" ? session.user : null;
+  const isPro = Boolean(user?.proTier);
 
   useEffect(() => {
     fetch("/api/user/predictions?limit=5")
@@ -66,9 +79,11 @@ export default function DashboardOverview() {
         />
         <StatCard
           label="Plan"
-          value="Free"
+          value={
+            session.status === "loading" ? "…" : planLabel(user?.proTier ?? null)
+          }
           icon={<Sparkles className="h-5 w-5" />}
-          cta={{ label: "Upgrade", href: "/pricing" }}
+          cta={isPro ? undefined : { label: "Upgrade", href: "/pricing" }}
         />
       </div>
 
@@ -128,21 +143,23 @@ export default function DashboardOverview() {
         )}
       </section>
 
-      {/* Upgrade nudge */}
-      <section className="rounded-3xl bg-gradient-to-br from-mint-500 to-mint-600 text-white p-8 lg:p-10">
-        <div className="max-w-2xl">
-          <h2 className="text-2xl lg:text-3xl font-extrabold mb-3">
-            Unlock unlimited tracking with Pro
-          </h2>
-          <p className="text-white/90 mb-6 leading-relaxed">
-            Track all three Steps, view your full timeline, and get unlimited
-            predictions. $9.99/mo, cancel anytime.
-          </p>
-          <Button variant="secondary" size="lg" className="bg-white text-mint-800 hover:bg-gray-50" asChild>
-            <Link href="/pricing">View Pro plans</Link>
-          </Button>
-        </div>
-      </section>
+      {/* Upgrade nudge — hidden for Pro subscribers */}
+      {!isPro && session.status !== "loading" && (
+        <section className="rounded-3xl bg-gradient-to-br from-mint-500 to-mint-600 text-white p-8 lg:p-10">
+          <div className="max-w-2xl">
+            <h2 className="text-2xl lg:text-3xl font-extrabold mb-3">
+              Unlock unlimited tracking with Pro
+            </h2>
+            <p className="text-white/90 mb-6 leading-relaxed">
+              Track all three Steps, view your full timeline, and get unlimited
+              predictions. $9.99/mo, cancel anytime.
+            </p>
+            <Button variant="secondary" size="lg" className="bg-white text-mint-800 hover:bg-gray-50" asChild>
+              <Link href="/pricing">View Pro plans</Link>
+            </Button>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
