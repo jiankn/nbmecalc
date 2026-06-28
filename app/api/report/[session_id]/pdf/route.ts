@@ -10,8 +10,14 @@
  * token. Anyone with the URL can download (intentional, matches "save the
  * report URL after purchase" UX).
  */
-import { loadReportFromSession } from "@/lib/session-report";
+import {
+  loadProPredictionReport,
+  loadReportFromSession,
+  type ReportLoadResult,
+} from "@/lib/session-report";
 import { createReportPdf } from "@/lib/report-pdf-edge";
+import { getDb } from "@/lib/db/client";
+import { loadSession } from "@/lib/auth/session";
 import { getOptionalRequestContext } from "@cloudflare/next-on-pages";
 
 export const runtime = "edge";
@@ -33,11 +39,17 @@ type CloudflareRuntimeEnv = Record<string, unknown> & {
 export async function GET(_req: Request, context: RouteContext) {
   const { session_id } = await context.params;
 
+  // Paid reports are keyed by a Stripe Checkout session (`cs_...`); Pro
+  // subscribers reach the same PDF via one of their own prediction ids.
+  const isProReport = !session_id.startsWith("cs_");
+
   let loaded;
   try {
-    loaded = await loadReportFromSession(session_id);
+    loaded = isProReport
+      ? await loadProReportForRequest(_req, session_id)
+      : await loadReportFromSession(session_id);
   } catch (err) {
-    console.error("[pdf] loadReportFromSession failed", err);
+    console.error("[pdf] load report data failed", err);
     return new Response(
       JSON.stringify({ error: "Failed to load report data", detail: String(err) }),
       { status: 500, headers: { "Content-Type": "application/json" } }
@@ -67,7 +79,13 @@ export async function GET(_req: Request, context: RouteContext) {
   const stepLabel = data.step.toUpperCase();
   const filename = `nbmecalc-${stepLabel}-${data.result.pointEstimate}.pdf`;
 
-  const rendered = await renderWithPdfWorker(_req, data.sessionId, filename);
+  // The headless PDF worker re-fetches `/report/<id>` server-to-server with no
+  // user cookie. That's fine for paid reports (the `cs_` id is the auth), but
+  // a Pro prediction-id report needs the user's session — which the worker
+  // can't carry — so we render those directly with the edge generator.
+  const rendered = isProReport
+    ? ({ ok: false, reason: "pro-edge-render", target: "edge" } as const)
+    : await renderWithPdfWorker(_req, data.sessionId, filename);
   if (rendered.ok) return rendered.response;
 
   let pdfBytes: Uint8Array;
@@ -103,6 +121,26 @@ export async function GET(_req: Request, context: RouteContext) {
       "Cache-Control": "private, no-store, max-age=0",
     },
   });
+}
+
+/**
+ * Pro-report variant of the loader: authenticate the request, require an
+ * active Pro subscription, and load the report from a prediction the user
+ * owns. Returns `not_found` for anyone who isn't an entitled owner so the
+ * route surfaces a plain 404 (same as a bad `cs_` id).
+ */
+async function loadProReportForRequest(
+  req: Request,
+  predictionId: string
+): Promise<ReportLoadResult> {
+  const db = getDb();
+  if (!db) return { status: "not_found" };
+
+  const session = await loadSession(db, req);
+  if (!session || !session.user.proTier) {
+    return { status: "not_found" };
+  }
+  return loadProPredictionReport(db, session.user.id, predictionId);
 }
 
 type PdfWorkerResult =

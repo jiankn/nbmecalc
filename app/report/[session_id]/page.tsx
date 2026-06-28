@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import Link from "next/link";
-import { loadReportFromSession } from "@/lib/session-report";
+import {
+  loadProPredictionReport,
+  loadReportFromSession,
+  type ReportLoadResult,
+} from "@/lib/session-report";
+import { getDb } from "@/lib/db/client";
+import { loadSession } from "@/lib/auth/session";
 import { PageShell } from "@/components/page-shell";
 import { ReportView } from "@/components/report-view";
 
@@ -21,9 +28,34 @@ export const metadata: Metadata = {
 
 type RouteParams = Promise<{ session_id: string }>;
 
+/**
+ * Resolve a report either from a paid Stripe Checkout session (`cs_...`) or,
+ * for an authenticated Pro subscriber, from one of their own prediction ids.
+ * Pro membership includes the full report, so we let them reuse this exact
+ * page for any prediction they own without a second purchase.
+ */
+async function loadReport(idOrSession: string): Promise<ReportLoadResult> {
+  if (idOrSession.startsWith("cs_")) {
+    return loadReportFromSession(idOrSession);
+  }
+
+  const db = getDb();
+  if (!db) return { status: "not_found" };
+
+  const cookie = (await headers()).get("cookie") ?? "";
+  const session = await loadSession(
+    db,
+    new Request("https://report.internal/", { headers: { cookie } })
+  );
+  if (!session || !session.user.proTier) {
+    return { status: "not_found" };
+  }
+  return loadProPredictionReport(db, session.user.id, idOrSession);
+}
+
 export default async function ReportPage({ params }: { params: RouteParams }) {
   const { session_id } = await params;
-  const loaded = await loadReportFromSession(session_id);
+  const loaded = await loadReport(session_id);
 
   if (loaded.status === "not_found") notFound();
   if (loaded.status === "pending") {

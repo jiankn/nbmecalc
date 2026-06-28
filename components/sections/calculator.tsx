@@ -50,6 +50,9 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
   const [weakSubjects, setWeakSubjects] = useState<string[]>([]);
   const [result, setResult] = useState<PredictionPreview | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
+  const session = useSession();
+  const isPro =
+    session.status === "authed" && Boolean(session.user.proTier);
 
   // Listen for the Hero's "Predict My Score" button. When the user enters
   // a score in the hero and clicks, we receive it here and inject it into
@@ -459,6 +462,8 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
             weakSubjects={weakSubjects}
             onToggleWeakSubject={toggleWeakSubject}
             onUpgrade={() => setShowPaywall(true)}
+            isPro={isPro}
+            predictionId={predictionId}
           />
         )}
 
@@ -485,12 +490,16 @@ function ResultCard({
   weakSubjects,
   onToggleWeakSubject,
   onUpgrade,
+  isPro,
+  predictionId,
 }: {
   result: PredictionPreview;
   step: StepKind;
   weakSubjects: string[];
   onToggleWeakSubject: (name: string) => void;
   onUpgrade: () => void;
+  isPro: boolean;
+  predictionId: string | null;
 }) {
   const subjectTaxonomy = getSubjectTaxonomy(step);
   // Viz range covers all three Steps (Step 1 ~196 pass, Step 3 up to ~265+).
@@ -703,12 +712,13 @@ function ResultCard({
         {result.cohortNote}
       </p>
 
-      {/* Paywall CTA */}
+      {/* Paywall CTA — Pro members already own the full report, so we send
+          them straight to it instead of asking for the one-off $14.99. */}
       <div className="mt-8 rounded-2xl bg-black text-white p-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1">
             <div className="text-xs font-semibold uppercase tracking-wider text-mint-400 mb-1">
-              Unlock Full Report
+              {isPro ? "Included with Pro" : "Unlock Full Report"}
             </div>
             <div className="text-lg font-bold mb-1">
               Get your day-by-day plan + complete subject map
@@ -718,14 +728,28 @@ function ResultCard({
               breakdown.
             </div>
           </div>
-          <Button
-            variant="mint"
-            size="lg"
-            onClick={onUpgrade}
-            className="shrink-0"
-          >
-            Get Report — $14.99
-          </Button>
+          {isPro ? (
+            <Button variant="mint" size="lg" className="shrink-0" asChild>
+              <a
+                href={
+                  predictionId
+                    ? `/report/${predictionId}`
+                    : "/dashboard/predictions"
+                }
+              >
+                View full report
+              </a>
+            </Button>
+          ) : (
+            <Button
+              variant="mint"
+              size="lg"
+              onClick={onUpgrade}
+              className="shrink-0"
+            >
+              Get Report — $14.99
+            </Button>
+          )}
         </div>
       </div>
 
