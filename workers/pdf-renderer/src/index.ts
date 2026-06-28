@@ -119,7 +119,12 @@ function validateReportUrl(value: string | undefined, siteUrl: string): URL | nu
   }
 
   if (parsed.origin !== site.origin) return null;
-  if (!parsed.pathname.startsWith("/report/cs_")) return null;
+  // Accept both paid reports (`/report/cs_<stripe-session>`) and Pro reports
+  // keyed by a prediction id (`/report/<uuid>?k=<signed-token>`). The caller is
+  // already authenticated by the shared renderer secret, and the report page
+  // enforces its own per-report authorization, so any same-origin /report/ path
+  // is safe to render here.
+  if (!parsed.pathname.startsWith("/report/")) return null;
   return parsed;
 }
 
