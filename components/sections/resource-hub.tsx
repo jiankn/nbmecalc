@@ -6,7 +6,7 @@ const featured = [
   {
     title: "NBME Score Conversion: The Complete 2026 Guide",
     excerpt:
-      "Everything you need to know about converting NBME 28-32 raw scores to predicted Step 1 and Step 2 CK scores.",
+      "Convert Step 2 CK CCSSA scores or estimate Step 1 pass probability from the matching NBME assessment family.",
     href: "/blog/nbme-score-conversion-guide",
     date: "MAY 17, 2026",
     readTime: "8 MIN READ",
@@ -44,9 +44,9 @@ export function ResourceHub() {
             Your Resource for All Things USMLE
           </h2>
           <p className="text-lg text-gray-600 leading-relaxed">
-            We don&apos;t just predict — we help you understand why. Every guide
-            is written by current med students and reviewed by US-trained
-            physicians.
+            We don&apos;t just predict — we explain assumptions, link official
+            sources, and keep unreviewed drafts out of search until their
+            claims can be checked.
           </p>
           <p className="text-base font-semibold text-gray-900 mt-6">
             To get you started, here are our top guides:

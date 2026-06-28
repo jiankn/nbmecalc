@@ -9,7 +9,8 @@ import { useSession } from "@/lib/auth/use-session";
 import {
   predictPreview,
   EXAM_SOURCES,
-  NBME_FORM_NUMBERS,
+  getDefaultNbmeFormNumber,
+  getNbmeFormNumbers,
   getSubjectTaxonomy,
   type PracticeExam,
   type ExamSource,
@@ -25,11 +26,15 @@ const STEPS: { key: StepKind; label: string }[] = [
 ];
 
 /** Pick the right defaults when the user changes the source on a row. */
-function defaultsForSource(source: ExamSource): Partial<PracticeExam> {
+function defaultsForSource(
+  source: ExamSource,
+  step: StepKind
+): Partial<PracticeExam> {
   const meta = EXAM_SOURCES.find((s) => s.key === source)!;
   return {
     score: meta.defaultScore,
-    formNumber: source === "NBME" ? 30 : undefined,
+    formNumber:
+      source === "NBME" ? getDefaultNbmeFormNumber(step) : undefined,
   };
 }
 
@@ -40,11 +45,26 @@ function isValidScore(score: number, source: ExamSource): boolean {
 
 export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind } = {}) {
   const [step, setStep] = useState<StepKind>(defaultStep);
-  const [exams, setExams] = useState<PracticeExam[]>([
-    { id: "1", source: "NBME", formNumber: 30, score: 200, takenDaysAgo: 28 },
-    { id: "2", source: "NBME", formNumber: 31, score: 208, takenDaysAgo: 14 },
-    { id: "3", source: "UWSA2", score: 212, takenDaysAgo: 5 },
-  ]);
+  const [exams, setExams] = useState<PracticeExam[]>(() => {
+    const forms = getNbmeFormNumbers(defaultStep);
+    return [
+      {
+        id: "1",
+        source: "NBME",
+        formNumber: forms[Math.max(0, forms.length - 2)],
+        score: 230,
+        takenDaysAgo: 28,
+      },
+      {
+        id: "2",
+        source: "NBME",
+        formNumber: forms[forms.length - 1],
+        score: 240,
+        takenDaysAgo: 14,
+      },
+      { id: "3", source: "UWSA2", score: 242, takenDaysAgo: 5 },
+    ];
+  });
   const [daysUntil, setDaysUntil] = useState(14);
   const [targetScore, setTargetScore] = useState<number | undefined>(undefined);
   const [weakSubjects, setWeakSubjects] = useState<string[]>([]);
@@ -76,7 +96,10 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
           id: updated[0]?.id ?? "1",
           source: detail.source,
           score: detail.score,
-          formNumber: detail.source === "NBME" ? (detail.step === "step1" ? 30 : 31) : undefined,
+          formNumber:
+            detail.source === "NBME"
+              ? getDefaultNbmeFormNumber(detail.step)
+              : undefined,
           takenDaysAgo: updated[0]?.takenDaysAgo ?? 7,
         };
         return updated;
@@ -108,7 +131,7 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
   );
 
   function addExam() {
-    const defaults = defaultsForSource("NBME");
+    const defaults = defaultsForSource("NBME", step);
     setExams((prev) => [
       ...prev,
       {
@@ -125,7 +148,7 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
         if (e.id !== id) return e;
         // When the source changes, also reset score and formNumber to source-appropriate defaults.
         if (patch.source && patch.source !== e.source) {
-          const defaults = defaultsForSource(patch.source);
+          const defaults = defaultsForSource(patch.source, step);
           return { ...e, ...patch, ...defaults };
         }
         return { ...e, ...patch };
@@ -135,6 +158,21 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
 
   function removeExam(id: string) {
     setExams((prev) => prev.filter((e) => e.id !== id));
+  }
+
+  function selectStep(nextStep: StepKind) {
+    const allowedForms = getNbmeFormNumbers(nextStep);
+    const defaultForm = getDefaultNbmeFormNumber(nextStep);
+    setStep(nextStep);
+    setExams((prev) =>
+      prev.map((exam) =>
+        exam.source === "NBME" &&
+        !allowedForms.includes(exam.formNumber ?? -1)
+          ? { ...exam, formNumber: defaultForm }
+          : exam
+      )
+    );
+    setResult(null);
   }
 
   function handlePredict() {
@@ -223,7 +261,7 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
             {STEPS.map((s) => (
               <button
                 key={s.key}
-                onClick={() => setStep(s.key)}
+                onClick={() => selectStep(s.key)}
                 className={cn(
                   "btn-pill px-5 py-2.5 text-sm border-2",
                   step === s.key
@@ -286,7 +324,9 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
                       </label>
                       <select
                         id={`${controlIdPrefix}-form`}
-                        value={exam.formNumber || 30}
+                        value={
+                          exam.formNumber || getDefaultNbmeFormNumber(step)
+                        }
                         onChange={(e) =>
                           updateExam(exam.id, {
                             formNumber: Number(e.target.value),
@@ -294,7 +334,7 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
                         }
                         className="bg-gray-50 rounded-md text-sm font-medium px-2 py-1 focus:outline-none cursor-pointer"
                       >
-                        {NBME_FORM_NUMBERS.map((n) => (
+                        {getNbmeFormNumbers(step).map((n) => (
                           <option key={n} value={n}>
                             Form {n}
                           </option>

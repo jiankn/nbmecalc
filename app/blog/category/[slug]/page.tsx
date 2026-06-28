@@ -28,7 +28,7 @@ export async function generateMetadata({
 
   return {
     title: `${label} — USMLE Blog | NBMEcalc`,
-    description: `Articles on ${label.toLowerCase()} for USMLE Step prep. Evidence-based, reviewed by practicing physicians.`,
+    description: `Source-checked articles on ${label.toLowerCase()} for USMLE Step prep.`,
     alternates: { canonical: `https://nbmecalc.com/blog/category/${slug}` },
     openGraph: {
       title: `${label} — USMLE Blog`,
@@ -55,7 +55,7 @@ export default async function BlogCategoryPage({
       <PageHero
         badge="USMLE blog"
         title={label}
-        description={`Articles on ${label.toLowerCase()} for USMLE Step prep. Evidence-based, reviewed by practicing physicians.`}
+        description={`Source-checked articles on ${label.toLowerCase()} for USMLE Step prep. Drafts remain out of search until reviewed.`}
         size="md"
       />
 

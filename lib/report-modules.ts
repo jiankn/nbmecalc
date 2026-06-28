@@ -375,7 +375,7 @@ export function buildAntiPatterns(input: {
     const label = inflated === "UWSA1" ? "UWSA1" : "AMBOSS Self-Assessment";
     items.push({
       title: `Do not anchor your expectations to your ${label} score`,
-      reason: `${label} runs ~5 pts hot vs the real exam. Your NBME and Free 120 numbers are the more honest read.`,
+      reason: `${label} receives an internal source adjustment that is not an official conversion. Do not anchor a high-stakes decision to one input.`,
       basedOn: `You submitted a ${label} score.`,
     });
   }
@@ -385,7 +385,7 @@ export function buildAntiPatterns(input: {
     items.push({
       title: "Do not take Free 120 yet",
       reason:
-        "Free 120 is most predictive when taken 7-10 days before test day. Taking it earlier wastes its calibration value, and you can't usefully act on the result.",
+        "Save an official-style sample for a point when the result can still inform review. There is no verified universal timing window.",
       basedOn: "Free 120 not yet taken; test day still >14 days away.",
     });
   }
@@ -395,7 +395,7 @@ export function buildAntiPatterns(input: {
     items.push({
       title: "Do not rely on CMS forms alone",
       reason:
-        "CMS subject forms correlate with the comprehensive exam at r ≈ 0.55 — much weaker than full NBME. They're useful supplements, not primary predictors.",
+        "CMS forms are subject-focused and do not replace the comprehensive assessment aligned with your target exam.",
       basedOn: "Your inputs are all CMS forms.",
     });
   }
@@ -441,8 +441,8 @@ export function buildHighLeverageMoves(input: {
     const targetWindow = Math.min(days, 10);
     candidates.push({
       title: `Take Free 120 about ${targetWindow} days before exam`,
-      expectedImpact: "+2-3 pts of prediction certainty",
-      why: "Free 120 has the highest single-form correlation with the current Step exam. Taken too early, you can't act on it; too late, it adds stress with no time for adjustment.",
+      expectedImpact: "Adds another official-style readiness signal",
+      why: "A sample assessment can complement a recent comprehensive result. Use agreement across inputs rather than an unpublished accuracy ranking.",
       when: `Around ${days - targetWindow} days from now (with ${targetWindow} days remaining).`,
     });
   }
@@ -461,7 +461,7 @@ export function buildHighLeverageMoves(input: {
   if (input.inputCount === 1) {
     candidates.push({
       title: "Add a second practice exam from a different source",
-      expectedImpact: "+25% tighter CI, +1-2 pts of estimate accuracy",
+      expectedImpact: "Reduces reliance on one result",
       why: "A single input is fragile. Two inputs from different sources triangulate your real level and slash uncertainty.",
       when: "This week. Pick a different source than what you've already used.",
     });
@@ -470,10 +470,10 @@ export function buildHighLeverageMoves(input: {
   // No NBME → take one
   if (!hasNbme && input.inputCount >= 1 && days >= 7) {
     candidates.push({
-      title: "Take an NBME (form 30, 31, or 32) within 7 days",
-      expectedImpact: "Replaces less-reliable inputs with the gold-standard predictor",
-      why: "NBME is the most predictive single source for the real exam. Without one, your prediction is being driven by sources known to run hot.",
-      when: "Within 7 days. Forms 30 and 32 are the most representative of current Step difficulty.",
+      title: "Take a comprehensive NBME assessment for your target Step exam",
+      expectedImpact: "Adds official readiness and content-area feedback",
+      why: "Choose CBSSA for Step 1, CCSSA for Step 2 CK, or CCMSA for Step 3. The assessment families and form numbers are not interchangeable.",
+      when: "When the result can still change your review plan, using an unused form.",
     });
   }
 
@@ -482,7 +482,7 @@ export function buildHighLeverageMoves(input: {
     const subject = input.personalizedWeakSubjects.doublyWeak[0];
     candidates.push({
       title: `Focus 60% of your UWorld blocks on ${subject}`,
-      expectedImpact: "+1-3 pts at your score level",
+      expectedImpact: "Prioritizes a self-reported weak area",
       why: `${subject} is flagged BOTH by you and by the cohort at your score band — that's the highest-confidence weak signal we have. Concentrated reps move the needle here more than mixed blocks do.`,
       when: "Now through ~Day -7. Switch back to mixed blocks in the final week.",
     });
@@ -492,7 +492,7 @@ export function buildHighLeverageMoves(input: {
   if (input.inputCount >= 3 && days <= 14 && days > 5) {
     candidates.push({
       title: "Re-do your error log, NOT a new question bank",
-      expectedImpact: "+1-2 pts, avoids -2 pts of resource fatigue",
+      expectedImpact: "Reuses evidence from your own prior mistakes",
       why: "At your stage, your own previous errors carry more signal than fresh content. Each re-done wrong question forces a deeper trace than a brand-new one.",
       when: "Daily, in 30-minute blocks until test day.",
     });
@@ -502,7 +502,7 @@ export function buildHighLeverageMoves(input: {
   if (input.passProbability >= 0.7 && days >= 7 && hasNbme) {
     candidates.push({
       title: "Switch UWorld from tutored to timed mixed blocks",
-      expectedImpact: "+1-2 pts on test day",
+      expectedImpact: "Shifts practice toward exam timing and mixed recall",
       why: "Your trajectory suggests endurance and pattern recognition, not content gaps, are the gating factor at your level. Tutored mode reinforces content; timed mixed mode trains exam stamina.",
       when: "Starting tomorrow, all UWorld blocks should be timed mixed.",
     });

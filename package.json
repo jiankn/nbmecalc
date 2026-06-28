@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "audit:indexing": "npm run build && node scripts/audit-indexing.mjs",
     "start": "next start",
     "lint": "next lint",
     "gen:images": "node scripts/gen-images.mjs",

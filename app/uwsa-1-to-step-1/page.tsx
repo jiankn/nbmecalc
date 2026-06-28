@@ -49,7 +49,7 @@ const conversionTable = [
 const faqs = [
   {
     q: "Is UWSA 1 accurate for Step 1?",
-    a: "Moderately. UWSA 1 over-predicts your real Step 1 equivalent score by about 3 points on average. Our calculator subtracts that bias automatically before computing pass probability.",
+    a: "The calculator applies an internal UWSA 1 source adjustment, but it is not an official conversion or a published validation result. Use it with the official readiness guidance from a current CBSSA.",
   },
   {
     q: "When should I take UWSA 1?",
@@ -65,7 +65,7 @@ const faqs = [
   },
   {
     q: "How does UWSA 1 differ from UWSA 2?",
-    a: "UWSA 1 runs hotter (+3 to +5 pts vs your real score) and uses an older question pool. UWSA 2 is more representative of current Step exam style.",
+    a: "The two assessments use different forms and may produce different results. This calculator models them separately, but does not claim a verified universal offset between them.",
   },
 ];
 
@@ -218,9 +218,9 @@ export default function UWSA1ToStep1Page() {
               to the real Step 1 equivalent score.
             </p>
             <p>
-              In our 1,247-pair validation set, students who scored 215 on UWSA 1
-              landed at a 211 ± 6 Step 1 equivalent on test day — exactly the
-              −3 to −4 point shift built into our model.
+              The calculator applies an internal UWSA 1 source adjustment.
+              This adjustment is a model assumption, not an official UWorld,
+              NBME, or USMLE conversion and not a published validation result.
             </p>
             <p>
               The fix: <strong>subtract 3 points</strong> from your UWSA 1 score

@@ -4,23 +4,22 @@ import { useEffect, useRef, useState } from "react";
 
 const stats = [
   {
-    value: 1247,
+    value: 3,
     suffix: "",
-    label: "Historical Step Takers",
-    sub: "Real NBME → Step pairs in our dataset",
+    label: "Step Exams Supported",
+    sub: "Step 1, Step 2 CK, and Step 3",
   },
   {
-    value: 10,
-    prefix: "±",
-    suffix: " pts",
-    label: "Median Prediction Error",
-    sub: "Based on holdout validation",
+    value: 6,
+    suffix: "",
+    label: "Input Source Types",
+    sub: "NBME, UWSA 1/2, Free 120, AMBOSS, and CMS",
   },
   {
-    value: 487,
-    suffix: "",
-    label: "Predictions This Month",
-    sub: "And growing every day",
+    value: 95,
+    suffix: "%",
+    label: "Interval Reported",
+    sub: "Planning range, not a guarantee",
   },
 ];
 
@@ -30,11 +29,12 @@ export function Stats() {
       <div className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
-            Built on Real Data, Validated Daily
+            Transparent About What the Model Can Do
           </h2>
           <p className="text-base text-gray-600 max-w-2xl mx-auto">
-            We started small and we&apos;ll always be honest about it. Our
-            dataset grows every day from anonymous user reports.
+            The calculator exposes its assumptions and uncertainty. We do not
+            claim a validated cohort until a reproducible dataset and holdout
+            report are published.
           </p>
         </div>
 

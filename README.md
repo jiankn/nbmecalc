@@ -197,15 +197,20 @@ SMTP_FROM=noreply@nbmecalc.com
 
 Use Cloudflare secret variables for `POSTAL_API_KEY`. Keep `SMTP_FROM` aligned with the current project domain.
 
-## SEO Targets (KD < 15)
+## SEO Targets (US, DataForSEO + GSC, 2026-06-28)
 
 | Keyword | Volume/mo | Status |
 |---|---|---|
-| nbme score calculator | 5.51K | Targeting |
-| nbme score conversion | 5.08K | Targeting |
-| nbme calculator | 3.65K | Targeting |
-| step 2 ck predictor | 650 | Targeting |
-| nbme score conversion step 2 | 1.83K | Targeting |
+| nbme score converter | 880 | `/nbme-score-conversion` |
+| nbme score conversion | 880 | `/nbme-score-conversion` |
+| nbme score calculator | 480 | `/nbme-score-calculator` |
+| step 2 score predictor | 480 | `/step-2-predictor` |
+| free 120 step 2 score conversion | 480 | `/free-120-predictor` |
+| step 3 score predictor | 320 | `/step-3-predictor` |
+| nbme cms forms | 320 | `/cms-converter` |
+
+Volumes are US monthly averages and close variants may share Google Ads
+volume. Do not sum variants as independent demand.
 
 ## Disclaimer
 
@@ -220,7 +225,9 @@ nbmecalc is not affiliated with NBME, FSMB, USMLE, USMLE-Rx, AMBOSS, UWorld, or 
 - [ ] Magic Link auth + user accounts
 - [ ] `/dashboard` with saved predictions timeline
 - [ ] Webhook → KV entitlement / D1 reports row
-- [ ] Per-subject SEO pages (`/nbme-30-conversion`, `/nbme-31-conversion`, ...)
+- [ ] Publish individual NBME form pages only after each page has verified
+      form-to-exam mapping, unique evidence, and enough information gain to
+      pass the sitemap admission checklist.
 - [ ] Compare pages (`/compare/vs-predictmystepscore`, ...)
 - [ ] Blog MDX pipeline
 - [ ] Dynamic OG images

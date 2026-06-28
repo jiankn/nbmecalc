@@ -25,7 +25,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 export const PASS_THRESHOLDS: Record<StepKind, number> = {
   step1: 196,
-  step2: 214,
+  step2: 218,
   step3: 198,
 };
 

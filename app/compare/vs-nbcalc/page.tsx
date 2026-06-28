@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 const competitors = ["NBMEcalc", "nbcalc.netlify.app"];
 
 const rows: CompareRow[] = [
-  { feature: "NBME 28-32 input", values: ["yes", "yes"] },
+  { feature: "Exam-specific NBME forms", values: ["yes", "yes"] },
   { feature: "UWSA / Free 120 / AMBOSS / CMS input", values: ["yes", "no"] },
   { feature: "Multi-input weighted aggregation", values: ["yes", "no"] },
   { feature: "95% confidence interval", values: ["yes", "no"] },

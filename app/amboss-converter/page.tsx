@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "AMBOSS to Step 2 CK Converter — Free Score Calculator | NBMEcalc",
   description:
-    "Convert your AMBOSS Self-Assessment score into a Step 2 CK prediction. Auto-corrects AMBOSS's known +5 point inflation with calibrated 95% confidence interval.",
+    "Use an AMBOSS Self-Assessment as one input in an independent Step 2 CK estimate. Includes a planning range and transparent model limitations.",
   keywords: [
     "amboss to step",
     "amboss to step 2",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AMBOSS to Step 2 CK Converter — Free Score Calculator",
     description:
-      "Free converter from AMBOSS Self-Assessment to Step 2 CK with bias correction and 95% confidence interval.",
+      "Independent estimate from an AMBOSS Self-Assessment input to a Step 2 CK planning range.",
     url: "https://nbmecalc.com/amboss-converter",
     type: "website",
     images: [
@@ -49,11 +49,11 @@ const conversionTable = [
 const faqs = [
   {
     q: "How accurate is AMBOSS Self-Assessment for Step 2 CK?",
-    a: "Less accurate than NBMEs or UWSAs. AMBOSS over-predicts by ~5 points on average. Our converter applies a −5 bias correction.",
+    a: "The calculator applies an internal AMBOSS source adjustment, but a reproducible validation study is not published. Combine it with a recent CCSSA or Free 120 and use the full range.",
   },
   {
     q: "Why does AMBOSS over-predict?",
-    a: "AMBOSS questions skew slightly easier and the cohort sample skews toward heavy AMBOSS users (a self-selected high-effort group). Both inflate the equated score.",
+    a: "We do not publish evidence for a universal AMBOSS offset. Differences may reflect question mix, timing, or the population taking the assessment, so this site labels its adjustment as an internal assumption.",
   },
   {
     q: "Should I take AMBOSS Self-Assessment if I have NBMEs?",
@@ -61,7 +61,7 @@ const faqs = [
   },
   {
     q: "What AMBOSS score predicts a 250 Step 2 CK?",
-    a: "Approximately AMBOSS 263-265 corresponds to a real Step 2 CK estimate around 250 after applying the −5 bias correction.",
+    a: "There is no official one-to-one AMBOSS-to-Step 2 CK conversion. Enter the score as one input and compare the resulting range with a recent comprehensive assessment.",
   },
 ];
 
@@ -80,7 +80,7 @@ export default function AmbossConverterPage() {
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free converter from AMBOSS Self-Assessment score to USMLE Step 2 CK prediction with bias correction.",
+              "Independent planning estimate from an AMBOSS Self-Assessment input to a Step 2 CK range.",
           }),
         }}
       />
@@ -102,7 +102,7 @@ export default function AmbossConverterPage() {
       <PageHero
         badge="AMBOSS → Step 2 CK"
         title="AMBOSS to Step 2 CK Converter"
-        description="AMBOSS Self-Assessment runs hot — about 5 points above your real Step 2 CK on average. We correct that automatically and report a calibrated prediction with confidence interval."
+        description="Use an AMBOSS Self-Assessment as one input in an independent Step 2 CK estimate. The source adjustment is a model assumption, not an official conversion."
         size="md"
       />
 
@@ -130,8 +130,8 @@ export default function AmbossConverterPage() {
             </h2>
           </div>
           <p className="text-gray-600 text-lg mb-8">
-            All Step 2 CK estimates already have the −5 point bias correction
-            applied.
+            The calculator applies its documented internal AMBOSS adjustment.
+            It is not an official fixed-point conversion.
           </p>
 
           <div className="overflow-x-auto rounded-3xl border border-gray-200 shadow-sm">
@@ -158,9 +158,10 @@ export default function AmbossConverterPage() {
           <div className="mt-6 rounded-2xl bg-amber-50 border border-amber-200 p-5 flex gap-3">
             <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-900">
-              <strong>Note:</strong> AMBOSS validation set is smaller (n=312
-              vs NBME n=1,247). Confidence intervals are wider when AMBOSS is
-              your only input. Pair with at least one NBME for tight prediction.
+              <strong>Note:</strong> AMBOSS-only estimates rely on an internal
+              source adjustment that has not been published as a reproducible
+              validation study. Pair it with an assessment from the correct
+              NBME family and interpret the full range.
             </p>
           </div>
         </div>

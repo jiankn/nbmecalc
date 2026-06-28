@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title:
     "NBME Score Calculator — Free, Instant USMLE Predictor | NBMEcalc",
   description:
-    "Free NBME score calculator that predicts your USMLE Step 1 (P/F) and Step 2 CK score in seconds. Supports NBME 28-32, UWSA, Free 120, AMBOSS, CMS Forms. No signup needed.",
+    "Free NBME score calculator for Step 1 pass probability and Step 2 CK estimates. Supports exam-specific NBME forms, UWSA, Free 120, AMBOSS, and CMS inputs.",
   keywords: [
     "nbme score calculator",
     "nbme calculator",
@@ -66,21 +66,21 @@ const steps = [
 
 const inputs = [
   {
-    title: "NBME 28, 29, 30, 31, 32",
-    body: "All current and recent NBME forms supported. Score range: 200-280.",
-    badge: "Most accurate",
+    title: "Exam-specific NBME forms",
+    body: "Choose Step 1, Step 2 CK, or Step 3 first; the form list updates to the matching NBME assessment family.",
+    badge: "Correct form family",
     tone: "mint",
   },
   {
     title: "UWSA 1 & UWSA 2",
-    body: "Auto-adjusted by −3 points (UWSAs run hot). UWSA 2 is more predictive.",
-    badge: "Auto-adjusted",
+    body: "Handled with internal source assumptions. No fixed subtraction is an official conversion.",
+    badge: "Source-aware",
     tone: "purple",
   },
   {
     title: "Free 120",
-    body: "Enter % correct (0-100). The single most predictive form for Step 2.",
-    badge: "Best signal",
+    body: "Enter percent correct (0-100) and combine it with a recent comprehensive self-assessment.",
+    badge: "Late-stage signal",
     tone: "amber",
   },
   {
@@ -96,9 +96,9 @@ const inputs = [
     tone: "rose",
   },
   {
-    title: "Old NBMEs (1-26)",
-    body: "Allowed but flagged — typically under-predict by 3-5 points.",
-    badge: "Use cautiously",
+    title: "Older or retired forms",
+    body: "Use the official score report and confirm that the form belongs to the Step exam selected above.",
+    badge: "Verify first",
     tone: "gray",
   },
 ];
@@ -127,7 +127,7 @@ const compareRows = [
 const faqs = [
   {
     q: "How does the NBME score calculator work?",
-    a: "Enter the scores you have so far. Our calculator runs each through a piecewise linear regression fit to 1,247 paired NBME ↔ Step 2 CK outcomes, applies a source adjustment (UWSAs −3, AMBOSS −5, etc.), then aggregates with recency weighting. The output is a point estimate plus a 95% confidence interval.",
+    a: "Enter the scores you have so far. The calculator maps each source through an internal piecewise model, applies source and recency weights, and returns a point estimate with a planning interval. These are independent assumptions, not an official NBME or USMLE conversion.",
   },
   {
     q: "Is the calculator really free?",
@@ -139,7 +139,7 @@ const faqs = [
   },
   {
     q: "Why is my predicted Step 2 CK score lower than my latest NBME?",
-    a: "NBME forms typically under-predict your real Step 2 CK score by 3-8 points. If you scored 240 on NBME 32 last week, our calculator should output a Step 2 CK estimate near 250 — that gap is normal.",
+    a: "The calculator combines all inputs, source adjustments, and recency weights, so it may not match your latest score. Check that you selected Step 2 CK and a CCSSA form, then interpret the estimate together with its confidence interval.",
   },
   {
     q: "Does the calculator work on mobile?",

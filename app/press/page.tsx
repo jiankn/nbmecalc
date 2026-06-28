@@ -100,8 +100,8 @@ export default function PressPage() {
               that converts NBME, UWSA, Free 120, AMBOSS, and CMS Form scores
               into a likely Step 1, Step 2 CK, or Step 3 score with a 95%
               confidence interval. Founded in 2025, the product is built and
-              maintained by a former medical student and reviewed by three
-              practicing physicians. NBMEcalc is independent and not affiliated
+              maintained as an independent educational project with a public
+              methodology and corrections process. NBMEcalc is not affiliated
               with the NBME, USMLE, FSMB, UWorld, AMBOSS, or Kaplan.
             </p>
           </div>

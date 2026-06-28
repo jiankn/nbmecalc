@@ -7,21 +7,22 @@ import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Free 120 Predictor — USMLE Step Score Calculator | NBMEcalc",
+  title: "Free 120 Step 2 Score Conversion Calculator | NBMEcalc",
   description:
-    "Convert your NBME Free 120 percentage into a USMLE Step 1 / Step 2 CK / Step 3 score prediction. The single most predictive form for the real exam.",
+    "Convert Free 120 percent correct into an independent Step 2 CK score estimate. Includes a conversion table, calculator, and confidence interval.",
   keywords: [
+    "free 120 step 2 score conversion",
+    "step 2 free 120 score conversion",
+    "free 120 score conversion",
     "free 120 predictor",
+    "free 120 score calculator",
     "free 120 to step 2",
-    "free 120 to step 1",
-    "nbme free 120",
-    "free 120 conversion",
   ],
   alternates: { canonical: "https://nbmecalc.com/free-120-predictor" },
   openGraph: {
-    title: "Free 120 Predictor — USMLE Step Score Calculator",
+    title: "Free 120 Step 2 Score Conversion Calculator",
     description:
-      "Free converter from NBME Free 120 percentage to a calibrated Step prediction. The single most predictive practice form.",
+      "Convert Free 120 percentage into an independent Step 2 CK estimate with a confidence interval.",
     url: "https://nbmecalc.com/free-120-predictor",
     type: "website",
     images: [
@@ -50,11 +51,11 @@ const conversionTable = [
 const faqs = [
   {
     q: "How predictive is Free 120 for Step 2 CK?",
-    a: "Free 120 is the single most predictive form available. In our 1,247-pair validation set, MAE was 3.4 points — better than any individual NBME or UWSA.",
+    a: "Free 120 is a useful late-stage readiness signal because its format and content outline resemble the live exam. It is still one assessment, so combine it with a recent CCSSA or UWSA and use the full predicted range.",
   },
   {
     q: "Why is Free 120 so accurate?",
-    a: "It is written by NBME using actual retired Step 2 CK items. Unlike NBMEs (which under-predict by 3-8 pts), Free 120 maps almost 1:1 to the real exam.",
+    a: "Its main value is familiarity with official-style questions and timing close to test day. There is no official one-to-one percentage-to-score conversion, so the table below is an independent estimate rather than an NBME or USMLE score report.",
   },
   {
     q: "When should I take Free 120?",
@@ -105,16 +106,16 @@ export default function Free120PredictorPage() {
       />
 
       <PageHero
-        badge="The most predictive form"
-        title="Free 120 Predictor: Convert % to Step Score"
-        description="Free 120 is the single most predictive practice form for the real Step exam. Drop your % correct in below and we'll give you a calibrated Step 1 / 2 CK / 3 prediction with confidence interval."
+        badge="Free 120 → Step 2 CK"
+        title="Free 120 Step 2 Score Conversion Calculator"
+        description="Enter your Free 120 percentage to get an independent Step 2 CK estimate and confidence interval. Use it with a recent CCSSA or UWSA rather than as a guaranteed one-to-one conversion."
         size="md"
       />
 
       <section id="calculator" className="py-12 bg-mint-50/30 border-b border-gray-200">
         <div className="container max-w-3xl mb-6">
           <h2 className="text-2xl lg:text-3xl font-extrabold mb-2">
-            Convert Free 120 % to Step
+            Convert Free 120 % to a Step 2 CK estimate
           </h2>
           <p className="text-gray-600">
             Pick your Step exam, then choose <strong>Free 120</strong> as the
@@ -135,7 +136,7 @@ export default function Free120PredictorPage() {
             </h2>
           </div>
           <p className="text-gray-600 text-lg mb-8">
-            Validated against 1,247 paired Free 120 → Step 2 CK outcomes.
+            Independent estimate—not an official NBME or USMLE conversion.
           </p>
 
           <div className="overflow-x-auto rounded-3xl border border-gray-200 shadow-sm">
@@ -173,15 +174,15 @@ export default function Free120PredictorPage() {
               <Zap className="h-5 w-5 text-mint-700" />
             </div>
             <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-              Why Free 120 beats every other form
+              How to use Free 120 in a score forecast
             </h2>
           </div>
           <ul className="space-y-3 text-gray-700 list-disc pl-5">
-            <li>Written by NBME using <strong>retired real Step items</strong></li>
-            <li>No score inflation — your % maps almost 1:1 to your true level</li>
-            <li>Accessible free of charge from the official USMLE website</li>
-            <li>Mirrors test-day question style and timing</li>
-            <li>Best when taken within 5-7 days of your scheduled exam</li>
+            <li>Take the version that matches the Step exam you are preparing for</li>
+            <li>Use percent correct as one input, not a guaranteed final score</li>
+            <li>Compare it with a recent comprehensive NBME self-assessment</li>
+            <li>Investigate large disagreements between recent practice results</li>
+            <li>Plan from the confidence interval rather than the midpoint alone</li>
           </ul>
         </div>
       </section>

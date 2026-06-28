@@ -8,20 +8,21 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title:
-    "Step 2 CK Predictor — Free Score Calculator | NBMEcalc",
+    "Step 2 Score Predictor & CK Calculator | NBMEcalc",
   description:
-    "Free USMLE Step 2 CK predictor. Convert NBME 28-32, UWSA, Free 120, AMBOSS, and CMS Form scores into a Step 2 CK prediction with 95% confidence interval and specialty matching context.",
+    "Free Step 2 score predictor and CK calculator. Combine CCSSA forms 9-15, UWSA, Free 120, AMBOSS, and CMS inputs with a 95% confidence interval.",
   keywords: [
+    "step 2 score predictor",
+    "step 2 score calculator",
+    "step 2 ck score calculator",
+    "usmle step 2 ck score predictor",
     "step 2 predictor",
     "step 2 ck calculator",
-    "nbme step 2",
-    "uwsa 2 to step 2",
-    "step 2 ck score",
-    "free 120 step 2",
+    "step 2 score converter",
   ],
   alternates: { canonical: "https://nbmecalc.com/step-2-predictor" },
   openGraph: {
-    title: "Step 2 CK Predictor — Free Score Calculator",
+    title: "Step 2 Score Predictor & CK Calculator",
     description:
       "Predict your USMLE Step 2 CK score from NBME, UWSA, Free 120, AMBOSS, and CMS Form inputs. Specialty-matching context included.",
     url: "https://nbmecalc.com/step-2-predictor",
@@ -56,7 +57,7 @@ const specialties = [
 ];
 
 const sourceCorrections = [
-  { src: "NBME 28-32", note: "Under-predicts by 3-8 pts", adj: "+5" },
+  { src: "CCSSA forms 9-15", note: "Use the equated score report", adj: "Modelled" },
   { src: "UWSA 1", note: "Over-predicts", adj: "−3" },
   { src: "UWSA 2", note: "Most accurate UWSA", adj: "−2" },
   { src: "Free 120", note: "Best single predictor", adj: "0" },
@@ -67,15 +68,15 @@ const sourceCorrections = [
 const faqs = [
   {
     q: "How accurate is the Step 2 CK predictor?",
-    a: "With 5+ recent inputs, the 95% confidence interval narrows to about ±4 points. With one input it&apos;s ±12. Median absolute error in our validation set (n=1,247) is 4.2 points.",
+    a: "A reproducible holdout validation dataset is not currently published, so we do not claim a verified median error. More recent, consistent inputs can make the model range more useful, but the official score report remains the primary readiness signal.",
   },
   {
     q: "Which practice exam is most predictive of Step 2 CK?",
-    a: "The Free 120, especially when taken within two weeks of test day. After that: NBME 32, NBME 31, UWSA 2, and NBME 30 in that order.",
+    a: "No single practice exam guarantees a final score. Use a recent CCSSA result together with Free 120 or UWSA 2, and pay attention to agreement across inputs and the confidence interval.",
   },
   {
-    q: "Does the calculator know about the 2024 score recalibration?",
-    a: "Yes. The Step 2 CK pass threshold remains 209, but NBME re-equated forms in late 2024. Our model uses the new equating coefficients.",
+    q: "What is the current Step 2 CK passing score?",
+    a: "The passing standard is 218 for examinees testing on or after July 1, 2025. A prediction near that threshold should be interpreted with its full confidence interval, not as a guaranteed pass.",
   },
   {
     q: "Should I take Step 2 CK before submitting ERAS?",
@@ -122,9 +123,9 @@ export default function Step2PredictorPage() {
       />
 
       <PageHero
-        badge="Step 2 CK is the new gatekeeper"
-        title="Step 2 CK Predictor: Forecast Your Real Score"
-        description="Step 2 CK is now the single most important number on your residency application. Combine your NBME, UWSA, Free 120, AMBOSS, and CMS Form inputs into one weighted prediction — with the confidence interval to back it up."
+        badge="Free Step 2 CK score calculator"
+        title="Step 2 Score Predictor and CK Calculator"
+        description="Combine Step 2 CK CCSSA, UWSA, Free 120, AMBOSS, and CMS inputs into one independent estimate. Review the point estimate together with its 95% confidence interval."
         size="md"
       />
 
@@ -278,18 +279,18 @@ export default function Step2PredictorPage() {
             {[
               {
                 w: "Week −8",
-                t: "Baseline NBME 28 or 29",
-                b: "Take cold to expose weak rotations. Score will feel disappointing — that&apos;s the point.",
+                t: "Baseline CCSSA",
+                b: "Use an unused Step 2 CK CCSSA form to establish a baseline and identify content areas that need work.",
               },
               {
                 w: "Week −6",
                 t: "UWSA 1",
-                b: "Mid-cycle check. UWSA 1 runs hot; expect a number 3-5 points above your true level.",
+                b: "Mid-cycle check. Treat the UWSA result as another input, not as a fixed offset from your final score.",
               },
               {
                 w: "Week −4",
-                t: "NBME 30",
-                b: "Best representativeness of question style. Use weakness map to plan final 4 weeks.",
+                t: "Second CCSSA",
+                b: "Choose another unused CCSSA form and compare both the total result and content-area feedback.",
               },
               {
                 w: "Week −3",
@@ -298,18 +299,18 @@ export default function Step2PredictorPage() {
               },
               {
                 w: "Week −2",
-                t: "NBME 31",
-                b: "Trajectory check. Should be ≥ NBME 30 if you&apos;ve been on track.",
+                t: "Late CCSSA check",
+                b: "Use a fresh form to check whether your trend holds under new questions.",
               },
               {
                 w: "Week −1",
-                t: "NBME 32 + Free 120",
-                b: "Final calibration. NBME 32 = most predictive NBME. Free 120 = most predictive single form overall.",
+                t: "Free 120 + recent CCSSA",
+                b: "Compare the two signals. Agreement is more informative than a fixed adjustment to either score.",
               },
               {
                 w: "Test day",
                 t: "Walk in with confidence",
-                b: "Your real Step 2 CK should land at NBME 32 + 5 ± 4 points.",
+                b: "Use the full predicted range for planning. No practice assessment can guarantee the final score.",
               },
             ].map((step) => (
               <li

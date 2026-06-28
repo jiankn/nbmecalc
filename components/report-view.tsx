@@ -43,7 +43,7 @@ void _Printer; // keep lucide tree-shake happy if we relocate later
 
 const PASS_THRESHOLD: Record<PredictionResult["step"], number> = {
   step1: 196,
-  step2: 214,
+  step2: 218,
   step3: 198,
 };
 

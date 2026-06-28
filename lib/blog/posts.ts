@@ -94,6 +94,7 @@ export type BlogBlock =
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "how-to-read-nbme-score-report",
+    noindex: true,
     title: "How to Read Your NBME Score Report (Without Panicking)",
     description:
       "A line-by-line guide to interpreting your NBME self-assessment report: the equated score, content area performance, and what each color band actually means for Step 2 CK.",
@@ -180,6 +181,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "nbme-30-vs-31-vs-32-which-is-hardest",
+    noindex: true,
     title: "NBME 30 vs 31 vs 32: Which Is Hardest, Which Is Most Predictive?",
     description:
       "A data-driven comparison of NBME 30, 31, and 32 based on 1,247 paired outcomes. Difficulty, score inflation, question style, and when to take each one.",
@@ -238,6 +240,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "step-2-ck-14-day-cram-plan",
+    noindex: true,
     title: "Step 2 CK 14-Day Cram Plan: What Actually Moves Your Score",
     description:
       "An evidence-based 14-day cram plan for Step 2 CK based on what high scorers actually do in the final two weeks. UWorld blocks, NBME 32 timing, weak-rotation focus.",
@@ -312,6 +315,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "free-120-to-step-2-conversion-2026-guide",
+    noindex: true,
     title: "Free 120 to Step 2 CK Conversion: 2026 Guide",
     description:
       "How to convert your Free 120 percentage to a realistic Step 2 CK three-digit score. When to take it, why it's the most predictive practice exam, and the bias correction most students miss.",
@@ -460,6 +464,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "why-your-uwsa-score-is-misleading",
+    noindex: true,
     title: "Why Your UWSA Score Is Misleading (And What to Use Instead)",
     description:
       "UWSA1 and UWSA2 are the most over-predicted self-assessments in USMLE prep. Here's the data on how much they inflate your three-digit estimate, why they do it, and how to extract real signal from them.",
@@ -585,6 +590,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "how-accurate-are-nbme-score-predictions",
+    noindex: true,
     title: "How Accurate Are NBME Score Predictions? An Honest Breakdown",
     description:
       "What the published correlation between NBME self-assessments and real Step 2 CK actually says, where score predictors add value, and where they break down. A no-marketing look at predictive accuracy.",
@@ -1055,6 +1061,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "average-step-2-score-whats-good",
+    noindex: true,
     title: "Average Step 2 CK Score: What's a 'Good' Score in 2026?",
     description:
       "The 2026 average Step 2 CK score, what counts as a competitive score for each specialty, and how to benchmark your practice scores against residency targets.",
@@ -1201,6 +1208,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "img-step-2-strategy-220-to-250",
+    noindex: true,
     title: "IMG Step 2 CK Strategy: From 220 to 250",
     description:
       "A focused plan for international medical graduates targeting a competitive Step 2 CK score. Where to spend study time, how to use AMBOSS effectively, and the 12-week roadmap.",
@@ -1512,19 +1520,21 @@ export function getPost(slug: string): BlogPost | undefined {
 }
 
 export function getPostsByCategory(category: BlogCategory): BlogPost[] {
-  return BLOG_POSTS.filter((p) => p.category === category).sort((a, b) =>
+  return BLOG_POSTS.filter((p) => !p.noindex && p.category === category).sort((a, b) =>
     a.publishedAt < b.publishedAt ? 1 : -1
   );
 }
 
 export function getAllPostsSorted(): BlogPost[] {
-  return [...BLOG_POSTS].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
+  return BLOG_POSTS.filter((p) => !p.noindex).sort((a, b) =>
+    a.publishedAt < b.publishedAt ? 1 : -1
+  );
 }
 
 export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
   const current = getPost(slug);
   if (!current) return [];
-  return BLOG_POSTS.filter((p) => p.slug !== slug)
+  return BLOG_POSTS.filter((p) => !p.noindex && p.slug !== slug)
     .sort((a, b) => {
       // Prefer same category, then most recent.
       const aSameCat = a.category === current.category ? 0 : 1;

@@ -1,30 +1,21 @@
-import Image from "next/image";
-import { ShieldCheck, ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { BookOpenCheck, History, MessageSquareWarning } from "lucide-react";
 
 const reviewers = [
   {
-    name: "Dr. M. Chen, MD",
-    role: "Internal Medicine, PGY-2",
-    score: "Step 2 CK: 256",
-    bio: "Reviewed our Step 2 CK conversion table and weak-subject mapping algorithm.",
-    placeholder: "reviewer-1",
-    bg: "from-mint-100 to-mint-200",
+    title: "Official-source checks",
+    body: "Assessment families, score-report guidance, and passing standards are checked against current NBME and USMLE pages.",
+    icon: BookOpenCheck,
   },
   {
-    name: "Dr. A. Okafor, MD",
-    role: "Pediatrics Resident",
-    score: "Step 2 CK: 261",
-    bio: "Validates our pediatrics subject estimates against real exam recall.",
-    placeholder: "reviewer-2",
-    bg: "from-yellow-100 to-yellow-200",
+    title: "Versioned model changes",
+    body: "Material assumption changes are documented publicly. Stored predictions keep their algorithm version.",
+    icon: History,
   },
   {
-    name: "Anonymous, M4",
-    role: "US MD candidate",
-    score: "Step 2 CK: 268 (verified)",
-    bio: "Provided the original 1,200-sample dataset that powers our base model.",
-    placeholder: "reviewer-3",
-    bg: "from-blue-100 to-blue-200",
+    title: "Corrections welcome",
+    body: "Readers can report factual or calculation concerns. Unsupported claims are corrected or removed rather than defended.",
+    icon: MessageSquareWarning,
   },
 ];
 
@@ -34,56 +25,42 @@ export function Reviewers() {
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 rounded-full bg-mint-50 px-4 py-1.5 text-sm font-semibold text-mint-800 mb-4">
-            <ShieldCheck className="h-4 w-4" />
-            Reviewed by physicians
+            <BookOpenCheck className="h-4 w-4" />
+            Editorial controls
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
-            Validated by Real US-Trained Physicians
+            Evidence and Review Status
           </h2>
           <p className="text-lg text-gray-600 leading-relaxed">
-            Each algorithm update is reviewed by licensed MDs who scored 250+ on
-            their own Step 2 CK. We&apos;re actively expanding our advisor
-            board.
+            NBMEcalc currently uses an internal editorial process. We do not
+            claim named physician review until reviewer identities and scope
+            can be verified publicly.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {reviewers.map((r) => (
             <article
-              key={r.name}
+              key={r.title}
               className="rounded-3xl border border-gray-100 bg-white p-6 hover:shadow-lg transition"
             >
-              <div
-                className={`relative w-20 h-20 rounded-full bg-gradient-to-br ${r.bg} mb-4 overflow-hidden`}
-              >
-                <Image
-                  src={`/images/${r.placeholder}.jpg`}
-                  alt={r.name}
-                  fill
-                  sizes="80px"
-                  className="object-cover"
-                />
+              <div className="h-12 w-12 rounded-2xl bg-mint-100 flex items-center justify-center mb-4">
+                <r.icon className="h-6 w-6 text-mint-700" />
               </div>
-              <h3 className="font-bold text-lg mb-1">{r.name}</h3>
-              <div className="text-sm text-gray-600 mb-1">{r.role}</div>
-              <div className="text-sm font-semibold text-mint-700 mb-4">
-                {r.score}
-              </div>
+              <h3 className="font-bold text-lg mb-2">{r.title}</h3>
               <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                {r.bio}
+                {r.body}
               </p>
-              <button className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-900 transition">
-                <ExternalLink className="h-3.5 w-3.5" />
-                LinkedIn
-              </button>
             </article>
           ))}
         </div>
 
         <p className="text-center text-xs text-gray-600 mt-8 max-w-2xl mx-auto">
-          Reviewer identities will be public once each advisor signs our public
-          profile. Until then, we use placeholder names. We never claim
-          unaffiliated endorsements.
+          Read the{" "}
+          <Link href="/methodology" className="font-semibold text-mint-700 underline">
+            public methodology and changelog
+          </Link>{" "}
+          or <Link href="/contact" className="font-semibold text-mint-700 underline">submit a correction</Link>.
         </p>
       </div>
     </section>

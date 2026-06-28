@@ -8,11 +8,14 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title:
-    "Step 3 Predictor — Free Score Calculator | NBMEcalc",
+    "Step 3 Score Predictor & USMLE Calculator | NBMEcalc",
   description:
     "Free USMLE Step 3 predictor. Estimate your two-day Step 3 score from UWSA Step 3 self-assessments and Free 120. Pass probability + percentile + study plan.",
   keywords: [
+    "step 3 score predictor",
+    "usmle step 3 score predictor",
     "step 3 predictor",
+    "step 3 score calculator",
     "usmle step 3 calculator",
     "step 3 ccs predictor",
     "uwsa step 3",
@@ -119,7 +122,7 @@ const faqs = [
   },
   {
     q: "Which practice resources are predictive?",
-    a: "UWSA Step 3 (most predictive), Free 120 Step 3, AMBOSS Step 3, and the NBME Comprehensive Basic Science / Clinical Science self-assessments. NBME Step 3 forms exist (CCSE) but are less granular.",
+    a: "Use resources designed for Step 3, including UWSA Step 3, the Step 3 sample questions, and NBME Comprehensive Clinical Medicine Self-Assessments (CCMSA). Step 1 CBSSA and Step 2 CK CCSSA form numbers are not interchangeable with Step 3 forms.",
   },
   {
     q: "When should I take Step 3?",
@@ -163,8 +166,8 @@ export default function Step3PredictorPage() {
 
       <PageHero
         badge="Predict your two-day exam"
-        title="Step 3 Predictor: Forecast Your USMLE Step 3 Score"
-        description="Step 3 is the final hurdle — and the only one with CCS computer-based case simulations. Drop in your UWSA Step 3 and Free 120 numbers to get a pass probability and a Step 2 CK-comparable estimate."
+        title="Step 3 Score Predictor and USMLE Calculator"
+        description="Combine Step 3-specific CCMSA, UWSA, and sample-question results into an independent score estimate and pass probability with a confidence interval."
         size="md"
       />
 
@@ -201,7 +204,7 @@ export default function Step3PredictorPage() {
           </p>
           <p className="text-xs text-gray-500 mt-2 italic">
             Note: Step 3 data is sparser than Step 2 CK. Confidence intervals
-            run wider (±6-8 pts) until you provide 3+ inputs.
+            remain model-generated planning ranges, not a validated guarantee.
           </p>
         </div>
         <Calculator defaultStep="step3" />

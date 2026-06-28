@@ -8,22 +8,21 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title:
-    "NBME Calculator — What It Is & How to Use It | NBMEcalc",
+    "NBME Self-Assessment Guide: Forms & Scores | NBMEcalc",
   description:
-    "Beginner-friendly guide to NBME calculators. Learn what NBME self-assessments are, which form to take first, and how to convert your score into a Step 1 / Step 2 CK prediction. Free calculator included.",
+    "Learn the difference between CBSSA, CCSSA, and CCMSA forms, how to read an NBME score report, and when to use an independent score calculator.",
   keywords: [
-    "nbme calculator",
     "nbme self assessment",
     "nbme forms",
     "nbme score interpretation",
     "what is nbme",
-    "nbme step 2",
+    "which nbme form",
   ],
   alternates: { canonical: "https://nbmecalc.com/nbme-calculator" },
   openGraph: {
-    title: "NBME Calculator — What It Is & How to Use It",
+    title: "NBME Self-Assessment Guide: Forms & Scores",
     description:
-      "What the NBME is, which form to take, and how to convert your three-digit equivalent into a real Step prediction.",
+      "Understand the NBME form families, official score reports, and when an independent calculator can help.",
     url: "https://nbmecalc.com/nbme-calculator",
     type: "website",
     images: [
@@ -39,29 +38,24 @@ export const metadata: Metadata = {
 
 const forms = [
   {
-    name: "NBME 28",
-    when: "Early in dedicated",
-    body: "Older form. Tends to feel harder than the real Step 2 CK. Good for a baseline.",
+    name: "CBSSA",
+    when: "Preparing for Step 1",
+    body: "Comprehensive Basic Science Self-Assessment. Use its official readiness and performance feedback for the pass/fail Step 1 exam.",
   },
   {
-    name: "NBME 29",
-    when: "Mid-dedicated",
-    body: "Solid mid-cycle gauge. Slight under-prediction (~3 pts vs Step 2 CK).",
+    name: "CCSSA",
+    when: "Preparing for Step 2 CK",
+    body: "Comprehensive Clinical Science Self-Assessment. This is the comprehensive NBME family aligned with Step 2 CK.",
   },
   {
-    name: "NBME 30",
-    when: "Mid-dedicated",
-    body: "Most students say this is the most representative of question style.",
+    name: "CCMSA",
+    when: "Preparing for Step 3",
+    body: "Comprehensive Clinical Medicine Self-Assessment. Use this family when estimating Step 3 readiness.",
   },
   {
-    name: "NBME 31",
-    when: "Late dedicated",
-    body: "Often the highest score in a series. Use as confidence check.",
-  },
-  {
-    name: "NBME 32",
-    when: "1-2 weeks out",
-    body: "Newest form. Most predictive for current Step 2 CK exam.",
+    name: "Clinical Science Mastery Series",
+    when: "Checking a clerkship subject",
+    body: "Subject-focused CMS forms can reveal weak clinical areas, but they are not a direct substitute for a comprehensive CCSSA.",
   },
 ];
 
@@ -78,7 +72,7 @@ const interpretation = [
     color: "amber",
     label: "Likely pass",
     advice:
-      "Comfortable margin above the pass threshold (~209 for Step 2 CK). Focus on weak subjects to lift the floor.",
+      "Above the current 218 Step 2 CK pass threshold, but the confidence interval still matters. Focus on weak subjects and confirm with another recent assessment.",
   },
   {
     range: "230-249",
@@ -114,19 +108,19 @@ const colorClasses: Record<string, string> = {
 const faqs = [
   {
     q: "What is the NBME?",
-    a: "The National Board of Medical Examiners (NBME) is the non-profit that writes the USMLE Step exams. The same organization sells &quot;self-assessment&quot; practice forms (NBME 28, 29, 30, 31, 32) so medical students can simulate Step 1 and Step 2 CK before test day.",
+    a: "The National Board of Medical Examiners develops assessments used across medical education and offers self-assessments aligned with Step 1, Step 2 CK, and Step 3 preparation.",
   },
   {
     q: "Are NBME self-assessments worth the money?",
-    a: "Yes. At $60 each, NBME forms are the single most predictive signal you have. No third-party Qbank score correlates with the real Step exam as well as a recent NBME.",
+    a: "They can provide useful readiness and content-area feedback because they are aligned with the target exam. Whether another form is worth purchasing depends on your timeline, prior results, and what decision the result would change.",
   },
   {
     q: "What three-digit score does the NBME report?",
-    a: "NBME forms report an equated USMLE-style score on the same 200-300 scale as the real Step exam. However, NBME forms tend to under-predict your true Step 2 CK score by 3-8 points.",
+    a: "Reporting differs by assessment family and can change over time. Use the official score report as the source of truth; this site provides an independent estimate and confidence interval, not an official conversion.",
   },
   {
     q: "Which NBME should I take first?",
-    a: "Most students start with NBME 28 or 29 (older, more conservative) about 4-6 weeks before test day, then take 30, 31, and 32 in the final three weeks. Save NBME 32 for the week before — it&apos;s the most predictive.",
+    a: "First choose the correct family: CBSSA for Step 1, CCSSA for Step 2 CK, or CCMSA for Step 3. Within that family, use an earlier form for a baseline and preserve another unused form for a later readiness check.",
   },
   {
     q: "Can I retake the same NBME form?",
@@ -134,7 +128,7 @@ const faqs = [
   },
   {
     q: "What is a passing score on NBME?",
-    a: "Step 2 CK passing is currently 209. Step 1 is pass/fail — there is no minimum NBME score, but a 196+ equivalent gives you a ~95% pass probability on the real exam.",
+    a: "An NBME self-assessment does not have a universal pass score across every product. For the real Step 2 CK exam, the passing standard is 218 as of July 1, 2025. For Step 1, use the probability and readiness guidance in the official CBSSA score report.",
   },
 ];
 
@@ -147,10 +141,10 @@ export default function NbmeCalculatorPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: "NBME Calculator — What It Is & How to Use It",
+            headline: "NBME Self-Assessment Guide: Forms and Scores",
             url: "https://nbmecalc.com/nbme-calculator",
             description:
-              "A beginner-friendly guide explaining what NBME self-assessments are, which form to take when, and how to convert your three-digit score into a Step prediction.",
+              "A beginner-friendly guide to NBME assessment families, official score reports, and independent score estimates.",
             author: { "@type": "Organization", name: "NBMEcalc" },
           }),
         }}
@@ -171,9 +165,9 @@ export default function NbmeCalculatorPage() {
       />
 
       <PageHero
-        badge="NBME 101 + free calculator"
-        title="NBME Calculator: Understand the Forms, Then Predict Your Step"
-        description="Everything you need to know about NBME self-assessments — which form to take, how to read the result, and how to convert that three-digit score into a real Step 1 / Step 2 CK prediction."
+        badge="NBME self-assessment guide"
+        title="NBME Self-Assessments: Forms, Scores, and Next Steps"
+        description="Choose the correct assessment family for Step 1, Step 2 CK, or Step 3; read the official score report first; then use an independent calculator when you need a combined estimate."
         size="md"
       />
 
@@ -196,16 +190,17 @@ export default function NbmeCalculatorPage() {
                 test.
               </li>
               <li>
-                Available forms: <strong>NBME 28, 29, 30, 31, 32</strong> — take
-                them in order, ending with 32 about a week before test day.
+                Match the family to the exam: <strong>CBSSA for Step 1,
+                CCSSA for Step 2 CK, and CCMSA for Step 3</strong>.
               </li>
               <li>
-                Your three-digit NBME score <strong>under-predicts</strong> your
-                real Step 2 CK by 3-8 points on average.
+                Treat the official score report as the source of truth. An
+                independent estimate should show uncertainty, not promise a
+                fixed point adjustment.
               </li>
               <li>
                 Use a <strong>calculator like this one</strong> to adjust for
-                under-prediction, recency, and confidence interval.
+                recency, multiple inputs, and confidence interval.
               </li>
             </ul>
           </div>
@@ -230,11 +225,11 @@ export default function NbmeCalculatorPage() {
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-5xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            Which NBME form should I take, and when?
+            Which NBME assessment family should I use?
           </h2>
           <p className="text-gray-600 text-lg max-w-3xl mb-10">
-            Here is a recommended sequence used by 70%+ of high scorers
-            (Reddit r/Step2 polls, 2024-2025).
+            Start with the exam you are preparing for. Form numbers are not
+            interchangeable across assessment families.
           </p>
 
           <div className="overflow-hidden rounded-3xl border border-gray-200 shadow-sm">
@@ -276,8 +271,8 @@ export default function NbmeCalculatorPage() {
           </h2>
           <p className="text-gray-600 text-lg max-w-3xl mb-10">
             Translate your three-digit NBME equivalent into an action plan.
-            Reminder: these are NBME ranges, not real Step 2 CK ranges. The
-            real Step typically lands 3-8 points higher.
+            Reminder: reporting differs by assessment family, and an
+            independent estimate does not replace the official score report.
           </p>
 
           <div className="space-y-3">
@@ -318,11 +313,11 @@ export default function NbmeCalculatorPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div className="rounded-3xl border border-gray-200 bg-white p-6">
               <BookOpen className="h-6 w-6 text-mint-600 mb-3" />
-              <h3 className="font-bold mb-1">Under-prediction correction</h3>
+              <h3 className="font-bold mb-1">Source-aware modelling</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
-                NBME forms run 3-8 points cold vs the real Step 2 CK. We apply
-                a regression-based adjustment so the number you see is
-                Step-equivalent.
+                The calculator treats comprehensive, subject-level, and
+                third-party inputs differently instead of applying one fixed
+                adjustment to every score.
               </p>
             </div>
             <div className="rounded-3xl border border-gray-200 bg-white p-6">

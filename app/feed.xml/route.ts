@@ -6,7 +6,6 @@
  */
 import { getAllPostsSorted } from "@/lib/blog/posts";
 
-export const runtime = "edge";
 export const dynamic = "force-static";
 
 const SITE_URL = "https://nbmecalc.com";
