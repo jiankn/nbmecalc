@@ -633,6 +633,39 @@ export function predictStepScore(
   };
 }
 
+/**
+ * Strip a full PredictionResult down to what a non-paying account is allowed
+ * to see (PRD §5.2 / §7.1 / §7.2.7): the headline score / CI / pass
+ * probability plus a preview of the weakest cohort subjects. Every paid-only
+ * report module (trajectory, source insight, target gap, risk profile,
+ * one-decision, anti-patterns, high-leverage moves, test-day protocol, cohort
+ * mirror, honest-uncertainty, sit-or-postpone, personalized weak subjects) is
+ * reset to its empty placeholder so it never leaves the server for a free
+ * user — not even by reading the raw API response.
+ */
+export function toFreePreview(
+  full: PredictionResult,
+  subjectLimit = 2
+): PredictionResult {
+  const base = emptyResult(full.step);
+  const subjects = [...full.cohortSubjectAverages]
+    .sort((a, b) => a.cohortAverage - b.cohortAverage)
+    .slice(0, subjectLimit);
+  return {
+    ...base,
+    pointEstimate: full.pointEstimate,
+    ciLower: full.ciLower,
+    ciUpper: full.ciUpper,
+    passProbability: full.passProbability,
+    cohortSize: full.cohortSize,
+    cohortNote: full.cohortNote,
+    inputCount: full.inputCount,
+    freshness: full.freshness,
+    cohortSubjectAverages: subjects,
+    cohortSubjectAveragesNote: full.cohortSubjectAveragesNote,
+  };
+}
+
 function emptyResult(step: StepKind): PredictionResult {
   return {
     step,

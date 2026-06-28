@@ -13,7 +13,7 @@ import { and, eq } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
 import { predictions, reports } from "@/lib/db/schema";
 import { loadSession } from "@/lib/auth/session";
-import type { PredictionResult } from "@/lib/data";
+import { toFreePreview, type PredictionResult } from "@/lib/data";
 
 // Free accounts may preview at most this many (weakest) cohort subjects.
 // Full 14-subject breakdown is a paid feature (PRD §5.2 / §7.1).
@@ -73,15 +73,16 @@ export async function GET(req: Request, context: RouteContext): Promise<Response
   const entitledToFullReport =
     Boolean(session.user.proTier) || reportSessionId !== null;
 
-  const resultSnapshot = JSON.parse(row.resultSnapshot) as PredictionResult;
-  const subjectsTotal = resultSnapshot.cohortSubjectAverages?.length ?? 0;
-  let subjectsTruncated = false;
-  if (!entitledToFullReport && subjectsTotal > FREE_SUBJECT_PREVIEW) {
-    resultSnapshot.cohortSubjectAverages = [...resultSnapshot.cohortSubjectAverages]
-      .sort((a, b) => a.cohortAverage - b.cohortAverage)
-      .slice(0, FREE_SUBJECT_PREVIEW);
-    subjectsTruncated = true;
-  }
+  const fullSnapshot = JSON.parse(row.resultSnapshot) as PredictionResult;
+  const subjectsTotal = fullSnapshot.cohortSubjectAverages?.length ?? 0;
+  const subjectsTruncated =
+    !entitledToFullReport && subjectsTotal > FREE_SUBJECT_PREVIEW;
+  // Non-paying users get a headline-only preview with the weakest subjects;
+  // every paid report module is stripped server-side (not just hidden in the
+  // UI) so it can't be read straight off the API response.
+  const resultSnapshot = entitledToFullReport
+    ? fullSnapshot
+    : toFreePreview(fullSnapshot, FREE_SUBJECT_PREVIEW);
 
   return NextResponse.json({
     prediction: {
