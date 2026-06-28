@@ -17,8 +17,6 @@ import { sendReportEmail } from "@/lib/email-report";
 
 export const runtime = "edge";
 
-const MAX_SENDS_PER_HOUR = 3;
-
 const STEP_LABELS: Record<string, string> = {
   step1: "Step 1",
   step2: "Step 2 CK",

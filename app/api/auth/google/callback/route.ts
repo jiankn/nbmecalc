@@ -9,7 +9,6 @@
  * surfaces here as a bare 500 destroys conversion.
  */
 import { eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db/client";
 import { users } from "@/lib/db/schema";
 import { buildSessionCookie, createSession } from "@/lib/auth/session";

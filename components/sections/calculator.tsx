@@ -68,7 +68,6 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
       setExams((prev) => {
         const updated = [...prev];
         // Overwrite the first row with the hero's input.
-        const meta = EXAM_SOURCES.find((s) => s.key === detail.source);
         updated[0] = {
           ...updated[0],
           id: updated[0]?.id ?? "1",
