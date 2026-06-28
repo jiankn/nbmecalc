@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { TrendingUp, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/lib/auth/use-session";
 
 interface PredictionRow {
   id: string;
@@ -27,10 +28,11 @@ const STEP_LABELS: Record<PredictionRow["step"], string> = {
 };
 
 export default function TimelinePage() {
+  const session = useSession();
   const [rows, setRows] = useState<PredictionRow[]>([]);
   const [loading, setLoading] = useState(true);
-  // TODO: read Pro tier from a /api/user/me endpoint once that exists.
-  const isPro = false;
+
+  const isPro = session.status === "authed" && Boolean(session.user.proTier);
 
   useEffect(() => {
     fetch("/api/user/predictions?limit=100")
@@ -41,6 +43,20 @@ export default function TimelinePage() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  if (session.status === "loading") {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight">Timeline</h1>
+          <p className="text-gray-600 mt-1">
+            Track all three Steps in one chart over time.
+          </p>
+        </div>
+        <p className="text-gray-500">Loading…</p>
+      </div>
+    );
+  }
 
   if (!isPro) {
     return (
