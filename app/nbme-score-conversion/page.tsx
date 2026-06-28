@@ -73,7 +73,7 @@ const step1Table = [
 const faqs = [
   {
     q: "How accurate is NBME score conversion?",
-    a: "Our conversion is based on 1,200+ correlated NBME-to-Step pairs aggregated from public Reddit posts and user submissions. The 95% confidence interval is typically ±8 points for Step 2 CK. Accuracy improves the closer your test date is and the more recent forms you have taken.",
+    a: "Our conversion is based on published NBME-to-Step score-correlation data and aggregated user-submitted score reports. We do not currently claim a verified validation cohort — see our methodology page for status. Treat the range (typically about ±8 points for Step 2 CK), not the single point estimate, as your guide; accuracy improves the closer your test date is and the more recent the forms you have taken.",
   },
   {
     q: "Which NBME forms are most predictive of my Step 2 CK score?",

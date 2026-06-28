@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "NBMEcalc Pricing — Free, $14.99 Single Report, $9.99/mo Pro",
     description:
-      "Transparent USMLE score predictor pricing. Cancel anytime. Real medical advisors review every algorithm change.",
+      "Transparent USMLE score predictor pricing. Cancel anytime. No auto-renewal traps, no hidden fees.",
     url: "https://nbmecalc.com/pricing",
     type: "website",
     images: [

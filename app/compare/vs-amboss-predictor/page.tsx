@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "NBMEcalc vs AMBOSS Predictor — 2026 Comparison",
   description:
-    "Compare NBMEcalc and AMBOSS Step 2 CK Predictor. Multi-source input vs ecosystem lock-in, confidence intervals, mobile UX, and pricing reviewed.",
+    "Compare NBMEcalc and AMBOSS Step 2 CK Predictor. Multi-source input vs ecosystem lock-in, confidence intervals, mobile UX, and pricing compared.",
   keywords: [
     "nbmecalc vs amboss",
     "amboss predictor alternative",
@@ -109,7 +109,8 @@ export default function VsAmbossPage() {
             <p className="text-gray-700">
               AMBOSS Predictor is a feature, not a tool. NBMEcalc is a
               dedicated, source-agnostic predictor. If you use multiple Q-banks
-              (most students do), NBMEcalc gives a more accurate aggregate.
+              (most students do), NBMEcalc combines them into a single
+              multi-source estimate.
             </p>
           </div>
         </div>

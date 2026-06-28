@@ -26,10 +26,15 @@ export async function generateMetadata({
   if (!CATEGORIES.includes(slug as BlogCategory)) return {};
   const label = CATEGORY_LABELS[slug as BlogCategory];
 
+  // Categories with no indexable posts are kept crawlable but out of the
+  // index to avoid soft-404 / thin-content signals.
+  const isEmpty = getPostsByCategory(slug as BlogCategory).length === 0;
+
   return {
     title: `${label} — USMLE Blog | NBMEcalc`,
     description: `Source-checked articles on ${label.toLowerCase()} for USMLE Step prep.`,
     alternates: { canonical: `https://nbmecalc.com/blog/category/${slug}` },
+    ...(isEmpty ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       title: `${label} — USMLE Blog`,
       description: `Articles on ${label.toLowerCase()} for USMLE Step prep.`,

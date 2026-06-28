@@ -1,5 +1,10 @@
 import type { MetadataRoute } from "next";
-import { BLOG_POSTS } from "@/lib/blog/posts";
+import {
+  BLOG_POSTS,
+  CATEGORY_LABELS,
+  getPostsByCategory,
+  type BlogCategory,
+} from "@/lib/blog/posts";
 
 const SITE_URL = "https://nbmecalc.com";
 
@@ -50,10 +55,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // Blog (built 2026-05-20)
     { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${SITE_URL}/blog/category/score-conversion`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${SITE_URL}/blog/category/study-plans`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${SITE_URL}/blog/category/step-1-tips`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${SITE_URL}/blog/category/step-2-tips`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
+    // Category pages — only those with at least one indexable post. Empty
+    // categories are noindex'd, so keeping them out of the sitemap avoids
+    // sending Google a soft-404/thin page.
+    ...(Object.keys(CATEGORY_LABELS) as BlogCategory[])
+      .filter((c) => getPostsByCategory(c).length > 0)
+      .map((c) => ({
+        url: `${SITE_URL}/blog/category/${c}`,
+        lastModified: now,
+        changeFrequency: "weekly" as const,
+        priority: 0.5,
+      })),
 
     // Blog posts — derived from BLOG_POSTS, drafts (noindex) are skipped so
     // the sitemap stays consistent with each post's robots meta tag.

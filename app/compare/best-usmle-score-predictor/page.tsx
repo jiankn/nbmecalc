@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Best USMLE Score Predictor 2026 — Honest Comparison | NBMEcalc",
   description:
-    "We tested every major USMLE score predictor: nbcalc, PredictMyStepScore, AMBOSS Predictor, and NBMEcalc. Honest head-to-head review with feature matrix.",
+    "We compared every major USMLE score predictor — nbcalc, PredictMyStepScore, AMBOSS Predictor, and NBMEcalc — using public product information. Honest head-to-head feature matrix.",
   keywords: [
     "best usmle score predictor",
     "usmle score calculator comparison",
@@ -48,7 +48,6 @@ const rows: CompareRow[] = [
   { feature: "Mobile-optimized", values: ["yes", "partial", "partial", "no"] },
   { feature: "Free unlimited use", values: ["yes", "partial", "yes", "yes"] },
   { feature: "Multi-Step tracking dashboard", values: ["partial", "no", "no", "no"] },
-  { feature: "Real medical reviewer signoff", values: ["yes", "no", "yes", "no"] },
 ];
 
 export default function BestPredictorPage() {
@@ -87,9 +86,8 @@ export default function BestPredictorPage() {
           </div>
           <CompareTable competitors={competitors} rows={rows} />
           <p className="text-xs text-gray-500 mt-6">
-            Last updated May 2026. Data sourced from public product pages and
-            hands-on testing. Brand names are property of their respective
-            owners.
+            Last updated May 2026. Data sourced from public product pages.
+            Brand names are property of their respective owners.
           </p>
         </div>
       </section>
@@ -104,8 +102,8 @@ export default function BestPredictorPage() {
             <h3 className="text-xl font-bold mb-2 text-mint-800">NBMEcalc (us)</h3>
             <p className="text-gray-700 leading-relaxed">
               <strong>Strongest at:</strong> multi-source aggregation, 95%
-              confidence intervals, personalized study plans, and reviewer
-              signoff. <strong>Weakest at:</strong> Pro dashboard timeline still
+              confidence intervals, and personalized study plans.
+              <strong>Weakest at:</strong> Pro dashboard timeline still
               in beta. Recommended if you need an end-to-end Step prep tool.
             </p>
           </div>
