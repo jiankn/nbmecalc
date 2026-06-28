@@ -9,7 +9,8 @@
  * Use it to eyeball PDF layout changes without going through Stripe
  * Checkout. Pair with `/report/preview` for the web-view counterpart.
  */
-import { predictStepScore, type PracticeExam } from "@/lib/data";
+import type { PracticeExam } from "@/lib/data";
+import { predictStepScore } from "@/lib/predict";
 import { createReportPdf } from "@/lib/report-pdf-edge";
 
 export const runtime = "edge";

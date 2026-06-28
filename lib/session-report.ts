@@ -13,11 +13,11 @@
  */
 import { getStripe } from "@/lib/stripe";
 import {
-  predictStepScore,
   type PracticeExam,
   type PredictionResult,
   type StepKind,
 } from "@/lib/data";
+import { predictStepScore } from "@/lib/predict";
 
 export type ReportLoadResult =
   | { status: "ok"; data: ReportData }

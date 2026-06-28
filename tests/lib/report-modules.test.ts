@@ -25,12 +25,12 @@ import {
   buildOneDecision,
   buildRiskProfile,
   buildTestDayProtocol,
-  predictStepScore,
   type PracticeExam,
   type ScoreTrajectory,
   type SourceInsight,
   type PostponeRecommendation,
 } from "@/lib/data";
+import { predictStepScore } from "@/lib/predict";
 
 // ---------------------------------------------------------------------------
 // Test fixtures

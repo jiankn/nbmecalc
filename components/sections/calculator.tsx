@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSession } from "@/lib/auth/use-session";
 import {
-  predictStepScore,
+  predictPreview,
   EXAM_SOURCES,
   NBME_FORM_NUMBERS,
   getSubjectTaxonomy,
   type PracticeExam,
   type ExamSource,
   type StepKind,
-  type PredictionResult,
+  type PredictionPreview,
 } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -48,7 +48,7 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
   const [daysUntil, setDaysUntil] = useState(14);
   const [targetScore, setTargetScore] = useState<number | undefined>(undefined);
   const [weakSubjects, setWeakSubjects] = useState<string[]>([]);
-  const [result, setResult] = useState<PredictionResult | null>(null);
+  const [result, setResult] = useState<PredictionPreview | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
 
   // Listen for the Hero's "Predict My Score" button. When the user enters
@@ -136,10 +136,9 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
 
   function handlePredict() {
     // 1. Instant client-side compute. UX must not depend on the network.
-    const r = predictStepScore(exams, step, daysUntil, {
-      targetScore,
-      selfReportedWeakSubjects: weakSubjects,
-    });
+    //    Only the free preview is computed in the browser; the full paid
+    //    report is synthesized server-side (see /api/predict + lib/predict).
+    const r = predictPreview(exams, step, daysUntil);
     setResult(r);
     setTimeout(() => {
       document.getElementById("calc-result")?.scrollIntoView({
@@ -190,12 +189,7 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
         ? prev.filter((s) => s !== name)
         : [...prev, name];
       if (result) {
-        setResult(
-          predictStepScore(exams, step, daysUntil, {
-            targetScore,
-            selfReportedWeakSubjects: next,
-          })
-        );
+        setResult(predictPreview(exams, step, daysUntil));
       }
       return next;
     });
@@ -454,7 +448,7 @@ function ResultCard({
   onToggleWeakSubject,
   onUpgrade,
 }: {
-  result: PredictionResult;
+  result: PredictionPreview;
   step: StepKind;
   weakSubjects: string[];
   onToggleWeakSubject: (name: string) => void;
@@ -479,7 +473,10 @@ function ResultCard({
   const sortedSubjects = [...result.cohortSubjectAverages].sort(
     (a, b) => b.cohortAverage - a.cohortAverage
   );
-  const hiddenSubjectsCount = sortedSubjects.length - 3;
+  const hiddenSubjectsCount = Math.max(
+    0,
+    result.cohortSubjectsTotal - sortedSubjects.length
+  );
 
   return (
     <div

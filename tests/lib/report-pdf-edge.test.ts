@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { predictStepScore, type PracticeExam } from "@/lib/data";
+import type { PracticeExam } from "@/lib/data";
+import { predictStepScore } from "@/lib/predict";
 import { createReportPdf } from "@/lib/report-pdf-edge";
 
 const exams: PracticeExam[] = [

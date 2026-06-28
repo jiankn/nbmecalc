@@ -18,10 +18,10 @@ import {
   buildScoreTrajectory,
   buildSourceInsight,
   buildTargetGap,
-  predictStepScore,
   type CohortSubjectAverage,
   type PracticeExam,
 } from "@/lib/data";
+import { predictStepScore } from "@/lib/predict";
 
 // ---------------------------------------------------------------------------
 // buildScoreTrajectory

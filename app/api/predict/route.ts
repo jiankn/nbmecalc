@@ -30,12 +30,12 @@
 import { NextResponse } from "next/server";
 import {
   ALGORITHM_VERSION,
-  predictStepScore,
   type ExamSource,
   type PracticeExam,
   type PredictionResult,
   type StepKind,
 } from "@/lib/data";
+import { predictStepScore } from "@/lib/predict";
 import { getDb } from "@/lib/db/client";
 import { events, predictions } from "@/lib/db/schema";
 import { checkRateLimit, rateLimitHeaders } from "@/lib/rate-limit";

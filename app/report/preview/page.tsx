@@ -15,7 +15,8 @@
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/page-shell";
 import { ReportView } from "@/components/report-view";
-import { predictStepScore, type PracticeExam } from "@/lib/data";
+import type { PracticeExam } from "@/lib/data";
+import { predictStepScore } from "@/lib/predict";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";

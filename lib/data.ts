@@ -42,15 +42,12 @@ export type AlgorithmVersion = typeof ALGORITHM_VERSION;
 // Premium-report module types are defined in `./report-modules` to keep the
 // algorithm file small. We re-export them here so existing consumers (UI,
 // PDF, session-report) only need to import from "@/lib/data".
-import {
-  buildAntiPatterns,
-  buildCohortMirror,
-  buildHighLeverageMoves,
-  buildHonestUncertainty,
-  buildOneDecision,
-  buildRiskProfile,
-  buildTestDayProtocol,
-} from "./report-modules";
+//
+// NOTE: the premium *builder functions* are deliberately NOT imported into
+// this module. The full report engine (`predictStepScore`) lives in
+// `./predict`, which is the only place that pulls in `./report-modules`. This
+// file is imported by the client-side calculator, so keeping the paid
+// synthesis out of it keeps it out of the browser bundle.
 import type {
   AntiPatterns,
   CohortMirror,
@@ -450,16 +447,28 @@ function passProbabilityLogistic(
  *   - Tightens 25% when most-recent input is < 7 days old.
  *   - Widens 25% when most-recent input is > 30 days old or unknown.
  */
-export function predictStepScore(
+export interface PredictionBaseline {
+  point: number;
+  ciHalfWidth: number;
+  ciLower: number;
+  ciUpper: number;
+  passProb: number;
+  freshness: PredictionResult["freshness"];
+  inputCount: number;
+  cohortSubjectAverages: CohortSubjectAverage[];
+}
+
+/**
+ * Headline prediction shared by the free preview and the full report: point
+ * estimate, CI, pass probability, freshness, and the cohort subject averages.
+ * Deliberately free of any paid-report synthesis so it can safely run in the
+ * browser for the instant calculator preview.
+ */
+export function computeBaseline(
   exams: PracticeExam[],
   step: StepKind,
-  daysUntilExam?: number,
-  options: PredictOptions = {}
-): PredictionResult {
-  if (exams.length === 0) {
-    return emptyResult(step);
-  }
-
+  daysUntilExam?: number
+): PredictionBaseline {
   // 1. Convert each exam.
   const converted = exams.map((e) => ({
     exam: e,
@@ -521,115 +530,86 @@ export function predictStepScore(
   // 4. Pass probability.
   const passProb = passProbabilityLogistic(point, step, ciHalfWidth);
 
-  // 5. Personalized analytics.
+  // 5. Cohort subject averages (cohort-level reference shown in the preview).
   const cohortSubjectAverages = getCohortSubjectAverages(step, point);
-  const scoreTrajectory = buildScoreTrajectory(exams, step);
-  const sourceInsight = buildSourceInsight(exams, step);
-  const targetGap =
-    typeof options.targetScore === "number"
-      ? buildTargetGap(
-          options.targetScore,
-          point,
-          scoreTrajectory.slopePer30Days,
-          daysUntilExam
-        )
-      : null;
-  const postponeRecommendation = buildPostponeRecommendation(
-    point,
-    passProb,
-    scoreTrajectory.slopePer30Days,
-    step,
-    ciHalfWidth
-  );
-  const personalizedWeakSubjects = buildPersonalizedWeakSubjects(
-    options.selfReportedWeakSubjects,
-    cohortSubjectAverages
-  );
-
-  // 6. Premium-report modules (always computed; UI gates on `show` flags).
   const ciLower = point - ciHalfWidth;
   const ciUpper = point + ciHalfWidth;
-  const inputCount = exams.length;
-
-  const riskProfile = buildRiskProfile({
-    point,
-    ciLower,
-    ciUpper,
-    exams,
-    step,
-    sourceInsight,
-    inputCount,
-  });
-  const oneDecision = buildOneDecision({
-    point,
-    passProbability: passProb,
-    postponeRecommendation,
-    inputCount,
-    freshness,
-    daysUntilExam,
-    scoreTrajectory,
-    targetGap,
-    step,
-  });
-  const antiPatterns = buildAntiPatterns({
-    exams,
-    step,
-    daysUntilExam,
-    scoreTrajectory,
-    passProbability: passProb,
-    inputCount,
-  });
-  const highLeverageMoves = buildHighLeverageMoves({
-    exams,
-    step,
-    daysUntilExam,
-    scoreTrajectory,
-    passProbability: passProb,
-    inputCount,
-    personalizedWeakSubjects,
-  });
-  const testDayProtocol = buildTestDayProtocol({ daysUntilExam, step });
-  const cohortMirror = buildCohortMirror({
-    point,
-    ciLower,
-    ciUpper,
-    step,
-    exams,
-    daysUntilExam,
-    scoreTrajectory,
-    inputCount,
-  });
-  const honestUncertainty = buildHonestUncertainty({
-    exams,
-    scoreTrajectory,
-    sourceInsight,
-  });
 
   return {
-    step,
-    pointEstimate: point,
+    point,
+    ciHalfWidth,
     ciLower,
     ciUpper,
-    passProbability: passProb,
+    passProb,
+    freshness,
+    inputCount: exams.length,
+    cohortSubjectAverages,
+  };
+}
+
+export const COHORT_SUBJECT_NOTE =
+  "These are cohort averages at this score level — they reflect what students at your predicted score typically score by subject. They are NOT a personalized estimate of YOUR subject performance.";
+
+export interface PredictionPreview {
+  step: StepKind;
+  pointEstimate: number;
+  ciLower: number;
+  ciUpper: number;
+  passProbability: number;
+  freshness: PredictionResult["freshness"];
+  cohortSize: number;
+  cohortNote: string;
+  cohortSubjectAverages: CohortSubjectAverage[];
+  cohortSubjectAveragesNote: string;
+  /** Total cohort subjects in the full report — lets the UI show "+N more". */
+  cohortSubjectsTotal: number;
+}
+
+const PREVIEW_SUBJECT_COUNT = 3;
+
+/**
+ * Client-safe prediction for the marketing calculator. Returns ONLY what the
+ * free preview renders — the headline numbers plus the top few cohort
+ * subjects — and never the paid report modules, which are computed
+ * server-side by `predictStepScore` (in `./predict`). This is what keeps the
+ * paid report engine out of the browser bundle.
+ */
+export function predictPreview(
+  exams: PracticeExam[],
+  step: StepKind,
+  daysUntilExam?: number
+): PredictionPreview {
+  if (exams.length === 0) {
+    return {
+      step,
+      pointEstimate: 0,
+      ciLower: 0,
+      ciUpper: 0,
+      passProbability: 0,
+      freshness: "unknown",
+      cohortSize: 0,
+      cohortNote: "",
+      cohortSubjectAverages: [],
+      cohortSubjectAveragesNote: "",
+      cohortSubjectsTotal: 0,
+    };
+  }
+  const base = computeBaseline(exams, step, daysUntilExam);
+  const sorted = [...base.cohortSubjectAverages].sort(
+    (a, b) => b.cohortAverage - a.cohortAverage
+  );
+  return {
+    step,
+    pointEstimate: base.point,
+    ciLower: base.ciLower,
+    ciUpper: base.ciUpper,
+    passProbability: base.passProb,
+    freshness: base.freshness,
     cohortSize: COHORT_SIZE,
     cohortNote: COHORT_NOTE,
-    cohortSubjectAverages,
-    cohortSubjectAveragesNote:
-      "These are cohort averages at this score level — they reflect what students at your predicted score typically score by subject. They are NOT a personalized estimate of YOUR subject performance.",
-    inputCount,
-    freshness,
-    scoreTrajectory,
-    sourceInsight,
-    targetGap,
-    postponeRecommendation,
-    personalizedWeakSubjects,
-    riskProfile,
-    oneDecision,
-    antiPatterns,
-    highLeverageMoves,
-    testDayProtocol,
-    cohortMirror,
-    honestUncertainty,
+    cohortSubjectAverages: sorted.slice(0, PREVIEW_SUBJECT_COUNT),
+    cohortSubjectAveragesNote: COHORT_SUBJECT_NOTE,
+    cohortSubjectsTotal: base.cohortSubjectAverages.length,
   };
 }
 
@@ -666,7 +646,7 @@ export function toFreePreview(
   };
 }
 
-function emptyResult(step: StepKind): PredictionResult {
+export function emptyResult(step: StepKind): PredictionResult {
   return {
     step,
     pointEstimate: 0,
@@ -738,8 +718,8 @@ function emptyResult(step: StepKind): PredictionResult {
 // 3. Cohort metadata (constants — not synthesized at runtime)
 // ---------------------------------------------------------------------------
 
-const COHORT_SIZE = 1247;
-const COHORT_NOTE =
+export const COHORT_SIZE = 1247;
+export const COHORT_NOTE =
   "Calibrated from 1,247 paired NBME → Step outcomes (US MD seniors, 2022-2025).";
 
 /**
