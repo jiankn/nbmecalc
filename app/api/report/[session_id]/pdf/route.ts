@@ -18,6 +18,7 @@ import {
 import { createReportPdf } from "@/lib/report-pdf-edge";
 import { getDb } from "@/lib/db/client";
 import { loadSession } from "@/lib/auth/session";
+import { getPdfRendererSecret, signReportToken } from "@/lib/report-token";
 import { getOptionalRequestContext } from "@cloudflare/next-on-pages";
 
 export const runtime = "edge";
@@ -44,10 +45,17 @@ export async function GET(_req: Request, context: RouteContext) {
   const isProReport = !session_id.startsWith("cs_");
 
   let loaded;
+  // For a Pro report we keep the authenticated user id around so we can mint
+  // a short-lived token authorizing the (cookieless) renderer worker.
+  let proUserId: string | null = null;
   try {
-    loaded = isProReport
-      ? await loadProReportForRequest(_req, session_id)
-      : await loadReportFromSession(session_id);
+    if (isProReport) {
+      const pro = await loadProReportForRequest(_req, session_id);
+      loaded = pro.result;
+      proUserId = pro.userId;
+    } else {
+      loaded = await loadReportFromSession(session_id);
+    }
   } catch (err) {
     console.error("[pdf] load report data failed", err);
     return new Response(
@@ -80,12 +88,25 @@ export async function GET(_req: Request, context: RouteContext) {
   const filename = `nbmecalc-${stepLabel}-${data.result.pointEstimate}.pdf`;
 
   // The headless PDF worker re-fetches `/report/<id>` server-to-server with no
-  // user cookie. That's fine for paid reports (the `cs_` id is the auth), but
-  // a Pro prediction-id report needs the user's session — which the worker
-  // can't carry — so we render those directly with the edge generator.
-  const rendered = isProReport
-    ? ({ ok: false, reason: "pro-edge-render", target: "edge" } as const)
-    : await renderWithPdfWorker(_req, data.sessionId, filename);
+  // user cookie. Paid reports authenticate via the `cs_` id in the URL; a Pro
+  // prediction-id report instead gets a short-lived signed token (minted only
+  // after we verified ownership above) so the worker can render the exact same
+  // styled page. Without a signing secret we fall back to the edge generator.
+  let rendered: PdfWorkerResult;
+  if (isProReport) {
+    const secret = getPdfRendererSecret();
+    if (secret && proUserId) {
+      const token = await signReportToken(secret, {
+        predictionId: data.sessionId,
+        userId: proUserId,
+      });
+      rendered = await renderWithPdfWorker(_req, data.sessionId, filename, token);
+    } else {
+      rendered = { ok: false, reason: "pro-no-secret", target: "edge" };
+    }
+  } else {
+    rendered = await renderWithPdfWorker(_req, data.sessionId, filename);
+  }
   if (rendered.ok) return rendered.response;
 
   let pdfBytes: Uint8Array;
@@ -132,15 +153,18 @@ export async function GET(_req: Request, context: RouteContext) {
 async function loadProReportForRequest(
   req: Request,
   predictionId: string
-): Promise<ReportLoadResult> {
+): Promise<{ result: ReportLoadResult; userId: string | null }> {
   const db = getDb();
-  if (!db) return { status: "not_found" };
+  if (!db) return { result: { status: "not_found" }, userId: null };
 
   const session = await loadSession(db, req);
   if (!session || !session.user.proTier) {
-    return { status: "not_found" };
+    return { result: { status: "not_found" }, userId: null };
   }
-  return loadProPredictionReport(db, session.user.id, predictionId);
+  return {
+    result: await loadProPredictionReport(db, session.user.id, predictionId),
+    userId: session.user.id,
+  };
 }
 
 type PdfWorkerResult =
@@ -150,7 +174,8 @@ type PdfWorkerResult =
 async function renderWithPdfWorker(
   req: Request,
   sessionId: string,
-  filename: string
+  filename: string,
+  token?: string
 ): Promise<PdfWorkerResult> {
   const siteUrl =
     readRuntimeEnv("NEXT_PUBLIC_SITE_URL") ?? new URL(req.url).origin;
@@ -165,6 +190,9 @@ async function renderWithPdfWorker(
   }
 
   const reportUrl = new URL(`/report/${encodeURIComponent(sessionId)}`, siteUrl);
+  // Pro reports include a signed token so the cookieless worker can render the
+  // same styled page a logged-in user sees.
+  if (token) reportUrl.searchParams.set("k", token);
   const body = JSON.stringify({
     reportUrl: reportUrl.toString(),
     filename,

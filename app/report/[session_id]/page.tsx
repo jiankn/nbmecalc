@@ -9,6 +9,7 @@ import {
 } from "@/lib/session-report";
 import { getDb } from "@/lib/db/client";
 import { loadSession } from "@/lib/auth/session";
+import { getPdfRendererSecret, verifyReportToken } from "@/lib/report-token";
 import { PageShell } from "@/components/page-shell";
 import { ReportView } from "@/components/report-view";
 
@@ -34,7 +35,10 @@ type RouteParams = Promise<{ session_id: string }>;
  * Pro membership includes the full report, so we let them reuse this exact
  * page for any prediction they own without a second purchase.
  */
-async function loadReport(idOrSession: string): Promise<ReportLoadResult> {
+async function loadReport(
+  idOrSession: string,
+  token?: string
+): Promise<ReportLoadResult> {
   if (idOrSession.startsWith("cs_")) {
     return loadReportFromSession(idOrSession);
   }
@@ -42,6 +46,20 @@ async function loadReport(idOrSession: string): Promise<ReportLoadResult> {
   const db = getDb();
   if (!db) return { status: "not_found" };
 
+  // Worker path: the headless-Chrome PDF renderer can't carry the user's
+  // login cookie, so it authenticates with a short-lived signed token the PDF
+  // route minted after verifying the user owns this prediction.
+  if (token) {
+    const secret = getPdfRendererSecret();
+    if (secret) {
+      const claims = await verifyReportToken(secret, token);
+      if (claims && claims.predictionId === idOrSession) {
+        return loadProPredictionReport(db, claims.userId, idOrSession);
+      }
+    }
+  }
+
+  // Interactive path: a logged-in Pro user viewing their own prediction.
   const cookie = (await headers()).get("cookie") ?? "";
   const session = await loadSession(
     db,
@@ -53,9 +71,16 @@ async function loadReport(idOrSession: string): Promise<ReportLoadResult> {
   return loadProPredictionReport(db, session.user.id, idOrSession);
 }
 
-export default async function ReportPage({ params }: { params: RouteParams }) {
+export default async function ReportPage({
+  params,
+  searchParams,
+}: {
+  params: RouteParams;
+  searchParams: Promise<{ k?: string }>;
+}) {
   const { session_id } = await params;
-  const loaded = await loadReport(session_id);
+  const { k } = await searchParams;
+  const loaded = await loadReport(session_id, k);
 
   if (loaded.status === "not_found") notFound();
   if (loaded.status === "pending") {
