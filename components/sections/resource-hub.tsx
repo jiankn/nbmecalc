@@ -48,6 +48,23 @@ export function ResourceHub() {
             sources, and keep unreviewed drafts out of search until their
             claims can be checked.
           </p>
+          <p className="text-lg text-gray-600 leading-relaxed mt-4">
+            Ready to run your scores? Go straight to the{" "}
+            <Link
+              href="/step-1-predictor"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              Step 1 predictor
+            </Link>{" "}
+            or the{" "}
+            <Link
+              href="/step-2-predictor"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              Step 2 CK predictor
+            </Link>
+            .
+          </p>
           <p className="text-base font-semibold text-gray-900 mt-6">
             To get you started, here are our top guides:
           </p>

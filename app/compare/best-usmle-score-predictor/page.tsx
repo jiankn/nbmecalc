@@ -144,7 +144,21 @@ export default function BestPredictorPage() {
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
             No signup. Multi-source aggregation, 95% CI, and a personalized
-            study plan — all free.
+            study plan — all free. Go straight to the{" "}
+            <Link
+              href="/step-1-predictor"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              Step 1 predictor
+            </Link>{" "}
+            or the{" "}
+            <Link
+              href="/step-2-predictor"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              Step 2 CK predictor
+            </Link>
+            .
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="primary" size="lg" asChild>

@@ -28,7 +28,7 @@ const cards = [
   },
   {
     title: "Real Range, Not a Guess",
-    body: "We show you a 95% confidence interval based on 1,200+ historical Step takers. No more 'you'll get a 240' fake precision.",
+    body: "We show you a 95% confidence interval, not a single number — so you see the realistic range instead of fake 'you'll get a 240' precision.",
     image: "/images/feature-score-range.png",
     imageAlt: "Medical student holding a phone displaying an NBMEcalc score range prediction",
     icon: BarChart3,
