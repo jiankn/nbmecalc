@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "NBMEcalc vs AMBOSS Predictor — 2026 Comparison",
   description:
-    "Compare NBMEcalc and AMBOSS Step 2 CK Predictor. Multi-source input vs ecosystem lock-in, confidence intervals, mobile UX, and pricing reviewed.",
+    "Compare NBMEcalc and AMBOSS Step 2 CK Predictor. Multi-source input vs ecosystem lock-in, confidence intervals, mobile UX, and pricing compared.",
   keywords: [
     "nbmecalc vs amboss",
     "amboss predictor alternative",
@@ -109,7 +109,8 @@ export default function VsAmbossPage() {
             <p className="text-gray-700">
               AMBOSS Predictor is a feature, not a tool. NBMEcalc is a
               dedicated, source-agnostic predictor. If you use multiple Q-banks
-              (most students do), NBMEcalc gives a more accurate aggregate.
+              (most students do), NBMEcalc combines them into a single
+              multi-source estimate.
             </p>
           </div>
         </div>
@@ -120,6 +121,23 @@ export default function VsAmbossPage() {
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
             Try the source-agnostic alternative
           </h2>
+          <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
+            Works with UWorld, NBME, UWSA, Free 120, and CMS forms — run the{" "}
+            <Link
+              href="/step-2-predictor"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              Step 2 CK predictor
+            </Link>{" "}
+            or the{" "}
+            <Link
+              href="/step-1-predictor"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              Step 1 predictor
+            </Link>
+            .
+          </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
             <Button variant="primary" size="lg" asChild>
               <Link href="/#calculator">Predict my Step score</Link>

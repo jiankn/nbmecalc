@@ -46,7 +46,7 @@ const rows: CompareRow[] = [
   { feature: "3 highest-leverage moves for your input pattern", values: ["yes", "no"] },
   { feature: "Downloadable PDF report", values: ["yes", "no"] },
   { feature: "Mobile-optimized", values: ["yes", "no"] },
-  { feature: "Methodology document + reviewer signoff", values: ["yes", "no"] },
+  { feature: "Public methodology document", values: ["yes", "no"] },
   { feature: "Free to use", values: ["yes", "yes"] },
   { feature: "Modern UI", values: ["yes", "no"] },
 ];
@@ -103,7 +103,6 @@ export default function VsNbcalcPage() {
             <li>nbcalc&apos;s table covers only NBME 18-30, ignoring NBMEs 31 and 32</li>
             <li>No UWSA, Free 120, AMBOSS, or CMS Form support</li>
             <li>No confidence interval — students get a single misleading number</li>
-            <li>Bounce rate 82% (per public Ahrefs data) — UI clearly fails users</li>
             <li>No mobile version; the lookup table doesn&apos;t scroll on phones</li>
             <li>No methodology disclosed; you have to trust an unsigned table</li>
           </ul>

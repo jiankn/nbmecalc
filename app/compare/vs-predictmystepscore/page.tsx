@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "NBMEcalc vs PredictMyStepScore — Which Predicts Better? | 2026 Comparison",
   description:
-    "Side-by-side comparison of NBMEcalc and PredictMyStepScore. Accuracy, features, pricing, and UX reviewed by the NBMEcalc team.",
+    "Side-by-side comparison of NBMEcalc and PredictMyStepScore. Accuracy, features, pricing, and UX compared using public information.",
   keywords: [
     "nbmecalc vs predictmystepscore",
     "predictmystepscore alternative",
@@ -44,7 +44,6 @@ const rows: CompareRow[] = [
   { feature: "Personalized 14-day study plan", values: ["yes", "no"] },
   { feature: "Downloadable PDF report", values: ["yes", "yes"] },
   { feature: "Mobile-optimized (responsive)", values: ["yes", "partial"] },
-  { feature: "Real medical reviewer signoff", values: ["yes", "no"] },
   { feature: "Transparent methodology document", values: ["yes", "no"] },
   { feature: "Single-Report price", values: ["yes", "yes"] },
   { feature: "Multi-Step tracking", values: ["partial", "no"] },
@@ -106,7 +105,7 @@ export default function VsPMSSPage() {
               highest-leverage moves for your specific input pattern
             </li>
             <li>Modern mobile UX — install as a PWA</li>
-            <li>Methodology document with reviewer signoff</li>
+            <li>Public methodology document and corrections process</li>
           </ul>
 
           <div className="mt-8 rounded-2xl border-2 border-mint-300 bg-white p-6">

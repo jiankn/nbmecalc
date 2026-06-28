@@ -26,7 +26,7 @@ const featured = [
   {
     title: "UWSA vs NBME: Which Predicts Step Better?",
     excerpt:
-      "We pulled 1,200+ self-reports from r/Step1 and r/Step2 and ran the numbers. Results inside.",
+      "We compared UWSA and NBME self-reports from r/Step1 and r/Step2 to see which tracks Step scores better. Results inside.",
     href: "/blog/uwsa-vs-nbme",
     date: "MAY 5, 2026",
     readTime: "6 MIN READ",
@@ -47,6 +47,23 @@ export function ResourceHub() {
             We don&apos;t just predict — we explain assumptions, link official
             sources, and keep unreviewed drafts out of search until their
             claims can be checked.
+          </p>
+          <p className="text-lg text-gray-600 leading-relaxed mt-4">
+            Ready to run your scores? Go straight to the{" "}
+            <Link
+              href="/step-1-predictor"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              Step 1 predictor
+            </Link>{" "}
+            or the{" "}
+            <Link
+              href="/step-2-predictor"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              Step 2 CK predictor
+            </Link>
+            .
           </p>
           <p className="text-base font-semibold text-gray-900 mt-6">
             To get you started, here are our top guides:

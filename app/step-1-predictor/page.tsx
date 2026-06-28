@@ -210,6 +210,36 @@ export default function Step1PredictorPage() {
         <Calculator defaultStep="step1" />
       </section>
 
+      {/* Worked example */}
+      <section className="py-12 bg-white border-t border-gray-100">
+        <div className="container max-w-3xl">
+          <h2 className="text-2xl lg:text-3xl font-extrabold mb-3">
+            A worked example
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Say you sat three assessments in your final three weeks:{" "}
+            <strong>NBME 30 = 201</strong>, <strong>NBME 31 = 197</strong>, and{" "}
+            <strong>UWSA 1 = 208</strong>. The model equates each form to a common
+            scale, weights your most recent results more heavily, and reports a
+            range rather than a single number — so one slightly lower form does
+            not sink the estimate. This profile lands in the{" "}
+            <strong>~95–98% pass band</strong>: a comfortable pass with margin,
+            where the right move is to maintain rather than cram.
+          </p>
+          <p className="text-sm text-gray-500 italic">
+            Illustrative only — your own result depends on your exact forms,
+            dates, and how closely they cluster. See the{" "}
+            <Link
+              href="/methodology"
+              className="text-mint-700 underline underline-offset-2"
+            >
+              methodology
+            </Link>{" "}
+            for the assumptions behind the model.
+          </p>
+        </div>
+      </section>
+
       {/* Pass bands */}
       <section className="py-16 lg:py-20 bg-mint-50/30">
         <div className="container max-w-4xl">
@@ -315,6 +345,47 @@ export default function Step1PredictorPage() {
               remaining. If less, be more conservative.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Related tools */}
+      <section className="py-12 bg-white">
+        <div className="container max-w-3xl">
+          <h2 className="text-2xl font-extrabold mb-4">Related Step 1 tools</h2>
+          <ul className="grid sm:grid-cols-2 gap-3 text-mint-700 font-semibold">
+            <li>
+              <Link
+                href="/uwsa-1-to-step-1"
+                className="underline underline-offset-2"
+              >
+                Convert UWSA 1 to a Step 1 estimate
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/free-120-predictor"
+                className="underline underline-offset-2"
+              >
+                Free 120 predictor
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/nbme-score-conversion"
+                className="underline underline-offset-2"
+              >
+                Full NBME score conversion tables
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/step-2-predictor"
+                className="underline underline-offset-2"
+              >
+                Step 2 CK predictor
+              </Link>
+            </li>
+          </ul>
         </div>
       </section>
 

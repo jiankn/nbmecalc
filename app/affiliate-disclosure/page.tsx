@@ -75,8 +75,8 @@ export default function AffiliateDisclosurePage() {
             never influenced by commission rates.
           </li>
           <li>
-            <strong>Reviewer veto.</strong> Any product mentioned must pass a
-            review by at least one of our medical advisors.
+            <strong>Editorial veto.</strong> Any product we mention must pass
+            our internal editorial review before inclusion.
           </li>
           <li>
             <strong>Cons listed.</strong> We list weaknesses of products we

@@ -144,6 +144,38 @@ export default function Step2PredictorPage() {
         <Calculator defaultStep="step2" />
       </section>
 
+      {/* Worked example */}
+      <section className="py-12 bg-white border-b border-gray-200">
+        <div className="container max-w-4xl">
+          <h2 className="text-2xl lg:text-3xl font-extrabold mb-3">
+            A worked example
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Suppose you enter <strong>CCSSA Form 12 = 248</strong>,{" "}
+            <strong>UWSA 2 = 255</strong>, and <strong>Free 120 = 78%</strong>.
+            The calculator applies the UWSA-2{" "}
+            <span className="font-mono">−2</span> correction (see the table
+            below), weights your most recent forms, and returns a point estimate
+            near <strong>250</strong> with a 95% confidence interval of roughly{" "}
+            <strong>±8</strong>. Read against the specialty table, that sits
+            around the median for diagnostic radiology and well above the
+            family-medicine range — useful context when you are deciding whether
+            your score supports your target specialty.
+          </p>
+          <p className="text-sm text-gray-500 italic">
+            Illustrative only — your result depends on your exact forms and
+            dates. The corrections and assumptions are documented in our{" "}
+            <Link
+              href="/methodology"
+              className="text-mint-700 underline underline-offset-2"
+            >
+              methodology
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
       {/* Specialty context */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-5xl">
@@ -330,6 +362,47 @@ export default function Step2PredictorPage() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* Related tools */}
+      <section className="py-12 bg-white">
+        <div className="container max-w-4xl">
+          <h2 className="text-2xl font-extrabold mb-4">Related Step 2 CK tools</h2>
+          <ul className="grid sm:grid-cols-2 gap-3 text-mint-700 font-semibold">
+            <li>
+              <Link
+                href="/nbme-score-conversion"
+                className="underline underline-offset-2"
+              >
+                NBME → Step 2 CK conversion tables
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/uwsa-2-to-step-2"
+                className="underline underline-offset-2"
+              >
+                Convert UWSA 2 to Step 2 CK
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/cms-converter"
+                className="underline underline-offset-2"
+              >
+                CMS Form subject converter
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/amboss-converter"
+                className="underline underline-offset-2"
+              >
+                AMBOSS SA → Step 2 CK converter
+              </Link>
+            </li>
+          </ul>
         </div>
       </section>
 
