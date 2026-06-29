@@ -99,6 +99,39 @@ export type PredictionRow = typeof predictions.$inferSelect;
 export type NewPredictionRow = typeof predictions.$inferInsert;
 
 // ---------------------------------------------------------------------------
+// prediction_shares — privacy-safe public summaries created explicitly by a
+// user. Never store raw exam inputs, weak subjects, pass probability, email,
+// or report credentials here.
+// ---------------------------------------------------------------------------
+
+export const predictionShares = sqliteTable(
+  "prediction_shares",
+  {
+    /** 128-bit opaque token used in /share/[token]. */
+    token: text("token").primaryKey(),
+    /** SHA-256 of a separate secret returned once to the creating browser. */
+    manageTokenHash: text("manage_token_hash").notNull(),
+    /** Nullable so anonymous calculator users can still share. */
+    userId: text("user_id"),
+    step: text("step", { enum: ["step1", "step2", "step3"] }).notNull(),
+    pointEstimate: integer("point_estimate").notNull(),
+    ciLower: integer("ci_lower").notNull(),
+    ciUpper: integer("ci_upper").notNull(),
+    createdAt: integer("created_at").notNull(),
+    /** Soft revoke keeps an audit trail while immediately hiding the page. */
+    revokedAt: integer("revoked_at"),
+  },
+  (t) => ({
+    byUser: index("idx_prediction_shares_user").on(t.userId),
+    byCreated: index("idx_prediction_shares_created").on(t.createdAt),
+    byRevoked: index("idx_prediction_shares_revoked").on(t.revokedAt),
+  })
+);
+
+export type PredictionShareRow = typeof predictionShares.$inferSelect;
+export type NewPredictionShareRow = typeof predictionShares.$inferInsert;
+
+// ---------------------------------------------------------------------------
 // reports — a row is created when Stripe Checkout completes. The PDF itself
 // is currently re-rendered on demand from the linked prediction; this table
 // tracks "did the user pay" and "when did we email them".
@@ -338,6 +371,7 @@ export const nowMs = sql`(strftime('%s','now') * 1000)`;
 // each table's exact import name.
 export const tables = {
   predictions,
+  predictionShares,
   reports,
   rateLimits,
   events,

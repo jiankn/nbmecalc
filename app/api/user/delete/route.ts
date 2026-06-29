@@ -8,6 +8,7 @@
  * What's deleted:
  *   - users row (the account itself)
  *   - all predictions for this user (their score data)
+ *   - all public prediction shares created while signed in
  *   - all events for this user (analytics trail)
  *   - all sessions for this user (signs them out everywhere)
  *   - all magic_links for this user's email (so old links stop working)
@@ -32,6 +33,7 @@ import {
   events,
   sessions,
   magicLinks,
+  predictionShares,
   reports,
 } from "@/lib/db/schema";
 import { buildClearSessionCookie, loadSession } from "@/lib/auth/session";
@@ -106,6 +108,9 @@ export async function POST(req: Request): Promise<Response> {
         .where(eq(reports.userId, userId)),
 
       db.delete(predictions).where(eq(predictions.userId, userId)),
+      db
+        .delete(predictionShares)
+        .where(eq(predictionShares.userId, userId)),
       db.delete(events).where(eq(events.userId, userId)),
       db.delete(sessions).where(eq(sessions.userId, userId)),
       db.delete(magicLinks).where(eq(magicLinks.email, userEmail)),

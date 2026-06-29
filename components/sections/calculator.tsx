@@ -2,9 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, X, ArrowRight, Lock, Share2, Sparkles, Info } from "lucide-react";
+import { Plus, X, ArrowRight, Lock, Sparkles, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SharePrediction } from "@/components/share-prediction";
 import { useSession } from "@/lib/auth/use-session";
 import {
   predictPreview,
@@ -793,16 +794,12 @@ function ResultCard({
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-center gap-3 text-sm text-gray-500">
-        <span>Or share your prediction:</span>
-        <button className="rounded-full border border-gray-200 px-3 py-1 hover:border-gray-400 inline-flex items-center gap-1.5 font-medium transition">
-          <Share2 className="h-3 w-3" />
-          Reddit
-        </button>
-        <button className="rounded-full border border-gray-200 px-3 py-1 hover:border-gray-400 inline-flex items-center gap-1.5 font-medium transition">
-          <Share2 className="h-3 w-3" />X
-        </button>
-      </div>
+      <SharePrediction
+        step={result.step}
+        pointEstimate={result.pointEstimate}
+        ciLower={result.ciLower}
+        ciUpper={result.ciUpper}
+      />
     </div>
   );
 }
