@@ -8,6 +8,7 @@ const cards = [
     body: "NBME, UWSA 1/2, Free 120, AMBOSS, and CMS forms — all in one prediction. Most calculators only handle one source. We do them all.",
     image: "/images/feature-practice-exams.jpg",
     imageAlt: "Blank pastel practice exam cards arranged on a medical student's desk",
+    imageClassName: "group-hover:scale-[1.02]",
     icon: FileText,
     iconBg: "bg-blue-100/95 text-blue-700",
     visual: (
@@ -16,7 +17,7 @@ const cards = [
           <div
             key={label}
             className={cn(
-              "rounded-full bg-white/90 shadow-sm backdrop-blur px-3 py-1.5 text-[10px] font-bold text-gray-800 flex items-center justify-center",
+              "flex items-center justify-center rounded-full bg-white px-3 py-2 text-xs font-semibold leading-none text-gray-900 shadow-sm ring-1 ring-black/5",
               i === 1 && "ring-2 ring-mint-400"
             )}
           >
@@ -31,6 +32,7 @@ const cards = [
     body: "We show you a 95% confidence interval, not a single number — so you see the realistic range instead of fake 'you'll get a 240' precision.",
     image: "/images/feature-score-range.png",
     imageAlt: "Medical student holding a phone displaying an NBMEcalc score range prediction",
+    imageClassName: "",
     icon: BarChart3,
     iconBg: "bg-yellow-100/95 text-yellow-700",
     visual: null,
@@ -40,6 +42,7 @@ const cards = [
     body: "Should you sit or postpone? What 3 moves actually shift your score? Which Reddit-favorite tactics will hurt you? The paid report answers — and tells you when it would be wrong.",
     image: "/images/feature-study-plan.jpg",
     imageAlt: "Blank study planner with pastel sticky notes on a warm wooden desk",
+    imageClassName: "group-hover:scale-[1.02]",
     icon: Calendar,
     iconBg: "bg-mint-100/95 text-mint-700",
     visual: (
@@ -49,9 +52,9 @@ const cards = [
             <div
               key={label}
               className={cn(
-                "rounded-full px-3 py-1.5 text-[10px] font-bold shadow-sm backdrop-blur",
+                "rounded-full px-3 py-2 text-xs font-semibold leading-none shadow-sm ring-1 ring-black/5",
                 i === 0 && "bg-mint-100/95 text-mint-800",
-                i === 1 && "bg-white/90 text-gray-800",
+                i === 1 && "bg-white text-gray-900",
                 i === 2 && "bg-red-100/95 text-red-700"
               )}
             >
@@ -89,10 +92,12 @@ export function ValueProps() {
                   fill
                   quality={100}
                   sizes="(min-width: 768px) 33vw, 100vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className={cn(
+                    "object-cover transition-transform duration-500 motion-reduce:transform-none",
+                    card.imageClassName
+                  )}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/95 via-[34%] to-transparent to-[52%]" />
                 {card.visual}
                 <div className="relative z-10 flex h-full min-h-[430px] flex-col justify-end p-8">
                   <div className={cn("inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-4 shadow-sm backdrop-blur", card.iconBg)}>
