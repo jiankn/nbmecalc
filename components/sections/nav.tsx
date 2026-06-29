@@ -239,7 +239,7 @@ export function Nav() {
               </Link>
               <Button
                 variant="secondary"
-                size="md"
+                size="sm"
                 className="border-0 bg-white hover:bg-gray-50"
                 asChild
               >
