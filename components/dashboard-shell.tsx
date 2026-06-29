@@ -9,11 +9,9 @@ import {
   TrendingUp,
   Settings,
   CreditCard,
-  LogOut,
-  Sparkles,
 } from "lucide-react";
-import { Logo } from "@/components/logo";
-import { invalidateSession, type SessionUser } from "@/lib/auth/use-session";
+import { Nav } from "@/components/sections/nav";
+import { type SessionUser } from "@/lib/auth/use-session";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -77,55 +75,22 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     };
   }, [pathname, router]);
 
-  async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    invalidateSession();
-    router.replace("/");
-  }
-
   if (checking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-gray-500">Loading…</div>
+      <div className="min-h-screen bg-gray-50">
+        <Nav />
+        <div className="flex min-h-[calc(100vh-72px)] items-center justify-center">
+          <div className="text-gray-500">Loading…</div>
+        </div>
       </div>
     );
   }
 
   if (!user) return null;
 
-  const displayName = user.name || user.email.split("@")[0];
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
-        <div className="container flex h-16 items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Logo width={140} height={32} />
-          </Link>
-          <div className="flex items-center gap-3">
-            {user.proTier && (
-              <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-mint-100 px-3 py-1 text-xs font-bold text-mint-800">
-                <Sparkles className="h-3 w-3" />
-                Pro
-              </span>
-            )}
-            <span
-              className="hidden sm:inline text-sm text-gray-600 truncate max-w-[180px]"
-              title={user.email}
-            >
-              {displayName}
-            </span>
-            <button
-              onClick={logout}
-              className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-1.5 text-sm font-semibold text-gray-700 hover:border-gray-400 hover:bg-white transition"
-            >
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Sign out</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      <Nav />
 
       <div className="container py-8 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-8">
