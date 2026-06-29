@@ -6,7 +6,6 @@ import {
   Menu,
   X,
   ChevronDown,
-  ArrowRight,
   LayoutDashboard,
   CreditCard,
   Settings,
@@ -241,13 +240,10 @@ export function Nav() {
               <Button
                 variant="secondary"
                 size="md"
-                className="bg-white border-0 hover:bg-gray-50 inline-flex items-center gap-1.5"
+                className="border-0 bg-white hover:bg-gray-50"
                 asChild
               >
-                <Link href={TRY_FREE_HREF}>
-                  Get started
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+                <Link href={TRY_FREE_HREF}>Get started</Link>
               </Button>
             </>
           )}
@@ -391,11 +387,10 @@ export function Nav() {
                 <>
                   <Link
                     href={TRY_FREE_HREF}
-                    className="flex items-center justify-center gap-1.5 mx-2 rounded-full bg-white py-3 font-semibold"
+                    className="mx-2 flex items-center justify-center rounded-full bg-white py-3 font-semibold"
                     onClick={() => setMobileOpen(false)}
                   >
                     Get started
-                    <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
                     href="/login"
