@@ -1,11 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  ArrowRight,
+  LayoutDashboard,
+  CreditCard,
+  Settings,
+  LogOut,
+} from "lucide-react";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
-import { useSession } from "@/lib/auth/use-session";
+import { invalidateSession, useSession } from "@/lib/auth/use-session";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -38,15 +47,30 @@ const navItems = [
   { label: "Blog", href: "/blog" },
 ];
 
-// Target for the primary "Try free" CTA. The calculator on the homepage
+// Target for the primary "Get started" CTA. The calculator on the homepage
 // is the wedge — not /login. Don't change this without thinking through
 // the conversion impact.
 const TRY_FREE_HREF = "/#calculator";
+
+function getDisplayName(name: string | null, email: string): string {
+  const normalizedName = name?.trim();
+  return normalizedName || email.split("@")[0] || "Account";
+}
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "A";
+  if (parts.length === 1) return parts[0].slice(0, 1).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+}
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const accountMenuRef = useRef<HTMLDivElement>(null);
   const session = useSession();
 
   useEffect(() => {
@@ -54,6 +78,45 @@ export function Nav() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!accountOpen) return;
+
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      if (!accountMenuRef.current?.contains(event.target as Node)) {
+        setAccountOpen(false);
+      }
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setAccountOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [accountOpen]);
+
+  async function logout() {
+    if (signingOut) return;
+    setSigningOut(true);
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "same-origin",
+      });
+    } finally {
+      invalidateSession();
+      window.location.assign("/");
+    }
+  }
+
+  const user = session.status === "authed" ? session.user : null;
+  const displayName = user ? getDisplayName(user.name, user.email) : "";
 
   return (
     <header
@@ -143,25 +206,101 @@ export function Nav() {
                 asChild
               >
                 <Link href={TRY_FREE_HREF}>
-                  Try free
+                  Get started
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
             </>
           )}
 
-          {session.status === "authed" && (
-            <Button
-              variant="secondary"
-              size="md"
-              className="bg-white border-0 hover:bg-gray-50 inline-flex items-center gap-1.5"
-              asChild
-            >
-              <Link href="/dashboard">
-                Dashboard
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
+          {user && (
+            <div className="relative" ref={accountMenuRef}>
+              <button
+                type="button"
+                className="inline-flex h-11 max-w-[220px] items-center gap-2 rounded-full bg-white px-3.5 text-sm font-semibold text-black transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-mint-500"
+                aria-expanded={accountOpen}
+                aria-controls="account-menu"
+                aria-haspopup="true"
+                onClick={() => setAccountOpen((open) => !open)}
+              >
+                <span
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-mint-100 text-xs font-extrabold text-mint-900"
+                  aria-hidden="true"
+                >
+                  {getInitials(displayName)}
+                </span>
+                <span className="truncate">{displayName}</span>
+                <ChevronDown
+                  className={cn(
+                    "h-4 w-4 shrink-0 transition-transform",
+                    accountOpen && "rotate-180"
+                  )}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {accountOpen && (
+                <div
+                  id="account-menu"
+                  className="absolute right-0 top-full pt-2"
+                >
+                  <div className="w-72 rounded-2xl border border-gray-100 bg-white p-2 shadow-xl">
+                    <div className="px-3 py-2.5">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="truncate text-sm font-bold text-gray-950">
+                          {displayName}
+                        </p>
+                        <span className="shrink-0 rounded-full bg-mint-100 px-2 py-0.5 text-[11px] font-bold text-mint-900">
+                          {user.proTier ? "Pro" : "Free"}
+                        </span>
+                      </div>
+                      <p className="mt-0.5 truncate text-xs text-gray-500">
+                        {user.email}
+                      </p>
+                    </div>
+
+                    <div className="my-1 h-px bg-gray-100" />
+
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-mint-50 hover:text-mint-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint-500"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
+                      Dashboard
+                    </Link>
+                    <Link
+                      href="/dashboard/billing"
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-mint-50 hover:text-mint-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint-500"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      <CreditCard className="h-4 w-4" aria-hidden="true" />
+                      {user.proTier ? "Manage subscription" : "View plans"}
+                    </Link>
+                    <Link
+                      href="/dashboard/settings"
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-mint-50 hover:text-mint-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint-500"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      <Settings className="h-4 w-4" aria-hidden="true" />
+                      Account settings
+                    </Link>
+
+                    <div className="my-1 h-px bg-gray-100" />
+
+                    <button
+                      type="button"
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint-500 disabled:cursor-wait disabled:opacity-50"
+                      onClick={logout}
+                      disabled={signingOut}
+                    >
+                      <LogOut className="h-4 w-4" aria-hidden="true" />
+                      {signingOut ? "Signing out..." : "Sign out"}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </div>
 
@@ -224,7 +363,7 @@ export function Nav() {
                     className="flex items-center justify-center gap-1.5 mx-2 rounded-full bg-white py-3 font-semibold"
                     onClick={() => setMobileOpen(false)}
                   >
-                    Try free
+                    Get started
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
@@ -237,15 +376,60 @@ export function Nav() {
                 </>
               )}
 
-              {session.status === "authed" && (
-                <Link
-                  href="/dashboard"
-                  className="flex items-center justify-center gap-1.5 mx-2 rounded-full bg-white py-3 font-semibold"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Dashboard
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+              {user && (
+                <div className="mx-2 overflow-hidden rounded-2xl bg-white">
+                  <div className="flex items-center gap-3 border-b border-gray-100 px-4 py-3">
+                    <span
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-mint-100 text-sm font-extrabold text-mint-900"
+                      aria-hidden="true"
+                    >
+                      {getInitials(displayName)}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold text-gray-950">
+                        {displayName}
+                      </p>
+                      <p className="truncate text-xs text-gray-500">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="p-2">
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-700 hover:bg-mint-50"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
+                      Dashboard
+                    </Link>
+                    <Link
+                      href="/dashboard/billing"
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-700 hover:bg-mint-50"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <CreditCard className="h-4 w-4" aria-hidden="true" />
+                      {user.proTier ? "Manage subscription" : "View plans"}
+                    </Link>
+                    <Link
+                      href="/dashboard/settings"
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-700 hover:bg-mint-50"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <Settings className="h-4 w-4" aria-hidden="true" />
+                      Account settings
+                    </Link>
+                    <button
+                      type="button"
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 disabled:cursor-wait disabled:opacity-50"
+                      onClick={logout}
+                      disabled={signingOut}
+                    >
+                      <LogOut className="h-4 w-4" aria-hidden="true" />
+                      {signingOut ? "Signing out..." : "Sign out"}
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
           </div>
