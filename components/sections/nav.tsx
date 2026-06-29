@@ -30,7 +30,7 @@ const navItems = [
     label: "Step 3",
     children: [
       { label: "Step 3 Predictor", href: "/step-3-predictor" },
-      { label: "Step 3 CCS Cases", href: "/blog/step-3-ccs-guide" },
+      { label: "Step 3 CCS Cases", href: "/blog/step-3-ccs-cases-complete-walkthrough" },
     ],
   },
   { label: "Compare", href: "/compare/best-usmle-score-predictor" },
