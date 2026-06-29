@@ -75,6 +75,7 @@ export interface AuthenticatedSession {
     | "id"
     | "email"
     | "name"
+    | "avatarUrl"
     | "proTier"
     | "proExpiresAt"
     | "stripeCustomerId"
@@ -105,6 +106,7 @@ export async function loadSession(
         id: users.id,
         email: users.email,
         name: users.name,
+        avatarUrl: users.avatarUrl,
         proTier: users.proTier,
         proExpiresAt: users.proExpiresAt,
         stripeCustomerId: users.stripeCustomerId,

@@ -128,13 +128,23 @@ export async function GET(req: Request): Promise<Response> {
       if (!existing[0].name && profile.name) {
         updates.name = profile.name;
       }
-      await db.update(users).set(updates).where(eq(users.id, userId)).catch(() => {});
+      // Refresh on every Google login so account or profile-photo changes
+      // propagate without requiring a separate profile sync job.
+      if (profile.picture) {
+        updates.avatarUrl = profile.picture;
+      }
+      await db
+        .update(users)
+        .set(updates)
+        .where(eq(users.id, userId))
+        .catch(() => {});
     } else {
       userId = newUserId();
       await db.insert(users).values({
         id: userId,
         email: profile.email,
         name: profile.name,
+        avatarUrl: profile.picture,
         createdAt: now,
         updatedAt: now,
         source: "google",

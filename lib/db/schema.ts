@@ -268,7 +268,7 @@ export type EventRow = typeof events.$inferSelect;
 export type NewEventRow = typeof events.$inferInsert;
 
 // ---------------------------------------------------------------------------
-// users — Magic Link accounts. Created lazily on first successful verify.
+// users — Magic Link or Google OAuth accounts. Created on first successful login.
 // ---------------------------------------------------------------------------
 
 export const users = sqliteTable(
@@ -278,6 +278,8 @@ export const users = sqliteTable(
     id: text("id").primaryKey(),
     email: text("email").notNull().unique(),
     name: text("name"),
+    /** Profile image supplied by a trusted identity provider (currently Google). */
+    avatarUrl: text("avatar_url"),
 
     /** NULL | "monthly" | "annual". Updated by Stripe webhook. */
     proTier: text("pro_tier"),

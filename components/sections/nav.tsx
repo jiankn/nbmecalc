@@ -64,6 +64,45 @@ function getInitials(name: string): string {
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 }
 
+function AccountAvatar({
+  avatarUrl,
+  displayName,
+  className,
+}: {
+  avatarUrl: string | null;
+  displayName: string;
+  className: string;
+}) {
+  const [failedUrl, setFailedUrl] = useState<string | null>(null);
+  const showImage = Boolean(avatarUrl && failedUrl !== avatarUrl);
+
+  return (
+    <span
+      className={cn(
+        "relative flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-mint-100 font-extrabold text-mint-900",
+        className
+      )}
+      aria-hidden="true"
+    >
+      {showImage ? (
+        // Google profile photos are small third-party assets. Loading them
+        // directly avoids proxying personal avatars through image optimization.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={avatarUrl!}
+          alt=""
+          className="h-full w-full object-cover"
+          referrerPolicy="no-referrer"
+          decoding="async"
+          onError={() => setFailedUrl(avatarUrl)}
+        />
+      ) : (
+        getInitials(displayName)
+      )}
+    </span>
+  );
+}
+
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -217,25 +256,17 @@ export function Nav() {
             <div className="relative" ref={accountMenuRef}>
               <button
                 type="button"
-                className="inline-flex h-11 max-w-[220px] items-center gap-2 rounded-full bg-white px-3.5 text-sm font-semibold text-black transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-mint-500"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white p-1 text-sm transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-mint-500"
                 aria-expanded={accountOpen}
                 aria-controls="account-menu"
                 aria-haspopup="true"
+                aria-label={`Account menu for ${displayName}`}
                 onClick={() => setAccountOpen((open) => !open)}
               >
-                <span
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-mint-100 text-xs font-extrabold text-mint-900"
-                  aria-hidden="true"
-                >
-                  {getInitials(displayName)}
-                </span>
-                <span className="truncate">{displayName}</span>
-                <ChevronDown
-                  className={cn(
-                    "h-4 w-4 shrink-0 transition-transform",
-                    accountOpen && "rotate-180"
-                  )}
-                  aria-hidden="true"
+                <AccountAvatar
+                  avatarUrl={user.avatarUrl}
+                  displayName={displayName}
+                  className="h-9 w-9 text-xs"
                 />
               </button>
 
@@ -379,12 +410,11 @@ export function Nav() {
               {user && (
                 <div className="mx-2 overflow-hidden rounded-2xl bg-white">
                   <div className="flex items-center gap-3 border-b border-gray-100 px-4 py-3">
-                    <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-mint-100 text-sm font-extrabold text-mint-900"
-                      aria-hidden="true"
-                    >
-                      {getInitials(displayName)}
-                    </span>
+                    <AccountAvatar
+                      avatarUrl={user.avatarUrl}
+                      displayName={displayName}
+                      className="h-9 w-9 text-sm"
+                    />
                     <div className="min-w-0">
                       <p className="truncate text-sm font-bold text-gray-950">
                         {displayName}

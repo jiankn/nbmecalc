@@ -34,6 +34,7 @@ export async function GET(req: Request): Promise<Response> {
         id: u.id,
         email: u.email,
         name: u.name,
+        avatarUrl: u.avatarUrl,
         proTier: u.proTier,
         proExpiresAt: u.proExpiresAt,
         createdAt: u.createdAt,
