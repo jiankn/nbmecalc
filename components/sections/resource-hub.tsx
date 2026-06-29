@@ -1,41 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { getAllPostsSorted } from "@/lib/blog/posts";
+import { getBlogSummaryImage } from "@/lib/blog/images";
 
-const featured = [
-  {
-    title: "NBME Score Conversion: The Complete 2026 Guide",
-    excerpt:
-      "Convert Step 2 CK CCSSA scores or estimate Step 1 pass probability from the matching NBME assessment family.",
-    href: "/blog/nbme-score-conversion-guide",
-    date: "MAY 17, 2026",
-    readTime: "8 MIN READ",
-    placeholder: "/placeholders/blog-cover-nbme.jpg",
-    promptKey: "blog-cover-nbme",
-  },
-  {
-    title: "How to Read a Confidence Interval (For Med Students)",
-    excerpt:
-      "Why one number isn't enough — and how to use a 95% CI to plan your final 2 weeks of prep.",
-    href: "/blog/confidence-interval-guide",
-    date: "MAY 10, 2026",
-    readTime: "5 MIN READ",
-    placeholder: "/placeholders/blog-cover-ci.jpg",
-    promptKey: "blog-cover-ci",
-  },
-  {
-    title: "UWSA vs NBME: Which Predicts Step Better?",
-    excerpt:
-      "We compared UWSA and NBME self-reports from r/Step1 and r/Step2 to see which tracks Step scores better. Results inside.",
-    href: "/blog/uwsa-vs-nbme",
-    date: "MAY 5, 2026",
-    readTime: "6 MIN READ",
-    placeholder: "/placeholders/blog-cover-cram.jpg",
-    promptKey: "blog-cover-cram",
-  },
-];
+const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function formatDate(iso: string): string {
+  return DATE_FORMATTER.format(new Date(`${iso}T00:00:00Z`)).toUpperCase();
+}
 
 export function ResourceHub() {
+  const featured = getAllPostsSorted().slice(0, 3);
+
   return (
     <section className="py-20 lg:py-28 bg-white">
       <div className="container">
@@ -73,13 +55,13 @@ export function ResourceHub() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {featured.map((post) => (
             <Link
-              key={post.href}
-              href={post.href}
+              key={post.slug}
+              href={`/blog/${post.slug}`}
               className="group block rounded-3xl overflow-hidden bg-white border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
             >
               <div className="aspect-[4/3] bg-gradient-to-br from-mint-100 to-blue-50 relative overflow-hidden">
                 <Image
-                  src={`/images/${post.promptKey}.jpg`}
+                  src={getBlogSummaryImage(post.slug)}
                   alt={post.title}
                   fill
                   sizes="(min-width: 768px) 33vw, 100vw"
@@ -88,15 +70,15 @@ export function ResourceHub() {
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-3 text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wider">
-                  <span>{post.date}</span>
+                  <span>{formatDate(post.publishedAt)}</span>
                   <span>•</span>
-                  <span>{post.readTime}</span>
+                  <span>{post.readingTime} MIN READ</span>
                 </div>
                 <h3 className="text-lg font-bold mb-3 leading-snug group-hover:text-mint-700 transition">
                   {post.title}
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                  {post.excerpt}
+                  {post.description}
                 </p>
                 <span className="inline-flex items-center gap-1 text-sm font-semibold text-mint-700">
                   Read more
