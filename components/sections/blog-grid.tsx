@@ -1,64 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getAllPostsSorted } from "@/lib/blog/posts";
+import { getBlogSummaryImage } from "@/lib/blog/images";
 
-const posts = [
-  {
-    title: "How to Cram from a Low NBME 25 in 5 Days",
-    excerpt:
-      "A targeted approach used by 12 students who improved 15+ points in their final week.",
-    href: "/blog/cram-from-nbme-25",
-    date: "MAY 17, 2026",
-    bg: "from-blue-100 to-blue-200",
-    image: "blog-cram",
-  },
-  {
-    title: "The 7 Most Tested Topics on Step 2 CK in 2026",
-    excerpt:
-      "Based on community recall from 800+ test-takers in the past 90 days.",
-    href: "/blog/most-tested-step-2-topics",
-    date: "MAY 12, 2026",
-    bg: "from-mint-100 to-mint-200",
-    image: "blog-most-tested",
-  },
-  {
-    title: "Why Your NBME Average Lies (And What to Use Instead)",
-    excerpt:
-      "Why a simple average across NBMEs is misleading — and how to weight by recency.",
-    href: "/blog/nbme-average-lies",
-    date: "MAY 10, 2026",
-    bg: "from-yellow-100 to-yellow-200",
-    image: "blog-average-lies",
-  },
-  {
-    title: "Cheapest Step 2 Question Banks in 2026",
-    excerpt:
-      "UWorld vs AMBOSS vs Kaplan vs USMLE-Rx — pricing, value, and free trials compared.",
-    href: "/blog/cheapest-step-qbanks",
-    date: "MAY 8, 2026",
-    bg: "from-purple-100 to-purple-200",
-    image: "blog-qbanks",
-  },
-  {
-    title: "Free 120 vs Real Step 2 — Honest Difficulty Comparison",
-    excerpt:
-      "Real test-takers tell us what surprised them on test day vs the free official material.",
-    href: "/blog/free-120-vs-real",
-    date: "MAY 5, 2026",
-    bg: "from-rose-100 to-rose-200",
-    image: "blog-free-120",
-  },
-  {
-    title: "What to Do the Night Before Step 2 CK",
-    excerpt:
-      "The science (and superstition) behind exam-eve routines that work.",
-    href: "/blog/night-before-step-2",
-    date: "MAY 1, 2026",
-    bg: "from-orange-100 to-orange-200",
-    image: "blog-night-before",
-  },
-];
+const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function formatDate(iso: string): string {
+  return DATE_FORMATTER.format(new Date(`${iso}T00:00:00Z`)).toUpperCase();
+}
 
 export function BlogGrid() {
+  // ResourceHub features the top 3; show the remaining indexable posts here so
+  // the homepage never links a post that doesn't exist and never duplicates a card.
+  const posts = getAllPostsSorted().slice(3);
+
+  if (posts.length === 0) return null;
+
   return (
     <section className="py-20 lg:py-28 bg-white">
       <div className="container">
@@ -75,13 +37,13 @@ export function BlogGrid() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((p) => (
             <Link
-              key={p.href}
-              href={p.href}
+              key={p.slug}
+              href={`/blog/${p.slug}`}
               className="group block rounded-2xl overflow-hidden bg-white border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
-              <div className={`relative aspect-[16/10] bg-gradient-to-br ${p.bg} overflow-hidden`}>
+              <div className="relative aspect-[16/10] bg-gradient-to-br from-mint-100 to-blue-50 overflow-hidden">
                 <Image
-                  src={`/images/${p.image}.jpg`}
+                  src={getBlogSummaryImage(p.slug)}
                   alt={p.title}
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
@@ -90,13 +52,13 @@ export function BlogGrid() {
               </div>
               <div className="p-5">
                 <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                  {p.date}
+                  {formatDate(p.publishedAt)}
                 </div>
                 <h3 className="text-base font-bold leading-snug group-hover:text-mint-700 transition mb-2">
                   {p.title}
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  {p.excerpt}
+                  {p.description}
                 </p>
               </div>
             </Link>
