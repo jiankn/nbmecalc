@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Sparkles, FileText, ArrowRight, TrendingUp } from "lucide-react";
+import Image from "next/image";
+import { FileText, ArrowRight, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/lib/auth/use-session";
 
@@ -82,7 +83,16 @@ export default function DashboardOverview() {
           value={
             session.status === "loading" ? "…" : planLabel(user?.proTier ?? null)
           }
-          icon={<Sparkles className="h-5 w-5" />}
+          icon={
+            <Image
+              src="/images/login-score-access.webp"
+              alt=""
+              width={20}
+              height={20}
+              aria-hidden="true"
+              className="h-5 w-5 rounded-md"
+            />
+          }
           cta={isPro ? undefined : { label: "Upgrade", href: "/pricing" }}
         />
       </div>

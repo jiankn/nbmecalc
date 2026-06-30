@@ -2,8 +2,9 @@
 
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { Mail, Sparkles, AlertCircle } from "lucide-react";
+import { Mail, AlertCircle } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,9 +106,15 @@ function LoginFormInner() {
   return (
     <div className="rounded-3xl bg-white border border-gray-200 shadow-xl p-8 lg:p-10">
       <div className="text-center mb-6">
-        <div className="mx-auto h-14 w-14 rounded-2xl bg-mint-100 flex items-center justify-center mb-4">
-          <Sparkles className="h-7 w-7 text-mint-700" />
-        </div>
+        <Image
+          src="/images/login-score-access.webp"
+          alt=""
+          width={64}
+          height={64}
+          priority
+          aria-hidden="true"
+          className="mx-auto h-16 w-16 rounded-[1.15rem] mb-4"
+        />
         <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight mb-2">
           Sign in to NBMEcalc
         </h1>
