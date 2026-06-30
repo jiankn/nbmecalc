@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Logo } from "@/components/logo";
 
 const columns = [
@@ -97,9 +98,14 @@ export function Footer() {
               aria-label="Reddit r/Step2"
               className="h-10 w-10 rounded-full border border-white/15 flex items-center justify-center hover:border-white/40 hover:bg-white/10 transition"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="text-orange-500">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5.4 12.5c.1-.3.15-.6.15-.92 0-1.66-2.13-3-4.75-3-2.27 0-4.16 1-4.62 2.32-.16.4.04.86.45 1.04.4.16.86-.04 1.04-.45.18-.42 1.36-.91 3.13-.91 1.92 0 3.25.83 3.25 1.5 0 .67-1.33 1.5-3.25 1.5-1.78 0-2.95-.49-3.13-.91-.18-.41-.64-.61-1.04-.45-.41.18-.61.64-.45 1.04.46 1.32 2.35 2.32 4.62 2.32 2.62 0 4.75-1.34 4.75-3 0-.32-.05-.62-.15-.92z" />
-              </svg>
+              <Image
+                src="/images/reddit-snoo.webp"
+                alt=""
+                width={24}
+                height={24}
+                aria-hidden="true"
+                className="h-6 w-6 rounded-full"
+              />
             </a>
             <a
               href="https://x.com"
