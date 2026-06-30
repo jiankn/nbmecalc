@@ -156,15 +156,22 @@ export default function DashboardOverview() {
       {/* Upgrade nudge — hidden for Pro subscribers */}
       {!isPro && session.status !== "loading" && (
         <section className="rounded-3xl bg-gradient-to-br from-mint-500 to-mint-600 text-white p-8 lg:p-10">
-          <div className="max-w-2xl">
-            <h2 className="text-2xl lg:text-3xl font-extrabold mb-3">
-              Unlock unlimited tracking with Pro
-            </h2>
-            <p className="text-white/90 mb-6 leading-relaxed">
-              Track all three Steps, view your full timeline, and get unlimited
-              predictions. $9.99/mo, cancel anytime.
-            </p>
-            <Button variant="secondary" size="lg" className="bg-white text-mint-800 hover:bg-gray-50" asChild>
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <h2 className="text-2xl lg:text-3xl font-extrabold mb-3">
+                Unlock unlimited tracking with Pro
+              </h2>
+              <p className="text-white/90 leading-relaxed">
+                Track all three Steps, view your full timeline, and get
+                unlimited predictions. $9.99/mo, cancel anytime.
+              </p>
+            </div>
+            <Button
+              variant="secondary"
+              size="lg"
+              className="w-full bg-white text-mint-800 hover:bg-gray-50 lg:w-auto lg:shrink-0"
+              asChild
+            >
               <Link href="/pricing">View Pro plans</Link>
             </Button>
           </div>
