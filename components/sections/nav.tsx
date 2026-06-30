@@ -378,7 +378,7 @@ export function Nav() {
             )}
 
             {/* Mobile auth area — same three states, stacked. */}
-            <div className="pt-3 mt-2 border-t border-mint-600 space-y-2">
+            <div className="pt-3 mt-2 border-t border-mint-600 space-y-3">
               {session.status === "loading" && (
                 <div className="h-12 mx-2 rounded-full bg-mint-400/40 animate-pulse" />
               )}
@@ -387,17 +387,17 @@ export function Nav() {
                 <>
                   <Link
                     href={TRY_FREE_HREF}
-                    className="mx-2 flex items-center justify-center rounded-full bg-white py-3 font-semibold"
+                    className="mx-2 flex min-h-12 items-center justify-center rounded-full bg-white px-4 py-3 text-base font-semibold text-gray-950 shadow-sm transition-colors hover:bg-gray-50 active:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 focus-visible:ring-offset-mint-500"
                     onClick={() => setMobileOpen(false)}
                   >
-                    Get started
+                    Try the free predictor
                   </Link>
                   <Link
                     href="/login"
-                    className="block px-2 py-2 text-center text-sm font-semibold text-black/80"
+                    className="mx-2 flex min-h-12 items-center justify-center rounded-full border-2 border-gray-950/70 px-4 py-3 text-base font-semibold text-gray-950 transition-colors hover:bg-gray-950/10 active:bg-gray-950/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 focus-visible:ring-offset-mint-500"
                     onClick={() => setMobileOpen(false)}
                   >
-                    Already have an account? Sign in
+                    Sign in
                   </Link>
                 </>
               )}
