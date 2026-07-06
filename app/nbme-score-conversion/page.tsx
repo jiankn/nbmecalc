@@ -70,6 +70,68 @@ const step1Table = [
   { nbme: 240, passProb: 0.99, status: "Strong pass" },
 ];
 
+const formFamilySections = [
+  {
+    title: "Step 2 CK CCSSA forms 9-15",
+    intent: "Use this family for Step 2 CK score conversion and readiness checks.",
+    examples: [
+      "NBME 10 Step 2 score conversion",
+      "NBME 11 score conversion",
+      "NBME 14 score conversion",
+      "NBME 15 Step 2 CK score conversion",
+    ],
+    note:
+      "These queries belong on the conversion hub because the user job is the same: enter a recent comprehensive Step 2 practice score and understand the range.",
+    href: "/step-2-predictor",
+    cta: "Open Step 2 predictor",
+  },
+  {
+    title: "Step 1 CBSSA forms 26-32",
+    intent: "Use this family for Step 1 pass-readiness planning.",
+    examples: [
+      "NBME 28 score conversion",
+      "NBME 29 score conversion",
+      "NBME 30 score conversion",
+      "NBME 32 score calculator",
+    ],
+    note:
+      "Step 1 is pass/fail, so these searches should land on one clear explanation of pass probability rather than separate pages for each form.",
+    href: "/step-1-predictor",
+    cta: "Open Step 1 predictor",
+  },
+  {
+    title: "Step 3 CCMSA forms 5-7",
+    intent: "Use this family for Step 3 planning, especially when paired with CCS practice.",
+    examples: [
+      "NBME 6 Step 3 score conversion",
+      "Step 3 NBME score conversion",
+      "NBME Step 3 score conversion",
+    ],
+    note:
+      "Step 3 search demand is smaller and should strengthen the Step 3 predictor, not become a separate conversion-page cluster.",
+    href: "/step-3-predictor",
+    cta: "Open Step 3 predictor",
+  },
+];
+
+const conversionHubLinks = [
+  {
+    href: "/free-120-predictor",
+    title: "Free 120 score conversion",
+    desc: "Convert percent correct and compare it with a recent NBME or UWSA.",
+  },
+  {
+    href: "/nbme-score-calculator",
+    title: "NBME score calculator",
+    desc: "Use the full calculator flow when you have several practice inputs.",
+  },
+  {
+    href: "/cms-converter",
+    title: "CMS form conversion",
+    desc: "Use subject forms to investigate weak rotations before a comprehensive retest.",
+  },
+];
+
 const faqs = [
   {
     q: "How accurate is NBME score conversion?",
@@ -173,6 +235,58 @@ export default function NbmeScoreConversionPage() {
           </div>
         </div>
         <Calculator />
+      </section>
+
+      <section className="py-16 lg:py-20 bg-white border-b border-gray-200">
+        <div className="container max-w-5xl">
+          <div className="mb-8">
+            <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
+              Find the right NBME form family
+            </h2>
+            <p className="text-gray-600 text-lg max-w-3xl">
+              NBME form numbers are not interchangeable across Step exams.
+              Search queries like &quot;NBME 32 score conversion&quot; and &quot;NBME 10
+              Step 2 score conversion&quot; should be answered here as form-family
+              guidance, not split into thin single-form pages.
+            </p>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-3">
+            {formFamilySections.map((section) => (
+              <div
+                key={section.title}
+                className="rounded-2xl border border-gray-200 bg-white p-5"
+              >
+                <h3 className="text-xl font-extrabold text-gray-950 mb-2">
+                  {section.title}
+                </h3>
+                <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                  {section.intent}
+                </p>
+                <div className="text-xs font-bold uppercase tracking-wide text-gray-500 mb-2">
+                  Common searches
+                </div>
+                <ul className="space-y-2 text-sm text-gray-700 mb-4">
+                  {section.examples.map((example) => (
+                    <li key={example} className="flex gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-mint-600 shrink-0" />
+                      <span>{example}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                  {section.note}
+                </p>
+                <Link
+                  href={section.href}
+                  className="text-sm font-bold text-mint-700 underline"
+                >
+                  {section.cta}
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Step 2 CK conversion table */}
@@ -361,6 +475,31 @@ export default function NbmeScoreConversionPage() {
             All adjustments are baked into <Link href="#calculator" className="text-mint-700 font-semibold underline">our calculator</Link>.
             You only need to enter the raw score.
           </p>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-20 bg-mint-50/40">
+        <div className="container max-w-5xl">
+          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
+            Related conversion calculators
+          </h2>
+          <p className="text-gray-600 text-lg max-w-3xl mb-8">
+            A single NBME is useful, but the forecast improves when recent
+            inputs agree. These related pages cover the other conversion
+            searches that showed up in Search Console.
+          </p>
+          <div className="grid gap-4 md:grid-cols-3">
+            {conversionHubLinks.map((tool) => (
+              <Link
+                key={tool.href}
+                href={tool.href}
+                className="rounded-2xl border border-gray-200 bg-white p-5 hover:border-mint-400 hover:shadow-md transition"
+              >
+                <div className="font-bold text-gray-950 mb-1">{tool.title}</div>
+                <div className="text-sm text-gray-600">{tool.desc}</div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

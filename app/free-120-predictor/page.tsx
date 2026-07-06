@@ -14,8 +14,10 @@ export const metadata: Metadata = {
     "free 120 step 2 score conversion",
     "step 2 free 120 score conversion",
     "free 120 score conversion",
+    "free120 score converter",
     "free 120 predictor",
     "free 120 score calculator",
+    "free 120 score converter step 2",
     "free 120 to step 2",
   ],
   alternates: { canonical: "https://nbmecalc.com/free-120-predictor" },
@@ -50,6 +52,10 @@ const conversionTable = [
 
 const faqs = [
   {
+    q: "What is the Free 120 score converter for Step 2?",
+    a: "It is an independent calculator that turns your Free 120 percent correct into a Step 2 CK planning estimate. It is not an official USMLE or NBME conversion table, so use the estimate together with a recent comprehensive self-assessment.",
+  },
+  {
     q: "How predictive is Free 120 for Step 2 CK?",
     a: "Free 120 is a useful late-stage readiness signal because its format and content outline resemble the live exam. It is still one assessment, so combine it with a recent CCSSA or UWSA and use the full predicted range.",
   },
@@ -59,7 +65,7 @@ const faqs = [
   },
   {
     q: "When should I take Free 120?",
-    a: "Within 5-7 days of your test date. Earlier is fine but the predictive power decays. Taking it cold 2 weeks out gives the best signal of test-day readiness.",
+    a: "Most students get the cleanest planning signal inside the final 1-2 weeks. Earlier can still be useful for pacing practice, but the score becomes less tied to test-day readiness as more study time remains.",
   },
   {
     q: "What Free 120 percentage equals a 250 Step 2 CK?",
@@ -68,6 +74,35 @@ const faqs = [
   {
     q: "Does Free 120 also predict Step 1?",
     a: "Yes for Step 1 candidates — there is a separate Step 1 Free 120. Use the Step 1 selector in the calculator below.",
+  },
+  {
+    q: "Should I use an older 2019 Free 120 conversion chart?",
+    a: "Older charts can be useful as rough context, but they may reflect older item sets and student samples. Prefer a current percent-correct estimate and compare it with your latest CCSSA or UWSA before making test-day decisions.",
+  },
+];
+
+const forecastSteps = [
+  "Use your raw percent correct, not a rounded block average if you have the total.",
+  "Enter Free 120 as one input in the calculator, then add a recent CCSSA or UWSA.",
+  "Compare the midpoint with the confidence interval before changing your test date.",
+  "If Free 120 and your latest NBME disagree by more than 8-10 points, trust the range and investigate why.",
+];
+
+const relatedTools = [
+  {
+    href: "/nbme-score-conversion",
+    title: "NBME score conversion",
+    desc: "Convert recent CCSSA or CBSSA results and compare them with Free 120.",
+  },
+  {
+    href: "/step-2-predictor",
+    title: "Step 2 CK predictor",
+    desc: "Combine NBME, UWSA, Free 120, AMBOSS, and CMS inputs in one forecast.",
+  },
+  {
+    href: "/cms-converter",
+    title: "CMS form converter",
+    desc: "Use subject forms to diagnose weak rotations before a comprehensive retest.",
   },
 ];
 
@@ -115,7 +150,7 @@ export default function Free120PredictorPage() {
       <section id="calculator" className="py-12 bg-mint-50/30 border-b border-gray-200">
         <div className="container max-w-3xl mb-6">
           <h2 className="text-2xl lg:text-3xl font-extrabold mb-2">
-            Convert Free 120 % to a Step 2 CK estimate
+            Convert Free 120 percent to a Step 2 CK estimate
           </h2>
           <p className="text-gray-600">
             Pick your Step exam, then choose <strong>Free 120</strong> as the
@@ -123,6 +158,45 @@ export default function Free120PredictorPage() {
           </p>
         </div>
         <Calculator defaultStep="step2" />
+      </section>
+
+      <section className="py-14 lg:py-16 bg-white border-b border-gray-200">
+        <div className="container max-w-4xl">
+          <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+            <div>
+              <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-4">
+                Free 120 score conversion: the quick answer
+              </h2>
+              <div className="space-y-4 text-gray-700 leading-relaxed">
+                <p>
+                  A Free 120 score conversion is a planning estimate from
+                  percent correct to a Step score range. It should answer one
+                  question: does your official-style sample exam agree with
+                  the rest of your practice data?
+                </p>
+                <p>
+                  For Step 2 CK, the high-intent query is usually{" "}
+                  <strong>free 120 step 2 score conversion</strong>. That
+                  belongs on this calculator page, because students searching
+                  it want the tool first and the caveats immediately after.
+                </p>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-mint-200 bg-mint-50 p-5">
+              <div className="text-sm font-bold uppercase tracking-wide text-mint-800 mb-3">
+                Use this page when
+              </div>
+              <ul className="space-y-3 text-sm text-gray-700">
+                {forecastSteps.map((step) => (
+                  <li key={step} className="flex gap-2">
+                    <span className="mt-1 h-2 w-2 rounded-full bg-mint-600 shrink-0" />
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="py-16 lg:py-20 bg-white">
@@ -184,6 +258,31 @@ export default function Free120PredictorPage() {
             <li>Investigate large disagreements between recent practice results</li>
             <li>Plan from the confidence interval rather than the midpoint alone</li>
           </ul>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-20 bg-white">
+        <div className="container max-w-4xl">
+          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
+            Related score conversion tools
+          </h2>
+          <p className="text-gray-600 text-lg mb-8">
+            Free 120 is strongest when it agrees with another recent input.
+            Use these pages to check whether your forecast is internally
+            consistent.
+          </p>
+          <div className="grid gap-4 md:grid-cols-3">
+            {relatedTools.map((tool) => (
+              <Link
+                key={tool.href}
+                href={tool.href}
+                className="rounded-2xl border border-gray-200 bg-white p-5 hover:border-mint-400 hover:shadow-md transition"
+              >
+                <div className="font-bold text-gray-950 mb-1">{tool.title}</div>
+                <div className="text-sm text-gray-600">{tool.desc}</div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

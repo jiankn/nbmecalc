@@ -13,6 +13,10 @@ export const metadata: Metadata = {
   keywords: [
     "cms form score conversion",
     "cms score conversion",
+    "cms forms score conversion",
+    "cms form score conversion pdf",
+    "nbme cms score conversion",
+    "how to calculate cms form score",
     "nbme cms forms",
     "cms exams",
     "cms form to step",
@@ -57,12 +61,49 @@ const faqs = [
     a: "Not directly. CMS forms are subject-focused and should not replace a comprehensive CCSSA. Combine CMS results with a recent CCSSA, UWSA, or Free 120 when estimating overall Step 2 CK readiness.",
   },
   {
+    q: "How do I calculate a CMS form score from the PDF report?",
+    a: "Use the score or percent-correct value shown in the official report, then enter it as a CMS Form input in the calculator. The result should be treated as a subject-level planning signal, not a direct Step 2 CK score.",
+  },
+  {
     q: "What CMS Form percentage maps to a 250 Step 2 CK?",
-    a: "Roughly 70-75% across multiple CMS forms correlates with a Step 2 CK in the 245-255 range, assuming the test was taken within 4 weeks of your real exam.",
+    a: "There is no official one-to-one CMS-to-Step 2 conversion. Scores in the low-to-mid 70s across multiple CMS subjects are generally a strong subject-level signal, but you still need a recent comprehensive form to estimate an overall Step 2 CK score.",
   },
   {
     q: "Are CMS Forms worth taking if I am studying for Step 2 CK directly?",
     a: "They can help investigate a suspected weak subject. Choose the matching subject form, review the official performance feedback, and use the result to guide targeted study rather than treating it as a direct Step 2 CK score.",
+  },
+];
+
+const cmsPdfSteps = [
+  {
+    title: "Open the official CMS PDF or score report",
+    body: "Find the subject, form, and reported score. Do not mix a Medicine CMS form with a Surgery or Pediatrics form.",
+  },
+  {
+    title: "Use the native score first",
+    body: "If the report gives a 3-digit equated score, enter that. If it only gives percent correct, enter the percentage and keep the uncertainty wider.",
+  },
+  {
+    title: "Compare against a comprehensive form",
+    body: "A CMS result explains a weak subject. A CCSSA, UWSA, or Free 120 result is still needed for overall Step 2 CK readiness.",
+  },
+];
+
+const cmsRelatedTools = [
+  {
+    href: "/nbme-score-conversion",
+    title: "NBME score conversion",
+    desc: "Use comprehensive CCSSA or CBSSA forms for overall readiness.",
+  },
+  {
+    href: "/free-120-predictor",
+    title: "Free 120 score conversion",
+    desc: "Check whether your late-stage official-style sample agrees with CMS signals.",
+  },
+  {
+    href: "/step-2-predictor",
+    title: "Step 2 CK predictor",
+    desc: "Combine CMS, NBME, UWSA, Free 120, and AMBOSS inputs in one forecast.",
   },
 ];
 
@@ -160,6 +201,37 @@ export default function CmsConverterPage() {
         </div>
       </section>
 
+      <section className="py-16 lg:py-20 bg-white border-b border-gray-200">
+        <div className="container max-w-4xl">
+          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
+            How to calculate a CMS form score from your PDF
+          </h2>
+          <p className="text-gray-600 text-lg mb-8">
+            Search Console showed demand for &quot;CMS form score conversion PDF&quot;
+            and &quot;how to calculate CMS form score.&quot; The important distinction:
+            a CMS PDF helps diagnose one subject, while comprehensive Step 2
+            readiness still needs a broader assessment.
+          </p>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {cmsPdfSteps.map((step, index) => (
+              <div
+                key={step.title}
+                className="rounded-2xl border border-gray-200 bg-white p-5"
+              >
+                <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-full bg-mint-100 text-sm font-extrabold text-mint-800">
+                  {index + 1}
+                </div>
+                <h3 className="font-bold text-gray-950 mb-2">{step.title}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {step.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 lg:py-20 bg-mint-50/40">
         <div className="container max-w-3xl">
           <div className="flex items-center gap-3 mb-4">
@@ -209,6 +281,30 @@ export default function CmsConverterPage() {
                 </summary>
                 <p className="mt-3 text-gray-700 leading-relaxed text-sm">{f.a}</p>
               </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-20 bg-mint-50/40">
+        <div className="container max-w-4xl">
+          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
+            Related Step 2 conversion tools
+          </h2>
+          <p className="text-gray-600 text-lg mb-8">
+            CMS forms are best used as subject-level evidence. Use these pages
+            when you need a comprehensive forecast or a late-stage check.
+          </p>
+          <div className="grid gap-4 md:grid-cols-3">
+            {cmsRelatedTools.map((tool) => (
+              <Link
+                key={tool.href}
+                href={tool.href}
+                className="rounded-2xl border border-gray-200 bg-white p-5 hover:border-mint-400 hover:shadow-md transition"
+              >
+                <div className="font-bold text-gray-950 mb-1">{tool.title}</div>
+                <div className="text-sm text-gray-600">{tool.desc}</div>
+              </Link>
             ))}
           </div>
         </div>
