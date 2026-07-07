@@ -23,7 +23,7 @@ const columns = [
       { label: "Methodology & Sources", href: "/methodology" },
       { label: "UWSA 1 → Step 1", href: "/uwsa-1-to-step-1" },
       { label: "UWSA 2 → Step 2", href: "/uwsa-2-to-step-2" },
-      { label: "Study Plans", href: "/blog/category/study-plans" },
+      { label: "Step 2 High-Yield Topics", href: "/blog/most-tested-topics-step-2-ck" },
       { label: "Blog", href: "/blog" },
       { label: "FAQ", href: "/#faq" },
     ],
