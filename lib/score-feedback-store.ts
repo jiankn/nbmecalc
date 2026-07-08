@@ -1,7 +1,12 @@
 import { eq } from "drizzle-orm";
 import type { Db } from "@/lib/db/client";
-import { events, reports, scoreReports } from "@/lib/db/schema";
-import { loadReportFromSession } from "@/lib/session-report";
+import {
+  events,
+  reports,
+  scoreReports,
+  type ScoreReportRow,
+} from "@/lib/db/schema";
+import { loadReportFromSession, type ReportData } from "@/lib/session-report";
 import type { StepKind } from "@/lib/data";
 import {
   estimateScoreReleaseDate,
@@ -33,33 +38,25 @@ export async function loadScoreFeedbackRecord(
   db: Db,
   sessionId: string
 ): Promise<ScoreFeedbackLoadResult> {
+  const existing = await findScoreReport(db, sessionId);
+  const stored = existing ? feedbackDataFromScoreReport(existing) : null;
+  if (stored) {
+    return {
+      status: "ok",
+      record: recordFromFeedbackData(sessionId, stored, existing),
+    };
+  }
+
   const loaded = await loadReportFromSession(sessionId);
   if (loaded.status !== "ok") return { status: loaded.status };
 
-  const existing = await db
-    .select()
-    .from(scoreReports)
-    .where(eq(scoreReports.stripeSessionId, sessionId))
-    .limit(1);
-
-  const row = existing[0];
-  const data = loaded.data;
   return {
     status: "ok",
-    record: {
+    record: recordFromFeedbackData(
       sessionId,
-      step: data.step,
-      predictedScore: data.result.pointEstimate,
-      ciLower: data.result.ciLower,
-      ciUpper: data.result.ciUpper,
-      passProbability: data.result.passProbability,
-      examDate: row?.examDate ?? null,
-      scoreReleaseDate: row?.scoreReleaseDate ?? null,
-      submittedAt: row?.submittedAt ?? null,
-      actualScore: row?.actualScore ?? null,
-      passFail: row?.passFail ?? null,
-      scoreBand: row?.scoreBand ?? null,
-    },
+      feedbackDataFromReportData(loaded.data),
+      existing
+    ),
   };
 }
 
@@ -158,10 +155,14 @@ export async function submitScoreFeedback(args: {
   userAgent: string | null;
   source: string;
 }): Promise<ScoreFeedbackLoadResult> {
-  const loaded = await loadReportFromSession(args.sessionId);
-  if (loaded.status !== "ok") return { status: loaded.status };
+  const existing = await findScoreReport(args.db, args.sessionId);
+  let data = existing ? feedbackDataFromScoreReport(existing) : null;
+  if (!data) {
+    const loaded = await loadReportFromSession(args.sessionId);
+    if (loaded.status !== "ok") return { status: loaded.status };
+    data = feedbackDataFromReportData(loaded.data);
+  }
 
-  const data = loaded.data;
   const now = Date.now();
   const reportRow = await findReport(args.db, args.sessionId);
   const actionOutcome = args.action ? outcomeFromAction(args.action) : null;
@@ -174,22 +175,16 @@ export async function submitScoreFeedback(args: {
   const scoreBand = scoreOutcome?.scoreBand ?? actionOutcome?.scoreBand ?? null;
   if (!passFail) return { status: "needs_inputs" };
 
-  const existing = await args.db
-    .select({ id: scoreReports.id })
-    .from(scoreReports)
-    .where(eq(scoreReports.stripeSessionId, args.sessionId))
-    .limit(1);
-
   const values = {
-    reportId: reportRow?.id ?? null,
+    reportId: reportRow?.id ?? existing?.reportId ?? null,
     predictionId: data.predictionId ?? reportRow?.predictionId ?? null,
-    userId: reportRow?.userId ?? null,
-    email: data.customerEmail ?? reportRow?.customerEmail ?? null,
+    userId: reportRow?.userId ?? existing?.userId ?? null,
+    email: data.customerEmail ?? reportRow?.customerEmail ?? existing?.email ?? null,
     step: data.step,
-    predictedScore: data.result.pointEstimate,
-    ciLower: data.result.ciLower,
-    ciUpper: data.result.ciUpper,
-    passProbability: data.result.passProbability,
+    predictedScore: data.predictedScore,
+    ciLower: data.ciLower,
+    ciUpper: data.ciUpper,
+    passProbability: data.passProbability,
     actualScore: args.actualScore ?? null,
     passFail,
     scoreBand,
@@ -202,11 +197,11 @@ export async function submitScoreFeedback(args: {
     updatedAt: now,
   };
 
-  if (existing[0]) {
+  if (existing) {
     await args.db
       .update(scoreReports)
       .set(values)
-      .where(eq(scoreReports.id, existing[0].id));
+      .where(eq(scoreReports.id, existing.id));
   } else {
     await args.db.insert(scoreReports).values({
       id: crypto.randomUUID(),
@@ -240,6 +235,82 @@ export async function submitScoreFeedback(args: {
   });
 
   return loadScoreFeedbackRecord(args.db, args.sessionId);
+}
+
+interface ScoreFeedbackData {
+  step: StepKind;
+  predictedScore: number;
+  ciLower: number;
+  ciUpper: number;
+  passProbability: number;
+  predictionId?: string | null;
+  customerEmail?: string | null;
+}
+
+function feedbackDataFromReportData(data: ReportData): ScoreFeedbackData {
+  return {
+    step: data.step,
+    predictedScore: data.result.pointEstimate,
+    ciLower: data.result.ciLower,
+    ciUpper: data.result.ciUpper,
+    passProbability: data.result.passProbability,
+    predictionId: data.predictionId,
+    customerEmail: data.customerEmail,
+  };
+}
+
+function feedbackDataFromScoreReport(
+  row: ScoreReportRow
+): ScoreFeedbackData | null {
+  if (
+    !row.step ||
+    typeof row.predictedScore !== "number" ||
+    typeof row.ciLower !== "number" ||
+    typeof row.ciUpper !== "number" ||
+    typeof row.passProbability !== "number"
+  ) {
+    return null;
+  }
+
+  return {
+    step: row.step,
+    predictedScore: row.predictedScore,
+    ciLower: row.ciLower,
+    ciUpper: row.ciUpper,
+    passProbability: row.passProbability,
+    predictionId: row.predictionId,
+    customerEmail: row.email,
+  };
+}
+
+function recordFromFeedbackData(
+  sessionId: string,
+  data: ScoreFeedbackData,
+  row: ScoreReportRow | null
+): ScoreFeedbackRecordView {
+  return {
+    sessionId,
+    step: data.step,
+    predictedScore: data.predictedScore,
+    ciLower: data.ciLower,
+    ciUpper: data.ciUpper,
+    passProbability: data.passProbability,
+    examDate: row?.examDate ?? null,
+    scoreReleaseDate: row?.scoreReleaseDate ?? null,
+    submittedAt: row?.submittedAt ?? null,
+    actualScore: row?.actualScore ?? null,
+    passFail: row?.passFail ?? null,
+    scoreBand: row?.scoreBand ?? null,
+  };
+}
+
+async function findScoreReport(db: Db, sessionId: string) {
+  const rows = await db
+    .select()
+    .from(scoreReports)
+    .where(eq(scoreReports.stripeSessionId, sessionId))
+    .limit(1);
+  return rows[0] ?? null;
 }
 
 async function findReport(db: Db, sessionId: string) {
