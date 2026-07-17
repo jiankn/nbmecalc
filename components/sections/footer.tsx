@@ -21,6 +21,7 @@ const columns = [
       { label: "NBME Score Calculator", href: "/nbme-score-calculator" },
       { label: "NBME Forms Guide", href: "/nbme-calculator" },
       { label: "Methodology & Sources", href: "/methodology" },
+      { label: "For Educators & Libraries", href: "/educators" },
       { label: "UWSA 1 → Step 1", href: "/uwsa-1-to-step-1" },
       { label: "UWSA 2 → Step 2", href: "/uwsa-2-to-step-2" },
       { label: "Step 2 High-Yield Topics", href: "/blog/most-tested-topics-step-2-ck" },

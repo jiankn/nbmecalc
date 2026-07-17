@@ -388,6 +388,19 @@ export default function MethodologyPage() {
               </div>
             </dl>
           </div>
+          <div className="mt-8 flex flex-col items-start justify-between gap-4 border-t border-mint-200 pt-6 sm:flex-row sm:items-center">
+            <p className="max-w-2xl text-sm leading-relaxed text-gray-700">
+              Reviewing NBMEcalc for a library guide, course, or academic
+              support program?
+            </p>
+            <Link
+              href="/educators"
+              className="inline-flex items-center gap-2 font-semibold text-mint-700 underline underline-offset-4 hover:text-mint-900"
+            >
+              Open the institutional review page
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </section>
 

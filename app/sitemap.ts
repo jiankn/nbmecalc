@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // meaningful <lastmod> signal.
   const now = new Date("2026-06-28");
   const seoContentUpdate = new Date("2026-07-07");
+  const educatorResourceUpdate = new Date("2026-07-17");
 
   const liveRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
@@ -30,6 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/methodology`, lastModified: now, changeFrequency: "monthly", priority: 0.65 },
+    { url: `${SITE_URL}/educators`, lastModified: educatorResourceUpdate, changeFrequency: "monthly", priority: 0.6 },
 
     // Secondary SEO predictors
     { url: `${SITE_URL}/uwsa-1-to-step-1`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
