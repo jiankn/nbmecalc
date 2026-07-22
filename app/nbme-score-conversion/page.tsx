@@ -121,7 +121,7 @@ const conversionHubLinks = [
     desc: "Convert percent correct and compare it with a recent NBME or UWSA.",
   },
   {
-    href: "/nbme-score-calculator",
+    href: "/",
     title: "NBME score calculator",
     desc: "Use the full calculator flow when you have several practice inputs.",
   },
@@ -585,7 +585,7 @@ export default function NbmeScoreConversionPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               {
-                href: "/nbme-score-calculator",
+                href: "/",
                 title: "NBME Calculator",
                 desc: "The full interactive tool with PDF report.",
               },

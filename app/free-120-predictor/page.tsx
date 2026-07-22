@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Free 120 Step 2 Score Conversion Calculator | NBMEcalc",
   description:
-    "Convert Free 120 percent correct into an independent Step 2 CK score estimate. Includes a conversion table, calculator, and confidence interval.",
+    "Compare current, 2021, and 2019 Free 120 versions, then convert percent correct into an independent Step 2 CK estimate with a confidence interval.",
   keywords: [
     "free 120 step 2 score conversion",
     "step 2 free 120 score conversion",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Free 120 Step 2 Score Conversion Calculator",
     description:
-      "Convert Free 120 percentage into an independent Step 2 CK estimate with a confidence interval.",
+      "Compare current, 2021, and 2019 Free 120 versions, then calculate an independent Step 2 CK estimate with a confidence interval.",
     url: "https://nbmecalc.com/free-120-predictor",
     type: "website",
     images: [
@@ -76,8 +76,8 @@ const faqs = [
     a: "Yes for Step 1 candidates — there is a separate Step 1 Free 120. Use the Step 1 selector in the calculator below.",
   },
   {
-    q: "Should I use an older 2019 Free 120 conversion chart?",
-    a: "Older charts can be useful as rough context, but they may reflect older item sets and student samples. Prefer a current percent-correct estimate and compare it with your latest CCSSA or UWSA before making test-day decisions.",
+    q: "What is the difference between the current, 2021, and 2019 Free 120?",
+    a: "The current official material is the best match for today's Step 2 CK format. The 2021 set is an older 120-question booklet, while the 2019 set predates the November 2020 content-distribution change that increased systems-based practice, patient safety, legal/ethical issues, and professionalism. Use older sets for extra practice, not as interchangeable score predictors.",
   },
 ];
 
@@ -103,6 +103,36 @@ const relatedTools = [
     href: "/cms-converter",
     title: "CMS form converter",
     desc: "Use subject forms to diagnose weak rotations before a comprehensive retest.",
+  },
+];
+
+const free120Versions = [
+  {
+    version: "Current official material",
+    status: "Recommended",
+    statusClass: "bg-mint-100 text-mint-800",
+    context:
+      "The sample questions and interactive testing experience currently linked by USMLE. The items were refreshed in 2023, and the testing interface was updated for Step 2 CK in May 2026.",
+    use:
+      "Use this set for your primary late-stage check. Enter its raw percent correct in the calculator and compare the result with a recent CCSSA or UWSA.",
+  },
+  {
+    version: "2021 Free 120",
+    status: "Archived set",
+    statusClass: "bg-amber-100 text-amber-800",
+    context:
+      "An older official booklet containing 120 questions. It predates the 2023 sample-item refresh and the 2026 testing-interface update.",
+    use:
+      "Use it for additional official-style practice or historical comparison. Do not assume the same percentage has the same meaning as on the current set.",
+  },
+  {
+    version: "2019 Free 120",
+    status: "Legacy set",
+    statusClass: "bg-gray-100 text-gray-700",
+    context:
+      "The oldest commonly referenced set. It predates the November 2020 Step 2 CK content-distribution change affecting systems-based practice, patient safety, ethics, and professionalism.",
+    use:
+      "Use it as older official-style practice, not a current score forecast. Its content distribution is the least current of these three sets.",
   },
 ];
 
@@ -180,6 +210,14 @@ export default function Free120PredictorPage() {
                   belongs on this calculator page, because students searching
                   it want the tool first and the caveats immediately after.
                 </p>
+                <p>
+                  For a multi-exam forecast, add your percentage to the{" "}
+                  <Link href="/" className="font-semibold text-mint-700 underline underline-offset-4">
+                    free NBME score calculator
+                  </Link>{" "}
+                  alongside a recent CCSSA or UWSA instead of treating Free 120
+                  as a standalone prediction.
+                </p>
               </div>
             </div>
             <div className="rounded-2xl border border-mint-200 bg-mint-50 p-5">
@@ -195,6 +233,67 @@ export default function Free120PredictorPage() {
                 ))}
               </ul>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-20 bg-mint-50/40 border-b border-gray-200">
+        <div className="container max-w-5xl">
+          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
+            Current vs 2021 vs 2019 Free 120
+          </h2>
+          <p className="text-gray-700 text-lg leading-relaxed mb-3 max-w-4xl">
+            These year labels are informal names students use for different
+            official question sets. USMLE presents the latest material as its
+            current sample test rather than publishing an official conversion
+            curve for each year.
+          </p>
+          <p className="text-gray-600 leading-relaxed mb-8 max-w-4xl">
+            Version matters because identical percentages from different item
+            sets are not interchangeable. The calculator on this page is
+            intended for the current official material; treat an estimate from
+            an older set as rough context only.
+          </p>
+
+          <div className="overflow-x-auto rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <table className="min-w-[760px] w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="text-left px-5 py-3 font-bold text-gray-900">Version</th>
+                  <th className="text-left px-5 py-3 font-bold text-gray-900">What it represents</th>
+                  <th className="text-left px-5 py-3 font-bold text-gray-900">How to use it</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {free120Versions.map((item) => (
+                  <tr key={item.version} className="align-top">
+                    <td className="px-5 py-5 w-48">
+                      <div className="font-bold text-gray-950 mb-2">{item.version}</div>
+                      <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold ${item.statusClass}`}>
+                        {item.status}
+                      </span>
+                    </td>
+                    <td className="px-5 py-5 text-gray-700 leading-relaxed">{item.context}</td>
+                    <td className="px-5 py-5 text-gray-700 leading-relaxed">{item.use}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-950 leading-relaxed">
+            <strong>Important:</strong> USMLE does not publish an official
+            Free 120 percentage-to-Step 2 CK score conversion. Always download
+            the latest questions from the{" "}
+            <a
+              href="https://www.usmle.org/exam-resources/step-2-ck-materials/step-2-ck-sample-test-questions"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold underline underline-offset-4"
+            >
+              official Step 2 CK sample-test page
+            </a>
+            .
           </div>
         </div>
       </section>

@@ -258,7 +258,13 @@ export default function CmsConverterPage() {
               <strong>Recommended workflow:</strong> start with the content
               areas in your official comprehensive score report, choose the
               matching CMS subject, review the explanations, and then confirm
-              progress with a fresh comprehensive assessment.
+              progress with a fresh comprehensive assessment. When you have
+              results from more than one source, add them to the{" "}
+              <Link href="/" className="font-semibold text-mint-700 underline underline-offset-4">
+                NBME score calculator
+              </Link>{" "}
+              for a combined forecast instead of projecting one CMS subject
+              score across the whole exam.
             </p>
           </div>
         </div>
