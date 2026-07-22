@@ -11,15 +11,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Update only when search-visible content changes; build time is not a
   // meaningful <lastmod> signal.
   const now = new Date("2026-06-28");
+  const homepageUpdate = new Date("2026-07-22");
   const seoContentUpdate = new Date("2026-07-07");
+  const free120CmsUpdate = new Date("2026-07-22");
   const educatorResourceUpdate = new Date("2026-07-17");
 
   const liveRoutes: MetadataRoute.Sitemap = [
-    { url: SITE_URL, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
+    { url: SITE_URL, lastModified: homepageUpdate, changeFrequency: "weekly", priority: 1.0 },
 
     // Core SEO landing pages
     { url: `${SITE_URL}/nbme-score-conversion`, lastModified: seoContentUpdate, changeFrequency: "weekly", priority: 0.95 },
-    { url: `${SITE_URL}/nbme-score-calculator`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/nbme-calculator`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/step-1-predictor`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-2-predictor`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
@@ -36,9 +37,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Secondary SEO predictors
     { url: `${SITE_URL}/uwsa-1-to-step-1`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/uwsa-2-to-step-2`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${SITE_URL}/free-120-predictor`, lastModified: seoContentUpdate, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${SITE_URL}/free-120-predictor`, lastModified: free120CmsUpdate, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/amboss-converter`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${SITE_URL}/cms-converter`, lastModified: seoContentUpdate, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${SITE_URL}/cms-converter`, lastModified: free120CmsUpdate, changeFrequency: "weekly", priority: 0.8 },
 
     // Comparison pages
     { url: `${SITE_URL}/compare/best-usmle-score-predictor`, lastModified: now, changeFrequency: "monthly", priority: 0.75 },

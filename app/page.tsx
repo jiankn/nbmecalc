@@ -16,7 +16,7 @@ import { BlogGrid } from "@/components/sections/blog-grid";
 import { Footer } from "@/components/sections/footer";
 import { CookieBanner } from "@/components/sections/cookie-banner";
 
-const homeTitle = "NBME Score Calculator & USMLE Step Predictor | NBMEcalc";
+const homeTitle = "Free NBME Score Calculator for USMLE Step Scores | NBMEcalc";
 const homeDescription =
   "Free NBME score calculator and USMLE Step predictor. Convert NBME, UWSA, Free 120, AMBOSS, and CMS scores into a Step 1, Step 2 CK, or Step 3 prediction with confidence intervals.";
 

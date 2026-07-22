@@ -7,6 +7,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/nbme-score-calculator",
+        destination: "/",
+        statusCode: 301,
+      },
+      {
         source: "/nbme-:number(28|29|30|31|32)-conversion",
         destination: "/nbme-score-conversion",
         permanent: true,

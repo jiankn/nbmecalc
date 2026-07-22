@@ -54,9 +54,9 @@ export function Hero() {
 
           {/* H1 */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight text-black text-balance">
-            Predict Your USMLE
+            NBME Score Calculator —
             <br />
-            Step Score in 5 Seconds
+            Predict Your Step Score in 5 Seconds
           </h1>
 
           {/* Sub */}

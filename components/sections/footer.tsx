@@ -18,7 +18,7 @@ const columns = [
     title: "Resources",
     links: [
       { label: "NBME Score Conversion", href: "/nbme-score-conversion" },
-      { label: "NBME Score Calculator", href: "/nbme-score-calculator" },
+      { label: "NBME Score Calculator", href: "/" },
       { label: "NBME Forms Guide", href: "/nbme-calculator" },
       { label: "Methodology & Sources", href: "/methodology" },
       { label: "For Educators & Libraries", href: "/educators" },
