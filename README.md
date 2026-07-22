@@ -1,6 +1,20 @@
-# nbmecalc.com
+# NBMEcalc — Free NBME Score Calculator
 
-Free USMLE Step score predictor. Drop your NBME, UWSA, Free 120, AMBOSS, or CMS scores — get an accurate Step prediction with a 95% confidence interval.
+**[Use the free NBME Score Calculator →](https://nbmecalc.com)**
+
+NBMEcalc is a free USMLE Step score predictor for combining NBME, UWSA,
+Free 120, AMBOSS, and CMS results. It returns an independent planning estimate
+with a 95% confidence interval instead of presenting a single score as certain.
+
+## Live Tools
+
+- [Free NBME Score Calculator](https://nbmecalc.com) — combine multiple practice exams in one Step score forecast.
+- [NBME Score Conversion Calculator and Chart](https://nbmecalc.com/nbme-score-conversion) — review current CCSSA and CBSSA form families.
+- [Free 120 Step 2 Score Conversion](https://nbmecalc.com/free-120-predictor) — compare current, 2021, and 2019 Free 120 versions.
+- [CMS Form Score Conversion](https://nbmecalc.com/cms-converter) — use subject-form results to investigate weak rotations.
+
+NBMEcalc is an independent educational tool and is not affiliated with or
+endorsed by NBME, FSMB, or USMLE.
 
 ## Tech Stack
 
@@ -203,7 +217,7 @@ Use Cloudflare secret variables for `POSTAL_API_KEY`. Keep `SMTP_FROM` aligned w
 |---|---|---|
 | nbme score converter | 880 | `/nbme-score-conversion` |
 | nbme score conversion | 880 | `/nbme-score-conversion` |
-| nbme score calculator | 480 | `/nbme-score-calculator` |
+| nbme score calculator | 480 | `/` |
 | step 2 score predictor | 480 | `/step-2-predictor` |
 | free 120 step 2 score conversion | 480 | `/free-120-predictor` |
 | step 3 score predictor | 320 | `/step-3-predictor` |
