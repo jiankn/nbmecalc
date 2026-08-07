@@ -14,7 +14,7 @@ const steps = [
   {
     number: "3",
     title: "Get Your Range",
-    body: "See your point estimate and 95% confidence interval instantly. Unlock the full PDF — sit-or-postpone call, 3 highest-leverage moves, cohort mirror — for $14.99.",
+    body: "See your point estimate and estimated planning range instantly. Unlock the full PDF — source notes, readiness questions, and 3 highest-leverage moves — for $14.99.",
   },
 ];
 

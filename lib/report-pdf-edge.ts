@@ -159,7 +159,7 @@ export function createReportPdf(data: ReportData): Uint8Array {
 
   writer.subheading("Headline Prediction");
   writer.keyValue(`Predicted ${stepLabel}`, String(result.pointEstimate));
-  writer.keyValue("95% confidence interval", `${result.ciLower}-${result.ciUpper}`);
+  writer.keyValue("Estimated planning range", `${result.ciLower}-${result.ciUpper}`);
   writer.keyValue("Pass probability", formatPct(result.passProbability));
   writer.keyValue("Margin vs pass threshold", `${result.pointEstimate - threshold} pts (threshold ${threshold})`);
   writer.keyValue("Inputs used", `${result.inputCount} exam${result.inputCount === 1 ? "" : "s"}`);

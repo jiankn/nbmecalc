@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import type { Db } from "@/lib/db/client";
 import {
   events,
+  predictions,
   reports,
   scoreReports,
   type ScoreReportRow,
@@ -142,6 +143,74 @@ export async function optInScoreFeedback(args: {
   });
 
   return loadScoreFeedbackRecord(args.db, args.sessionId);
+}
+
+export async function optInPredictionScoreFeedback(args: {
+  db: Db;
+  predictionId: string;
+  email: string;
+  examDate: number;
+  ip: string | null;
+  userAgent: string | null;
+}): Promise<ScoreFeedbackLoadResult> {
+  const predictionRows = await args.db
+    .select()
+    .from(predictions)
+    .where(eq(predictions.id, args.predictionId))
+    .limit(1);
+  const prediction = predictionRows[0];
+  if (!prediction) return { status: "not_found" };
+
+  const now = Date.now();
+  const sessionId = `pred_${prediction.id}`;
+  const scoreReleaseDate = estimateScoreReleaseDate(args.examDate);
+  const existing = await findScoreReport(args.db, sessionId);
+  const values = {
+    predictionId: prediction.id,
+    userId: prediction.userId ?? null,
+    email: args.email.trim().toLowerCase(),
+    step: prediction.step,
+    predictedScore: prediction.pointEstimate,
+    ciLower: prediction.ciLower,
+    ciUpper: prediction.ciUpper,
+    passProbability: prediction.passProbability,
+    examDate: args.examDate,
+    scoreReleaseDate,
+    optedInAt: now,
+    optInSource: "free_prediction",
+    ip: args.ip,
+    userAgent: args.userAgent,
+    updatedAt: now,
+  };
+
+  if (existing) {
+    await args.db
+      .update(scoreReports)
+      .set(values)
+      .where(eq(scoreReports.id, existing.id));
+  } else {
+    await args.db.insert(scoreReports).values({
+      id: crypto.randomUUID(),
+      stripeSessionId: sessionId,
+      tier: "self_reported",
+      createdAt: now,
+      ...values,
+    });
+  }
+
+  await recordScoreFeedbackEvent(args.db, {
+    type: "score_feedback_opted_in",
+    userId: prediction.userId ?? null,
+    payload: {
+      predictionId: prediction.id,
+      examDate: args.examDate,
+      scoreReleaseDate,
+      source: "free_prediction",
+    },
+    ip: args.ip,
+  });
+
+  return loadScoreFeedbackRecord(args.db, sessionId);
 }
 
 export async function submitScoreFeedback(args: {

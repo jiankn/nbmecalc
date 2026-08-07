@@ -467,8 +467,11 @@ export interface PredictionBaseline {
 export function computeBaseline(
   exams: PracticeExam[],
   step: StepKind,
-  daysUntilExam?: number
+  _daysUntilExam?: number
 ): PredictionBaseline {
+  // Retained for API compatibility; exam timing powers downstream scenarios,
+  // but it must not change uncertainty about already-completed practice inputs.
+  void _daysUntilExam;
   // 1. Convert each exam.
   const converted = exams.map((e) => ({
     exam: e,
@@ -502,9 +505,9 @@ export function computeBaseline(
 
   // 3. CI half-width.
   //
-  // Base constant 16 is calibrated against published NBME→Step prediction
-  // standard errors (~8–10 pts), giving ~±16 for a single input and ~±9
-  // for n=3 — ranges that match real-world dispersion observed on r/Step2.
+  // Base constant 16 is an explicit internal planning assumption. It gives
+  // a wider range for one input and narrows as independent inputs are added.
+  // It is not yet calibrated to a published holdout cohort or 95% coverage.
   const nEffective = exams.length;
   let ciHalfWidth = 16 / Math.sqrt(nEffective);
   // Bump for low-quality-only inputs (e.g. only AMBOSS or CMS).
@@ -512,13 +515,22 @@ export function computeBaseline(
     (e) => sourceQuality[e.source] < 0.85
   );
   if (onlyLowQuality) ciHalfWidth *= 1.25;
-  // Tighten / loosen by recency.
+  // Tighten / loosen using the age of the most recent practice input. The
+  // number of days until the real exam must not change uncertainty about the
+  // evidence already supplied by the user.
   let freshness: PredictionResult["freshness"] = "unknown";
-  if (typeof daysUntilExam === "number") {
-    if (daysUntilExam <= 7) {
+  const datedInputs = exams
+    .map((exam) => exam.takenDaysAgo)
+    .filter(
+      (days): days is number =>
+        typeof days === "number" && Number.isFinite(days) && days >= 0
+    );
+  if (datedInputs.length > 0) {
+    const mostRecentDaysAgo = Math.min(...datedInputs);
+    if (mostRecentDaysAgo <= 7) {
       ciHalfWidth *= 0.85;
       freshness = "fresh";
-    } else if (daysUntilExam > 60) {
+    } else if (mostRecentDaysAgo > 30) {
       ciHalfWidth *= 1.2;
       freshness = "stale";
     } else {
@@ -1139,11 +1151,11 @@ export function buildPostponeRecommendation(
 
   let insight: string;
   if (!show) {
-    insight = `Your on-schedule pass probability (${Math.round(passProbability * 100)}%) is high enough that postponing isn't recommended. Keep pace.`;
+    insight = `The current-date model scenario has an experimental pass estimate of ${Math.round(passProbability * 100)}%. Confirm readiness with official guidance.`;
   } else if (postponed28d.projectedPassProbability - passProbability >= 0.15) {
-    insight = `Pushing back 28 days lifts your pass probability from ${Math.round(passProbability * 100)}% → ${Math.round(postponed28d.projectedPassProbability * 100)}%. Strongly consider it.`;
+    insight = `The 28-day model scenario changes the experimental pass estimate from ${Math.round(passProbability * 100)}% → ${Math.round(postponed28d.projectedPassProbability * 100)}%. Discuss the tradeoff with an advisor.`;
   } else if (postponed14d.projectedPassProbability - passProbability >= 0.08) {
-    insight = `A 14-day push gives a meaningful lift (${Math.round(passProbability * 100)}% → ${Math.round(postponed14d.projectedPassProbability * 100)}%). Worth weighing against your logistics.`;
+    insight = `The 14-day model scenario changes the experimental pass estimate (${Math.round(passProbability * 100)}% → ${Math.round(postponed14d.projectedPassProbability * 100)}%). Weigh it with official evidence and your logistics.`;
   } else {
     insight = `Postponing helps a little but not decisively. The bigger lever is changing tactics: re-test on a fresh NBME, then attack weak subjects systematically.`;
   }

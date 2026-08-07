@@ -49,14 +49,14 @@ const trustItems = [
 
 const detailedFeatures = [
   { name: "Multi-source predictor (NBME + UWSA + Free 120)", free: true, single: true, pro: true },
-  { name: "95% confidence interval", free: true, single: true, pro: true },
-  { name: "Percentile ranking vs. cohort", free: true, single: true, pro: true },
+  { name: "Estimated planning range", free: true, single: true, pro: true },
+  { name: "Model summary and assumptions", free: true, single: true, pro: true },
   { name: "Pass-probability indicator", free: true, single: true, pro: true },
   { name: "Predictions saved to dashboard", free: false, single: true, pro: true },
   { name: "Downloadable PDF report (3 pages)", free: false, single: true, pro: true },
-  { name: "Sit-or-postpone recommendation + reverse triggers", free: false, single: true, pro: true },
+  { name: "Readiness discussion guide + reverse triggers", free: false, single: true, pro: true },
   { name: "3 highest-leverage moves for your input pattern", free: false, single: true, pro: true },
-  { name: "Cohort mirror (model-projected score distribution)", free: false, single: true, pro: true },
+  { name: "Model assumptions and scenario breakdown", free: false, single: true, pro: true },
   { name: "Anti-patterns: counter-intuitive things NOT to do", free: false, single: true, pro: true },
   { name: "Score trajectory analysis + subject-level weakness map", free: false, single: true, pro: true },
   { name: "Unlimited predictions & refreshes", free: false, single: false, pro: true },

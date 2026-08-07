@@ -107,7 +107,7 @@ export async function GET(
               letterSpacing: "0.08em",
             }}
           >
-            Predicted range · 95% CI
+            Estimated planning range
           </div>
           <div
             style={{

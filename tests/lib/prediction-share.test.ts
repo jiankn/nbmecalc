@@ -19,14 +19,14 @@ describe("prediction share helpers", () => {
     expect(parsePredictionShareInput(share)).toEqual(share);
   });
 
-  it("rejects an estimate outside its confidence interval", () => {
+  it("rejects an estimate outside its planning range", () => {
     expect(
       parsePredictionShareInput({
         ...share,
         pointEstimate: 260,
       })
     ).toEqual({
-      error: "The most likely score must fall inside the 95% CI.",
+      error: "The midpoint must fall inside the estimated range.",
     });
   });
 

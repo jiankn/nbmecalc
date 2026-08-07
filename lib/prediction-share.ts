@@ -54,10 +54,10 @@ export function parsePredictionShareInput(
   const ciLower = body.ciLower as number;
   const ciUpper = body.ciUpper as number;
   if (ciLower > pointEstimate || pointEstimate > ciUpper) {
-    return { error: "The most likely score must fall inside the 95% CI." };
+    return { error: "The midpoint must fall inside the estimated range." };
   }
   if (ciUpper - ciLower > 100) {
-    return { error: "The shared confidence interval is too wide." };
+    return { error: "The shared planning range is too wide." };
   }
 
   return {

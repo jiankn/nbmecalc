@@ -42,13 +42,22 @@ export const metadata: Metadata = {
   },
 };
 
-const subjectMapping = [
-  { subject: "Internal Medicine", strongPct: 75, avgPct: 67, weakPct: 58 },
-  { subject: "Surgery", strongPct: 73, avgPct: 65, weakPct: 56 },
-  { subject: "Pediatrics", strongPct: 74, avgPct: 66, weakPct: 57 },
-  { subject: "OB/GYN", strongPct: 72, avgPct: 64, weakPct: 55 },
-  { subject: "Psychiatry", strongPct: 76, avgPct: 68, weakPct: 60 },
-  { subject: "Family Medicine", strongPct: 73, avgPct: 65, weakPct: 56 },
+const reportFields = [
+  {
+    field: "Equated score",
+    supports: "Comparison within the same CMS subject and form family",
+    limit: "Not a direct Step 2 CK score",
+  },
+  {
+    field: "Percent correct",
+    supports: "A simple record of questions answered correctly",
+    limit: "Different forms may not have identical difficulty",
+  },
+  {
+    field: "Content-area feedback",
+    supports: "Targeted review inside that clerkship subject",
+    limit: "Does not measure comprehensive exam readiness",
+  },
 ];
 
 const faqs = [
@@ -158,7 +167,7 @@ export default function CmsConverterPage() {
             as the source. Best paired with multiple inputs.
           </p>
         </div>
-        <Calculator defaultStep="step2" />
+        <Calculator defaultStep="step2" defaultSource="CMS" />
       </section>
 
       <section className="py-16 lg:py-20 bg-white">
@@ -168,31 +177,30 @@ export default function CmsConverterPage() {
               <LayoutGrid className="h-5 w-5 text-mint-700" />
             </div>
             <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-              CMS Form % bands by subject
+              How to read a CMS score report
             </h2>
           </div>
           <p className="text-gray-600 text-lg mb-8">
-            Approximate percentile bands for matched US MD seniors taking each
-            CMS form within 4 weeks of Step 2 CK.
+            CMS score conversion starts by identifying what the official
+            report actually gives you. Do not treat a subject-form result as
+            a comprehensive Step 2 CK conversion.
           </p>
 
           <div className="overflow-x-auto rounded-3xl border border-gray-200 shadow-sm">
             <table className="min-w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="text-left px-5 py-3 font-bold text-gray-900">CMS subject</th>
-                  <th className="text-right px-5 py-3 font-bold text-rose-700">Weak (≤ 58%)</th>
-                  <th className="text-right px-5 py-3 font-bold text-amber-700">Average</th>
-                  <th className="text-right px-5 py-3 font-bold text-mint-700">Strong (≥ 73%)</th>
+                  <th className="text-left px-5 py-3 font-bold text-gray-900">Report field</th>
+                  <th className="text-left px-5 py-3 font-bold text-mint-700">What it supports</th>
+                  <th className="text-left px-5 py-3 font-bold text-rose-700">What it cannot tell you</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 bg-white">
-                {subjectMapping.map((row) => (
-                  <tr key={row.subject}>
-                    <td className="px-5 py-3 font-medium text-gray-900">{row.subject}</td>
-                    <td className="px-5 py-3 text-right text-gray-700">≤ {row.weakPct}%</td>
-                    <td className="px-5 py-3 text-right text-gray-700">{row.weakPct + 1}-{row.strongPct - 1}%</td>
-                    <td className="px-5 py-3 text-right font-bold text-mint-700">≥ {row.strongPct}%</td>
+                {reportFields.map((row) => (
+                  <tr key={row.field}>
+                    <td className="px-5 py-3 font-medium text-gray-900">{row.field}</td>
+                    <td className="px-5 py-3 text-gray-700">{row.supports}</td>
+                    <td className="px-5 py-3 text-gray-700">{row.limit}</td>
                   </tr>
                 ))}
               </tbody>
@@ -207,10 +215,9 @@ export default function CmsConverterPage() {
             How to calculate a CMS form score from your PDF
           </h2>
           <p className="text-gray-600 text-lg mb-8">
-            Search Console showed demand for &quot;CMS form score conversion PDF&quot;
-            and &quot;how to calculate CMS form score.&quot; The important distinction:
-            a CMS PDF helps diagnose one subject, while comprehensive Step 2
-            readiness still needs a broader assessment.
+            A CMS PDF helps diagnose one subject, while comprehensive Step 2
+            readiness still needs a broader assessment. Follow these three
+            checks before entering the number in any CMS score converter.
           </p>
 
           <div className="grid gap-4 md:grid-cols-3">

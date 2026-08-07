@@ -79,7 +79,7 @@ export default async function ScoreFeedbackPage({
                 <p className="text-gray-600">
                   Your predicted {record.step.toUpperCase()} score was{" "}
                   <strong className="text-gray-950">{record.predictedScore}</strong>{" "}
-                  ({record.ciLower}–{record.ciUpper} 95% CI).
+                  (estimated range {record.ciLower}–{record.ciUpper}).
                 </p>
               </div>
             </div>
@@ -188,7 +188,7 @@ function ThankYouState({
             : "Your feedback was recorded."}
       </p>
       <p className="text-sm text-gray-600 mt-3">
-        This single datapoint helps calibrate future confidence intervals and pass-risk estimates.
+        This single datapoint helps evaluate future planning ranges and pass-risk estimates.
       </p>
       <Button variant="outline" className="mt-5" asChild>
         <Link href="/">Back to NBMEcalc</Link>

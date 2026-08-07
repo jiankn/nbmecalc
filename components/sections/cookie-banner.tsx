@@ -73,13 +73,14 @@ export function CookieBanner() {
         </div>
 
         <p className="text-sm text-gray-600 leading-relaxed mb-4">
-          NBMEcalc is built by med students. We&apos;re{" "}
+          NBMEcalc is an independent educational tool. We&apos;re{" "}
           <strong className="text-gray-900">not affiliated</strong> with NBME,
-          USMLE, or any official testing body. Predictions are statistical
-          estimates based on historical data.
+          USMLE, or any official testing body. Outputs are model-based planning
+          estimates built from explicit assumptions.
           <br />
           <span className="text-xs text-gray-500 mt-1 block">
-            We use minimal cookies for analytics.
+            We store this acknowledgment locally and use Cloudflare&apos;s
+            privacy-focused traffic analytics.
           </span>
         </p>
 

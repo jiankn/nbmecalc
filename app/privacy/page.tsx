@@ -71,8 +71,8 @@ export default function PrivacyPage() {
         <ul>
           <li>
             <strong>Usage data</strong> — pages visited, predictions run,
-            features used (via privacy-friendly Plausible Analytics —
-            cookieless, no fingerprinting).
+            features used (via Cloudflare Web Analytics and our first-party
+            product event log).
           </li>
           <li>
             <strong>Device data</strong> — browser type, OS, screen size,
@@ -134,11 +134,8 @@ export default function PrivacyPage() {
             delivery.
           </li>
           <li>
-            <strong>Plausible Analytics</strong> — privacy-friendly,
-            cookieless web analytics.
-          </li>
-          <li>
-            <strong>Sentry</strong> — error monitoring (no PII captured).
+            <strong>Cloudflare Web Analytics</strong> — aggregate traffic and
+            performance analytics.
           </li>
         </ul>
         <p>
@@ -153,8 +150,10 @@ export default function PrivacyPage() {
             account.
           </li>
           <li>
-            <strong>Predictions</strong> — kept until you delete them or your
-            account.
+            <strong>Account predictions</strong> — kept until you delete them
+            or your account. Anonymous calculation snapshots and first-party
+            funnel events are retained for up to 12 months, then deleted or
+            aggregated.
           </li>
           <li>
             <strong>Payment records</strong> — 7 years (tax law).
@@ -180,7 +179,9 @@ export default function PrivacyPage() {
             remembers your cookie choice for 30 days. Strictly necessary.
           </li>
           <li>
-            <strong>Analytics</strong> — none. Plausible is cookieless.
+            <strong>Analytics</strong> — Cloudflare Web Analytics is designed
+            to operate without cross-site tracking cookies. First-party funnel
+            events are stored server-side according to the retention period above.
           </li>
         </ul>
         <p>

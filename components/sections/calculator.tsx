@@ -19,6 +19,8 @@ import {
   type PredictionPreview,
 } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { trackProductEvent } from "@/lib/product-events";
+import { PredictionFeedbackOptIn } from "@/components/prediction-feedback-opt-in";
 
 const STEPS: { key: StepKind; label: string }[] = [
   { key: "step1", label: "Step 1" },
@@ -44,17 +46,24 @@ function isValidScore(score: number, source: ExamSource): boolean {
   return score >= meta.scoreRange[0] && score <= meta.scoreRange[1];
 }
 
-export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind } = {}) {
+export function Calculator({
+  defaultStep = "step2",
+  defaultSource = "NBME",
+}: {
+  defaultStep?: StepKind;
+  defaultSource?: ExamSource;
+} = {}) {
   const [step, setStep] = useState<StepKind>(defaultStep);
   const [exams, setExams] = useState<PracticeExam[]>(() => {
     const forms = getNbmeFormNumbers(defaultStep);
+    const sourceDefaults = defaultsForSource(defaultSource, defaultStep);
     return [
       {
         id: "1",
-        source: "NBME",
-        formNumber: forms[Math.max(0, forms.length - 2)],
-        score: 230,
-        takenDaysAgo: 28,
+        source: defaultSource,
+        score: sourceDefaults.score ?? 215,
+        formNumber: sourceDefaults.formNumber,
+        takenDaysAgo: 7,
       },
       {
         id: "2",
@@ -177,11 +186,21 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
   }
 
   function handlePredict() {
+    trackProductEvent("calculator_started", {
+      step,
+      inputCount: exams.length,
+      path: window.location.pathname,
+    });
     // 1. Instant client-side compute. UX must not depend on the network.
     //    Only the free preview is computed in the browser; the full paid
     //    report is synthesized server-side (see /api/predict + lib/predict).
     const r = predictPreview(exams, step, daysUntil);
     setResult(r);
+    trackProductEvent("result_viewed", {
+      step,
+      inputCount: exams.length,
+      path: window.location.pathname,
+    });
     setTimeout(() => {
       document.getElementById("calc-result")?.scrollIntoView({
         behavior: "smooth",
@@ -491,7 +510,8 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
 
           <p className="mt-4 text-xs text-center text-gray-500 flex items-center justify-center gap-1.5">
             <Lock className="h-3 w-3" />
-            We don&apos;t store your scores unless you save. Free, no signup.
+            No signup required. Calculate clicks are logged to measure and
+            improve the funnel; see Privacy for retention details.
           </p>
         </div>
 
@@ -502,7 +522,14 @@ export function Calculator({ defaultStep = "step2" }: { defaultStep?: StepKind }
             step={step}
             weakSubjects={weakSubjects}
             onToggleWeakSubject={toggleWeakSubject}
-            onUpgrade={() => setShowPaywall(true)}
+            onUpgrade={() => {
+              trackProductEvent("paywall_opened", {
+                step,
+                path: window.location.pathname,
+                ...(predictionId ? { predictionId } : {}),
+              });
+              setShowPaywall(true);
+            }}
             isPro={isPro}
             predictionId={predictionId}
           />
@@ -553,7 +580,7 @@ function ResultCard({
   const pointPct = ((clamp(result.pointEstimate) - min) / range) * 100;
 
   const passThreshold =
-    result.step === "step1" ? 196 : result.step === "step2" ? 214 : 198;
+    result.step === "step1" ? 196 : result.step === "step2" ? 218 : 198;
   const passThresholdPct = ((passThreshold - min) / range) * 100;
 
   // Sort subjects by cohort average descending so weak spots naturally bubble
@@ -575,7 +602,7 @@ function ResultCard({
         <Badge variant="mint">Your Prediction</Badge>
         {result.freshness === "stale" && (
           <Badge variant="outline" className="text-xs">
-            Wide CI: 60+ days until test day
+            Wider range: latest practice input is over 30 days old
           </Badge>
         )}
       </div>
@@ -601,7 +628,7 @@ function ResultCard({
         </div>
         <div className="rounded-2xl bg-gray-50 p-5 text-center">
           <div className="text-xs uppercase font-semibold text-gray-600 mb-1">
-            95% CI
+            Estimated range
           </div>
           <div className="text-2xl font-bold tabular-nums">
             {result.ciLower} – {result.ciUpper}
@@ -609,13 +636,19 @@ function ResultCard({
         </div>
         <div className="rounded-2xl bg-gray-50 p-5 text-center">
           <div className="text-xs uppercase font-semibold text-gray-600 mb-1">
-            Pass Probability
+            Experimental pass estimate
           </div>
           <div className="text-2xl font-bold tabular-nums">
             {(result.passProbability * 100).toFixed(0)}%
           </div>
         </div>
       </div>
+
+      <p className="mt-3 text-xs text-gray-500 text-center">
+        The range and pass estimate are internal planning heuristics and are
+        not yet calibrated on a published holdout cohort. Compare them with
+        your official score report.
+      </p>
 
       {/* Visual bar */}
       <div className="mt-8 mb-2">
@@ -765,8 +798,8 @@ function ResultCard({
               Get your day-by-day plan + complete subject map
             </div>
             <div className="text-sm text-gray-300">
-              Includes downloadable PDF, peer outcomes, and confidence
-              breakdown.
+              Includes a downloadable PDF, source-weighting notes, uncertainty
+              assumptions, and a study-plan framework.
             </div>
           </div>
           {isPro ? (
@@ -800,6 +833,7 @@ function ResultCard({
         ciLower={result.ciLower}
         ciUpper={result.ciUpper}
       />
+      {predictionId && <PredictionFeedbackOptIn predictionId={predictionId} />}
     </div>
   );
 }
@@ -965,9 +999,9 @@ function PaywallModal({
                 </div>
               </div>
               <ul className="text-xs text-gray-700 space-y-1 shrink-0">
-                <li>✓ Sit-or-postpone call</li>
+                <li>✓ Readiness discussion guide</li>
                 <li>✓ 3 highest-leverage moves</li>
-                <li>✓ Cohort mirror + PDF</li>
+                <li>✓ Assumptions + PDF</li>
               </ul>
             </div>
             <div className="mt-4 flex">

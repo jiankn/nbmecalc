@@ -1,0 +1,22 @@
+{
+  "site": "https://nbmecalc.com",
+  "status_version": "2026-08-07",
+  "model_status": "planning_heuristic_not_holdout_validated",
+  "published_validation_cohort_size": 0,
+  "verified_95_percent_interval": false,
+  "verified_error_rate": false,
+  "outcome_collection": {
+    "active": true,
+    "requires_explicit_opt_in": true,
+    "accepts_free_and_paid_predictions": true
+  },
+  "planned_metrics": [
+    "mean_absolute_error",
+    "median_absolute_error",
+    "planning_range_coverage",
+    "pass_risk_calibration",
+    "source_and_recency_subgroups"
+  ],
+  "methodology_url": "https://nbmecalc.com/methodology",
+  "validation_url": "https://nbmecalc.com/validation"
+}

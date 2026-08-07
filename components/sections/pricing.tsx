@@ -52,13 +52,13 @@ const plans: PlanCard[] = [
     ctaHref: "/#calculator",
     features: [
       "1 score prediction",
-      "95% confidence interval",
+      "Estimated planning range",
       "Percentile ranking",
       "Basic result summary",
     ],
     excluded: [
       "PDF report download",
-      "Sit-or-postpone recommendation",
+      "Readiness discussion guide",
       "Multi-Step tracking",
       "Unlimited refreshes",
     ],
@@ -76,7 +76,7 @@ const plans: PlanCard[] = [
     features: [
       "Everything in Free",
       "Downloadable PDF report",
-      "Sit-or-postpone recommendation",
+      "Readiness discussion guide",
       "Subject-level weakness map",
       "Score trajectory analysis",
     ],

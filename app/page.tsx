@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Nav } from "@/components/sections/nav";
 import { Hero } from "@/components/sections/hero";
-import { LogoWall } from "@/components/sections/logo-wall";
 import { ValueProps } from "@/components/sections/value-props";
 import { Calculator } from "@/components/sections/calculator";
-import { Reviews } from "@/components/sections/reviews";
 import { Stats } from "@/components/sections/stats";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { Comparison } from "@/components/sections/comparison";
@@ -94,10 +92,8 @@ export default function HomePage() {
       <Nav />
       <main>
         <Hero />
-        <LogoWall />
         <ValueProps />
         <Calculator />
-        <Reviews />
         <Stats />
         <HowItWorks />
         <Comparison />

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title:
     "Step 2 Score Predictor & CK Calculator | NBMEcalc",
   description:
-    "Free Step 2 score predictor and CK calculator. Combine CCSSA forms 9-15, UWSA, Free 120, AMBOSS, and CMS inputs with a 95% confidence interval.",
+    "Free Step 2 score predictor and CK calculator. Combine CCSSA forms 9-15, UWSA, Free 120, AMBOSS, and CMS inputs with a transparent planning range.",
   keywords: [
     "step 2 score predictor",
     "step 2 score calculator",
@@ -58,7 +58,7 @@ const specialties = [
 
 const sourceCorrections = [
   { src: "CCSSA forms 9-15", note: "Use the equated score report", adj: "Modelled" },
-  { src: "UWSA 1", note: "Over-predicts", adj: "−3" },
+  { src: "UWSA 1", note: "Internal source adjustment", adj: "−5" },
   { src: "UWSA 2", note: "Most accurate UWSA", adj: "−2" },
   { src: "Free 120", note: "Best single predictor", adj: "0" },
   { src: "AMBOSS SA", note: "Runs hot", adj: "−5" },
@@ -72,11 +72,11 @@ const faqs = [
   },
   {
     q: "Which practice exam is most predictive of Step 2 CK?",
-    a: "No single practice exam guarantees a final score. Use a recent CCSSA result together with Free 120 or UWSA 2, and pay attention to agreement across inputs and the confidence interval.",
+    a: "No single practice exam guarantees a final score. Use a recent CCSSA result together with Free 120 or UWSA 2, and pay attention to agreement across inputs and the full planning range.",
   },
   {
     q: "What is the current Step 2 CK passing score?",
-    a: "The passing standard is 218 for examinees testing on or after July 1, 2025. A prediction near that threshold should be interpreted with its full confidence interval, not as a guaranteed pass.",
+    a: "The passing standard is 218 for examinees testing on or after July 1, 2025. A prediction near that threshold should be interpreted with its full planning range, not as a guaranteed pass.",
   },
   {
     q: "Should I take Step 2 CK before submitting ERAS?",
@@ -103,7 +103,7 @@ export default function Step2PredictorPage() {
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free USMLE Step 2 CK predictor that combines NBME, UWSA, Free 120, AMBOSS, and CMS Form scores into a single weighted prediction with 95% confidence interval.",
+              "Free USMLE Step 2 CK predictor that combines NBME, UWSA, Free 120, AMBOSS, and CMS Form scores into a weighted estimate with a transparent planning range.",
           }),
         }}
       />
@@ -125,7 +125,7 @@ export default function Step2PredictorPage() {
       <PageHero
         badge="Free Step 2 CK score calculator"
         title="Step 2 Score Predictor and CK Calculator"
-        description="Combine Step 2 CK CCSSA, UWSA, Free 120, AMBOSS, and CMS inputs into one independent estimate. Review the point estimate together with its 95% confidence interval."
+        description="Combine Step 2 CK CCSSA, UWSA, Free 120, AMBOSS, and CMS inputs into one independent estimate. Review the midpoint together with its estimated planning range."
         size="md"
       />
 
@@ -138,7 +138,7 @@ export default function Step2PredictorPage() {
           <p className="text-gray-600">
             Select <strong>Step 2 CK</strong> in the form below, then enter
             your practice scores. The calculator outputs your point estimate,
-            95% CI, and percentile.
+            estimated range and model-based pass estimate.
           </p>
         </div>
         <Calculator defaultStep="step2" />
@@ -156,7 +156,7 @@ export default function Step2PredictorPage() {
             The calculator applies the UWSA-2{" "}
             <span className="font-mono">−2</span> correction (see the table
             below), weights your most recent forms, and returns a point estimate
-            near <strong>250</strong> with a 95% confidence interval of roughly{" "}
+            near <strong>250</strong> with an estimated planning range of roughly{" "}
             <strong>±8</strong>. Read against the specialty table, that sits
             around the median for diagnostic radiology and well above the
             family-medicine range — useful context when you are deciding whether
@@ -303,8 +303,8 @@ export default function Step2PredictorPage() {
             </h2>
           </div>
           <p className="text-gray-600 text-lg mb-8">
-            A recommended sequence used by 240+ scorers (Reddit r/Step2 polls
-            2024-2025).
+            An illustrative sequence, not an evidence-based prescription.
+            Adapt it to your school&apos;s guidance and the assessments you still have unused.
           </p>
 
           <ol className="space-y-4">
@@ -327,7 +327,7 @@ export default function Step2PredictorPage() {
               {
                 w: "Week −3",
                 t: "UWSA 2",
-                b: "Most predictive UWSA. Calibrate confidence here.",
+                b: "Use as another late-cycle input and compare it with your recent CCSSA results.",
               },
               {
                 w: "Week −2",

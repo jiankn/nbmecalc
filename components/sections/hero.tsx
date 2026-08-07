@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Star, ArrowRight, Zap } from "lucide-react";
+import { ArrowRight, Check, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { IPhoneMockup } from "@/components/iphone-mockup";
@@ -61,12 +61,12 @@ export function Hero() {
 
           {/* Sub */}
           <p className="text-lg lg:text-xl text-black/75 max-w-[560px] leading-relaxed">
-            Drop your NBME, UWSA, or Free 120 scores. Get an accurate Step
-            prediction with{" "}
+            Combine your NBME, UWSA, or Free 120 scores into an independent
+            Step estimate with an{" "}
             <span className="font-semibold text-black">
-              95% confidence interval
+              estimated planning range
             </span>
-            . Built by med students, for med students.
+            . Review the assumptions before using it for a test-date decision.
           </p>
 
           {/* Step picker */}
@@ -113,39 +113,16 @@ export function Hero() {
             Been here before? Resume your prediction →
           </button>
 
-          {/* Trust strip */}
+          {/* Factual product assurances */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
-            <div className="flex items-center gap-1.5">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="h-4 w-4 fill-mint-700 text-mint-700"
-                />
-              ))}
-              <span className="ml-1 text-sm font-semibold text-black">
-                Excellent
-              </span>
-            </div>
-            <span className="text-sm text-black/70">
-              Trusted by 1,200+ Step takers from{" "}
-              <a
-                href="https://reddit.com/r/step1"
-                target="_blank"
-                rel="noopener"
-                className="font-semibold underline underline-offset-2"
-              >
-                r/Step1
-              </a>{" "}
-              &{" "}
-              <a
-                href="https://reddit.com/r/step2"
-                target="_blank"
-                rel="noopener"
-                className="font-semibold underline underline-offset-2"
-              >
-                r/Step2
-              </a>
-            </span>
+            {["No signup", "Scores stay local until you calculate", "Public assumptions"].map(
+              (label) => (
+                <span key={label} className="inline-flex items-center gap-1.5 text-sm text-black/70">
+                  <Check className="h-4 w-4 text-mint-700" />
+                  {label}
+                </span>
+              )
+            )}
           </div>
         </div>
 
@@ -154,7 +131,7 @@ export function Hero() {
           {/* Floating chips */}
           <div className="absolute top-12 -left-2 z-10 hidden md:flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-lg animate-fade-up">
             <span className="h-2 w-2 rounded-full bg-mint-500 animate-pulse" />
-            <span className="text-xs font-bold">95% confidence</span>
+            <span className="text-xs font-bold">Planning range</span>
           </div>
           <div className="absolute bottom-20 -right-4 z-10 hidden md:block animate-fade-up" style={{ animationDelay: "0.3s" }}>
             <div className="rounded-2xl bg-white px-4 py-3 shadow-lg">
@@ -194,7 +171,7 @@ function PhonePreviewContent() {
           238
         </div>
         <div className="mt-2 text-[11px] text-gray-600">
-          95% CI: 230 – 246
+          Estimated range: 230 – 246
         </div>
       </div>
 

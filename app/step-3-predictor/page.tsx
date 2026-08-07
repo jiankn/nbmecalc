@@ -200,7 +200,7 @@ export default function Step3PredictorPage() {
           <p className="text-gray-600">
             Pick <strong>Step 3</strong> below, then enter your UWSA Step 3
             and Free 120 scores. The calculator outputs a three-digit
-            prediction with a 95% confidence interval.
+            estimate with a transparent planning range.
           </p>
           <p className="text-xs text-gray-500 mt-2 italic">
             Note: Step 3 data is sparser than Step 2 CK. Confidence intervals

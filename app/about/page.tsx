@@ -58,12 +58,12 @@ const timeline = [
   {
     year: "2026 Q2",
     title: "Public launch",
-    body: "Free tier opens to all. Single Report and Pro plans launch with PDF delivery, multi-Step tracking, and confidence intervals.",
+    body: "Free tier opens to all. Single Report and Pro plans launch with PDF delivery, multi-Step tracking, and transparent planning ranges.",
   },
   {
     year: "2026 H2",
-    title: "ML predictor v2",
-    body: "Once we collect 1,000+ real outcome pairs, we replace the linear model with a gradient-boosted tree and re-validate.",
+    title: "Holdout validation",
+    body: "After enough consented outcomes are collected, publish inclusion rules, error metrics, range coverage, and a locked holdout evaluation before making accuracy claims.",
   },
 ];
 

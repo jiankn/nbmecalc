@@ -183,7 +183,7 @@ export default function PredictionDetailPage() {
         <div className="rounded-2xl bg-white border border-gray-200 p-5">
           <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
             <BarChart3 className="h-4 w-4" />
-            95% CI
+            Estimated range
           </div>
           <div className="text-3xl font-black text-gray-950">
             {prediction.ciLower} – {prediction.ciUpper}
@@ -192,7 +192,7 @@ export default function PredictionDetailPage() {
         <div className="rounded-2xl bg-white border border-gray-200 p-5">
           <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
             <Target className="h-4 w-4" />
-            Pass Probability
+            Experimental pass estimate
           </div>
           <div className="text-3xl font-black text-gray-950">
             {passPercent}%

@@ -60,7 +60,7 @@ const faqs = [
     a: "Free 120 is a useful late-stage readiness signal because its format and content outline resemble the live exam. It is still one assessment, so combine it with a recent CCSSA or UWSA and use the full predicted range.",
   },
   {
-    q: "Why is Free 120 so accurate?",
+    q: "How should I interpret Free 120?",
     a: "Its main value is familiarity with official-style questions and timing close to test day. There is no official one-to-one percentage-to-score conversion, so the table below is an independent estimate rather than an NBME or USMLE score report.",
   },
   {
@@ -84,7 +84,7 @@ const faqs = [
 const forecastSteps = [
   "Use your raw percent correct, not a rounded block average if you have the total.",
   "Enter Free 120 as one input in the calculator, then add a recent CCSSA or UWSA.",
-  "Compare the midpoint with the confidence interval before changing your test date.",
+  "Compare the midpoint with the estimated range before changing your test date.",
   "If Free 120 and your latest NBME disagree by more than 8-10 points, trust the range and investigate why.",
 ];
 
@@ -173,7 +173,7 @@ export default function Free120PredictorPage() {
       <PageHero
         badge="Free 120 → Step 2 CK"
         title="Free 120 Step 2 Score Conversion Calculator"
-        description="Enter your Free 120 percentage to get an independent Step 2 CK estimate and confidence interval. Use it with a recent CCSSA or UWSA rather than as a guaranteed one-to-one conversion."
+        description="Enter your Free 120 percentage to get an independent Step 2 CK estimate and planning range. Use it with a recent CCSSA or UWSA rather than as a guaranteed one-to-one conversion."
         size="md"
       />
 
@@ -187,7 +187,7 @@ export default function Free120PredictorPage() {
             source and enter your percentage correct.
           </p>
         </div>
-        <Calculator defaultStep="step2" />
+        <Calculator defaultStep="step2" defaultSource="FREE120" />
       </section>
 
       <section className="py-14 lg:py-16 bg-white border-b border-gray-200">
@@ -205,10 +205,10 @@ export default function Free120PredictorPage() {
                   the rest of your practice data?
                 </p>
                 <p>
-                  For Step 2 CK, the high-intent query is usually{" "}
-                  <strong>free 120 step 2 score conversion</strong>. That
-                  belongs on this calculator page, because students searching
-                  it want the tool first and the caveats immediately after.
+                  For Step 2 CK, use the current official sample questions for
+                  the cleanest late-stage signal. The 2019 and 2021 sets remain
+                  useful practice, but their percentages are not interchangeable
+                  with the current set.
                 </p>
                 <p>
                   For a multi-exam forecast, add your percentage to the{" "}
@@ -334,8 +334,9 @@ export default function Free120PredictorPage() {
           </div>
 
           <p className="text-xs text-gray-500 mt-4">
-            * Step 1 candidates: ≥ 65% maps to ~95% pass probability. 95% CI ±4
-            pts when paired with at least one NBME.
+            * This is the calculator&apos;s illustrative internal scale, not an
+            official conversion curve or a validated probability table. Use
+            the displayed planning range and a recent comprehensive assessment.
           </p>
         </div>
       </section>
@@ -355,7 +356,7 @@ export default function Free120PredictorPage() {
             <li>Use percent correct as one input, not a guaranteed final score</li>
             <li>Compare it with a recent comprehensive NBME self-assessment</li>
             <li>Investigate large disagreements between recent practice results</li>
-            <li>Plan from the confidence interval rather than the midpoint alone</li>
+            <li>Plan from the estimated range rather than the midpoint alone</li>
           </ul>
         </div>
       </section>

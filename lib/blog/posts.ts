@@ -729,6 +729,7 @@ export const BLOG_POSTS: BlogPost[] = [
   // our predictions table, and ≥2 original infographics. PRD §13.
   {
     slug: "truth-about-confidence-intervals-score-predictors",
+    noindex: true,
     title: "The Truth About Confidence Intervals in Score Predictors",
     description:
       "Why every honest Step score predictor returns a range, not a single number. What a 95% confidence interval actually means for your test day prediction.",

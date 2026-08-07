@@ -38,7 +38,7 @@ const competitors = ["NBMEcalc", "PredictMyStepScore"];
 const rows: CompareRow[] = [
   { feature: "Free unlimited predictions", values: ["yes", "partial"] },
   { feature: "Multi-source aggregation (NBME + UWSA + Free 120 + AMBOSS + CMS)", values: ["yes", "no"] },
-  { feature: "95% confidence interval", values: ["yes", "no"] },
+  { feature: "Planning range shown", values: ["yes", "no"] },
   { feature: "Pass probability for Step 1 P/F", values: ["yes", "partial"] },
   { feature: "Per-subject weakness map", values: ["yes", "no"] },
   { feature: "Personalized 14-day study plan", values: ["yes", "no"] },
@@ -85,12 +85,12 @@ export default function VsPMSSPage() {
       <section className="py-16 lg:py-20 bg-mint-50/40">
         <div className="container max-w-3xl space-y-6">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-            Where PredictMyStepScore wins
+            When PredictMyStepScore may fit
           </h2>
           <ul className="space-y-3 text-gray-700 list-disc pl-5">
-            <li>Six years of brand recognition on Reddit r/Step2</li>
-            <li>Larger historical dataset (claimed)</li>
-            <li>Familiar to attending physicians who recommend it to clerks</li>
+            <li>You prefer its single-purpose workflow and interface</li>
+            <li>You have reviewed its current methodology and find it suitable</li>
+            <li>You only need the input sources it currently supports</li>
           </ul>
 
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mt-12">
@@ -98,11 +98,11 @@ export default function VsPMSSPage() {
           </h2>
           <ul className="space-y-3 text-gray-700 list-disc pl-5">
             <li>Multi-source aggregation (5 input types vs 2)</li>
-            <li>95% confidence interval — no other tool offers this</li>
+            <li>Estimated planning range with published assumptions</li>
             <li>Free unlimited predictions without signup</li>
             <li>
-              Paid report tells you whether to sit or postpone — and the 3
-              highest-leverage moves for your specific input pattern
+              Paid report adds a readiness discussion guide and 3 study
+              priorities for your specific input pattern
             </li>
             <li>Modern mobile UX — install as a PWA</li>
             <li>Public methodology document and corrections process</li>

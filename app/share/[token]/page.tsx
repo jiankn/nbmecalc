@@ -28,7 +28,7 @@ export async function generateMetadata({
 
   const stepLabel = getStepLabel(share.step);
   const title = `${stepLabel} prediction: ${share.ciLower}–${share.ciUpper}`;
-  const description = `A shared NBMEcalc estimate with a most likely score of ${share.pointEstimate} and a 95% confidence interval of ${share.ciLower}–${share.ciUpper}.`;
+  const description = `A shared NBMEcalc planning estimate with a midpoint of ${share.pointEstimate} and an estimated range of ${share.ciLower}–${share.ciUpper}.`;
   const url = `https://nbmecalc.com/share/${share.token}`;
   const image = `https://nbmecalc.com/share/og/${share.token}`;
 
@@ -86,7 +86,7 @@ export default async function SharedPredictionPage({
             <div className="p-6 sm:p-10">
               <div className="rounded-3xl bg-gray-950 p-7 text-white sm:p-9">
                 <p className="text-sm font-semibold uppercase tracking-wider text-mint-400">
-                  Predicted range · 95% CI
+                  Estimated planning range
                 </p>
                 <p className="mt-2 text-5xl font-extrabold tracking-tight tabular-nums sm:text-6xl">
                   {share.ciLower}–{share.ciUpper}

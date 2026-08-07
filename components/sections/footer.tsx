@@ -21,6 +21,7 @@ const columns = [
       { label: "NBME Score Calculator", href: "/" },
       { label: "NBME Forms Guide", href: "/nbme-calculator" },
       { label: "Methodology & Sources", href: "/methodology" },
+      { label: "Validation Status", href: "/validation" },
       { label: "For Educators & Libraries", href: "/educators" },
       { label: "UWSA 1 → Step 1", href: "/uwsa-1-to-step-1" },
       { label: "UWSA 2 → Step 2", href: "/uwsa-2-to-step-2" },
@@ -87,7 +88,7 @@ export function Footer() {
           <div>
             <Logo width={150} height={32} variant="white" />
             <p className="text-xs text-gray-400 mt-2 max-w-md">
-              Built by med students, for med students.
+              Independent USMLE score-planning tool with public assumptions.
             </p>
           </div>
 

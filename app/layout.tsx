@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { FunnelPageView } from "@/components/funnel-page-view";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   applicationName: "NBMEcalc",
   title: "NBMEcalc — Predict Your USMLE Step Score in 5 Seconds",
   description:
-    "Free USMLE Step score predictor. Drop your NBME, UWSA, or Free 120 scores. Get an accurate prediction with 95% confidence interval. Built by med students, for med students.",
+    "Free independent USMLE Step planning tool. Combine NBME, UWSA, or Free 120 scores into an estimate with a transparent planning range.",
   keywords: [
     "nbme calculator",
     "nbme score calculator",
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Predict Your USMLE Step Score in 5 Seconds — NBMEcalc",
     description:
-      "Free, no signup. Multi-source NBME / UWSA / Free 120 / AMBOSS predictor with 95% confidence interval.",
+      "Free, no signup. Combine NBME, UWSA, Free 120, and AMBOSS inputs into an estimate with a transparent planning range.",
     url: "https://nbmecalc.com",
     siteName: "NBMEcalc",
     locale: "en_US",
@@ -83,7 +84,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${jakarta.variable} ${mono.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <FunnelPageView />
+        {children}
+      </body>
     </html>
   );
 }

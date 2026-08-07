@@ -116,7 +116,7 @@ export default function AmbossConverterPage() {
             as the source. Adding NBMEs is highly recommended.
           </p>
         </div>
-        <Calculator defaultStep="step2" />
+        <Calculator defaultStep="step2" defaultSource="AMBOSS" />
       </section>
 
       <section className="py-16 lg:py-20 bg-white">

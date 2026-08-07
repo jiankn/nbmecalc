@@ -14,7 +14,7 @@ const rows: { feature: string; values: Cell[] }[] = [
   { feature: "Free 120",             values: ["yes",  "no",   "yes",  "no"] },
   { feature: "AMBOSS Score Pred.",   values: ["yes",  "no",   "yes",  "no"] },
   { feature: "CMS practice forms",   values: ["yes",  "no",   "no",   "no"] },
-  { feature: "95% confidence interval", values: ["yes", "no", "no",   "no"] },
+  { feature: "Planning range shown", values: ["yes", "no", "no",   "no"] },
   { feature: "Personalized study plan", values: ["yes", "no", "no",   "no"] },
   { feature: "Downloadable PDF report", values: ["yes", "no", "no",   "no"] },
   { feature: "Mobile (PWA)",            values: ["yes", "partial", "partial", "no"] },

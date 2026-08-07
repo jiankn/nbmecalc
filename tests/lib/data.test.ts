@@ -18,10 +18,39 @@ import {
   buildScoreTrajectory,
   buildSourceInsight,
   buildTargetGap,
+  computeBaseline,
   type CohortSubjectAverage,
   type PracticeExam,
 } from "@/lib/data";
 import { predictStepScore } from "@/lib/predict";
+
+describe("computeBaseline freshness", () => {
+  const inputs: PracticeExam[] = [
+    { id: "a", source: "NBME", formNumber: 31, score: 240, takenDaysAgo: 5 },
+    { id: "b", source: "UWSA2", score: 242, takenDaysAgo: 12 },
+  ];
+
+  it("does not change the planning range when only days until the real exam changes", () => {
+    const oneWeek = computeBaseline(inputs, "step2", 7);
+    const threeMonths = computeBaseline(inputs, "step2", 90);
+
+    expect(oneWeek.ciHalfWidth).toBe(threeMonths.ciHalfWidth);
+    expect(oneWeek.freshness).toBe("fresh");
+    expect(threeMonths.freshness).toBe("fresh");
+  });
+
+  it("widens the range when all dated practice inputs are stale", () => {
+    const fresh = computeBaseline(inputs, "step2", 14);
+    const stale = computeBaseline(
+      inputs.map((exam) => ({ ...exam, takenDaysAgo: 45 })),
+      "step2",
+      14
+    );
+
+    expect(stale.ciHalfWidth).toBeGreaterThan(fresh.ciHalfWidth);
+    expect(stale.freshness).toBe("stale");
+  });
+});
 
 // ---------------------------------------------------------------------------
 // buildScoreTrajectory

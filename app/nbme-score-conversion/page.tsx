@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title:
     "NBME Score Converter & Conversion Chart | NBMEcalc",
   description:
-    "Use the free NBME score converter for Step 2 CK estimates and Step 1 pass probability. Supports current CCSSA and CBSSA form families with confidence intervals.",
+    "Use the free NBME score converter for Step 2 CK estimates and Step 1 readiness planning. Supports current CCSSA and CBSSA form families with a transparent planning range.",
   keywords: [
     "nbme score converter",
     "nbme score conversion",
@@ -41,33 +41,30 @@ export const metadata: Metadata = {
 // Step 2 CK conversion table (more detailed than the lib/data.ts version
 // for SEO depth)
 const step2Table = [
-  { nbme: 200, step2: 218, percentile: 4, label: "Below pass" },
-  { nbme: 205, step2: 222, percentile: 7, label: "Below pass" },
-  { nbme: 210, step2: 226, percentile: 12, label: "Marginal" },
-  { nbme: 215, step2: 230, percentile: 19, label: "Marginal" },
-  { nbme: 220, step2: 234, percentile: 28, label: "Pass" },
-  { nbme: 225, step2: 238, percentile: 38, label: "Pass" },
-  { nbme: 230, step2: 242, percentile: 49, label: "Average" },
-  { nbme: 235, step2: 246, percentile: 60, label: "Above avg" },
-  { nbme: 240, step2: 250, percentile: 71, label: "Strong" },
-  { nbme: 245, step2: 253, percentile: 80, label: "Strong" },
-  { nbme: 250, step2: 256, percentile: 87, label: "Competitive" },
-  { nbme: 255, step2: 259, percentile: 92, label: "Competitive" },
-  { nbme: 260, step2: 262, percentile: 96, label: "Top tier" },
-  { nbme: 265, step2: 264, percentile: 98, label: "Top tier" },
-  { nbme: 270, step2: 266, percentile: 99, label: "Elite" },
-  { nbme: 280, step2: 270, percentile: 99, label: "Elite" },
+  { nbme: 200, step2: 218 },
+  { nbme: 210, step2: 225 },
+  { nbme: 220, step2: 232 },
+  { nbme: 230, step2: 240 },
+  { nbme: 240, step2: 248 },
+  { nbme: 250, step2: 254 },
+  { nbme: 260, step2: 260 },
+  { nbme: 270, step2: 265 },
+  { nbme: 280, step2: 270 },
 ];
 
-const step1Table = [
-  { nbme: 180, passProb: 0.55, status: "High risk" },
-  { nbme: 190, passProb: 0.7, status: "Borderline" },
-  { nbme: 196, passProb: 0.85, status: "Likely pass" },
-  { nbme: 200, passProb: 0.92, status: "Likely pass" },
-  { nbme: 210, passProb: 0.97, status: "Strong pass" },
-  { nbme: 220, passProb: 0.99, status: "Strong pass" },
-  { nbme: 230, passProb: 0.99, status: "Strong pass" },
-  { nbme: 240, passProb: 0.99, status: "Strong pass" },
+const step1ReportChecklist = [
+  {
+    field: "Equated percent correct",
+    use: "Compare performance across recent CBSSAs using the report's own scale.",
+  },
+  {
+    field: "Estimated probability of passing",
+    use: "Use the probability printed by the official score report as the primary readiness signal.",
+  },
+  {
+    field: "Low-pass range",
+    use: "Treat overlap with this range as uncertainty that deserves another official checkpoint or advisor discussion.",
+  },
 ];
 
 const formFamilySections = [
@@ -135,7 +132,7 @@ const conversionHubLinks = [
 const faqs = [
   {
     q: "How accurate is NBME score conversion?",
-    a: "Our conversion is based on published NBME-to-Step score-correlation data and aggregated user-submitted score reports. We do not currently claim a verified validation cohort — see our methodology page for status. Treat the range (typically about ±8 points for Step 2 CK), not the single point estimate, as your guide; accuracy improves the closer your test date is and the more recent the forms you have taken.",
+    a: "NBMEcalc does not currently publish a reproducible holdout cohort or a verified error rate. Treat the conversion as an independent planning heuristic, use the full displayed range, and keep the official NBME score report as the primary readiness source.",
   },
   {
     q: "Which NBME forms are most predictive of my Step 2 CK score?",
@@ -143,19 +140,19 @@ const faqs = [
   },
   {
     q: "Is the NBME score the same as a USMLE Step score?",
-    a: "No. NBME practice exams use a similar 200-280 scale but are not identical. NBMEs trend 3-8 points below your real Step 2 CK score on average. Our converter accounts for this offset.",
+    a: "No. A practice-assessment score and a final USMLE result come from different administrations. This converter applies published internal assumptions; it is not an official one-to-one mapping.",
   },
   {
     q: "How do I convert UWSA scores to a Step score?",
-    a: "UWSA 1 and UWSA 2 trend about 3-5 points higher than NBMEs. Our calculator automatically subtracts 3 points before applying the conversion. UWSA 2 is more predictive than UWSA 1.",
+    a: "The calculator treats UWSA 1 and UWSA 2 separately, using current internal adjustments of −5 and −2 before aggregation. These are model assumptions, not official universal offsets.",
   },
   {
     q: "Does NBME conversion work for the new pass/fail Step 1?",
-    a: "Yes. We report the probability of passing Step 1 instead of a numeric score. An NBME score above 200 corresponds to a >92% pass probability based on historical data.",
+    a: "For Step 1, use the official CBSSA report's estimated probability of passing and low-pass range first. NBMEcalc also shows an experimental model estimate, but it is not a replacement for the official report.",
   },
   {
     q: "Can I trust online NBME conversion charts?",
-    a: "Be careful — many charts circulating on Reddit are 5+ years old and use outdated forms. Our table is updated quarterly with new submissions and excludes outliers more than 3 standard deviations from the regression.",
+    a: "Be careful with any chart that does not state its assessment family, date, scale, sample, exclusions, and validation method. NBMEcalc publishes its assumptions and explicitly does not claim a validated cohort yet.",
   },
 ];
 
@@ -205,7 +202,7 @@ export default function NbmeScoreConversionPage() {
       <PageHero
         badge="NBME → Step conversion"
         title="NBME Score Converter and Conversion Chart"
-        description="Convert current Step 2 CK CCSSA scores into an independent estimate, or use Step 1 CBSSA scores to estimate pass probability. Add multiple recent inputs for a more useful confidence interval."
+        description="Convert current Step 2 CK CCSSA scores into an independent estimate, or use Step 1 CBSSA results for readiness planning. Add multiple recent inputs for a more useful planning range."
         size="md"
       />
 
@@ -235,6 +232,30 @@ export default function NbmeScoreConversionPage() {
           </div>
         </div>
         <Calculator />
+      </section>
+
+      <section id="nbme-32-score-conversion" className="border-b border-gray-200 bg-mint-50/40 py-14">
+        <div className="container max-w-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight">
+            NBME 32 score conversion: what to enter
+          </h2>
+          <div className="mt-4 space-y-3 leading-relaxed text-gray-700">
+            <p>
+              For an <strong>NBME 32 score conversion</strong>, select Step 1,
+              choose NBME Form 32, and enter the three-digit equated score shown
+              on your report. Do not enter percent correct into a field labeled
+              for a three-digit score.
+            </p>
+            <p>
+              The current model applies a small +1 form-specific adjustment
+              before aggregation. That is a disclosed internal assumption—not
+              an official NBME conversion. For a test-date decision, use the
+              official report&apos;s estimated probability of passing and low-pass
+              range first, then use this page to compare Form 32 with your other
+              recent evidence.
+            </p>
+          </div>
+        </div>
       </section>
 
       <section className="py-16 lg:py-20 bg-white border-b border-gray-200">
@@ -301,9 +322,10 @@ export default function NbmeScoreConversionPage() {
               NBME to Step 2 CK Conversion Chart
             </h2>
             <p className="text-gray-600 text-lg max-w-3xl">
-              The single most-asked question on r/Step2: <em>&quot;What does my NBME score actually mean?&quot;</em>{" "}
-              Below is our full lookup table with percentile ranking and a
-              competitiveness label for residency match.
+              If you are asking <em>&quot;What does my NBME score actually mean?&quot;</em>,{" "}
+              the table below exposes the calculator&apos;s current piecewise
+              midpoint mapping. It does not include invented percentile or
+              residency-competitiveness labels.
             </p>
           </div>
 
@@ -315,13 +337,7 @@ export default function NbmeScoreConversionPage() {
                     NBME score
                   </th>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    Predicted Step 2 CK
-                  </th>
-                  <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    Percentile
-                  </th>
-                  <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    Match competitiveness
+                    Internal model midpoint
                   </th>
                 </tr>
               </thead>
@@ -336,24 +352,6 @@ export default function NbmeScoreConversionPage() {
                     </td>
                     <td className="px-5 py-3 font-mono text-mint-700 font-bold">
                       {row.step2}
-                    </td>
-                    <td className="px-5 py-3 text-gray-700">
-                      {row.percentile}th
-                    </td>
-                    <td className="px-5 py-3">
-                      <span
-                        className={
-                          row.percentile >= 87
-                            ? "inline-flex items-center rounded-full bg-mint-100 text-mint-800 px-2.5 py-0.5 text-xs font-bold"
-                            : row.percentile >= 49
-                              ? "inline-flex items-center rounded-full bg-blue-100 text-blue-800 px-2.5 py-0.5 text-xs font-bold"
-                              : row.percentile >= 19
-                                ? "inline-flex items-center rounded-full bg-amber-100 text-amber-800 px-2.5 py-0.5 text-xs font-bold"
-                                : "inline-flex items-center rounded-full bg-rose-100 text-rose-800 px-2.5 py-0.5 text-xs font-bold"
-                        }
-                      >
-                        {row.label}
-                      </span>
                     </td>
                   </tr>
                 ))}
@@ -376,9 +374,9 @@ export default function NbmeScoreConversionPage() {
             NBME to Step 1 (Pass / Fail) Conversion
           </h2>
           <p className="text-gray-600 text-lg max-w-3xl mb-8">
-            Step 1 went pass/fail in January 2022, so we report the{" "}
-            <strong>probability of passing</strong> instead of a numeric score.
-            Use this table to triage whether you are ready to test.
+            Step 1 is pass/fail. The official CBSSA report already contains
+            readiness information, so start with those fields rather than an
+            unofficial numeric conversion chart.
           </p>
 
           <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm bg-white">
@@ -386,31 +384,20 @@ export default function NbmeScoreConversionPage() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    NBME score
+                    Official report field
                   </th>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    Pass probability
-                  </th>
-                  <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    Recommendation
+                    How to use it
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {step1Table.map((row) => {
-                  const pct = Math.round(row.passProb * 100);
-                  return (
-                    <tr key={row.nbme} className="hover:bg-mint-50 transition">
-                      <td className="px-5 py-3 font-mono font-bold text-gray-950">
-                        {row.nbme}
-                      </td>
-                      <td className="px-5 py-3 font-mono text-mint-700 font-bold">
-                        {pct}%
-                      </td>
-                      <td className="px-5 py-3 text-gray-700">{row.status}</td>
-                    </tr>
-                  );
-                })}
+                {step1ReportChecklist.map((row) => (
+                  <tr key={row.field} className="hover:bg-mint-50 transition">
+                    <td className="px-5 py-3 font-bold text-gray-950">{row.field}</td>
+                    <td className="px-5 py-3 text-gray-700">{row.use}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -418,11 +405,10 @@ export default function NbmeScoreConversionPage() {
           <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 flex gap-3">
             <AlertTriangle className="h-5 w-5 text-amber-700 shrink-0 mt-0.5" />
             <div className="text-sm text-amber-900">
-              <strong>Important:</strong> A 92% pass probability still means
-              roughly 1 in 12 people in your bucket fail. We recommend testing
-              only when at least <strong>3 consecutive NBMEs are above
-              200</strong>, with the most recent one within 2 weeks of test
-              day.
+              <strong>Important:</strong> Do not let an unofficial model output
+              override the readiness guidance on your current CBSSA report.
+              Discuss borderline or discordant results with your school or an
+              academic advisor.
             </div>
           </div>
         </div>
@@ -527,8 +513,8 @@ export default function NbmeScoreConversionPage() {
               <strong>What this is not:</strong> a guarantee. Test-day
               performance, content domain shifts, and the NBME&apos;s own
               psychometric adjustments mean any single prediction has natural
-              variance. Treat the confidence interval — not the point estimate
-              — as your ground truth.
+              variance. Treat the displayed range as planning context—not
+              ground truth—and compare it with official guidance.
             </p>
           </div>
 

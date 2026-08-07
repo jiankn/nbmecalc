@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "UWSA 1 to Step 1 Predictor — Free Pass Probability Calculator | NBMEcalc",
   description:
-    "Free UWSA 1 to USMLE Step 1 converter. Adjusts for UWSA 1's known +3 point inflation and outputs your Step 1 pass probability with 95% confidence interval.",
+    "Free UWSA 1 to USMLE Step 1 planning tool. Applies a disclosed internal source adjustment and shows an experimental pass estimate with a planning range.",
   keywords: [
     "uwsa 1 to step 1",
     "uwsa 1 step 1 conversion",
@@ -36,14 +36,14 @@ export const metadata: Metadata = {
 };
 
 const conversionTable = [
-  { uwsa: 170, step1Equiv: 167, passProb: 0.18, label: "High risk" },
-  { uwsa: 180, step1Equiv: 177, passProb: 0.42, label: "High risk" },
-  { uwsa: 190, step1Equiv: 187, passProb: 0.7, label: "Borderline" },
-  { uwsa: 200, step1Equiv: 197, passProb: 0.88, label: "Likely pass" },
-  { uwsa: 210, step1Equiv: 207, passProb: 0.96, label: "Strong pass" },
-  { uwsa: 220, step1Equiv: 217, passProb: 0.99, label: "Strong pass" },
-  { uwsa: 230, step1Equiv: 227, passProb: 0.99, label: "Strong pass" },
-  { uwsa: 240, step1Equiv: 237, passProb: 0.99, label: "Strong pass" },
+  { uwsa: 170, step1Equiv: 165, passProb: 0.18, label: "Higher model risk" },
+  { uwsa: 180, step1Equiv: 175, passProb: 0.42, label: "Higher model risk" },
+  { uwsa: 190, step1Equiv: 185, passProb: 0.7, label: "Model borderline" },
+  { uwsa: 200, step1Equiv: 195, passProb: 0.88, label: "Confirm officially" },
+  { uwsa: 210, step1Equiv: 205, passProb: 0.96, label: "Confirm officially" },
+  { uwsa: 220, step1Equiv: 215, passProb: 0.99, label: "Confirm officially" },
+  { uwsa: 230, step1Equiv: 225, passProb: 0.99, label: "Confirm officially" },
+  { uwsa: 240, step1Equiv: 235, passProb: 0.99, label: "Confirm officially" },
 ];
 
 const faqs = [
@@ -57,11 +57,11 @@ const faqs = [
   },
   {
     q: "What UWSA 1 score corresponds to passing Step 1?",
-    a: "A UWSA 1 of 199-200 corresponds to roughly the Step 1 pass threshold equivalent (196). Above 210 your pass probability exceeds 95%.",
+    a: "There is no official one-to-one UWSA 1 conversion. Use a current CBSSA score report and its official readiness guidance as the primary signal; the calculator's pass estimate is experimental.",
   },
   {
     q: "Should I rely on UWSA 1 alone?",
-    a: "No. Combine UWSA 1 with at least 2 NBMEs for a tight confidence interval. The calculator below accepts multiple sources and weights recent inputs higher.",
+    a: "No. Combine UWSA 1 with recent official readiness evidence. The calculator accepts multiple sources and weights recent inputs higher, but its displayed range is not yet holdout-calibrated.",
   },
   {
     q: "How does UWSA 1 differ from UWSA 2?",
@@ -84,7 +84,7 @@ export default function UWSA1ToStep1Page() {
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free converter from UWorld Self-Assessment 1 to USMLE Step 1 pass probability with 95% confidence interval.",
+              "Free independent planning tool for combining UWorld Self-Assessment 1 with other USMLE Step 1 readiness inputs.",
           }),
         }}
       />
@@ -106,7 +106,7 @@ export default function UWSA1ToStep1Page() {
       <PageHero
         badge="UWSA 1 → Step 1 conversion"
         title="UWSA 1 to Step 1: Free Pass Probability Predictor"
-        description="Your UWSA 1 score over-predicts your real Step 1 equivalent by ~3 points. We correct that automatically and output a calibrated pass probability with a 95% confidence interval."
+        description="Enter UWSA 1 as one readiness input. The calculator applies a disclosed −5 internal source adjustment and returns an experimental pass estimate with a planning range—not an official conversion."
         size="md"
       />
 
@@ -121,7 +121,7 @@ export default function UWSA1ToStep1Page() {
             NBME or Free 120 inputs for a tighter prediction.
           </p>
         </div>
-        <Calculator defaultStep="step1" />
+        <Calculator defaultStep="step1" defaultSource="UWSA1" />
       </section>
 
       {/* Conversion table */}
@@ -137,7 +137,7 @@ export default function UWSA1ToStep1Page() {
           </div>
           <p className="text-gray-600 text-lg mb-8">
             Lookup your UWSA 1 score and read across to see your equated Step 1
-            three-digit equivalent and pass probability.
+            internal three-digit equivalent and experimental pass estimate.
           </p>
 
           <div className="overflow-x-auto rounded-3xl border border-gray-200 shadow-sm">
@@ -151,7 +151,7 @@ export default function UWSA1ToStep1Page() {
                     Step 1 equivalent
                   </th>
                   <th className="text-right px-5 py-3 font-bold text-gray-900">
-                    Pass probability
+                    Experimental pass estimate
                   </th>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">
                     Status
@@ -192,8 +192,9 @@ export default function UWSA1ToStep1Page() {
           </div>
 
           <p className="text-xs text-gray-500 mt-4">
-            * UWSA 1 systematically over-predicts by 3 points. Step 1 equivalent
-            column already applies that correction. Pass threshold = 196.
+            * This table displays the calculator&apos;s current −5-point internal
+            source adjustment and logistic pass heuristic. It is not an official
+            UWorld, NBME, or USMLE conversion and is not holdout-calibrated.
           </p>
         </div>
       </section>
@@ -206,16 +207,14 @@ export default function UWSA1ToStep1Page() {
               <TrendingDown className="h-5 w-5 text-amber-700" />
             </div>
             <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-              Why UWSA 1 over-predicts
+              How this calculator treats UWSA 1
             </h2>
           </div>
           <div className="space-y-4 text-gray-700 leading-relaxed">
             <p>
-              UWorld Self-Assessment 1 was originally calibrated against an
-              older Step 1 cohort that scored, on average, lower than today&apos;s
-              testers. UWorld has not re-calibrated UWSA 1 since 2020, leaving a
-              persistent inflation of about <strong>+3 points</strong> compared
-              to the real Step 1 equivalent score.
+              UWSA 1 and current NBME readiness reports are different products
+              with different forms and reporting methods. A difference between
+              them is not proof of a universal conversion offset.
             </p>
             <p>
               The calculator applies an internal UWSA 1 source adjustment.
@@ -223,18 +222,19 @@ export default function UWSA1ToStep1Page() {
               NBME, or USMLE conversion and not a published validation result.
             </p>
             <p>
-              The fix: <strong>subtract 3 points</strong> from your UWSA 1 score
-              before reading any conversion table. Our calculator does this for
-              you automatically.
+              For consistency across the calculator, the current model applies
+              a <strong>−5 point internal adjustment</strong> before aggregation.
+              That value is versioned and may change after a reproducible
+              validation dataset is published.
             </p>
           </div>
 
           <div className="mt-8 rounded-2xl bg-white border border-amber-200 p-5 flex gap-3">
             <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-900">
-              <strong>Caveat:</strong> recent UWorld content updates may have
-              tightened UWSA 1&apos;s alignment. We re-validate every quarter
-              with fresh r/Step1 outcome submissions.
+              <strong>Caveat:</strong> this adjustment is an explicit model
+              assumption, not a published claim about UWorld&apos;s scoring. Use a
+              current official CBSSA report for readiness decisions.
             </p>
           </div>
         </div>

@@ -108,6 +108,15 @@ const sourceRows = [
 
 const changes = [
   {
+    date: "2026-08-07",
+    items: [
+      "Relabelled the heuristic interval as an estimated planning range until holdout coverage is published.",
+      "Corrected range freshness to use the age of the most recent practice input rather than days until the real exam.",
+      "Aligned the public UWSA 1 adjustment with the model's −5-point internal assumption.",
+      "Opened outcome-reminder opt-in to free predictions and published the validation protocol.",
+    ],
+  },
+  {
     date: "2026-06-28",
     items: [
       "Separated CBSSA, CCSSA, and CCMSA form selectors by target Step exam.",
@@ -166,7 +175,7 @@ export default function MethodologyPage() {
             </Link>
           </Button>
           <Button variant="secondary" asChild>
-            <Link href="/#calculator">Try the calculator</Link>
+            <Link href="/validation">View validation status</Link>
           </Button>
         </div>
       </PageHero>

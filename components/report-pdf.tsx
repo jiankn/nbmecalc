@@ -284,7 +284,7 @@ export function ReportPdf({
             </Text>
             <Text style={styles.heroScore}>{result.pointEstimate}</Text>
             <Text style={styles.heroCi}>
-              95% CI · {result.ciLower} – {result.ciUpper}
+              Estimated range · {result.ciLower} – {result.ciUpper}
             </Text>
           </View>
           <View style={styles.heroRight}>
@@ -342,7 +342,7 @@ export function ReportPdf({
             </Text>
             <Text style={{ marginBottom: 6 }}>{band.explainer}</Text>
             <Text style={{ fontSize: 8.5, color: COLOR.textMuted }}>
-              We cap pass probability at 99%. Even a +30 pt margin can fail on
+              We cap the experimental pass estimate at 99%. Even a +30 pt margin can fail on
               test day from illness, anxiety, or an unusual block.
             </Text>
           </View>
@@ -391,9 +391,9 @@ export function ReportPdf({
           react-pdf will auto-break to a new page if these overflow A4. */}
       <Page size="A4" style={styles.page} wrap>
         <Header />
-        <Text style={styles.title}>Decision-grade analysis</Text>
+        <Text style={styles.title}>Readiness discussion guide</Text>
         <Text style={styles.subtitle}>
-          Six modules answering the questions you&apos;ve been agonizing over.
+          Model scenarios, study priorities, and uncertainty to discuss with an advisor.
         </Text>
 
         <RiskProfileBlock profile={result.riskProfile} />
@@ -419,7 +419,7 @@ export function ReportPdf({
         <Header />
         <Text style={styles.title}>Supporting analytics</Text>
         <Text style={styles.subtitle}>
-          The numbers behind the recommendation above.
+          The model inputs and assumptions behind the discussion guide above.
         </Text>
 
         {result.scoreTrajectory.points.length >= 2 && (
@@ -445,16 +445,15 @@ export function ReportPdf({
 
         <Text style={styles.sectionTitle}>Methodology</Text>
         <Text style={{ fontSize: 9.5, marginBottom: 4 }}>
-          Equating tables: each practice source is mapped to a Step-equivalent
-          score using vendor-published equating where available, and otherwise
-          through a regression on a community dataset of {">"} 5,000 paired
-          (practice → real-exam) outcomes. Recent NBME forms (28+) are
-          weighted 1.4× because they best mirror current exam difficulty.
+          Equating rules: each practice source is mapped to a Step-equivalent
+          score using versioned piecewise tables and disclosed source
+          adjustments. These are internal planning assumptions, not an
+          official conversion or a regression on a published outcome cohort.
         </Text>
         <Text style={{ fontSize: 9.5, marginBottom: 4 }}>
-          Confidence interval: 95% CI is computed via residual standard error
-          across the cohort at your predicted band, then widened slightly for
-          single-source predictions to reflect lower information.
+          Planning range: an internal heuristic based on input count, source
+          quality, and the age of the most recent practice input. It has not
+          been calibrated to verified 95% coverage on a holdout cohort.
         </Text>
         <Text style={{ fontSize: 9.5 }}>
           Limitations: the model can&apos;t see your sleep, stamina, anxiety,
@@ -1009,8 +1008,8 @@ function OneDecisionBlock({ decision }: { decision: OneDecision }) {
           marginBottom: 4,
         }}
       >
-        {isMore ? "Need more data" : "Our recommendation"} ·{" "}
-        {decision.confidence} confidence
+        {isMore ? "Need more data" : "Model scenario"} ·{" "}
+        {decision.confidence} signal strength
       </Text>
       <Text
         style={{
@@ -1166,7 +1165,7 @@ function CohortMirrorBlock({ mirror }: { mirror: CohortMirror }) {
   const maxPct = Math.max(...mirror.buckets.map((b) => b.percentage), 0.01);
   return (
     <View style={{ marginBottom: 14 }} wrap={false}>
-      <Text style={styles.sectionTitle}>Cohort mirror</Text>
+      <Text style={styles.sectionTitle}>Model scenario mirror</Text>
       <Text style={styles.sectionDesc}>{mirror.cohortDescription}</Text>
       <View style={styles.card}>
         <View style={{ gap: 4 }}>

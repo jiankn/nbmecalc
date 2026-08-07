@@ -143,7 +143,7 @@ export default function PredictionsHistoryPage() {
                     Predicted
                   </th>
                   <th className="text-right px-5 py-3 font-bold text-gray-900">
-                    95% CI
+                    Estimated range
                   </th>
                   <th className="text-right px-5 py-3 font-bold text-gray-900">
                     Pass

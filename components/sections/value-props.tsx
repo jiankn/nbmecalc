@@ -28,8 +28,8 @@ const cards = [
     ),
   },
   {
-    title: "Real Range, Not a Guess",
-    body: "We show you a 95% confidence interval, not a single number — so you see the realistic range instead of fake 'you'll get a 240' precision.",
+    title: "A Range, Not False Precision",
+    body: "We show an estimated planning range beside the midpoint and publish how it is produced. It is an internal heuristic, not a validated 95% interval.",
     image: "/images/feature-score-range.png",
     imageAlt: "Medical student holding a phone displaying an NBMEcalc score range prediction",
     imageClassName: "",
@@ -38,8 +38,8 @@ const cards = [
     visual: null,
   },
   {
-    title: "A Decision, Not Just A Number",
-    body: "Should you sit or postpone? What 3 moves actually shift your score? Which Reddit-favorite tactics will hurt you? The paid report answers — and tells you when it would be wrong.",
+    title: "Decision Support, Not A Verdict",
+    body: "The paid report organizes source weighting, readiness questions, study priorities, and conditions that should prompt a discussion with your advisor.",
     image: "/images/feature-study-plan.jpg",
     imageAlt: "Blank study planner with pastel sticky notes on a warm wooden desk",
     imageClassName: "group-hover:scale-[1.02]",
@@ -47,7 +47,7 @@ const cards = [
     iconBg: "bg-mint-100/95 text-mint-700",
     visual: (
       <div className="absolute left-5 top-5 z-10 flex max-w-[240px] flex-wrap gap-2 rotate-2">
-        {["Sit / postpone", "3 high-leverage moves", "Don't do these"].map(
+        {["Readiness review", "3 high-leverage moves", "Avoid these"].map(
           (label, i) => (
             <div
               key={label}

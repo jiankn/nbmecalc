@@ -16,10 +16,10 @@ const stats = [
     sub: "NBME, UWSA 1/2, Free 120, AMBOSS, and CMS",
   },
   {
-    value: 95,
-    suffix: "%",
-    label: "Interval Reported",
-    sub: "Planning range, not a guarantee",
+    value: 1,
+    suffix: "",
+    label: "Public Methodology",
+    sub: "Versioned assumptions and validation status",
   },
 ];
 

@@ -215,7 +215,7 @@ export default function NbmeCalculatorPage() {
           </h2>
           <p className="text-gray-600">
             Enter your NBME scores below to get an adjusted Step prediction
-            with a 95% confidence interval.
+            with an estimated planning range.
           </p>
         </div>
         <Calculator />
@@ -333,7 +333,7 @@ export default function NbmeCalculatorPage() {
               <h3 className="font-bold mb-1">Confidence interval</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 A point estimate without an interval is misleading. We give
-                you the 95% CI so you know how wide the realistic range is.
+                you an estimated range so you can see the model&apos;s uncertainty.
               </p>
             </div>
           </div>

@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const seoContentUpdate = new Date("2026-07-07");
   const free120CmsUpdate = new Date("2026-07-22");
   const educatorResourceUpdate = new Date("2026-07-17");
+  const validationUpdate = new Date("2026-08-07");
 
   const liveRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: homepageUpdate, changeFrequency: "weekly", priority: 1.0 },
@@ -32,6 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/methodology`, lastModified: now, changeFrequency: "monthly", priority: 0.65 },
+    { url: `${SITE_URL}/validation`, lastModified: validationUpdate, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/educators`, lastModified: educatorResourceUpdate, changeFrequency: "monthly", priority: 0.6 },
 
     // Secondary SEO predictors

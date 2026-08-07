@@ -140,7 +140,7 @@ async function buildReminderEmail(args: {
 
   const stepLabel = args.step.toUpperCase().replace("STEP", "Step ");
   const predicted = args.predictedScore
-    ? `${args.predictedScore}${args.ciLower && args.ciUpper ? ` (${args.ciLower}–${args.ciUpper} 95% CI)` : ""}`
+    ? `${args.predictedScore}${args.ciLower && args.ciUpper ? ` (estimated range ${args.ciLower}–${args.ciUpper})` : ""}`
     : "your predicted score";
   const subject = `Your ${stepLabel} prediction was ${args.predictedScore ?? "ready"}. How did you actually do?`;
   const buttons = actionLinks
@@ -157,7 +157,7 @@ async function buildReminderEmail(args: {
       <p style="font-size:16px;margin:0 0 18px">One tap is enough. Failed outcomes are especially valuable because they keep pass-risk calibration honest for future students.</p>
       <div style="margin:16px 0 22px">${buttons}</div>
       <p style="font-size:14px;color:#4b5563;margin:0 0 16px">Want to enter the exact score instead? <a href="${escapeHtml(exactUrl)}" style="color:#047857;font-weight:700">Open the exact-score form</a>.</p>
-      <p style="font-size:12px;color:#6b7280;margin:24px 0 0">No login required. This link is tied only to your paid report session.</p>
+      <p style="font-size:12px;color:#6b7280;margin:24px 0 0">No login required. This private link is tied only to the prediction for which you requested a reminder.</p>
     </div>`;
 
   const text = `Your ${stepLabel} prediction was ${predicted}. How did you actually do?\n\n${actionLinks.map((l) => `${l.label}: ${l.url}`).join("\n")}\n\nExact score form: ${exactUrl}`;

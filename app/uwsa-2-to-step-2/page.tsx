@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "UWSA 2 to Step 2 CK Predictor — Free Score Calculator | NBMEcalc",
   description:
-    "Free UWSA 2 to USMLE Step 2 CK converter. Most predictive UWorld self-assessment. Auto-corrects the +2 point bias and outputs a calibrated Step 2 CK estimate with 95% CI.",
+    "Free UWSA 2 to USMLE Step 2 CK planning tool. Applies a disclosed −2 internal source adjustment and shows an estimated planning range.",
   keywords: [
     "uwsa 2 to step 2",
     "uwsa 2 step 2 conversion",
@@ -86,7 +86,7 @@ export default function UWSA2ToStep2Page() {
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free converter from UWorld Self-Assessment 2 to USMLE Step 2 CK with calibrated 95% confidence interval.",
+              "Free independent planning tool for combining UWorld Self-Assessment 2 with other USMLE Step 2 CK readiness inputs.",
           }),
         }}
       />
@@ -122,7 +122,7 @@ export default function UWSA2ToStep2Page() {
             tighten the confidence interval substantially.
           </p>
         </div>
-        <Calculator defaultStep="step2" />
+        <Calculator defaultStep="step2" defaultSource="UWSA2" />
       </section>
 
       <section className="py-16 lg:py-20 bg-white">
@@ -178,9 +178,9 @@ export default function UWSA2ToStep2Page() {
           </div>
 
           <p className="text-xs text-gray-500 mt-4">
-            * UWSA 2 over-predicts by ~2 points; the Step 2 CK column already
-            applies that correction. 95% CI = ±5 pts when used alongside ≥ 2
-            NBMEs.
+            * The table applies the calculator&apos;s −2-point internal UWSA 2
+            adjustment. It is not an official or validated conversion. The
+            planning range narrows when used alongside multiple recent inputs.
           </p>
         </div>
       </section>
@@ -188,13 +188,13 @@ export default function UWSA2ToStep2Page() {
       <section className="py-16 lg:py-20 bg-mint-50/40">
         <div className="container max-w-3xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-6">
-            Why UWSA 2 is your best UWorld signal
+            How the model treats UWSA 2
           </h2>
           <ul className="space-y-3 text-gray-700">
             {[
-              "Re-equated in 2024 against a current US MD + IMG cohort",
+              "Source assumption is versioned in the public methodology",
               "Separate internal source treatment from UWSA 1",
-              "Question style closely mirrors current Step 2 CK shelf items",
+              "Best interpreted beside a recent comprehensive assessment",
               "Independent estimate; no published holdout error rate",
             ].map((item) => (
               <li key={item} className="flex gap-3">

@@ -42,7 +42,7 @@ const rows: CompareRow[] = [
   { feature: "Free 120", values: ["yes", "no", "yes", "no"] },
   { feature: "AMBOSS SA conversion", values: ["yes", "no", "yes", "no"] },
   { feature: "CMS Form support", values: ["yes", "no", "no", "no"] },
-  { feature: "95% confidence interval", values: ["yes", "no", "no", "no"] },
+  { feature: "Planning range shown", values: ["yes", "no", "no", "no"] },
   { feature: "Personalized 14-day study plan", values: ["yes", "no", "no", "no"] },
   { feature: "Downloadable PDF report", values: ["yes", "yes", "no", "no"] },
   { feature: "Mobile-optimized", values: ["yes", "partial", "partial", "no"] },
@@ -143,7 +143,7 @@ export default function BestPredictorPage() {
             Try the best one free
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            No signup. Multi-source aggregation, 95% CI, and a personalized
+            No signup. Multi-source aggregation, a planning range, and a personalized
             study plan — all free. Go straight to the{" "}
             <Link
               href="/step-1-predictor"

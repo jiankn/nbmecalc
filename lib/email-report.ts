@@ -53,8 +53,8 @@ export function renderReportEmail(data: ReportEmailData): {
   const text = [
     `Your ${stepLabel} Report Is Ready`,
     "",
-    `Predicted Score: ${pointEstimate} (95% CI: ${ciLower}–${ciUpper})`,
-    `Pass Probability: ${passPercent}%`,
+    `Predicted Score: ${pointEstimate} (estimated range: ${ciLower}–${ciUpper})`,
+    `Experimental Pass Estimate: ${passPercent}%`,
     "",
     `View your full report: ${reportUrl}`,
     `Download PDF: ${pdfUrl}`,
@@ -70,7 +70,7 @@ export function renderReportEmail(data: ReportEmailData): {
   const html = `<!doctype html>
 <html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
 <body style="margin:0;padding:0;background:#f9fafb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#111827;">
-  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">Your ${stepLabel} score prediction: ${pointEstimate} (${ciLower}\u2013${ciUpper}), ${passPercent}% pass probability.</div>
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">Your ${stepLabel} planning estimate: ${pointEstimate} (${ciLower}\u2013${ciUpper}), ${passPercent}% experimental pass estimate.</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr><td align="center" style="padding:40px 16px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;">
@@ -103,7 +103,7 @@ export function renderReportEmail(data: ReportEmailData): {
                       <div style="font-size:32px;font-weight:900;color:#111827;">${pointEstimate}</div>
                     </td>
                     <td style="text-align:center;padding:0 8px;">
-                      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#047857;margin-bottom:4px;">95% CI</div>
+                      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#047857;margin-bottom:4px;">Estimated range</div>
                       <div style="font-size:20px;font-weight:800;color:#111827;">${ciLower}\u2013${ciUpper}</div>
                     </td>
                     <td style="text-align:center;padding:0 8px;">
@@ -136,7 +136,7 @@ export function renderReportEmail(data: ReportEmailData): {
           <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;"/>
 
           <p style="margin:0 0 8px;color:#6b7280;font-size:13px;line-height:1.5;">
-            <strong>Your report includes:</strong> full prediction breakdown, sit-or-postpone recommendation, 3 highest-leverage study moves, anti-patterns to avoid, and cohort comparison.
+            <strong>Your report includes:</strong> full prediction breakdown, a readiness discussion guide, 3 study priorities, uncertainty notes, and a printable PDF.
           </p>
 
           <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;"/>

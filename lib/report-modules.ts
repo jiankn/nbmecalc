@@ -176,10 +176,10 @@ export function buildOneDecision(input: {
       recommendation: "need_more_data",
       confidence: "low",
       headline:
-        "Add a second practice exam before we make a sit/postpone call.",
+        "Add a second practice exam before using this model for a test-date discussion.",
       reasons: [
         "A single input can't tell us whether your score is stable or noisy.",
-        "Single-source predictions widen our CI by ~25%.",
+        "Single-source predictions receive a wider planning range.",
         "The cheapest move you can make right now is one more NBME or UWSA.",
       ],
       reverseTriggers: [
@@ -203,13 +203,13 @@ export function buildOneDecision(input: {
       // <= 0.3 (not <) so 30% lands in "high confidence postpone" — the
       // user's intuition matches: a 30% pass probability is decisively low.
       confidence: passProb <= 0.3 ? "high" : "moderate",
-      headline: `Postpone 28 days. Your on-schedule pass probability (${Math.round(passProb * 100)}%) is below the safety threshold.`,
+      headline: `Discuss a longer delay with your advisor. The experimental on-schedule pass estimate is ${Math.round(passProb * 100)}%.`,
       reasons: [
-        `Pushing back 28 days lifts your pass probability from ${Math.round(passProb * 100)}% to ${Math.round((passProb + lift28) * 100)}%.`,
+        `The model's 28-day scenario changes the pass estimate from ${Math.round(passProb * 100)}% to ${Math.round((passProb + lift28) * 100)}%; this projection is not validated.`,
         input.scoreTrajectory.trend === "improving"
           ? "Your trajectory is still improving — more time = real gains."
           : "Your scores aren't yet stable — sitting now is unnecessary risk.",
-        "The financial and timeline cost of postponing is small compared to the cost of a failed attempt and forced retake.",
+        "Only your school or advisor can weigh this model signal against eligibility, scheduling, and personal constraints.",
       ],
       reverseTriggers: [
         "Your next NBME comes in significantly higher than your trajectory predicts (+10 pts or more).",
@@ -223,13 +223,13 @@ export function buildOneDecision(input: {
     return {
       recommendation: "postpone_14d",
       confidence: "moderate",
-      headline: `Consider postponing 14 days. Pass probability lifts from ${Math.round(passProb * 100)}% to ${Math.round((passProb + lift14) * 100)}%.`,
+      headline: `Review a 14-day delay scenario with your advisor. The experimental pass estimate changes from ${Math.round(passProb * 100)}% to ${Math.round((passProb + lift14) * 100)}%.`,
       reasons: [
         "14 days is enough to consolidate weak areas without losing momentum.",
         input.scoreTrajectory.trend === "improving"
           ? "Your trajectory suggests there's more score still to extract."
           : "Sitting at borderline pass probability is a high-variance bet on test-day luck.",
-        "The marginal gain from 14 more days exceeds the marginal cost for most candidates.",
+        "The model cannot determine whether the scheduling cost is acceptable for you.",
       ],
       reverseTriggers: [
         "Your next NBME drops below your current floor estimate.",
@@ -262,7 +262,7 @@ export function buildOneDecision(input: {
   }
   if (lift14 < 0.05) {
     reasons.push(
-      `Postponing 14 days only lifts your pass probability by ${Math.round(lift14 * 100)} pts. The marginal gain doesn't justify the cost.`,
+      `The model's 14-day scenario changes the pass estimate by ${Math.round(lift14 * 100)} points; treat that as discussion context, not a recommendation.`,
     );
   }
   if (input.daysUntilExam !== undefined && input.daysUntilExam <= 7) {
@@ -282,7 +282,7 @@ export function buildOneDecision(input: {
   return {
     recommendation: "sit_as_scheduled",
     confidence,
-    headline: "Sit as scheduled. Your inputs support taking the exam on your current date.",
+    headline: "The current-date scenario is the model's strongest fit; confirm readiness with official guidance.",
     reasons,
     reverseTriggers,
   };

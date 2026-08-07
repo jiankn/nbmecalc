@@ -28,6 +28,17 @@ describe("score feedback tokens", () => {
     expect(verified).toEqual({ ok: false, reason: "bad-signature" });
   });
 
+  it("signs and verifies a free-prediction feedback token", async () => {
+    const token = await createScoreFeedbackToken("pred_123e4567", "secret", {
+      now: 1_000,
+    });
+    const verified = await verifyScoreFeedbackToken(token, "secret", 2_000);
+    expect(verified.ok).toBe(true);
+    if (verified.ok) {
+      expect(verified.payload.sessionId).toBe("pred_123e4567");
+    }
+  });
+
   it("maps one-click actions to outcomes", () => {
     expect(outcomeFromAction("fail")).toEqual({ passFail: "fail", scoreBand: "fail" });
     expect(outcomeFromAction("pass_240_plus")).toEqual({ passFail: "pass", scoreBand: "240+" });

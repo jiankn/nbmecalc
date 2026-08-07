@@ -124,7 +124,7 @@ const faqs = [
   },
   {
     q: "Does the calculator account for the new pass/fail format?",
-    a: "Yes. Our model converts your inputs to an equated three-digit score, compares it to the current pass threshold, then outputs a pass probability with a 95% confidence interval.",
+    a: "The model converts inputs to an internal equated score and shows an experimental pass estimate with a planning range. It is not a validated substitute for the official CBSSA readiness report.",
   },
   {
     q: "Should I take Step 1 if my latest NBME is below 200?",

@@ -87,7 +87,10 @@ export async function verifyScoreFeedbackToken(
     return { ok: false, reason: "malformed" };
   }
 
-  if (payload.v !== TOKEN_VERSION || !payload.sessionId?.startsWith("cs_")) {
+  if (
+    payload.v !== TOKEN_VERSION ||
+    !/^(cs_|pred_)/.test(payload.sessionId ?? "")
+  ) {
     return { ok: false, reason: "malformed" };
   }
   if (payload.exp < now) return { ok: false, reason: "expired" };

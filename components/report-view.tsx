@@ -166,7 +166,7 @@ export function ReportView({
           </div>
           <div className="text-gray-600 text-lg tabular-nums">
             {result.ciLower}–{result.ciUpper}{" "}
-            <span className="text-xs">95% CI</span>
+            <span className="text-xs">Estimated range</span>
           </div>
           {result.freshness === "stale" && (
             <Badge variant="outline" className="text-xs">
@@ -193,7 +193,7 @@ export function ReportView({
           className={`md:col-span-1 rounded-3xl border-2 p-6 text-center ${TONE_BG[band.tone]} print:p-4`}
         >
           <div className="text-xs uppercase tracking-wider opacity-70 mb-1">
-            Pass Probability
+            Experimental pass estimate
           </div>
           <div className="text-5xl font-black tabular-nums">
             {Math.round(result.passProbability * 100)}%
@@ -207,7 +207,7 @@ export function ReportView({
           </h3>
           <p className="text-gray-700 mb-3">{band.explainer}</p>
           <p className="text-xs text-gray-500">
-            We cap pass probability at 99%. A model that claims certainty is
+            We cap the experimental pass estimate at 99%. A model that claims certainty is
             wrong — even a +30 pt margin can fail on test day from illness,
             anxiety, or an unusual block.
           </p>
@@ -752,7 +752,7 @@ function OneDecisionSection({ decision }: { decision: OneDecision }) {
           <Icon className="h-5 w-5" />
         </div>
         <span className={`text-xs uppercase tracking-widest font-bold ${subtle}`}>
-          Our recommendation · {decision.confidence} confidence
+          Model scenario · {decision.confidence} signal strength
         </span>
       </div>
       <h2 className="text-2xl lg:text-3xl font-black tracking-tight mt-3 mb-4 leading-tight">
@@ -807,7 +807,7 @@ function CohortMirrorSection({ mirror }: { mirror: CohortMirror }) {
     <section className="mb-8 print:break-inside-avoid">
       <h2 className="text-2xl font-extrabold mb-2 flex items-center gap-2 flex-wrap">
         <Users className="h-6 w-6 text-mint-600" />
-        Cohort mirror
+        Model scenario mirror
         <span className="inline-flex items-center rounded-full bg-mint-100 px-2 py-0.5 text-[10px] font-bold uppercase text-mint-800 tracking-wider">
           Model-projected
         </span>

@@ -42,7 +42,7 @@ const rows: CompareRow[] = [
   { feature: "Free 120 input", values: ["yes", "yes"] },
   { feature: "CMS Form subject input", values: ["yes", "no"] },
   { feature: "Multi-input weighted aggregation", values: ["yes", "no"] },
-  { feature: "95% confidence interval", values: ["yes", "no"] },
+  { feature: "Planning range shown", values: ["yes", "no"] },
   { feature: "Personalized study plan", values: ["yes", "no"] },
   { feature: "Free unlimited use", values: ["yes", "yes"] },
   { feature: "Mobile / PWA", values: ["yes", "partial"] },
@@ -99,7 +99,7 @@ export default function VsAmbossPage() {
           <ul className="space-y-3 text-gray-700 list-disc pl-5">
             <li>You used UWorld + NBMEs (no AMBOSS subscription required)</li>
             <li>You want to combine multiple sources for a tighter prediction</li>
-            <li>You want a 95% confidence interval (AMBOSS gives a point estimate only)</li>
+            <li>You want an estimated planning range with its assumptions stated</li>
             <li>You want a personalized study plan based on your weak rotations</li>
             <li>You don&apos;t want to be locked into a specific Q-bank brand</li>
           </ul>
