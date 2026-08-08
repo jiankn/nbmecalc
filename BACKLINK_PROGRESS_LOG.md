@@ -120,3 +120,28 @@
 2. 在仓库 Settings → Secrets and variables → Actions 中新增 Secret：`NPM_TOKEN`（npm automation token）。
 3. Actions → `Score conversion package` → Run workflow；确认三套 Node 测试通过后才会发布。
 4. 将 `https://www.npmjs.com/package/nbmecalc-score-conversion` 的版本、发布日期和页面审计结果发回，以便完成 P15 验收。
+
+## 2026-08-08 · Round 4 · 公开仓库与 CI 证据核验
+
+### 完成项
+
+- 提交 `db206251fcb108497739b2c70d485f1b9b004b15` 已推送到公开仓库 `https://github.com/jiankn/nbmecalc` 的 `main` 分支。
+- GitHub Actions 运行 [31259586679](https://github.com/jiankn/nbmecalc/actions/runs/31259586679)（`Score conversion package`）完成，结论为 `success`。
+- 审计公开包 README：
+  - 页面 `https://github.com/jiankn/nbmecalc/blob/main/packages/nbmecalc-score-conversion/README.md` 返回 HTTP 200；
+  - 未发现页面级 `noindex` 或 `X-Robots-Tag`；
+  - `NBME score conversion` → `/nbme-score-conversion`，`methodology and assumptions` → `/methodology`；
+  - 两条链接均由 GitHub 渲染为 `rel="nofollow"`，因此只记录为公开源资产和发现路径，不计入 follow 完成外链。
+
+### 当前状态
+
+- 完成的公开列表：`0`；唯一引荐根域：`0`。
+- 公开源仓库/配置资产：`1`（GitHub）；npm 公共包仍不存在。
+- npm 平台：`Pending user action`，需要 `NPM_TOKEN` Secret 和手动运行工作流。
+- GitHub 教育资源清单：仍为 `Pending user action`，源仓库 README 本身不等同于已合并清单 PR。
+
+### 下一步
+
+1. 配置仓库 Secret `NPM_TOKEN` 并手动运行发布 job，发布前确认包名仍可用。
+2. 审计 npm 公共页面的 HTTP、robots、README 可见锚文本和 `rel`，通过后再把 P15 记为 `Complete`。
+3. 选择一个主题匹配的教育资源清单，提交一次 GitHub PR；合并后审计最终渲染文件并单独统计其 `rel`。
