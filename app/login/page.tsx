@@ -61,6 +61,7 @@ function GoogleIcon({ className }: { className?: string }) {
 function LoginFormInner() {
   const params = useSearchParams();
   const next = params.get("next") ?? "/dashboard";
+  const resumesCheckout = next.startsWith("/checkout/resume");
   const errorCode = params.get("error");
   const initialError = errorCode ? ERROR_MESSAGES[errorCode] ?? null : null;
 
@@ -119,8 +120,9 @@ function LoginFormInner() {
           Sign in to NBMEcalc
         </h1>
         <p className="text-gray-600">
-          New here? Same form — we&apos;ll create your account automatically.
-          No password needed.
+          {resumesCheckout
+            ? "Sign in once. We will continue to secure checkout automatically."
+            : "New here? We will create your account automatically. No password needed."}
         </p>
       </div>
 

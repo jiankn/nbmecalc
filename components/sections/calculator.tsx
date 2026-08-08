@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, X, ArrowRight, Lock, Sparkles, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,11 @@ import { cn } from "@/lib/utils";
 import { trackProductEvent } from "@/lib/product-events";
 import { PredictionFeedbackOptIn } from "@/components/prediction-feedback-opt-in";
 import { formatUsd, getLifetimeOffer } from "@/lib/lifetime-offer";
+import {
+  buildLifetimeResumePath,
+  getCheckoutIntent,
+  stripCheckoutIntent,
+} from "@/lib/checkout-intent";
 
 const STEPS: { key: StepKind; label: string }[] = [
   { key: "step1", label: "Step 1" },
@@ -81,9 +86,30 @@ export function Calculator({
   const [weakSubjects, setWeakSubjects] = useState<string[]>([]);
   const [result, setResult] = useState<PredictionPreview | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [autoStartSingle, setAutoStartSingle] = useState(false);
+  const [singleCheckoutIntent, setSingleCheckoutIntent] = useState(false);
   const session = useSession();
   const hasLifetime =
     session.status === "authed" && session.user.lifetimeAccess;
+
+  useEffect(() => {
+    const syncCheckoutIntent = (event?: Event) => {
+      const announcedIntent = (event as CustomEvent<string> | undefined)
+        ?.detail;
+      setSingleCheckoutIntent(
+        announcedIntent === "single" ||
+          getCheckoutIntent(window.location.search) === "single"
+      );
+    };
+
+    syncCheckoutIntent();
+    window.addEventListener("popstate", syncCheckoutIntent);
+    window.addEventListener("checkout-intent-changed", syncCheckoutIntent);
+    return () => {
+      window.removeEventListener("popstate", syncCheckoutIntent);
+      window.removeEventListener("checkout-intent-changed", syncCheckoutIntent);
+    };
+  }, []);
 
   // Listen for the Hero's "Predict My Score" button. When the user enters
   // a score in the hero and clicks, we receive it here and inject it into
@@ -187,6 +213,8 @@ export function Calculator({
   }
 
   function handlePredict() {
+    const continueToSingleCheckout =
+      getCheckoutIntent(window.location.search) === "single";
     trackProductEvent("calculator_started", {
       step,
       inputCount: exams.length,
@@ -208,6 +236,26 @@ export function Calculator({
         block: "center",
       });
     }, 50);
+
+    if (continueToSingleCheckout) {
+      window.history.replaceState(
+        window.history.state,
+        "",
+        stripCheckoutIntent(
+          `${window.location.pathname}${window.location.search}${window.location.hash}`
+        )
+      );
+      setSingleCheckoutIntent(false);
+
+      if (!hasLifetime) {
+        trackProductEvent("paywall_opened", {
+          step,
+          path: window.location.pathname,
+        });
+        setAutoStartSingle(true);
+        setShowPaywall(true);
+      }
+    }
 
     // 2. Fire-and-forget server log so funnel + rate-limit can see this
     //    deliberate "Predict" click. We DON'T await because UI is already done.
@@ -271,6 +319,31 @@ export function Calculator({
             Add your scores. See your range instantly. No signup.
           </p>
         </div>
+
+        {singleCheckoutIntent && (
+          <div className="mb-6 rounded-2xl border border-mint-200 bg-mint-50 px-5 py-4 text-sm text-mint-900">
+            <p className="font-bold">Single Report selected</p>
+            <p className="mt-1 leading-relaxed">
+              Calculate your score to continue directly to secure checkout.
+            </p>
+            <button
+              type="button"
+              className="mt-2 font-semibold underline underline-offset-4 hover:text-mint-700"
+              onClick={() => {
+                window.history.replaceState(
+                  window.history.state,
+                  "",
+                  stripCheckoutIntent(
+                    `${window.location.pathname}${window.location.search}${window.location.hash}`
+                  )
+                );
+                setSingleCheckoutIntent(false);
+              }}
+            >
+              Continue with the free predictor instead
+            </button>
+          </div>
+        )}
 
         {/* Calculator card */}
         <div className="rounded-3xl bg-white p-6 sm:p-10 shadow-lg border border-gray-100 overflow-x-hidden">
@@ -539,13 +612,17 @@ export function Calculator({
         {/* Paywall modal */}
         {showPaywall && (
           <PaywallModal
-            onClose={() => setShowPaywall(false)}
+            onClose={() => {
+              setShowPaywall(false);
+              setAutoStartSingle(false);
+            }}
             exams={exams}
             step={step}
             daysUntil={daysUntil}
             targetScore={targetScore}
             selfReportedWeakSubjects={weakSubjects}
             predictionId={predictionId}
+            autoStartSingle={autoStartSingle}
           />
         )}
       </div>
@@ -847,6 +924,7 @@ function PaywallModal({
   targetScore,
   selfReportedWeakSubjects,
   predictionId,
+  autoStartSingle,
 }: {
   onClose: () => void;
   exams: PracticeExam[];
@@ -858,18 +936,20 @@ function PaywallModal({
    *  fire-and-forget call hadn't returned yet or the user mutated inputs
    *  after the last Predict click. Checkout works fine either way. */
   predictionId: string | null;
+  autoStartSingle: boolean;
 }) {
   const [loading, setLoading] = useState<"single" | "lifetime" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const session = useSession();
   const offer = getLifetimeOffer();
   const router = useRouter();
+  const autoStartedRef = useRef(false);
 
   // Hand off to /api/checkout, which creates a Stripe Checkout Session and
   // returns the hosted-page URL. We redirect the *whole window* (not fetch)
   // because Stripe blocks iframe embedding and we want users to land on a
   // top-level secure page.
-  const handleSingle = async () => {
+  const handleSingle = useCallback(async () => {
     setLoading("single");
     setError(null);
     try {
@@ -878,6 +958,9 @@ function PaywallModal({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           plan: "single",
+          ...(autoStartSingle
+            ? { checkoutSource: "single_pricing_card" }
+            : {}),
           exams,
           step,
           daysUntil,
@@ -897,7 +980,21 @@ function PaywallModal({
       setError(e instanceof Error ? e.message : "Could not start checkout.");
       setLoading(null);
     }
-  };
+  }, [
+    autoStartSingle,
+    daysUntil,
+    exams,
+    predictionId,
+    selfReportedWeakSubjects,
+    step,
+    targetScore,
+  ]);
+
+  useEffect(() => {
+    if (!autoStartSingle || autoStartedRef.current) return;
+    autoStartedRef.current = true;
+    void handleSingle();
+  }, [autoStartSingle, handleSingle]);
 
   // Lifetime access belongs to an account, so anonymous users sign in first.
   const handleLifetime = async () => {
@@ -908,9 +1005,8 @@ function PaywallModal({
       return;
     }
     if (session.status === "anon") {
-      // Land back on the calculator after sign-in. The predictionId persists
-      // as long as inputs aren't mutated; user can re-open the paywall.
-      router.push("/login?next=/#calculator");
+      const resumePath = buildLifetimeResumePath("calculator_paywall");
+      router.push(`/login?next=${encodeURIComponent(resumePath)}`);
       return;
     }
 
@@ -921,13 +1017,15 @@ function PaywallModal({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           plan: "lifetime",
+          checkoutSource: "calculator_paywall",
           // Keep prediction context for support and funnel analytics.
           ...(predictionId ? { predictionId } : {}),
         }),
       });
       const json = (await res.json()) as { url?: string; error?: string };
       if (res.status === 401) {
-        router.push("/login?next=/#calculator");
+        const resumePath = buildLifetimeResumePath("calculator_paywall");
+        router.push(`/login?next=${encodeURIComponent(resumePath)}`);
         return;
       }
       if (!res.ok || !json.url) {

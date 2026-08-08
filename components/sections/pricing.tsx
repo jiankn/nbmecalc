@@ -8,6 +8,11 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "@/lib/auth/use-session";
 import { formatUsd, getLifetimeOffer } from "@/lib/lifetime-offer";
 import { LIFETIME_OFFER_BAR_SOURCE } from "@/lib/lifetime-offer-bar";
+import {
+  buildLifetimeResumePath,
+  SINGLE_REPORT_CALCULATOR_PATH,
+  type CheckoutSource,
+} from "@/lib/checkout-intent";
 
 const standardPlans = [
   {
@@ -36,7 +41,7 @@ const standardPlans = [
     description: "One complete PDF with your full breakdown.",
     price: "$14.99",
     cta: "Calculate to unlock",
-    ctaHref: "/#calculator",
+    ctaHref: SINGLE_REPORT_CALCULATOR_PATH,
     features: [
       "Everything in Free",
       "Downloadable PDF report",
@@ -70,18 +75,16 @@ export function Pricing() {
     if (submitting) return;
     setError(null);
 
-    const checkoutSource =
+    const checkoutSource: CheckoutSource =
       typeof window !== "undefined" &&
       new URLSearchParams(window.location.search).get("source") ===
         LIFETIME_OFFER_BAR_SOURCE
         ? LIFETIME_OFFER_BAR_SOURCE
-        : undefined;
-    const returnToPricing = checkoutSource
-      ? `/pricing?source=${checkoutSource}#pricing`
-      : "/pricing";
+        : "pricing_card";
+    const resumePath = buildLifetimeResumePath(checkoutSource);
 
     if (session.status === "anon") {
-      router.push(`/login?next=${encodeURIComponent(returnToPricing)}`);
+      router.push(`/login?next=${encodeURIComponent(resumePath)}`);
       return;
     }
     if (session.status === "loading") return;
@@ -95,7 +98,7 @@ export function Pricing() {
       });
       const json = (await response.json()) as { url?: string; error?: string };
       if (response.status === 401) {
-        router.push(`/login?next=${encodeURIComponent(returnToPricing)}`);
+        router.push(`/login?next=${encodeURIComponent(resumePath)}`);
         return;
       }
       if (!response.ok || !json.url) {
@@ -159,7 +162,20 @@ export function Pricing() {
                 className="w-full mb-8"
                 asChild
               >
-                <Link href={plan.ctaHref}>{plan.cta}</Link>
+                <Link
+                  href={plan.ctaHref}
+                  onClick={() => {
+                    if (plan.kind === "single") {
+                      window.dispatchEvent(
+                        new CustomEvent("checkout-intent-changed", {
+                          detail: "single",
+                        })
+                      );
+                    }
+                  }}
+                >
+                  {plan.cta}
+                </Link>
               </Button>
               <FeatureList features={plan.features} excluded={plan.excluded} />
             </div>

@@ -10,6 +10,10 @@ import { getDb } from "@/lib/db/client";
 import { events } from "@/lib/db/schema";
 import { loadSession } from "@/lib/auth/session";
 import { getLifetimeOffer } from "@/lib/lifetime-offer";
+import {
+  isCheckoutSource,
+  type CheckoutSource,
+} from "@/lib/checkout-intent";
 
 export const runtime = "edge";
 
@@ -24,7 +28,7 @@ export const runtime = "edge";
  */
 type CheckoutRequest = {
   plan: PlanKey;
-  checkoutSource?: "founding_nav";
+  checkoutSource?: CheckoutSource;
   exams?: PracticeExam[];
   step?: StepKind;
   daysUntil?: number;
@@ -63,7 +67,7 @@ function validateBody(body: unknown): CheckoutRequest | { error: string } {
 
   if (
     b.checkoutSource !== undefined &&
-    b.checkoutSource !== "founding_nav"
+    !isCheckoutSource(b.checkoutSource)
   ) {
     return { error: "Invalid `checkoutSource`." };
   }
@@ -140,7 +144,7 @@ function validateBody(body: unknown): CheckoutRequest | { error: string } {
 
   return {
     plan: b.plan as PlanKey,
-    checkoutSource: b.checkoutSource as "founding_nav" | undefined,
+    checkoutSource: b.checkoutSource as CheckoutSource | undefined,
     exams: b.exams as PracticeExam[] | undefined,
     step: b.step as StepKind | undefined,
     daysUntil: b.daysUntil as number | undefined,
