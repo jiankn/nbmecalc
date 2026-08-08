@@ -1,0 +1,55 @@
+{
+  "name": "nbmecalc-score-conversion",
+  "version": "1.0.0",
+  "description": "Deterministic NBME, UWSA, Free 120, AMBOSS, and CMS score interpretation helpers for USMLE study planning.",
+  "type": "module",
+  "main": "./index.js",
+  "module": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "homepage": "https://nbmecalc.com/nbme-score-conversion",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiankn/nbmecalc.git",
+    "directory": "packages/nbmecalc-score-conversion"
+  },
+  "bugs": {
+    "url": "https://github.com/jiankn/nbmecalc/issues"
+  },
+  "keywords": [
+    "NBME",
+    "USMLE",
+    "score conversion",
+    "Step 1",
+    "Step 2 CK",
+    "Step 3",
+    "Free 120",
+    "CMS forms",
+    "medical education"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node --check index.js",
+    "test": "node --test",
+    "pack:check": "npm pack --dry-run"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "author": ""
+}

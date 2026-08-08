@@ -1,0 +1,67 @@
+name: Score conversion package
+
+on:
+  push:
+    paths:
+      - 'packages/nbmecalc-score-conversion/**'
+      - '.github/workflows/score-conversion-package.yml'
+  pull_request:
+    paths:
+      - 'packages/nbmecalc-score-conversion/**'
+      - '.github/workflows/score-conversion-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18, 20, 22]
+    defaults:
+      run:
+        working-directory: packages/nbmecalc-score-conversion
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Test package
+        run: npm test
+
+      - name: Check syntax
+        run: npm run build
+
+      - name: Check publish contents
+        run: npm run pack:check
+
+  publish:
+    name: Publish to npm
+    if: github.event_name == 'workflow_dispatch'
+    needs: test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/nbmecalc-score-conversion
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Publish package
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
