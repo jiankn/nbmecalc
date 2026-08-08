@@ -11,7 +11,7 @@
  * report URL after purchase" UX).
  */
 import {
-  loadProPredictionReport,
+  loadLifetimePredictionReport,
   loadReportFromSession,
   type ReportLoadResult,
 } from "@/lib/session-report";
@@ -40,19 +40,19 @@ type CloudflareRuntimeEnv = Record<string, unknown> & {
 export async function GET(_req: Request, context: RouteContext) {
   const { session_id } = await context.params;
 
-  // Paid reports are keyed by a Stripe Checkout session (`cs_...`); Pro
+  // Paid reports are keyed by a Stripe Checkout session (`cs_...`); Lifetime
   // subscribers reach the same PDF via one of their own prediction ids.
-  const isProReport = !session_id.startsWith("cs_");
+  const isLifetimeReport = !session_id.startsWith("cs_");
 
   let loaded;
-  // For a Pro report we keep the authenticated user id around so we can mint
+  // For a Lifetime report we keep the authenticated user id around so we can mint
   // a short-lived token authorizing the (cookieless) renderer worker.
-  let proUserId: string | null = null;
+  let lifetimeUserId: string | null = null;
   try {
-    if (isProReport) {
-      const pro = await loadProReportForRequest(_req, session_id);
-      loaded = pro.result;
-      proUserId = pro.userId;
+    if (isLifetimeReport) {
+      const lifetime = await loadLifetimeReportForRequest(_req, session_id);
+      loaded = lifetime.result;
+      lifetimeUserId = lifetime.userId;
     } else {
       loaded = await loadReportFromSession(session_id);
     }
@@ -88,21 +88,21 @@ export async function GET(_req: Request, context: RouteContext) {
   const filename = `nbmecalc-${stepLabel}-${data.result.pointEstimate}.pdf`;
 
   // The headless PDF worker re-fetches `/report/<id>` server-to-server with no
-  // user cookie. Paid reports authenticate via the `cs_` id in the URL; a Pro
+  // user cookie. Paid reports authenticate via the `cs_` id in the URL; a Lifetime
   // prediction-id report instead gets a short-lived signed token (minted only
   // after we verified ownership above) so the worker can render the exact same
   // styled page. Without a signing secret we fall back to the edge generator.
   let rendered: PdfWorkerResult;
-  if (isProReport) {
+  if (isLifetimeReport) {
     const secret = getPdfRendererSecret();
-    if (secret && proUserId) {
+    if (secret && lifetimeUserId) {
       const token = await signReportToken(secret, {
         predictionId: data.sessionId,
-        userId: proUserId,
+        userId: lifetimeUserId,
       });
       rendered = await renderWithPdfWorker(_req, data.sessionId, filename, token);
     } else {
-      rendered = { ok: false, reason: "pro-no-secret", target: "edge" };
+      rendered = { ok: false, reason: "lifetime-no-secret", target: "edge" };
     }
   } else {
     rendered = await renderWithPdfWorker(_req, data.sessionId, filename);
@@ -145,12 +145,12 @@ export async function GET(_req: Request, context: RouteContext) {
 }
 
 /**
- * Pro-report variant of the loader: authenticate the request, require an
- * active Pro subscription, and load the report from a prediction the user
+ * Lifetime-report variant of the loader: authenticate the request, require
+ * active Lifetime access, and load the report from a prediction the user
  * owns. Returns `not_found` for anyone who isn't an entitled owner so the
  * route surfaces a plain 404 (same as a bad `cs_` id).
  */
-async function loadProReportForRequest(
+async function loadLifetimeReportForRequest(
   req: Request,
   predictionId: string
 ): Promise<{ result: ReportLoadResult; userId: string | null }> {
@@ -158,11 +158,11 @@ async function loadProReportForRequest(
   if (!db) return { result: { status: "not_found" }, userId: null };
 
   const session = await loadSession(db, req);
-  if (!session || !session.user.proTier) {
+  if (!session || !session.user.lifetimeAccess) {
     return { result: { status: "not_found" }, userId: null };
   }
   return {
-    result: await loadProPredictionReport(db, session.user.id, predictionId),
+    result: await loadLifetimePredictionReport(db, session.user.id, predictionId),
     userId: session.user.id,
   };
 }
@@ -190,7 +190,7 @@ async function renderWithPdfWorker(
   }
 
   const reportUrl = new URL(`/report/${encodeURIComponent(sessionId)}`, siteUrl);
-  // Pro reports include a signed token so the cookieless worker can render the
+  // Lifetime reports include a signed token so the cookieless worker can render the
   // same styled page a logged-in user sees.
   if (token) reportUrl.searchParams.set("k", token);
   const body = JSON.stringify({

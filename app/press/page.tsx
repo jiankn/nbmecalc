@@ -25,7 +25,7 @@ const quickFacts = [
   { label: "Founded", value: "2025" },
   { label: "HQ", value: "Remote (US-based)" },
   { label: "Team", value: "Independent project — solo founder" },
-  { label: "Revenue model", value: "Freemium ($14.99 reports, $9.99/mo Pro)" },
+  { label: "Revenue model", value: "Freemium ($14.99 reports, $19.99 Founding Lifetime)" },
   { label: "Tech stack", value: "Next.js, Cloudflare Pages, Stripe" },
   { label: "Affiliations", value: "Independent — not NBME / USMLE / Kaplan" },
 ];

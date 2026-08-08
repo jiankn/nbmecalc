@@ -1298,7 +1298,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "callout",
         tone: "success",
-        text: "Track your trajectory across NBMEs and AMBOSS Predictor scores in our calculator. Pro users get unlimited tracking across the full 12-week prep.",
+        text: "Track your trajectory across NBMEs and AMBOSS Predictor scores in our calculator. Lifetime members get unlimited tracking across the full 12-week prep.",
       },
     ],
   },

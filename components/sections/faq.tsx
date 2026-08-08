@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     q: "Why do you charge for the full report?",
-    a: "The free version gives you the estimate and planning range. The $14.99 report adds a downloadable PDF, source-weighting notes, and a day-by-day study plan based on the subjects you select. Pro subscribers ($9.99/mo) get unlimited re-runs and a live timeline.",
+    a: "The free version gives you the estimate and planning range. The $14.99 report adds a downloadable PDF, source-weighting notes, and a day-by-day study plan based on the subjects you select. Lifetime members get unlimited re-runs and a live timeline with one payment.",
   },
   {
     q: "Can I use this for Step 1 and Step 3?",

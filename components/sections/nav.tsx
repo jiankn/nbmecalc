@@ -278,7 +278,7 @@ export function Nav() {
                           {displayName}
                         </p>
                         <span className="shrink-0 rounded-full bg-mint-100 px-2 py-0.5 text-[11px] font-bold text-mint-900">
-                          {user.proTier ? "Pro" : "Free"}
+                          {user.lifetimeAccess ? "Lifetime" : "Free"}
                         </span>
                       </div>
                       <p className="mt-0.5 truncate text-xs text-gray-500">
@@ -302,7 +302,7 @@ export function Nav() {
                       onClick={() => setAccountOpen(false)}
                     >
                       <CreditCard className="h-4 w-4" aria-hidden="true" />
-                      {user.proTier ? "Manage subscription" : "View plans"}
+                      {user.lifetimeAccess ? "Lifetime access" : "View plans"}
                     </Link>
                     <Link
                       href="/dashboard/settings"
@@ -434,7 +434,7 @@ export function Nav() {
                       onClick={() => setMobileOpen(false)}
                     >
                       <CreditCard className="h-4 w-4" aria-hidden="true" />
-                      {user.proTier ? "Manage subscription" : "View plans"}
+                      {user.lifetimeAccess ? "Lifetime access" : "View plans"}
                     </Link>
                     <Link
                       href="/dashboard/settings"

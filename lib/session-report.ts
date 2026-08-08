@@ -67,8 +67,7 @@ export async function loadReportFromSession(
     return { status: "not_found" };
   }
 
-  // Payment must be confirmed. Stripe's `payment_status` is "paid" for
-  // one-time AND for the first subscription invoice — both qualify.
+  // Payment must be confirmed by Stripe before a report is exposed.
   if (session.payment_status !== "paid") {
     return { status: "pending", sessionId: sessionIdRaw };
   }
@@ -124,20 +123,20 @@ export async function loadReportFromSession(
 }
 
 /**
- * Build the same premium-report payload for a Pro subscriber, keyed by one of
+ * Build the same premium-report payload for a Lifetime member, keyed by one of
  * their own prediction ids instead of a paid Stripe Checkout session.
  *
- * Pro membership includes the full report for every prediction (PRD §5.2),
+ * Lifetime access includes the full report for every prediction (PRD §5.2),
  * but historically the only way to reach `/report/...` was a one-off $14.99
- * purchase (a `cs_...` session). This lets a Pro user reuse the exact same
+ * purchase (a `cs_...` session). This lets a Lifetime member reuse the exact same
  * report page + PDF for any prediction they own — no second charge.
  *
- * The caller MUST have already authenticated the request and confirmed Pro
+ * The caller MUST have already authenticated the request and confirmed Lifetime
  * status; this function only enforces ownership (the prediction must belong
  * to `userId`). The model is re-run server-side from the stored inputs, so the
  * report always reflects the current algorithm version.
  */
-export async function loadProPredictionReport(
+export async function loadLifetimePredictionReport(
   db: Db,
   userId: string,
   predictionId: string
@@ -194,7 +193,7 @@ export async function loadProPredictionReport(
       weakSubjects,
       predictionId: row.id,
       customerEmail: undefined,
-      // Pro reports aren't "purchased" — use the prediction's creation time as
+      // Lifetime reports use the prediction's creation time as
       // the issued-at stamp shown on the report/PDF.
       purchasedAt: new Date(row.createdAt),
     },

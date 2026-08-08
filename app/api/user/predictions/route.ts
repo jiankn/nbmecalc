@@ -36,15 +36,15 @@ export async function GET(req: Request): Promise<Response> {
   // ?archived=true returns only archived predictions; default returns only active.
   const showArchived = url.searchParams.get("archived") === "true";
 
-  // Pro gating (PRD §5.2 pricing tiers, §7.1 Free-vs-Paid, §7.5 dashboard).
-  // Unlimited prediction history and the multi-Step timeline are Pro-only.
+  // Lifetime gating (PRD §5.2 pricing tiers, §7.1 Free-vs-Paid, §7.5 dashboard).
+  // Unlimited prediction history and the multi-Step timeline are paid-only.
   // Free accounts may read at most their single most-recent prediction (the
   // "最近 1 条预测" dashboard overview). Enforcing it here — not just in the
-  // UI — stops a non-Pro user from reconstructing the timeline by calling the
+  // UI — stops a free user from reconstructing the timeline by calling the
   // raw API directly.
-  const isPro = Boolean(session.user.proTier);
-  const effectiveLimit = isPro ? limit : 1;
-  const effectiveOffset = isPro ? offset : 0;
+  const hasLifetime = session.user.lifetimeAccess;
+  const effectiveLimit = hasLifetime ? limit : 1;
+  const effectiveOffset = hasLifetime ? offset : 0;
 
   const rows = await db
     .select({
@@ -74,7 +74,7 @@ export async function GET(req: Request): Promise<Response> {
       count: rows.length,
       limit: effectiveLimit,
       offset: effectiveOffset,
-      pro: isPro,
+      lifetime: hasLifetime,
     },
     { status: 200 }
   );

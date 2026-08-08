@@ -9,21 +9,22 @@ import { ResendReportEmail } from "@/components/resend-report-email";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
-  title: "Payment Successful — Your Report Is On the Way | NBMEcalc",
+  title: "Payment Successful | NBMEcalc",
   description:
-    "Thank you for purchasing your NBMEcalc Step report. Check your email for the download link.",
+    "Thank you for your NBMEcalc purchase.",
   robots: { index: false, follow: false },
   alternates: { canonical: "https://nbmecalc.com/checkout/success" },
 };
 
-type PageSearchParams = Promise<{ session_id?: string }>;
+type PageSearchParams = Promise<{ session_id?: string; plan?: string }>;
 
 export default async function CheckoutSuccessPage({
   searchParams,
 }: {
   searchParams: PageSearchParams;
 }) {
-  const { session_id } = await searchParams;
+  const { session_id, plan } = await searchParams;
+  const isLifetime = plan === "lifetime";
   const reportHref = session_id ? `/report/${encodeURIComponent(session_id)}` : "/";
 
   return (
@@ -39,8 +40,9 @@ export default async function CheckoutSuccessPage({
               Payment successful
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Thank you for your purchase. Your full Step report is being
-              generated and will arrive by email shortly.
+              {isLifetime
+                ? "Thank you for becoming a Lifetime member. Your account now has permanent access to NBMEcalc's core features."
+                : "Thank you for your purchase. Your full Step report is being generated and will arrive by email shortly."}
             </p>
 
             <div className="rounded-2xl bg-mint-50 border border-mint-200 p-5 mb-8 text-left">
@@ -48,12 +50,12 @@ export default async function CheckoutSuccessPage({
                 <Mail className="h-5 w-5 text-mint-700 shrink-0 mt-1" />
                 <div>
                   <h2 className="font-bold text-gray-950 mb-1">
-                    Check your inbox
+                    {isLifetime ? "Receipt on the way" : "Check your inbox"}
                   </h2>
                   <p className="text-sm text-gray-700 leading-relaxed">
-                    We&apos;re sending your full report to the email
-                    associated with this purchase. If you don&apos;t see it
-                    within 5 minutes, check your spam folder or contact{" "}
+                    {isLifetime
+                      ? "Stripe will email your payment receipt to the address used at checkout. If Lifetime access does not appear within a minute, refresh your dashboard or contact "
+                      : "We're sending your full report to the email associated with this purchase. If you don't see it within 5 minutes, check your spam folder or contact "}
                     <a
                       href="mailto:hello@nbmecalc.com"
                       className="text-mint-700 font-semibold underline"
@@ -66,7 +68,7 @@ export default async function CheckoutSuccessPage({
               </div>
             </div>
 
-            {session_id && (
+            {session_id && !isLifetime && (
               <div className="mb-8">
                 <ResendReportEmail sessionId={session_id} variant="success-page" />
               </div>
@@ -77,19 +79,23 @@ export default async function CheckoutSuccessPage({
                 <Download className="h-5 w-5 text-gray-700 shrink-0 mt-1" />
                 <div>
                   <h2 className="font-bold text-gray-950 mb-1">
-                    Want to download now?
+                    {isLifetime ? "Your dashboard is unlocked" : "Want to download now?"}
                   </h2>
                   <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                    Your report page is ready. Bookmark it for future access.
+                    {isLifetime
+                      ? "Run unlimited predictions and track Step 1, Step 2 CK, and Step 3 in one place."
+                      : "Your report page is ready. Bookmark it for future access."}
                   </p>
                   <Button variant="outline" size="md" asChild>
-                    <Link href={reportHref}>View my report</Link>
+                    <Link href={isLifetime ? "/dashboard" : reportHref}>
+                      {isLifetime ? "Open dashboard" : "View my report"}
+                    </Link>
                   </Button>
                 </div>
               </div>
             </div>
 
-            {session_id?.startsWith("cs_") && (
+            {session_id?.startsWith("cs_") && !isLifetime && (
               <ScoreFeedbackOptIn sessionId={session_id} />
             )}
 
@@ -101,11 +107,6 @@ export default async function CheckoutSuccessPage({
               <p>
                 <strong className="text-gray-900">Need help?</strong> Reply to
                 the receipt email and we&apos;ll respond within 24 hours.
-              </p>
-              <p>
-                <strong className="text-gray-900">Subscription users:</strong>{" "}
-                You can manage billing anytime via the link in your welcome
-                email.
               </p>
             </div>
 
@@ -120,8 +121,8 @@ export default async function CheckoutSuccessPage({
           </div>
 
           <p className="text-center text-xs text-gray-400 mt-8">
-            All sales final. Digital products are non-refundable. Pro
-            subscriptions can be canceled anytime to prevent future charges.
+            One-time payment. No recurring charges. All sales are final.
+            Digital products are non-refundable.
           </p>
         </div>
       </section>

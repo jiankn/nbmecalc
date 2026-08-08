@@ -28,7 +28,7 @@ export type DashboardUser = SessionUser;
 
 /**
  * Client-side dashboard layout. Auth-gates by calling /api/auth/me directly
- * so we get real user data (name, pro tier, email) for the chrome — not a
+ * so we get real user data (name, Lifetime access, email) for the chrome — not a
  * synthesized blank user. On 401, redirects to /login with a `next` param.
  *
  * Note: We don't go through the shared `useSession` hook here because the

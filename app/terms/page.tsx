@@ -7,13 +7,13 @@ import { LegalContent } from "@/components/legal-content";
 export const metadata: Metadata = {
   title: "Terms of Service — NBMEcalc",
   description:
-    "Terms governing your use of NBMEcalc — the USMLE Step score predictor. Subscription, refund, and acceptable use policies.",
+    "Terms governing your use of NBMEcalc — the USMLE Step score predictor. Lifetime access, refund, and acceptable use policies.",
   alternates: { canonical: "https://nbmecalc.com/terms" },
   robots: { index: true, follow: true },
   openGraph: {
     title: "Terms of Service — NBMEcalc",
     description:
-      "Terms governing your use of NBMEcalc — the USMLE Step score predictor. Subscription, refund, and acceptable use policies.",
+      "Terms governing your use of NBMEcalc — the USMLE Step score predictor. Lifetime access, refund, and acceptable use policies.",
     url: "https://nbmecalc.com/terms",
     type: "website",
   },
@@ -29,7 +29,7 @@ export default function TermsPage() {
         size="sm"
       />
 
-      <LegalContent lastUpdated="May 17, 2026">
+      <LegalContent lastUpdated="August 8, 2026">
         <h2>1. Agreement</h2>
         <p>
           By accessing or using <strong>nbmecalc.com</strong> (the
@@ -67,7 +67,7 @@ export default function TermsPage() {
         <h2>4. Accounts</h2>
         <p>
           You can use the basic predictor without an account. Saving
-          predictions, downloading reports, or subscribing to Pro requires
+          predictions, downloading reports, or purchasing Lifetime access requires
           creating a free account using a valid email address.
         </p>
         <p>You agree to:</p>
@@ -78,7 +78,7 @@ export default function TermsPage() {
           <li>Not share, sell, or transfer your account.</li>
         </ul>
 
-        <h2>5. Plans, billing, and renewal</h2>
+        <h2>5. Plans and billing</h2>
 
         <h3>5.1 Free</h3>
         <p>Anonymous predictions and limited dashboard. No payment required.</p>
@@ -90,36 +90,40 @@ export default function TermsPage() {
           once delivered.
         </p>
 
-        <h3>5.3 Pro ($9.99/mo or $79/year)</h3>
+        <h3>5.3 Lifetime (standard price $34.99 one-time)</h3>
         <p>
-          Recurring subscription billed monthly or annually. We email a
-          renewal notice 7 days before each charge. You can cancel at any
-          time from your dashboard.
+          A one-time purchase that unlocks the Service&apos;s core prediction,
+          tracking, timeline, and reporting features for the purchasing account.
+          There is no recurring charge.
         </p>
         <ul>
           <li>
-            <strong>Auto-renewal:</strong> Subscriptions renew automatically
-            until canceled.
+            <strong>Meaning of Lifetime:</strong> Access lasts for the life of
+            the purchasing account while NBMEcalc continues to operate the
+            applicable Service. It cannot be transferred to another account.
           </li>
           <li>
-            <strong>Cancellation:</strong> Cancel anytime — you keep access
-            until the end of the current billing period. After that, the
-            dashboard becomes read-only.
+            <strong>Core updates:</strong> Ongoing updates to NBMEcalc&apos;s core
+            prediction, tracking, and reporting features are included.
           </li>
           <li>
-            <strong>Price changes:</strong> We will email at least 30 days
-            before any price change. Your existing rate is honored until your
-            next renewal.
+            <strong>Separate products:</strong> Major standalone products or
+            services introduced later may be priced separately.
+          </li>
+          <li>
+            <strong>Founding offer:</strong> The $19.99 founding price is
+            the current price during NBMEcalc&apos;s founding stage. NBMEcalc may
+            return to the $34.99 standard price for future purchases. A later
+            price change does not affect access already purchased.
           </li>
         </ul>
 
         <h3>5.4 Refunds</h3>
         <p>
-          Digital products are <strong>non-refundable</strong> once delivered.
-          Pro subscriptions are eligible for a 7-day refund if no PDF report
-          has been downloaded. Email{" "}
-          <a href="mailto:hello@nbmecalc.com">hello@nbmecalc.com</a> to request
-          a refund.
+          <strong>All sales are final.</strong> Single Report and Lifetime
+          purchases are digital products delivered immediately and are
+          non-refundable. Nothing in these Terms limits rights that cannot be
+          waived under applicable law.
         </p>
 
         <h2>6. Acceptable use</h2>

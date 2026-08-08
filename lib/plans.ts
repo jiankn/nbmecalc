@@ -9,7 +9,7 @@
  * source — they live in env so test vs live can be swapped without a deploy.
  */
 
-export type PlanKey = "single" | "pro_monthly" | "pro_annual";
+export type PlanKey = "single" | "lifetime";
 
 export type Plan = {
   key: PlanKey;
@@ -20,7 +20,7 @@ export type Plan = {
   /** Period suffix, e.g. "/mo", "/yr", or "" for one-time. */
   period: string;
   /** Stripe Checkout mode. */
-  mode: "payment" | "subscription";
+  mode: "payment";
   /**
    * Name of the env var holding the Stripe Price ID for this plan.
    * The actual ID lives in env so we can swap test/live keys per deploy.
@@ -40,25 +40,19 @@ export const PLANS: Record<PlanKey, Plan> = {
     stripePriceEnvKey: "STRIPE_PRICE_SINGLE",
     unlocksReport: true,
   },
-  pro_monthly: {
-    key: "pro_monthly",
-    name: "Pro (Monthly)",
-    displayPrice: "$9.99",
-    period: "/mo",
-    mode: "subscription",
-    stripePriceEnvKey: "STRIPE_PRICE_PRO_MONTHLY",
-    unlocksReport: true,
-  },
-  pro_annual: {
-    key: "pro_annual",
-    name: "Pro (Annual)",
-    displayPrice: "$79",
-    period: "/yr",
-    mode: "subscription",
-    stripePriceEnvKey: "STRIPE_PRICE_PRO_ANNUAL",
+  lifetime: {
+    key: "lifetime",
+    name: "Lifetime",
+    displayPrice: "$34.99",
+    period: "one-time",
+    mode: "payment",
+    stripePriceEnvKey: "STRIPE_PRICE_LIFETIME_REGULAR",
     unlocksReport: true,
   },
 };
+
+export const STRIPE_PRICE_LIFETIME_FOUNDING_ENV =
+  "STRIPE_PRICE_LIFETIME_FOUNDING";
 
 export function getPlan(key: string): Plan | null {
   if (key in PLANS) return PLANS[key as PlanKey];

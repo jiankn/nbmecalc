@@ -281,7 +281,7 @@ export const users = sqliteTable(
     /** Profile image supplied by a trusted identity provider (currently Google). */
     avatarUrl: text("avatar_url"),
 
-    /** NULL | "monthly" | "annual". Updated by Stripe webhook. */
+    /** Legacy columns retained to avoid a risky SQLite table rebuild. Unused. */
     proTier: text("pro_tier"),
     proStartedAt: integer("pro_started_at"),
     proExpiresAt: integer("pro_expires_at"),
@@ -304,6 +304,40 @@ export const users = sqliteTable(
 
 export type UserRow = typeof users.$inferSelect;
 export type NewUserRow = typeof users.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// lifetime_entitlements - durable access owned by a user account. This is
+// intentionally independent from the pricing switch, so ending the founding
+// offer can never revoke access purchased by an existing member.
+// ---------------------------------------------------------------------------
+
+export const lifetimeEntitlements = sqliteTable(
+  "lifetime_entitlements",
+  {
+    userId: text("user_id").primaryKey(),
+    status: text("status", { enum: ["active", "revoked"] }).notNull(),
+    stripeCheckoutSessionId: text("stripe_checkout_session_id").notNull(),
+    stripePaymentIntent: text("stripe_payment_intent"),
+    amountPaid: integer("amount_paid").notNull(),
+    currency: text("currency").notNull().default("usd"),
+    promotionApplied: integer("promotion_applied").notNull().default(0),
+    purchasedAt: integer("purchased_at").notNull(),
+    revokedAt: integer("revoked_at"),
+    updatedAt: integer("updated_at").notNull(),
+  },
+  (t) => ({
+    byCheckoutSession: uniqueIndex("idx_lifetime_entitlements_checkout").on(
+      t.stripeCheckoutSessionId
+    ),
+    byPaymentIntent: uniqueIndex("idx_lifetime_entitlements_payment_intent").on(
+      t.stripePaymentIntent
+    ),
+    byStatus: index("idx_lifetime_entitlements_status").on(t.status),
+  })
+);
+
+export type LifetimeEntitlementRow = typeof lifetimeEntitlements.$inferSelect;
+export type NewLifetimeEntitlementRow = typeof lifetimeEntitlements.$inferInsert;
 
 // ---------------------------------------------------------------------------
 // magic_links — one-time login tokens. Consumed on verify, then deleted.
@@ -379,6 +413,7 @@ export const tables = {
   events,
   scoreReports,
   users,
+  lifetimeEntitlements,
   magicLinks,
   sessions,
 };

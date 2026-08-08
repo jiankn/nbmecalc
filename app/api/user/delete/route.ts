@@ -10,15 +10,14 @@
  *   - all predictions for this user (their score data)
  *   - all public prediction shares created while signed in
  *   - all events for this user (analytics trail)
+ *   - Lifetime entitlement
  *   - all sessions for this user (signs them out everywhere)
  *   - all magic_links for this user's email (so old links stop working)
  *
  * What's NOT deleted (and why):
  *   - reports rows: kept for accounting/tax purposes (financial records).
  *     The personal link is removed by nulling user_id.
- *   - Stripe customer data: lives at Stripe; user can delete via portal.
- *     We DO cancel any active subscription before account removal so they
- *     don't get billed after deletion.
+ *   - Stripe payment records: retained by Stripe for accounting purposes.
  *
  * Confirmation: requires `{ confirm: true }` in body to prevent CSRF /
  * accidental clicks. Sign-in cookies are HttpOnly, so a CSRF still needs
@@ -35,9 +34,9 @@ import {
   magicLinks,
   predictionShares,
   reports,
+  lifetimeEntitlements,
 } from "@/lib/db/schema";
 import { buildClearSessionCookie, loadSession } from "@/lib/auth/session";
-import { getStripe } from "@/lib/stripe";
 
 export const runtime = "edge";
 
@@ -73,30 +72,7 @@ export async function POST(req: Request): Promise<Response> {
 
   const userId = session.user.id;
   const userEmail = session.user.email;
-  const stripeCustomerId = session.user.stripeCustomerId;
-
-  // 1. Cancel any active Stripe subscription so user isn't billed after delete.
-  //    Best-effort: a Stripe failure shouldn't block account deletion (user
-  //    can self-serve cancellation later via the Stripe portal if needed).
-  if (stripeCustomerId) {
-    try {
-      const stripe = getStripe();
-      const subs = await stripe.subscriptions.list({
-        customer: stripeCustomerId,
-        status: "active",
-        limit: 100,
-      });
-      for (const sub of subs.data) {
-        await stripe.subscriptions.cancel(sub.id).catch((err) => {
-          console.error("[delete] subscription cancel failed", { sub: sub.id, err });
-        });
-      }
-    } catch (err) {
-      console.error("[delete] stripe cancellation block failed", err);
-    }
-  }
-
-  // 2. Delete personal data. Run as a batch so partial failures roll back.
+  // Delete personal data. Run as a batch so partial failures roll back.
   //    Reports are kept for financial-record retention but de-identified
   //    by nulling the user_id link.
   try {
@@ -111,6 +87,9 @@ export async function POST(req: Request): Promise<Response> {
       db
         .delete(predictionShares)
         .where(eq(predictionShares.userId, userId)),
+      db
+        .delete(lifetimeEntitlements)
+        .where(eq(lifetimeEntitlements.userId, userId)),
       db.delete(events).where(eq(events.userId, userId)),
       db.delete(sessions).where(eq(sessions.userId, userId)),
       db.delete(magicLinks).where(eq(magicLinks.email, userEmail)),
@@ -124,7 +103,7 @@ export async function POST(req: Request): Promise<Response> {
     );
   }
 
-  // 3. Clear session cookie so the next request from this browser goes to /login.
+  // Clear session cookie so the next request from this browser goes to /login.
   const url = new URL(req.url);
   return NextResponse.json(
     { ok: true, message: "Account deleted." },

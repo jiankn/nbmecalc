@@ -32,7 +32,8 @@ export default function TimelinePage() {
   const [rows, setRows] = useState<PredictionRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const isPro = session.status === "authed" && Boolean(session.user.proTier);
+  const hasLifetime =
+    session.status === "authed" && session.user.lifetimeAccess;
 
   useEffect(() => {
     fetch("/api/user/predictions?limit=100")
@@ -58,7 +59,7 @@ export default function TimelinePage() {
     );
   }
 
-  if (!isPro) {
+  if (!hasLifetime) {
     return (
       <div className="space-y-6">
         <div>
@@ -71,14 +72,14 @@ export default function TimelinePage() {
         <div className="rounded-3xl border-2 border-dashed border-mint-300 bg-mint-50/40 p-10 text-center">
           <Lock className="h-10 w-10 text-mint-700 mx-auto mb-4" />
           <h2 className="text-2xl font-extrabold text-gray-950 mb-2">
-            Timeline is a Pro feature
+            Timeline is a Lifetime feature
           </h2>
           <p className="text-gray-700 max-w-md mx-auto mb-6 leading-relaxed">
             Visualize your Step 1, Step 2 CK, and Step 3 predictions on one
             chart with trend lines, confidence bands, and weekly snapshots.
           </p>
           <Button size="lg" asChild>
-            <Link href="/pricing">Upgrade to Pro — $9.99/mo</Link>
+            <Link href="/pricing">Get Lifetime Access</Link>
           </Button>
         </div>
       </div>

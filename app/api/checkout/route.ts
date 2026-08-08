@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { getStripe, getSiteUrl } from "@/lib/stripe";
-import { getPlan, type PlanKey } from "@/lib/plans";
+import {
+  getPlan,
+  STRIPE_PRICE_LIFETIME_FOUNDING_ENV,
+  type PlanKey,
+} from "@/lib/plans";
 import type { PracticeExam, StepKind, ExamSource } from "@/lib/data";
 import { getDb } from "@/lib/db/client";
 import { events } from "@/lib/db/schema";
 import { loadSession } from "@/lib/auth/session";
+import { getLifetimeOffer } from "@/lib/lifetime-offer";
 
 export const runtime = "edge";
 
@@ -55,7 +60,7 @@ function validateBody(body: unknown): CheckoutRequest | { error: string } {
     return { error: "Invalid `plan`." };
   }
 
-  // exams + step + daysUntil are all optional (Pro signup doesn't need them).
+  // exams + step + daysUntil are optional (Lifetime checkout needs no inputs).
   if (b.exams !== undefined) {
     if (!Array.isArray(b.exams) || b.exams.length === 0 || b.exams.length > 10) {
       return { error: "`exams` must be a non-empty array of ≤10 items." };
@@ -160,9 +165,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unknown plan." }, { status: 400 });
   }
 
-  // Pro subscriptions REQUIRE an authenticated user. Without a user id we
-  // can't grant the Pro entitlement when the webhook fires (we'd have a
-  // paid customer with nowhere to attach the tier). Single Report stays
+  // Lifetime purchases REQUIRE an authenticated user. Without a user id we
+  // cannot attach the durable entitlement. Single Report stays
   // anonymous-friendly because the `/report/<session_id>` URL is itself
   // the bearer token for that purchase.
   //
@@ -171,7 +175,11 @@ export async function POST(req: Request) {
   // user from typing it again.
   const db = getDb();
   let authedUser:
-    | { id: string; email: string; stripeCustomerId: string | null }
+    | {
+        id: string;
+        email: string;
+        lifetimeAccess: boolean;
+      }
     | null = null;
 
   if (db) {
@@ -180,25 +188,41 @@ export async function POST(req: Request) {
       authedUser = {
         id: session.user.id,
         email: session.user.email,
-        stripeCustomerId: session.user.stripeCustomerId,
+        lifetimeAccess: session.user.lifetimeAccess,
       };
     }
   }
 
-  // Pro subscriptions hard-require auth — can't grant entitlement without
-  // a user id. Single Report is fine anonymous.
-  if (plan.mode === "subscription" && !authedUser) {
+  if (plan.key === "lifetime" && !authedUser) {
     return NextResponse.json(
-      { error: "Sign in to subscribe to Pro." },
+      { error: "Sign in to purchase Lifetime access." },
       { status: 401 }
     );
   }
 
-  const priceId = process.env[plan.stripePriceEnvKey];
+  if (plan.key === "lifetime" && authedUser?.lifetimeAccess) {
+    return NextResponse.json(
+      { error: "Lifetime access is already active on this account." },
+      { status: 409 }
+    );
+  }
+
+  let lifetimeFoundingPrice = false;
+  let expectedAmountCents = 1499;
+  if (plan.key === "lifetime") {
+    const offer = getLifetimeOffer();
+    lifetimeFoundingPrice = offer.active;
+    expectedAmountCents = offer.priceCents;
+  }
+
+  const priceEnvKey = lifetimeFoundingPrice
+    ? STRIPE_PRICE_LIFETIME_FOUNDING_ENV
+    : plan.stripePriceEnvKey;
+  const priceId = process.env[priceEnvKey];
   if (!priceId) {
     return NextResponse.json(
       {
-        error: `Server misconfigured: ${plan.stripePriceEnvKey} is not set.`,
+        error: `Server misconfigured: ${priceEnvKey} is not set.`,
       },
       { status: 500 }
     );
@@ -221,12 +245,12 @@ export async function POST(req: Request) {
   if (parsed.predictionId) {
     metadata.predictionId = parsed.predictionId;
   }
-  // For Pro subscriptions we MUST pass through the user id — the webhook
-  // uses it to find which row to flip `pro_tier` on. (We don't trust
-  // customer_email matching alone: a user could subscribe with a different
-  // payment-time email than their account email.)
   if (authedUser) {
     metadata.userId = authedUser.id;
+  }
+  if (plan.key === "lifetime") {
+    metadata.lifetimeOffer = lifetimeFoundingPrice ? "founding" : "regular";
+    metadata.expectedAmountCents = String(expectedAmountCents);
   }
 
   // Sanity-check size limit (Stripe enforces 500 chars/key).
@@ -243,42 +267,40 @@ export async function POST(req: Request) {
   const stripe = getStripe();
 
   try {
-    // Build the Checkout session params, branching on subscription vs
-    // one-time. Subscriptions need to bind to a Stripe Customer so the
-    // webhook can find us later; one-time payments stay anonymous.
+    const stripePrice = await stripe.prices.retrieve(priceId);
+    if (
+      !stripePrice.active ||
+      stripePrice.currency !== "usd" ||
+      stripePrice.unit_amount !== expectedAmountCents
+    ) {
+      return NextResponse.json(
+        { error: "Server misconfigured: Stripe Price amount does not match the selected plan." },
+        { status: 500 }
+      );
+    }
+
     const sessionParams: Parameters<
       typeof stripe.checkout.sessions.create
     >[0] = {
       mode: plan.mode,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url:
-        plan.key === "single"
-          ? `${site}/checkout/success?session_id={CHECKOUT_SESSION_ID}`
-          : `${site}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${site}/checkout/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan.key}`,
       cancel_url: `${site}/checkout/cancel`,
       metadata,
-      allow_promotion_codes: true,
+      allow_promotion_codes: plan.key === "single",
+      custom_text: {
+        submit: {
+          message:
+            "All sales are final. This digital product is delivered immediately and is non-refundable.",
+        },
+      },
     };
 
     if (authedUser) {
       // Prefill email on the Checkout page so the user doesn't retype it.
-      // If we already have a Stripe Customer for this user, bind to it
-      // (Stripe will skip the email field entirely). Otherwise just prefill.
-      if (authedUser.stripeCustomerId) {
-        sessionParams.customer = authedUser.stripeCustomerId;
-      } else {
-        sessionParams.customer_email = authedUser.email;
-      }
+      sessionParams.customer_email = authedUser.email;
       sessionParams.client_reference_id = authedUser.id;
 
-      // Subscription-specific: stash userId on the subscription metadata
-      // since `customer.subscription.*` webhook events don't include the
-      // parent checkout's metadata.
-      if (plan.mode === "subscription") {
-        sessionParams.subscription_data = {
-          metadata: { userId: authedUser.id, plan: plan.key },
-        };
-      }
     } else if (plan.mode === "payment") {
       // Anonymous single-report purchase — let Stripe create a customer
       // record so receipts can be emailed.

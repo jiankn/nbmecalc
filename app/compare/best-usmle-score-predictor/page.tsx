@@ -103,7 +103,7 @@ export default function BestPredictorPage() {
             <p className="text-gray-700 leading-relaxed">
               <strong>Strongest at:</strong> multi-source aggregation, 95%
               confidence intervals, and personalized study plans.
-              <strong>Weakest at:</strong> Pro dashboard timeline still
+              <strong>Weakest at:</strong> Lifetime dashboard timeline still
               in beta. Recommended if you need an end-to-end Step prep tool.
             </p>
           </div>

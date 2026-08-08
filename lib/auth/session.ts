@@ -17,7 +17,12 @@
  */
 import { and, eq, gt } from "drizzle-orm";
 import type { Db } from "@/lib/db/client";
-import { sessions, users, type UserRow } from "@/lib/db/schema";
+import {
+  lifetimeEntitlements,
+  sessions,
+  users,
+  type UserRow,
+} from "@/lib/db/schema";
 
 export const SESSION_COOKIE = "nb_session";
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -71,17 +76,17 @@ export function readSessionCookie(req: Request): string | null {
 export interface AuthenticatedSession {
   sessionId: string;
   user: Pick<
-    UserRow,
-    | "id"
-    | "email"
-    | "name"
-    | "avatarUrl"
-    | "proTier"
-    | "proExpiresAt"
-    | "stripeCustomerId"
-    | "createdAt"
-    | "deletedAt"
-  >;
+      UserRow,
+      | "id"
+      | "email"
+      | "name"
+      | "avatarUrl"
+      | "createdAt"
+      | "deletedAt"
+    > & {
+      lifetimeAccess: boolean;
+      lifetimePurchasedAt: number | null;
+    };
 }
 
 /**
@@ -107,15 +112,18 @@ export async function loadSession(
         email: users.email,
         name: users.name,
         avatarUrl: users.avatarUrl,
-        proTier: users.proTier,
-        proExpiresAt: users.proExpiresAt,
-        stripeCustomerId: users.stripeCustomerId,
         createdAt: users.createdAt,
         deletedAt: users.deletedAt,
+        lifetimeStatus: lifetimeEntitlements.status,
+        lifetimePurchasedAt: lifetimeEntitlements.purchasedAt,
       },
     })
     .from(sessions)
     .innerJoin(users, eq(sessions.userId, users.id))
+    .leftJoin(
+      lifetimeEntitlements,
+      eq(lifetimeEntitlements.userId, users.id)
+    )
     .where(and(eq(sessions.id, sid), gt(sessions.expiresAt, now)))
     .limit(1);
 
@@ -130,7 +138,14 @@ export async function loadSession(
     .where(eq(sessions.id, sid))
     .catch(() => {});
 
-  return { sessionId: sid, user: row.user };
+  const { lifetimeStatus, ...user } = row.user;
+  return {
+    sessionId: sid,
+    user: {
+      ...user,
+      lifetimeAccess: lifetimeStatus === "active",
+    },
+  };
 }
 
 /** Create a new session row. Returns the new id (also the cookie value). */

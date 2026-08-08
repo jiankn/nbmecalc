@@ -6,16 +6,19 @@ import { PageHero } from "@/components/page-hero";
 import { Pricing } from "@/components/sections/pricing";
 import { FAQ } from "@/components/sections/faq";
 import { Button } from "@/components/ui/button";
+import { formatUsd, getLifetimeOffer } from "@/lib/lifetime-offer";
+
+const lifetimeOffer = getLifetimeOffer();
 
 export const metadata: Metadata = {
-  title: "Pricing — Free Predictor + $14.99 Reports + $9.99 Pro | NBMEcalc",
+  title: "Pricing | Free, $14.99 Reports & Lifetime Access | NBMEcalc",
   description:
-    "Try the USMLE Step score predictor free. Pay $14.99 for a single PDF report or $9.99/mo for unlimited Pro tracking. No auto-renewal traps. Cancel anytime.",
+    "Try the USMLE Step score predictor free. Pay $14.99 for one PDF report or make one payment for unlimited Lifetime tracking.",
   alternates: { canonical: "https://nbmecalc.com/pricing" },
   openGraph: {
-    title: "NBMEcalc Pricing — Free, $14.99 Single Report, $9.99/mo Pro",
+    title: "NBMEcalc Pricing | Free, Single Report, or Lifetime",
     description:
-      "Transparent USMLE score predictor pricing. Cancel anytime. No auto-renewal traps, no hidden fees.",
+      "Transparent USMLE score predictor pricing with one-time payments and no recurring subscription.",
     url: "https://nbmecalc.com/pricing",
     type: "website",
     images: [
@@ -32,13 +35,13 @@ export const metadata: Metadata = {
 const trustItems = [
   {
     icon: Shield,
-    title: "No auto-renewal traps",
-    body: "We email you 7 days before any renewal. Cancel in one click from your dashboard.",
+    title: "No recurring charges",
+    body: "Single Report and Lifetime are both one-time purchases. Nothing renews automatically.",
   },
   {
     icon: FileText,
-    title: "Cancel anytime",
-    body: "Stop a Pro subscription whenever — you keep access until your billing period ends.",
+    title: "One payment, lasting access",
+    body: "Lifetime keeps your account unlocked without monthly or annual billing.",
   },
   {
     icon: Zap,
@@ -48,28 +51,28 @@ const trustItems = [
 ];
 
 const detailedFeatures = [
-  { name: "Multi-source predictor (NBME + UWSA + Free 120)", free: true, single: true, pro: true },
-  { name: "Estimated planning range", free: true, single: true, pro: true },
-  { name: "Model summary and assumptions", free: true, single: true, pro: true },
-  { name: "Pass-probability indicator", free: true, single: true, pro: true },
-  { name: "Predictions saved to dashboard", free: false, single: true, pro: true },
-  { name: "Downloadable PDF report (3 pages)", free: false, single: true, pro: true },
-  { name: "Readiness discussion guide + reverse triggers", free: false, single: true, pro: true },
-  { name: "3 highest-leverage moves for your input pattern", free: false, single: true, pro: true },
-  { name: "Model assumptions and scenario breakdown", free: false, single: true, pro: true },
-  { name: "Anti-patterns: counter-intuitive things NOT to do", free: false, single: true, pro: true },
-  { name: "Score trajectory analysis + subject-level weakness map", free: false, single: true, pro: true },
-  { name: "Unlimited predictions & refreshes", free: false, single: false, pro: true },
-  { name: "Multi-Step tracking (1, 2 CK, 3)", free: false, single: false, pro: true },
-  { name: "Real-time score timeline", free: false, single: false, pro: true },
-  { name: "Priority email support", free: false, single: false, pro: true },
-  { name: "All future Pro features included", free: false, single: false, pro: true },
+  { name: "Multi-source predictor (NBME + UWSA + Free 120)", free: true, single: true, lifetime: true },
+  { name: "Estimated planning range", free: true, single: true, lifetime: true },
+  { name: "Model summary and assumptions", free: true, single: true, lifetime: true },
+  { name: "Pass-probability indicator", free: true, single: true, lifetime: true },
+  { name: "Predictions saved to dashboard", free: false, single: true, lifetime: true },
+  { name: "Downloadable PDF report (3 pages)", free: false, single: true, lifetime: true },
+  { name: "Readiness discussion guide + reverse triggers", free: false, single: true, lifetime: true },
+  { name: "3 highest-leverage moves for your input pattern", free: false, single: true, lifetime: true },
+  { name: "Model assumptions and scenario breakdown", free: false, single: true, lifetime: true },
+  { name: "Anti-patterns: counter-intuitive things NOT to do", free: false, single: true, lifetime: true },
+  { name: "Score trajectory analysis + subject-level weakness map", free: false, single: true, lifetime: true },
+  { name: "Unlimited predictions & refreshes", free: false, single: false, lifetime: true },
+  { name: "Multi-Step tracking (1, 2 CK, 3)", free: false, single: false, lifetime: true },
+  { name: "Real-time score timeline", free: false, single: false, lifetime: true },
+  { name: "Priority email support", free: false, single: false, lifetime: true },
+  { name: "Ongoing updates to core features", free: false, single: false, lifetime: true },
 ];
 
 const refundFAQ = [
   {
     q: "Can I get a refund?",
-    a: "Digital products (Single Reports) are non-refundable once delivered, since you've already received the value. For Pro subscriptions, we offer a 7-day refund window if you haven't downloaded a report — just email us.",
+    a: "No. All sales are final. Single Report and Lifetime are digital products delivered immediately and are non-refundable. Please confirm your selected product before paying.",
   },
   {
     q: "What payment methods do you accept?",
@@ -81,15 +84,15 @@ const refundFAQ = [
   },
   {
     q: "Do you offer discounts for IMGs / students?",
-    a: "Pro is already priced as low as we can sustainably go. We periodically run discounts during USMLE peak seasons — subscribe to our newsletter to get notified.",
+    a: "The current $19.99 Lifetime founding price is our thank-you to early supporters during NBMEcalc's founding stage. It may return to the standard $34.99 price for future buyers, but purchased Lifetime access remains unchanged.",
   },
   {
-    q: "Can I upgrade from Single Report to Pro?",
-    a: "Yes. The amount you paid for the Single Report ($14.99) is credited toward your first Pro month. Just email us within 30 days of your Single Report purchase.",
+    q: "Can I upgrade from Single Report to Lifetime?",
+    a: "Yes. Lifetime can be purchased later from this page. A previous Single Report purchase is not automatically credited toward Lifetime.",
   },
   {
-    q: "What happens after I cancel Pro?",
-    a: "You keep full access until the end of your current billing period. After that, your dashboard switches to read-only mode — past predictions stay viewable, but no new ones can be created.",
+    q: "What does Lifetime include in the future?",
+    a: "Lifetime includes ongoing updates to NBMEcalc's core prediction, tracking, and reporting features. Major standalone products or services introduced later may be priced separately.",
   },
   {
     q: "Are there any hidden fees?",
@@ -101,7 +104,7 @@ function CheckOrDash({ on }: { on: boolean }) {
   if (on) {
     return <Check className="h-5 w-5 text-mint-500 mx-auto" aria-label="Included" />;
   }
-  return <span className="text-gray-300 mx-auto block w-fit" aria-label="Not included">—</span>;
+  return <span className="text-gray-300 mx-auto block w-fit" aria-label="Not included">-</span>;
 }
 
 const jsonLd = {
@@ -110,7 +113,7 @@ const jsonLd = {
   name: "NBMEcalc Pricing",
   url: "https://nbmecalc.com/pricing",
   description:
-    "Transparent USMLE score predictor pricing. Cancel anytime.",
+    "Transparent USMLE score predictor pricing with one-time payments.",
   mainEntity: {
     "@type": "Product",
     name: "NBMEcalc USMLE Step Score Predictor",
@@ -136,15 +139,11 @@ const jsonLd = {
       },
       {
         "@type": "Offer",
-        name: "Pro Monthly",
-        price: "9.99",
+        name: lifetimeOffer.active ? "Lifetime Access (Founding Offer)" : "Lifetime Access",
+        price: formatUsd(lifetimeOffer.priceCents).replace("$", ""),
         priceCurrency: "USD",
         url: "https://nbmecalc.com/pricing",
         availability: "https://schema.org/InStock",
-        priceSpecification: {
-          "@type": "UnitPriceSpecification",
-          billingDuration: "P1M",
-        },
       },
     ],
   },
@@ -160,7 +159,7 @@ export default function PricingPage() {
       <PageHero
         badge="Pricing"
         title="Simple, transparent pricing"
-        description="Start free. Pay only when you need a downloadable report or ongoing tracking. No auto-renewal traps. No hidden fees."
+        description="Start free. Pay once when you need a downloadable report or unlimited tracking. No subscriptions. No hidden fees."
         size="md"
       />
 
@@ -191,7 +190,7 @@ export default function PricingPage() {
             Compare every feature
           </h2>
           <p className="text-center text-gray-600 mb-12">
-            See exactly what you get at each tier. Upgrade or downgrade anytime.
+            See exactly what you get at each tier before making a one-time purchase.
           </p>
 
           <div className="overflow-x-auto rounded-3xl border border-gray-200 bg-white">
@@ -204,7 +203,7 @@ export default function PricingPage() {
                   <th className="px-4 py-5 font-bold text-mint-700">
                     <span className="inline-flex items-center gap-1">
                       <Sparkles className="h-3.5 w-3.5" />
-                      Pro
+                      Lifetime
                     </span>
                   </th>
                 </tr>
@@ -223,7 +222,7 @@ export default function PricingPage() {
                       <CheckOrDash on={f.single} />
                     </td>
                     <td className="px-4 py-3.5 text-center">
-                      <CheckOrDash on={f.pro} />
+                      <CheckOrDash on={f.lifetime} />
                     </td>
                   </tr>
                 ))}

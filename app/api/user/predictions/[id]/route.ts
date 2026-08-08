@@ -65,13 +65,13 @@ export async function GET(req: Request, context: RouteContext): Promise<Response
     // Non-critical — if reports table doesn't exist yet, just skip.
   }
 
-  // Entitlement to the full subject-level breakdown: Pro subscribers, or a
+  // Entitlement to the full subject-level breakdown: Lifetime members, or a
   // one-off purchase (a paid report exists for this prediction). Everyone
   // else gets a free preview of just the weakest subjects. Cropping here —
   // not only in the UI — stops a non-paying user from pulling all 14 subjects
   // straight from the API.
   const entitledToFullReport =
-    Boolean(session.user.proTier) || reportSessionId !== null;
+    session.user.lifetimeAccess || reportSessionId !== null;
 
   const fullSnapshot = JSON.parse(row.resultSnapshot) as PredictionResult;
   const subjectsTotal = fullSnapshot.cohortSubjectAverages?.length ?? 0;
@@ -100,7 +100,7 @@ export async function GET(req: Request, context: RouteContext): Promise<Response
       algorithmVersion: row.algorithmVersion,
       reportSessionId,
       archivedAt: row.archivedAt,
-      pro: Boolean(session.user.proTier),
+      lifetime: session.user.lifetimeAccess,
       subjectsTotal,
       subjectsTruncated,
     },

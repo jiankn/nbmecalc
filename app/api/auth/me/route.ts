@@ -5,7 +5,7 @@
  *
  * Used by:
  *   - <Nav> on the marketing site to decide between "Sign in" and "Dashboard"
- *   - <DashboardShell> for greeting / pro-tier badge / settings prefill
+ *   - <DashboardShell> for greeting / access badge / settings prefill
  *
  * We deliberately do NOT include sensitive fields (deletedAt, ip, audit
  * timestamps). The shape here is the contract the client can rely on.
@@ -35,8 +35,8 @@ export async function GET(req: Request): Promise<Response> {
         email: u.email,
         name: u.name,
         avatarUrl: u.avatarUrl,
-        proTier: u.proTier,
-        proExpiresAt: u.proExpiresAt,
+        lifetimeAccess: u.lifetimeAccess,
+        lifetimePurchasedAt: u.lifetimePurchasedAt,
         createdAt: u.createdAt,
       },
     },

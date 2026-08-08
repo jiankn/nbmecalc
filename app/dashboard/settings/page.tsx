@@ -13,8 +13,8 @@ export default function SettingsPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const userEmail = session.status === "authed" ? session.user.email : "";
-  const isPro =
-    session.status === "authed" && Boolean(session.user.proTier);
+  const hasLifetime =
+    session.status === "authed" && session.user.lifetimeAccess;
 
   // Force the user to type "DELETE" to confirm — protects against rage-
   // clicks and shoulder-surfing during a "let me show you my dashboard".
@@ -128,10 +128,9 @@ export default function SettingsPage() {
           Deleting your account permanently removes all your predictions and
           personal data. This cannot be undone.
         </p>
-        {isPro && (
+        {hasLifetime && (
           <p className="text-sm text-rose-900 font-semibold mb-2">
-            Your active Pro subscription will be canceled automatically as
-            part of the deletion process.
+            Deleting this account also permanently removes its Lifetime access.
           </p>
         )}
         <p className="text-xs text-rose-800/80 mb-5">

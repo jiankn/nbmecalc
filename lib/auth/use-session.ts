@@ -19,8 +19,8 @@ export interface SessionUser {
   email: string;
   name: string | null;
   avatarUrl: string | null;
-  proTier: string | null;
-  proExpiresAt: number | null;
+  lifetimeAccess: boolean;
+  lifetimePurchasedAt: number | null;
   createdAt: number;
 }
 

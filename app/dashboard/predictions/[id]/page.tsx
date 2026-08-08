@@ -34,7 +34,7 @@ interface PredictionDetail {
   algorithmVersion: string;
   reportSessionId: string | null;
   archivedAt: number | null;
-  pro: boolean;
+  lifetime: boolean;
 }
 
 function stepLabel(step: string): string {
@@ -301,11 +301,11 @@ export default function PredictionDetailPage() {
             <ResendReportEmail sessionId={prediction.reportSessionId!} variant="dashboard" />
           </div>
         </section>
-      ) : prediction.pro ? (
+      ) : prediction.lifetime ? (
         <section className="rounded-3xl bg-mint-50 border border-mint-200 p-6">
           <h2 className="text-lg font-bold mb-2">Your Full Report</h2>
           <p className="text-sm text-gray-700 mb-4">
-            Included with your Pro subscription. View the complete report
+            Included with your Lifetime access. View the complete report
             online or download the PDF — no extra charge.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
@@ -339,9 +339,9 @@ export default function PredictionDetailPage() {
         <Button size="lg" asChild>
           <Link href="/#calculator">Run a new prediction</Link>
         </Button>
-        {!prediction.pro && (
+        {!prediction.lifetime && (
           <Button variant="outline" size="lg" asChild>
-            <Link href="/pricing">Upgrade to Pro</Link>
+            <Link href="/pricing">Get Lifetime Access</Link>
           </Button>
         )}
       </div>

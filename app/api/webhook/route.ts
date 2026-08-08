@@ -1,10 +1,14 @@
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { getDb, type Db } from "@/lib/db/client";
-import { events, users, reports, predictions } from "@/lib/db/schema";
-import { getPlan, type PlanKey } from "@/lib/plans";
+import {
+  events,
+  lifetimeEntitlements,
+  reports,
+  predictions,
+} from "@/lib/db/schema";
 import { sendReportEmail } from "@/lib/email-report";
 
 export const runtime = "edge";
@@ -14,7 +18,7 @@ export const runtime = "edge";
  *
  * This is the source of truth for entitlement state. Stripe Checkout
  * redirects are best-effort UI; webhooks are the durable signal that says
- * "the money landed". Anything that grants access (Pro tier, etc.) MUST
+ * "the money landed". Anything that grants access MUST
  * flow through here, never through the redirect handlers.
  *
  * Signature verification uses `constructEventAsync` because Edge runtime
@@ -177,6 +181,10 @@ async function handleEvent(event: Stripe.Event): Promise<void> {
         }
       }
 
+      if (plan === "lifetime" && session.payment_status === "paid") {
+        await grantLifetimeAccess(db, session, event.id);
+      }
+
       await recordEvent(db, {
         userId: (session.metadata?.userId as string | undefined) ?? null,
         type: "checkout_completed",
@@ -196,39 +204,43 @@ async function handleEvent(event: Stripe.Event): Promise<void> {
       break;
     }
 
-    case "customer.subscription.created":
-    case "customer.subscription.updated": {
-      const sub = event.data.object as Stripe.Subscription;
-      await applySubscriptionState(db, sub, event.id);
+    case "checkout.session.async_payment_succeeded": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      if (session.metadata?.plan === "lifetime") {
+        await grantLifetimeAccess(db, session, event.id);
+      }
       break;
     }
 
-    case "customer.subscription.deleted": {
-      const sub = event.data.object as Stripe.Subscription;
-      await clearSubscriptionState(db, sub, event.id);
+    case "charge.refunded": {
+      const charge = event.data.object as Stripe.Charge;
+      if (charge.amount_refunded >= charge.amount) {
+        await revokeLifetimeAccess(
+          db,
+          typeof charge.payment_intent === "string"
+            ? charge.payment_intent
+            : charge.payment_intent?.id ?? null,
+          event.id,
+          "refunded"
+        );
+      }
       break;
     }
 
-    case "invoice.payment_failed": {
-      const invoice = event.data.object as Stripe.Invoice;
-      // We don't immediately revoke on the first failed payment — Stripe
-      // dunning will retry over ~3 weeks before flipping the subscription
-      // to `canceled`. The `customer.subscription.updated` webhook for the
-      // status change will reach `clearSubscriptionState` via the normal
-      // path. For now just log + analytics.
-      await recordEvent(db, {
-        userId: null,
-        type: "invoice_payment_failed",
-        payload: {
-          eventId: event.id,
-          invoiceId: invoice.id,
-          customer:
-            typeof invoice.customer === "string"
-              ? invoice.customer
-              : invoice.customer?.id ?? null,
-          amountDue: invoice.amount_due,
-        },
-      });
+    case "charge.dispute.created": {
+      const dispute = event.data.object as Stripe.Dispute;
+      const expandedCharge =
+        typeof dispute.charge === "string"
+          ? await getStripe().charges.retrieve(dispute.charge)
+          : dispute.charge;
+      await revokeLifetimeAccess(
+        db,
+        typeof expandedCharge.payment_intent === "string"
+          ? expandedCharge.payment_intent
+          : expandedCharge.payment_intent?.id ?? null,
+        event.id,
+        "disputed"
+      );
       break;
     }
 
@@ -239,209 +251,105 @@ async function handleEvent(event: Stripe.Event): Promise<void> {
   }
 }
 
-/**
- * Update the user's `pro_tier` / `pro_expires_at` based on a Stripe
- * subscription's current state. Called for both `created` and `updated`.
- *
- * Resolution order for finding which user this is for:
- *   1. `subscription.metadata.userId` — set by /api/checkout when the
- *      subscription was created. This is the canonical link.
- *   2. Fall back to `users.stripeCustomerId == subscription.customer` —
- *      handles older subscriptions or any drift.
- *   3. Last resort: `customer.email` lookup. Fragile, but better than
- *      a silent miss.
- */
-async function applySubscriptionState(
+async function grantLifetimeAccess(
   db: Db,
-  sub: Stripe.Subscription,
+  session: Stripe.Checkout.Session,
   eventId: string
 ): Promise<void> {
-  const userId = await resolveUserId(db, sub);
+  const userId = session.metadata?.userId;
   if (!userId) {
-    console.error(
-      "[stripe-webhook] could not resolve user for subscription",
-      { subId: sub.id, customer: sub.customer }
-    );
-    // Don't 500 — that triggers retries. A missing user is a permanent
-    // miss; we record it for offline reconciliation.
     await recordEvent(db, {
       userId: null,
-      type: "subscription_orphaned",
-      payload: {
-        eventId,
-        subId: sub.id,
-        status: sub.status,
-        customer:
-          typeof sub.customer === "string"
-            ? sub.customer
-            : sub.customer.id,
-      },
+      type: "lifetime_entitlement_orphaned",
+      payload: { eventId, stripeSessionId: session.id },
     });
     return;
   }
 
-  // Map Stripe price → our plan key, so we know whether this is monthly
-  // or annual. We keep the mapping loose: any unrecognized price still
-  // grants Pro (the user paid us; surely we should honor it) but logs
-  // a warning so we notice misconfigured price IDs.
-  const planKey = inferPlanKeyFromSubscription(sub);
-
-  // Active states give Pro; everything else clears it. Stripe's full
-  // status enum: trialing | active | past_due | canceled | unpaid |
-  // incomplete | incomplete_expired | paused
-  const grantPro =
-    sub.status === "active" ||
-    sub.status === "trialing" ||
-    // past_due users still have access during dunning grace.
-    sub.status === "past_due";
-
-  const customerId =
-    typeof sub.customer === "string" ? sub.customer : sub.customer.id;
-
   const now = Date.now();
-  // current_period_end is unix seconds; convert to ms. Some Stripe API
-  // versions ship it on the subscription, others on items.data[0]; check
-  // both. (Note the loose typing — Stripe's TS types vary by version.)
-  const periodEndSec =
-    (sub as unknown as { current_period_end?: number }).current_period_end ??
-    sub.items?.data?.[0]?.current_period_end ??
-    null;
-  const proExpiresAt =
-    typeof periodEndSec === "number" && periodEndSec > 0
-      ? periodEndSec * 1000
-      : null;
+  const paymentIntent =
+    typeof session.payment_intent === "string"
+      ? session.payment_intent
+      : session.payment_intent?.id ?? null;
+  const founding = session.metadata?.lifetimeOffer === "founding";
+  const entitlementValues = {
+    userId,
+    status: "active" as const,
+    stripeCheckoutSessionId: session.id,
+    stripePaymentIntent: paymentIntent,
+    amountPaid: session.amount_total ?? (founding ? 1999 : 3499),
+    currency: session.currency ?? "usd",
+    promotionApplied: founding ? 1 : 0,
+    purchasedAt: now,
+    revokedAt: null,
+    updatedAt: now,
+  };
 
-  if (grantPro) {
-    await db
-      .update(users)
-      .set({
-        proTier: planKey ?? "monthly", // fallback label if mapping missed
-        proStartedAt:
-          // Only set on first grant; preserve original on subsequent updates.
-          // Drizzle doesn't expose COALESCE concisely here, so we read first.
-          await getExistingProStartedAt(db, userId, now),
-        proExpiresAt,
-        stripeCustomerId: customerId,
-        updatedAt: now,
-      })
-      .where(eq(users.id, userId));
-  } else {
-    await db
-      .update(users)
-      .set({
-        proTier: null,
-        proExpiresAt: null,
-        stripeCustomerId: customerId,
-        updatedAt: now,
-      })
-      .where(eq(users.id, userId));
-  }
+  const restoreRevoked = db
+    .update(lifetimeEntitlements)
+    .set(entitlementValues)
+    .where(
+      and(
+        eq(lifetimeEntitlements.userId, userId),
+        ne(lifetimeEntitlements.status, "active")
+      )
+    );
+  const insertNew = db
+    .insert(lifetimeEntitlements)
+    .values(entitlementValues)
+    .onConflictDoNothing();
+  await db.batch([restoreRevoked, insertNew]);
 
   await recordEvent(db, {
     userId,
-    type: grantPro ? "pro_granted" : "pro_revoked",
+    type: "lifetime_granted",
     payload: {
       eventId,
-      subId: sub.id,
-      status: sub.status,
-      planKey,
-      proExpiresAt,
+      stripeSessionId: session.id,
+      paymentIntent,
+      founding,
+      amountPaid: entitlementValues.amountPaid,
     },
   });
 }
 
-/**
- * Subscription was deleted entirely (canceled at period end took effect,
- * or user hard-canceled). Mirror state: clear Pro.
- */
-async function clearSubscriptionState(
+async function revokeLifetimeAccess(
   db: Db,
-  sub: Stripe.Subscription,
-  eventId: string
+  paymentIntent: string | null,
+  eventId: string,
+  reason: "refunded" | "disputed"
 ): Promise<void> {
-  const userId = await resolveUserId(db, sub);
-  if (!userId) return;
+  if (!paymentIntent) return;
+  const rows = await db
+    .select()
+    .from(lifetimeEntitlements)
+    .where(
+      and(
+        eq(lifetimeEntitlements.stripePaymentIntent, paymentIntent),
+        eq(lifetimeEntitlements.status, "active")
+      )
+    )
+    .limit(1);
+  const entitlement = rows[0];
+  if (!entitlement) return;
 
   const now = Date.now();
-  await db
-    .update(users)
-    .set({
-      proTier: null,
-      proExpiresAt: null,
-      updatedAt: now,
-    })
-    .where(eq(users.id, userId));
+  const revoke = db
+    .update(lifetimeEntitlements)
+    .set({ status: "revoked", revokedAt: now, updatedAt: now })
+    .where(
+      and(
+        eq(lifetimeEntitlements.userId, entitlement.userId),
+        eq(lifetimeEntitlements.status, "active")
+      )
+    );
+  await revoke;
 
   await recordEvent(db, {
-    userId,
-    type: "pro_revoked",
-    payload: { eventId, subId: sub.id, reason: "subscription_deleted" },
+    userId: entitlement.userId,
+    type: "lifetime_revoked",
+    payload: { eventId, paymentIntent, reason },
   });
-}
-
-/** Look up our user from a Stripe subscription. See applySubscriptionState. */
-async function resolveUserId(
-  db: Db,
-  sub: Stripe.Subscription
-): Promise<string | null> {
-  const metaUserId = sub.metadata?.userId;
-  if (typeof metaUserId === "string" && metaUserId.length > 0) {
-    return metaUserId;
-  }
-
-  const customerId =
-    typeof sub.customer === "string" ? sub.customer : sub.customer.id;
-
-  // Try by stripeCustomerId.
-  const byCustomer = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.stripeCustomerId, customerId))
-    .limit(1);
-  if (byCustomer[0]) return byCustomer[0].id;
-
-  // Last resort: customer email. We'd have to expand the customer to read
-  // email; the subscription event payload usually doesn't include it.
-  // Skip in the edge runtime to avoid an extra Stripe round-trip per event.
-  return null;
-}
-
-/**
- * Get the user's current `proStartedAt` if set, otherwise return `now`.
- * Used to preserve the original Pro start time across subscription updates.
- */
-async function getExistingProStartedAt(
-  db: Db,
-  userId: string,
-  fallbackNow: number
-): Promise<number> {
-  const rows = await db
-    .select({ proStartedAt: users.proStartedAt })
-    .from(users)
-    .where(eq(users.id, userId))
-    .limit(1);
-  return rows[0]?.proStartedAt ?? fallbackNow;
-}
-
-/**
- * Map a Stripe Subscription's price ID to our PlanKey. Reads the configured
- * env vars so it stays in sync with whatever /api/checkout sends. If the
- * price isn't one of ours (someone created a price directly in the Stripe
- * dashboard) we return null; caller decides how to handle.
- */
-function inferPlanKeyFromSubscription(
-  sub: Stripe.Subscription
-): PlanKey | null {
-  const priceId = sub.items?.data?.[0]?.price?.id;
-  if (!priceId) return null;
-
-  for (const key of ["pro_monthly", "pro_annual"] as const) {
-    const plan = getPlan(key);
-    if (!plan) continue;
-    const expectedPriceId = process.env[plan.stripePriceEnvKey];
-    if (expectedPriceId && expectedPriceId === priceId) return key;
-  }
-  return null;
 }
 
 /** Append-only audit log. Best-effort (failure logged but not propagated). */

@@ -125,6 +125,7 @@ jobs:
           # Surface only the *public* env vars at build time. All secrets
           # live in Cloudflare Pages and are read at runtime by the Worker.
           NEXT_PUBLIC_SITE_URL: https://nbmecalc.com
+          NEXT_PUBLIC_LIFETIME_FOUNDING_OFFER_ENABLED: ${{ vars.NEXT_PUBLIC_LIFETIME_FOUNDING_OFFER_ENABLED || 'true' }}
 
       - name: Deploy to Cloudflare Pages
         env:

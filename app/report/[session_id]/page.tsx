@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import Link from "next/link";
 import {
-  loadProPredictionReport,
+  loadLifetimePredictionReport,
   loadReportFromSession,
   type ReportLoadResult,
 } from "@/lib/session-report";
@@ -31,8 +31,8 @@ type RouteParams = Promise<{ session_id: string }>;
 
 /**
  * Resolve a report either from a paid Stripe Checkout session (`cs_...`) or,
- * for an authenticated Pro subscriber, from one of their own prediction ids.
- * Pro membership includes the full report, so we let them reuse this exact
+ * for an authenticated Lifetime member, from one of their own prediction ids.
+ * Lifetime access includes the full report, so we let them reuse this exact
  * page for any prediction they own without a second purchase.
  */
 async function loadReport(
@@ -54,21 +54,21 @@ async function loadReport(
     if (secret) {
       const claims = await verifyReportToken(secret, token);
       if (claims && claims.predictionId === idOrSession) {
-        return loadProPredictionReport(db, claims.userId, idOrSession);
+        return loadLifetimePredictionReport(db, claims.userId, idOrSession);
       }
     }
   }
 
-  // Interactive path: a logged-in Pro user viewing their own prediction.
+  // Interactive path: a logged-in Lifetime user viewing their own prediction.
   const cookie = (await headers()).get("cookie") ?? "";
   const session = await loadSession(
     db,
     new Request("https://report.internal/", { headers: { cookie } })
   );
-  if (!session || !session.user.proTier) {
+  if (!session || !session.user.lifetimeAccess) {
     return { status: "not_found" };
   }
-  return loadProPredictionReport(db, session.user.id, idOrSession);
+  return loadLifetimePredictionReport(db, session.user.id, idOrSession);
 }
 
 export default async function ReportPage({

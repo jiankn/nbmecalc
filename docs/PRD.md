@@ -1,10 +1,22 @@
 # nbmecalc.com — Product Requirements Document (PRD)
 
-> **版本**: 1.0
-> **最后更新**: 2026-05-17
+> **版本**: 1.1
+> **最后更新**: 2026-08-08
 > **状态**: Draft → Active
 > **负责人**: Solo founder
 > **目标读者**: 任何接手该项目的 AI / 工程师
+
+---
+
+> **2026-08-08 定价决策（优先级高于下文旧版 Pro 描述）**：新销售方案为
+> Free、$14.99 Single Report、$34.99 Lifetime，均无订阅。Lifetime 创始价
+> $19.99 作为 founding stage 的长期公开优惠，不设自动人数上限、截止日期
+> 或倒计时。由 `NEXT_PUBLIC_LIFETIME_FOUNDING_OFFER_ENABLED` 手动控制；设为
+> `false` 并重新部署后，新购买恢复 $34.99，既有 Lifetime 权益不受影响。
+> 所有下文 Pro Monthly / Pro Annual / Stripe Subscription 描述仅为历史设计，
+> 不再代表当前产品或实现。当前实现详见 `lib/lifetime-offer.ts`、
+> `app/api/checkout/route.ts`、`app/api/webhook/route.ts` 与迁移
+> `0006_lifetime.sql`。
 
 ---
 
@@ -2151,4 +2163,3 @@ export const runtime = "edge"; // 每个 /api/*/route.ts
 ---
 
 **[END OF PRD v1.0]**
-

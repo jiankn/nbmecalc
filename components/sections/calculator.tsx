@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { trackProductEvent } from "@/lib/product-events";
 import { PredictionFeedbackOptIn } from "@/components/prediction-feedback-opt-in";
+import { formatUsd, getLifetimeOffer } from "@/lib/lifetime-offer";
 
 const STEPS: { key: StepKind; label: string }[] = [
   { key: "step1", label: "Step 1" },
@@ -81,8 +82,8 @@ export function Calculator({
   const [result, setResult] = useState<PredictionPreview | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const session = useSession();
-  const isPro =
-    session.status === "authed" && Boolean(session.user.proTier);
+  const hasLifetime =
+    session.status === "authed" && session.user.lifetimeAccess;
 
   // Listen for the Hero's "Predict My Score" button. When the user enters
   // a score in the hero and clicks, we receive it here and inject it into
@@ -209,7 +210,7 @@ export function Calculator({
     }, 50);
 
     // 2. Fire-and-forget server log so funnel + rate-limit can see this
-    //    deliberate "Predict" click. We DON'T await — UI is already done.
+    //    deliberate "Predict" click. We DON'T await because UI is already done.
     //    AbortController prevents stale responses from overwriting newer ids
     //    when the user clicks rapidly.
     inFlight.current?.abort();
@@ -231,13 +232,13 @@ export function Calculator({
             },
           }),
         });
-        if (!res.ok) return; // Rate-limited or invalid — silently skip.
+        if (!res.ok) return; // Rate-limited or invalid, so silently skip.
         const json = (await res.json()) as { predictionId?: string };
         if (json.predictionId && !controller.signal.aborted) {
           setPredictionId(json.predictionId);
         }
       } catch {
-        // Network errors are non-fatal — client-side result is already shown.
+        // Network errors are non-fatal because the client result is already shown.
       }
     })();
   }
@@ -530,7 +531,7 @@ export function Calculator({
               });
               setShowPaywall(true);
             }}
-            isPro={isPro}
+            hasLifetime={hasLifetime}
             predictionId={predictionId}
           />
         )}
@@ -558,7 +559,7 @@ function ResultCard({
   weakSubjects,
   onToggleWeakSubject,
   onUpgrade,
-  isPro,
+  hasLifetime,
   predictionId,
 }: {
   result: PredictionPreview;
@@ -566,7 +567,7 @@ function ResultCard({
   weakSubjects: string[];
   onToggleWeakSubject: (name: string) => void;
   onUpgrade: () => void;
-  isPro: boolean;
+  hasLifetime: boolean;
   predictionId: string | null;
 }) {
   const subjectTaxonomy = getSubjectTaxonomy(step);
@@ -584,7 +585,7 @@ function ResultCard({
   const passThresholdPct = ((passThreshold - min) / range) * 100;
 
   // Sort subjects by cohort average descending so weak spots naturally bubble
-  // to the bottom — makes the visual story read top-to-bottom (strong → weak).
+  // to the bottom. This makes the visual story read top-to-bottom (strong to weak).
   const sortedSubjects = [...result.cohortSubjectAverages].sort(
     (a, b) => b.cohortAverage - a.cohortAverage
   );
@@ -631,7 +632,7 @@ function ResultCard({
             Estimated range
           </div>
           <div className="text-2xl font-bold tabular-nums">
-            {result.ciLower} – {result.ciUpper}
+            {result.ciLower} - {result.ciUpper}
           </div>
         </div>
         <div className="rounded-2xl bg-gray-50 p-5 text-center">
@@ -680,7 +681,7 @@ function ResultCard({
         </div>
       </div>
 
-      {/* Cohort subject averages — clearly labeled as cohort, not personalized */}
+      {/* Cohort subject averages, clearly labeled as cohort, not personalized */}
       <div className="mt-8">
         <div className="flex items-center justify-between mb-2 gap-3">
           <h4 className="font-bold text-gray-900">
@@ -737,7 +738,7 @@ function ResultCard({
         </div>
       </div>
 
-      {/* Self-reported weak subjects — feeds the personalized priority card
+      {/* Self-reported weak subjects feed the personalized priority card
           inside the paid report. Optional; the user can skip it. */}
       <div className="mt-8 rounded-2xl bg-gray-50 border border-gray-200 p-5">
         <div className="flex items-baseline justify-between gap-3 mb-1">
@@ -748,7 +749,7 @@ function ResultCard({
             </span>
           </h4>
           <span className="text-[11px] text-gray-500">
-            Pick up to 3 — used to personalize the full report
+            Pick up to 3. Used to personalize the full report
           </span>
         </div>
         <p className="text-xs text-gray-600 mb-3">
@@ -786,13 +787,13 @@ function ResultCard({
         {result.cohortNote}
       </p>
 
-      {/* Paywall CTA — Pro members already own the full report, so we send
+      {/* Lifetime members already own the full report, so we send
           them straight to it instead of asking for the one-off $14.99. */}
       <div className="mt-8 rounded-2xl bg-black text-white p-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1">
             <div className="text-xs font-semibold uppercase tracking-wider text-mint-400 mb-1">
-              {isPro ? "Included with Pro" : "Unlock Full Report"}
+              {hasLifetime ? "Included with Lifetime" : "Unlock Full Report"}
             </div>
             <div className="text-lg font-bold mb-1">
               Get your day-by-day plan + complete subject map
@@ -802,7 +803,7 @@ function ResultCard({
               assumptions, and a study-plan framework.
             </div>
           </div>
-          {isPro ? (
+          {hasLifetime ? (
             <Button variant="mint" size="lg" className="shrink-0" asChild>
               <a
                 href={
@@ -821,7 +822,7 @@ function ResultCard({
               onClick={onUpgrade}
               className="shrink-0"
             >
-              Get Report — $14.99
+              Get Report, $14.99
             </Button>
           )}
         </div>
@@ -858,15 +859,10 @@ function PaywallModal({
    *  after the last Predict click. Checkout works fine either way. */
   predictionId: string | null;
 }) {
-  const [loading, setLoading] = useState<"single" | "pro" | null>(null);
+  const [loading, setLoading] = useState<"single" | "lifetime" | null>(null);
   const [error, setError] = useState<string | null>(null);
-  // Pro is a subscription so we have a billing-period choice. Default to
-  // monthly because the lower headline number reduces sticker shock; the
-  // toggle right under the price reveals the annual savings.
-  const [proBilling, setProBilling] = useState<"monthly" | "annual">(
-    "monthly"
-  );
   const session = useSession();
+  const offer = getLifetimeOffer();
   const router = useRouter();
 
   // Hand off to /api/checkout, which creates a Stripe Checkout Session and
@@ -887,7 +883,7 @@ function PaywallModal({
           daysUntil,
           targetScore,
           selfReportedWeakSubjects,
-          // Only include when fresh — links the order back to a real funnel row.
+          // Only include when fresh. This links the order to a real funnel row.
           ...(predictionId ? { predictionId } : {}),
         }),
       });
@@ -896,18 +892,15 @@ function PaywallModal({
         throw new Error(json.error ?? "Could not start checkout.");
       }
       window.location.href = json.url;
-      // We intentionally leave `loading` set — the page will navigate away.
+      // We intentionally leave `loading` set because the page will navigate away.
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not start checkout.");
       setLoading(null);
     }
   };
 
-  // Pro path: Stripe needs to attach the resulting subscription to a known
-  // user, so we require sign-in first. Anon users get bounced to /login
-  // and on return the modal will be reopened by the calculator (the
-  // predictionId is on the URL via PaywallModal's parent state).
-  const handlePro = async () => {
+  // Lifetime access belongs to an account, so anonymous users sign in first.
+  const handleLifetime = async () => {
     setError(null);
 
     if (session.status === "loading") {
@@ -921,15 +914,14 @@ function PaywallModal({
       return;
     }
 
-    setLoading("pro");
+    setLoading("lifetime");
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          plan: proBilling === "annual" ? "pro_annual" : "pro_monthly",
-          // We pass the prediction context so we have it on the order
-          // for support / analytics; subscriptions don't strictly need it.
+          plan: "lifetime",
+          // Keep prediction context for support and funnel analytics.
           ...(predictionId ? { predictionId } : {}),
         }),
       });
@@ -948,7 +940,10 @@ function PaywallModal({
     }
   };
 
-  const isPro = session.status === "authed" && Boolean(session.user.proTier);
+  const hasLifetime =
+    session.status === "authed" && session.user.lifetimeAccess;
+  const foundingOffer = offer.active;
+  const lifetimePrice = formatUsd(offer.priceCents);
 
   return (
     <div
@@ -981,7 +976,7 @@ function PaywallModal({
 
         {/* Plans */}
         <div className="space-y-3">
-          {/* Single Report — active CTA */}
+          {/* Single Report, active CTA */}
           <button
             onClick={handleSingle}
             disabled={loading !== null}
@@ -995,7 +990,7 @@ function PaywallModal({
                 </div>
                 <div className="text-2xl font-extrabold">$14.99</div>
                 <div className="text-xs text-gray-600">
-                  one-time — instant report + printable PDF
+                  one-time. Instant report + printable PDF
                 </div>
               </div>
               <ul className="text-xs text-gray-700 space-y-1 shrink-0">
@@ -1017,68 +1012,36 @@ function PaywallModal({
             </div>
           </button>
 
-          {/* Pro subscription — wired up. */}
+          {/* Lifetime access, one payment with no recurring charge. */}
           <div className="relative rounded-2xl border-2 border-gray-200 bg-white p-5 hover:border-mint-300 transition">
             <div className="flex items-start justify-between gap-4 mb-3">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="font-bold">Pro</span>
+                  <span className="font-bold">Lifetime</span>
                   <span className="inline-flex items-center gap-1 rounded-full bg-mint-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-mint-800">
-                    Best for serious prep
+                    {foundingOffer ? "Founding Offer" : "Best value"}
                   </span>
                 </div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-2xl font-extrabold tabular-nums">
-                    {proBilling === "annual" ? "$79" : "$9.99"}
+                    {lifetimePrice}
                   </span>
                   <span className="text-sm font-medium text-gray-500">
-                    {proBilling === "annual" ? "/yr" : "/mo"}
+                    one-time
                   </span>
-                  {proBilling === "annual" && (
-                    <span className="text-xs font-bold text-mint-700">
-                      Save 33%
-                    </span>
+                  {foundingOffer && (
+                    <span className="text-xs text-gray-500 line-through">$34.99</span>
                   )}
                 </div>
               </div>
-
-              {/* Tiny billing toggle inline — enough surface to flip the
-                  decision without taking the user out to /pricing. */}
-              <div
-                className="inline-flex items-center rounded-full bg-gray-100 p-0.5 text-xs font-semibold shrink-0"
-                role="tablist"
-                aria-label="Pro billing period"
-              >
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={proBilling === "monthly"}
-                  onClick={() => setProBilling("monthly")}
-                  className={cn(
-                    "px-2.5 py-1 rounded-full transition",
-                    proBilling === "monthly"
-                      ? "bg-white text-gray-900 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
-                  )}
-                >
-                  Monthly
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={proBilling === "annual"}
-                  onClick={() => setProBilling("annual")}
-                  className={cn(
-                    "px-2.5 py-1 rounded-full transition",
-                    proBilling === "annual"
-                      ? "bg-white text-gray-900 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
-                  )}
-                >
-                  Annual
-                </button>
-              </div>
             </div>
+
+            {foundingOffer && (
+              <p className="mb-3 text-xs text-mint-900">
+                Our current thank-you price for early supporters. No trial and
+                no recurring charge.
+              </p>
+            )}
 
             <ul className="text-xs text-gray-700 space-y-1 mb-4">
               <li>· Everything in Single Report</li>
@@ -1087,11 +1050,9 @@ function PaywallModal({
               <li>· Priority support</li>
             </ul>
 
-            {isPro ? (
-              // Already subscribed — make this transparent. They probably
-              // hit the paywall on a stale tab; tell them they're good.
+            {hasLifetime ? (
               <div className="rounded-xl bg-mint-50 border border-mint-200 p-3 text-xs text-mint-900">
-                You&apos;re already on Pro — your full report is ready in
+                Your Lifetime access is active. The full report is ready in
                 your dashboard. Refresh this page to unlock it here.
               </div>
             ) : (
@@ -1099,14 +1060,14 @@ function PaywallModal({
                 variant="outline"
                 size="md"
                 className="w-full"
-                onClick={handlePro}
+                onClick={handleLifetime}
                 disabled={loading !== null || session.status === "loading"}
               >
-                {loading === "pro"
-                  ? "Redirecting to secure checkout…"
+                {loading === "lifetime"
+                  ? "Redirecting to secure checkout..."
                   : session.status === "anon"
-                  ? `Subscribe ${proBilling} — sign in next`
-                  : `Subscribe ${proBilling}`}
+                  ? "Get Lifetime. Sign in next"
+                  : "Get Lifetime Access"}
               </Button>
             )}
           </div>

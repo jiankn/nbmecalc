@@ -23,21 +23,13 @@ const STEP_LABEL: Record<PredictionRow["step"], string> = {
   step3: "Step 3",
 };
 
-function planLabel(tier: string | null): string {
-  if (!tier) return "Free";
-  if (tier === "pro_monthly") return "Pro (Monthly)";
-  if (tier === "pro_annual") return "Pro (Annual)";
-  // Anything Stripe sends that we haven't mapped — still treat as Pro.
-  return "Pro";
-}
-
 export default function DashboardOverview() {
   const session = useSession();
   const [predictions, setPredictions] = useState<PredictionRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   const user = session.status === "authed" ? session.user : null;
-  const isPro = Boolean(user?.proTier);
+  const hasLifetime = Boolean(user?.lifetimeAccess);
 
   useEffect(() => {
     fetch("/api/user/predictions?limit=5")
@@ -81,7 +73,7 @@ export default function DashboardOverview() {
         <StatCard
           label="Plan"
           value={
-            session.status === "loading" ? "…" : planLabel(user?.proTier ?? null)
+            session.status === "loading" ? "…" : hasLifetime ? "Lifetime" : "Free"
           }
           icon={
             <Image
@@ -93,7 +85,7 @@ export default function DashboardOverview() {
               className="h-5 w-5 rounded-md"
             />
           }
-          cta={isPro ? undefined : { label: "Upgrade", href: "/pricing" }}
+          cta={hasLifetime ? undefined : { label: "Upgrade", href: "/pricing" }}
         />
       </div>
 
@@ -153,17 +145,17 @@ export default function DashboardOverview() {
         )}
       </section>
 
-      {/* Upgrade nudge — hidden for Pro subscribers */}
-      {!isPro && session.status !== "loading" && (
+      {/* Upgrade nudge — hidden for Lifetime members */}
+      {!hasLifetime && session.status !== "loading" && (
         <section className="rounded-3xl bg-gradient-to-br from-mint-500 to-mint-600 text-white p-8 lg:p-10">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
               <h2 className="text-2xl lg:text-3xl font-extrabold mb-3">
-                Unlock unlimited tracking with Pro
+                Unlock unlimited tracking for life
               </h2>
               <p className="text-white/90 leading-relaxed">
                 Track all three Steps, view your full timeline, and get
-                unlimited predictions. $9.99/mo, cancel anytime.
+                unlimited predictions with one payment and no recurring fee.
               </p>
             </div>
             <Button
@@ -172,7 +164,7 @@ export default function DashboardOverview() {
               className="w-full bg-white text-mint-800 hover:bg-gray-50 lg:w-auto lg:shrink-0"
               asChild
             >
-              <Link href="/pricing">View Pro plans</Link>
+              <Link href="/pricing">View Lifetime</Link>
             </Button>
           </div>
         </section>

@@ -58,7 +58,7 @@ const timeline = [
   {
     year: "2026 Q2",
     title: "Public launch",
-    body: "Free tier opens to all. Single Report and Pro plans launch with PDF delivery, multi-Step tracking, and transparent planning ranges.",
+    body: "Free tier opens to all. Single Report and Lifetime launch with PDF delivery, multi-Step tracking, and transparent planning ranges.",
   },
   {
     year: "2026 H2",

@@ -131,10 +131,10 @@ Prompts live in `/public/placeholders/*.prompt.txt` — edit them to tweak style
 
 - **Free**: Single prediction, 95% CI, basic subject preview
 - **Single Report — $14.99**: Full PDF + 14-day plan + complete subject map
-- **Pro Monthly — $9.99/mo**: Unlimited re-runs + Step 1/2/3 tracking + live timeline
-- **Pro Annual — $79/yr**: Same as Pro Monthly, save 33%
+- **Lifetime — $34.99 one-time**: Unlimited re-runs + Step 1/2/3 tracking + live timeline
+- **Founding Lifetime — $19.99 one-time**: Current founding-stage price with no automatic member cap or deadline
 
-> **No refunds** (digital product, instant PDF download).
+> **All sales are final. No refunds** (digital product, delivered immediately).
 
 ## Database (Cloudflare D1)
 
@@ -175,6 +175,45 @@ npx wrangler d1 migrations apply nbmecalc-prod --local
 ```
 
 Migrations are committed to `lib/db/migrations/` so production deploys don't need drizzle-kit on the server — they just `wrangler d1 migrations apply --remote`.
+
+### Lifetime launch order
+
+Migration `0006_lifetime.sql` creates the durable Lifetime entitlement table.
+The Founding offer is controlled by one deployment setting rather than a
+counter or timer:
+
+```bash
+# 1. Create two one-time Stripe Prices and configure them in Pages.
+STRIPE_PRICE_LIFETIME_FOUNDING=price_... # $19.99
+STRIPE_PRICE_LIFETIME_REGULAR=price_...  # $34.99
+NEXT_PUBLIC_LIFETIME_FOUNDING_OFFER_ENABLED=true
+
+# 2. Apply the entitlement migration and deploy.
+npx wrangler d1 migrations apply nbmecalc-prod --remote
+npm run deploy
+```
+
+To end the Founding offer for future purchases, set
+`NEXT_PUBLIC_LIFETIME_FOUNDING_OFFER_ENABLED=false` and redeploy. Checkout then
+selects and verifies the $34.99 Stripe Price server-side. Existing Lifetime
+entitlements are never changed by this switch.
+
+For the GitHub Actions deployment, create or update the repository variable at
+`Settings > Secrets and variables > Actions > Variables`. If the variable is
+absent, the workflow intentionally defaults to `true`.
+
+The buyer count remains available internally without appearing on the page:
+
+```bash
+npx wrangler d1 execute nbmecalc-prod --remote --command "SELECT COUNT(*) AS founding_members FROM lifetime_entitlements WHERE status = 'active' AND promotion_applied = 1;"
+```
+
+The Stripe webhook endpoint must receive `checkout.session.completed`,
+`checkout.session.async_payment_succeeded`, `charge.refunded`, and
+`charge.dispute.created`.
+`charge.refunded` is retained as an entitlement-safety event: it revokes access
+if an operator or payment network records a full refund despite the no-refund
+policy. It does not advertise or create a customer refund right.
 
 ## PDF Renderer Worker
 
@@ -233,7 +272,7 @@ nbmecalc is not affiliated with NBME, FSMB, USMLE, USMLE-Rx, AMBOSS, UWorld, or 
 ## Roadmap
 
 - [x] Cloudflare D1 schema + write API (`/api/predict`, predictions / reports / rate_limits / events)
-- [x] Stripe Checkout for Single Report + Pro (webhook signature verified; entitlement handler pending)
+- [x] Stripe Checkout for Single Report + Lifetime (server pricing, durable entitlement, signed webhook)
 - [x] PDF report generation (`@react-pdf/renderer` on edge)
 - [x] Personalized analytics layer (trajectory / source insight / target gap / postpone / weak)
 - [ ] Magic Link auth + user accounts

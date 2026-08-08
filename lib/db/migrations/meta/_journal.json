@@ -22,6 +22,13 @@
       "when": 1779424000000,
       "tag": "0002_archive",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1786147200000,
+      "tag": "0006_lifetime",
+      "breakpoints": true
     }
   ]
 }

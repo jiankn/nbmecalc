@@ -1,10 +1,10 @@
 /**
  * Short-lived signed tokens that let the headless-Chrome PDF worker render a
- * Pro subscriber's report page.
+ * Lifetime member's report page.
  *
  * Paid reports (`/report/cs_...`) need no token: the Stripe session id in the
  * URL is itself the bearer credential, so the worker can fetch the page
- * server-to-server. A Pro report is keyed by a prediction id and gated on the
+ * server-to-server. A Lifetime report is keyed by a prediction id and gated on the
  * user's login cookie — which the worker (a separate service) can't carry.
  *
  * To get the worker the SAME colorful page a logged-in user sees on screen,

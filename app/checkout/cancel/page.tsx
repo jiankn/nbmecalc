@@ -65,8 +65,8 @@ export default function CheckoutCancelPage() {
               <ul className="space-y-2 list-disc pl-5">
                 <li>Wanted to compare with other tools first — try our{" "}
                   <Link href="/compare/best-usmle-score-predictor" className="text-mint-700 underline font-semibold">comparison page</Link></li>
-                <li>Need a refund policy clarification — digital products are
-                  non-refundable but Pro subs can be canceled anytime</li>
+                <li>Wanted to confirm the policy — purchases are one-time,
+                  all sales are final, and there are no recurring charges</li>
                 <li>Card declined — try a different card or check with your bank</li>
                 <li>Just exploring — totally fine, the Free tier is yours forever</li>
               </ul>
