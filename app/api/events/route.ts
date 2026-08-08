@@ -12,6 +12,8 @@ const ALLOWED_TYPES = new Set([
   "result_viewed",
   "paywall_opened",
   "report_viewed",
+  "lifetime_offer_impression",
+  "lifetime_offer_clicked",
 ]);
 const ALLOWED_PAYLOAD_KEYS = new Set([
   "path",
@@ -19,6 +21,7 @@ const ALLOWED_PAYLOAD_KEYS = new Set([
   "predictionId",
   "inputCount",
   "plan",
+  "placement",
 ]);
 
 function getClientIp(req: Request): string {

@@ -195,6 +195,7 @@ async function handleEvent(event: Stripe.Event): Promise<void> {
           mode: session.mode,
           paymentStatus: session.payment_status,
           amountTotal: session.amount_total,
+          checkoutSource: session.metadata?.checkoutSource ?? null,
           customer:
             typeof session.customer === "string"
               ? session.customer

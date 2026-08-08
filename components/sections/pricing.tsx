@@ -7,6 +7,7 @@ import { Check, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/lib/auth/use-session";
 import { formatUsd, getLifetimeOffer } from "@/lib/lifetime-offer";
+import { LIFETIME_OFFER_BAR_SOURCE } from "@/lib/lifetime-offer-bar";
 
 const standardPlans = [
   {
@@ -69,8 +70,18 @@ export function Pricing() {
     if (submitting) return;
     setError(null);
 
+    const checkoutSource =
+      typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("source") ===
+        LIFETIME_OFFER_BAR_SOURCE
+        ? LIFETIME_OFFER_BAR_SOURCE
+        : undefined;
+    const returnToPricing = checkoutSource
+      ? `/pricing?source=${checkoutSource}#pricing`
+      : "/pricing";
+
     if (session.status === "anon") {
-      router.push("/login?next=/pricing");
+      router.push(`/login?next=${encodeURIComponent(returnToPricing)}`);
       return;
     }
     if (session.status === "loading") return;
@@ -80,11 +91,11 @@ export function Pricing() {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: "lifetime" }),
+        body: JSON.stringify({ plan: "lifetime", checkoutSource }),
       });
       const json = (await response.json()) as { url?: string; error?: string };
       if (response.status === 401) {
-        router.push("/login?next=/pricing");
+        router.push(`/login?next=${encodeURIComponent(returnToPricing)}`);
         return;
       }
       if (!response.ok || !json.url) {

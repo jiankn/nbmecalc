@@ -24,6 +24,7 @@ export const runtime = "edge";
  */
 type CheckoutRequest = {
   plan: PlanKey;
+  checkoutSource?: "founding_nav";
   exams?: PracticeExam[];
   step?: StepKind;
   daysUntil?: number;
@@ -58,6 +59,13 @@ function validateBody(body: unknown): CheckoutRequest | { error: string } {
 
   if (typeof b.plan !== "string" || !getPlan(b.plan)) {
     return { error: "Invalid `plan`." };
+  }
+
+  if (
+    b.checkoutSource !== undefined &&
+    b.checkoutSource !== "founding_nav"
+  ) {
+    return { error: "Invalid `checkoutSource`." };
   }
 
   // exams + step + daysUntil are optional (Lifetime checkout needs no inputs).
@@ -132,6 +140,7 @@ function validateBody(body: unknown): CheckoutRequest | { error: string } {
 
   return {
     plan: b.plan as PlanKey,
+    checkoutSource: b.checkoutSource as "founding_nav" | undefined,
     exams: b.exams as PracticeExam[] | undefined,
     step: b.step as StepKind | undefined,
     daysUntil: b.daysUntil as number | undefined,
@@ -231,6 +240,7 @@ export async function POST(req: Request) {
   // Build minimal input payload for /report page. Stripe metadata values
   // are strings only, so we JSON-stringify.
   const metadata: Record<string, string> = { plan: plan.key };
+  if (parsed.checkoutSource) metadata.checkoutSource = parsed.checkoutSource;
   if (parsed.exams) metadata.exams = JSON.stringify(parsed.exams);
   if (parsed.step) metadata.step = parsed.step;
   if (typeof parsed.daysUntil === "number") {
@@ -327,6 +337,7 @@ export async function POST(req: Request) {
             plan: plan.key,
             stripeSessionId: session.id,
             predictionId: parsed.predictionId ?? null,
+            checkoutSource: parsed.checkoutSource ?? null,
           }),
           ip: req.headers.get("cf-connecting-ip") ?? null,
           createdAt: Date.now(),

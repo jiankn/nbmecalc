@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Menu,
   X,
   ChevronDown,
+  ArrowRight,
   LayoutDashboard,
   CreditCard,
   Settings,
@@ -14,6 +16,13 @@ import {
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { invalidateSession, useSession } from "@/lib/auth/use-session";
+import { getLifetimeOffer } from "@/lib/lifetime-offer";
+import {
+  LIFETIME_OFFER_BAR_PLACEMENT,
+  LIFETIME_OFFER_BAR_SOURCE,
+  shouldShowLifetimeOfferBar,
+} from "@/lib/lifetime-offer-bar";
+import { trackProductEvent } from "@/lib/product-events";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -109,13 +118,46 @@ export function Nav() {
   const [accountOpen, setAccountOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement>(null);
+  const scrollSentinelRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
   const session = useSession();
+  const lifetimeOffer = getLifetimeOffer();
+  const hasLifetimeAccess =
+    session.status === "authed" && session.user.lifetimeAccess;
+  const showLifetimeOffer = shouldShowLifetimeOfferBar({
+    pathname,
+    foundingOfferActive: lifetimeOffer.active,
+    hasLifetimeAccess,
+  });
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const sentinel = scrollSentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setScrolled(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (!showLifetimeOffer || session.status === "loading") return;
+
+    const key = `nbmecalc:lifetime-offer-impression:${pathname}`;
+    try {
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, "1");
+    } catch {
+      // Continue without deduplication when sessionStorage is unavailable.
+    }
+
+    trackProductEvent("lifetime_offer_impression", {
+      path: pathname,
+      placement: LIFETIME_OFFER_BAR_PLACEMENT,
+    });
+  }, [pathname, session.status, showLifetimeOffer]);
 
   useEffect(() => {
     if (!accountOpen) return;
@@ -157,13 +199,50 @@ export function Nav() {
   const displayName = user ? getDisplayName(user.name, user.email) : "";
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-200",
-        "bg-mint-500",
-        scrolled && "shadow-sm backdrop-blur-md bg-mint-500/95"
+    <>
+      {showLifetimeOffer && (
+        <aside
+          aria-label="Lifetime founding offer"
+          className="bg-mint-900 text-mint-50"
+        >
+          <Link
+            href={`/pricing?source=${LIFETIME_OFFER_BAR_SOURCE}#pricing`}
+            className="group mx-auto flex min-h-11 max-w-7xl items-center justify-center gap-2.5 px-4 py-2 text-center text-xs font-semibold leading-tight transition-colors hover:bg-mint-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-mint-200 sm:min-h-9 sm:py-1.5 sm:text-sm"
+            onClick={() =>
+              trackProductEvent("lifetime_offer_clicked", {
+                path: pathname,
+                placement: LIFETIME_OFFER_BAR_PLACEMENT,
+              })
+            }
+          >
+            <span className="hidden sm:inline">
+              Founding offer: Lifetime access for a one-time $19.99
+            </span>
+            <span className="sm:hidden">
+              Lifetime access, one-time $19.99
+            </span>
+            <span className="inline-flex shrink-0 items-center gap-1 font-bold underline decoration-mint-300/70 underline-offset-4 group-hover:decoration-mint-100">
+              <span className="hidden sm:inline">View offer</span>
+              <span className="sm:hidden">View</span>
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </span>
+          </Link>
+        </aside>
       )}
-    >
+
+      <div
+        ref={scrollSentinelRef}
+        className="pointer-events-none h-px w-full -mb-px"
+        aria-hidden="true"
+      />
+
+      <header
+        className={cn(
+          "sticky top-0 z-50 w-full transition-all duration-200",
+          "bg-mint-500",
+          scrolled && "shadow-sm backdrop-blur-md bg-mint-500/95"
+        )}
+      >
       <div className="container flex h-[72px] items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -460,6 +539,7 @@ export function Nav() {
           </div>
         </div>
       )}
-    </header>
+      </header>
+    </>
   );
 }

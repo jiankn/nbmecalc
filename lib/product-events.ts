@@ -3,7 +3,9 @@ export type ProductEventType =
   | "calculator_started"
   | "result_viewed"
   | "paywall_opened"
-  | "report_viewed";
+  | "report_viewed"
+  | "lifetime_offer_impression"
+  | "lifetime_offer_clicked";
 
 export function trackProductEvent(
   type: ProductEventType,
