@@ -203,7 +203,7 @@ export function Nav() {
       {showLifetimeOffer && (
         <aside
           aria-label="Lifetime founding offer"
-          className="bg-mint-900 text-mint-50"
+          className="fixed inset-x-0 top-0 z-[60] bg-mint-900 text-mint-50"
         >
           <Link
             href={`/pricing?source=${LIFETIME_OFFER_BAR_SOURCE}#pricing`}
@@ -230,6 +230,13 @@ export function Nav() {
         </aside>
       )}
 
+      {/* Keep the document flow and sticky navigation aligned below the
+          viewport-fixed offer bar. The bar is 44px on mobile and 36px from
+          the sm breakpoint upward. */}
+      {showLifetimeOffer && (
+        <div className="h-11 sm:h-9" aria-hidden="true" />
+      )}
+
       <div
         ref={scrollSentinelRef}
         className="pointer-events-none h-px w-full -mb-px"
@@ -238,7 +245,8 @@ export function Nav() {
 
       <header
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-200",
+          "sticky z-50 w-full transition-all duration-200",
+          showLifetimeOffer ? "top-11 sm:top-9" : "top-0",
           "bg-mint-500",
           scrolled && "shadow-sm backdrop-blur-md bg-mint-500/95"
         )}
