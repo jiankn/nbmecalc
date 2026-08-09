@@ -57,7 +57,11 @@ export function Reviewers() {
 
         <p className="text-center text-xs text-gray-600 mt-8 max-w-2xl mx-auto">
           Read the{" "}
-          <Link href="/methodology" className="font-semibold text-mint-700 underline">
+          <Link
+            href="/methodology"
+            data-indexing-context="related"
+            className="font-semibold text-mint-700 underline"
+          >
             public methodology and changelog
           </Link>{" "}
           or <Link href="/contact" className="font-semibold text-mint-700 underline">submit a correction</Link>.

@@ -356,6 +356,7 @@ export default function Step1PredictorPage() {
             <li>
               <Link
                 href="/uwsa-1-to-step-1"
+                data-indexing-context="related"
                 className="underline underline-offset-2"
               >
                 Convert UWSA 1 to a Step 1 estimate
@@ -372,9 +373,19 @@ export default function Step1PredictorPage() {
             <li>
               <Link
                 href="/nbme-score-conversion"
+                data-indexing-context="related"
                 className="underline underline-offset-2"
               >
                 Full NBME score conversion tables
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/nbme-calculator"
+                data-indexing-context="related"
+                className="underline underline-offset-2"
+              >
+                Choose the correct NBME assessment family
               </Link>
             </li>
             <li>

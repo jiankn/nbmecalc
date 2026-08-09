@@ -43,6 +43,24 @@ export default function BlogIndexPage() {
         size="md"
       />
 
+      <section className="border-b border-gray-200 bg-mint-50/40 py-8">
+        <div className="container max-w-4xl text-center">
+          <p className="text-sm leading-relaxed text-gray-700">
+            Reviewed articles identify their source-check date and link to the
+            primary material used. Internal model assumptions remain labelled
+            separately in the{" "}
+            <Link
+              href="/methodology"
+              data-indexing-context="related"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              public methodology and changelog
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
       {/* Category filter */}
       <section className="py-8 bg-white border-b border-gray-200">
         <div className="container">
@@ -80,6 +98,7 @@ export default function BlogIndexPage() {
               {posts[0] && (
                 <Link
                   href={`/blog/${posts[0].slug}`}
+                  data-indexing-context="related"
                   className="block rounded-3xl bg-white border border-gray-200 overflow-hidden hover:border-mint-400 hover:shadow-xl transition group mb-8"
                 >
                   <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -112,11 +131,12 @@ export default function BlogIndexPage() {
                         </span>
                         <span>·</span>
                         <time dateTime={posts[0].publishedAt}>
-                          {new Date(posts[0].publishedAt).toLocaleDateString(
+                          {new Date(posts[0].reviewedAt ?? posts[0].updatedAt ?? posts[0].publishedAt).toLocaleDateString(
                             "en-US",
                             { year: "numeric", month: "long", day: "numeric" }
                           )}
                         </time>
+                        {posts[0].reviewedAt && <span>Sources checked</span>}
                         <span className="inline-flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {posts[0].readingTime} min read
@@ -133,6 +153,7 @@ export default function BlogIndexPage() {
                   <Link
                     key={post.slug}
                     href={`/blog/${post.slug}`}
+                    data-indexing-context="related"
                     className="group block rounded-2xl overflow-hidden bg-white border border-gray-200 hover:border-mint-400 hover:shadow-lg transition"
                   >
                     <div className="relative aspect-[1200/630] bg-mint-50 overflow-hidden">
@@ -164,6 +185,11 @@ export default function BlogIndexPage() {
                           <Clock className="h-3 w-3" />
                           {post.readingTime} min
                         </span>
+                        {post.reviewedAt && (
+                          <span className="font-semibold text-mint-700">
+                            Sources checked {post.reviewedAt}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </Link>

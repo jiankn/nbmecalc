@@ -70,6 +70,23 @@ const timeline = [
 export default function AboutPage() {
   return (
     <PageShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            name: "About NBMEcalc",
+            url: "https://nbmecalc.com/about",
+            dateModified: "2026-08-09",
+            mainEntity: {
+              "@type": "Organization",
+              name: "NBMEcalc",
+              url: "https://nbmecalc.com",
+            },
+          }),
+        }}
+      />
       <PageHero
         badge="About NBMEcalc"
         title="An Independent Score Planning Tool"
@@ -95,6 +112,43 @@ export default function AboutPage() {
                   dangerouslySetInnerHTML={{ __html: p.body }}
                 />
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-gray-200 bg-mint-50/40 py-14">
+        <div className="container max-w-5xl">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint-800">
+            Trust and review path
+          </p>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-gray-950">
+            Check the evidence before using the estimate
+          </h2>
+          <p className="mt-3 max-w-3xl text-gray-700">
+            These pages separate official facts from internal assumptions,
+            show what has and has not been validated, and provide a review path
+            for educators and readers.
+          </p>
+          <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["Methodology", "/methodology", "Sources, assumptions, and corrections"],
+              ["Validation", "/validation", "Protocol and current evidence status"],
+              ["For educators", "/educators", "Institutional review information"],
+              ["NBME guide", "/nbme-calculator", "Assessment families and report use"],
+              ["Editorial library", "/blog", "Source-checked exam preparation articles"],
+            ].map(([title, href, body]) => (
+              <Link
+                key={href}
+                href={href}
+                data-indexing-context="related"
+                className="rounded-2xl border border-gray-200 bg-white p-5 transition hover:border-mint-400"
+              >
+                <span className="font-bold text-gray-950">{title}</span>
+                <span className="mt-1 block text-sm leading-relaxed text-gray-600">
+                  {body}
+                </span>
+              </Link>
             ))}
           </div>
         </div>

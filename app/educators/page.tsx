@@ -82,6 +82,16 @@ const reviewLinks = [
     body: "Official sources, internal assumptions, validation status, known limits, and material corrections.",
   },
   {
+    title: "Validation Status",
+    href: "/validation",
+    body: "Outcome protocol, planned metrics, current sample status, and the claims that remain intentionally unmade.",
+  },
+  {
+    title: "About NBMEcalc",
+    href: "/about",
+    body: "Project purpose, editorial controls, correction policy, and the distinction between the tool and official organizations.",
+  },
+  {
     title: "Privacy Policy",
     href: "/privacy",
     body: "Data collected, processing purposes, service providers, retention, cookies, and user rights.",
@@ -119,6 +129,7 @@ const structuredData = {
   about: ["USMLE", "NBME self-assessments", "medical education"],
   isAccessibleForFree: true,
   inLanguage: "en",
+  dateModified: "2026-08-09",
   provider: {
     "@type": "Organization",
     name: "NBMEcalc",
@@ -148,7 +159,12 @@ export default function EducatorsPage() {
             </Link>
           </Button>
           <Button variant="secondary" asChild>
-            <Link href="/methodology">Read the methodology</Link>
+            <Link
+              href="/methodology"
+              data-indexing-context="related"
+            >
+              Read the methodology
+            </Link>
           </Button>
         </div>
       </PageHero>
@@ -341,6 +357,7 @@ export default function EducatorsPage() {
               </p>
               <Link
                 href="/methodology"
+                data-indexing-context="related"
                 className="mt-7 inline-flex items-center gap-2 font-semibold text-mint-300 underline underline-offset-4 hover:text-mint-200"
               >
                 Inspect sources, assumptions, and corrections
@@ -392,6 +409,7 @@ export default function EducatorsPage() {
               <Link
                 key={item.href}
                 href={item.href}
+                data-indexing-context="related"
                 className="group grid gap-2 py-5 transition hover:bg-gray-50 sm:grid-cols-[minmax(180px,0.7fr)_minmax(0,1.3fr)_auto] sm:items-center sm:gap-6 sm:px-4"
               >
                 <span className="font-bold text-gray-950 group-hover:text-mint-800">

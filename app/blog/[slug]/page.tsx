@@ -46,7 +46,7 @@ export async function generateMetadata({
       url: `https://nbmecalc.com/blog/${post.slug}`,
       type: "article",
       publishedTime: post.publishedAt,
-      modifiedTime: post.updatedAt ?? post.publishedAt,
+      modifiedTime: post.reviewedAt ?? post.updatedAt ?? post.publishedAt,
       authors: [post.author],
       tags: post.tags,
       images: [
@@ -94,13 +94,11 @@ export default async function BlogPostPage({
             description: p.description,
             url: `https://nbmecalc.com/blog/${p.slug}`,
             datePublished: p.publishedAt,
-            dateModified: p.updatedAt ?? p.publishedAt,
+            dateModified: p.reviewedAt ?? p.updatedAt ?? p.publishedAt,
             author: {
-              "@type":
-                p.author === "NBMEcalc Editorial Team"
-                  ? "Organization"
-                  : "Person",
+              "@type": "Organization",
               name: p.author,
+              url: "https://nbmecalc.com/about",
             },
             publisher: {
               "@type": "Organization",
@@ -192,6 +190,16 @@ export default async function BlogPostPage({
                   })}
                 </span>
               )}
+              {p.reviewedAt && (
+                <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-mint-800 ring-1 ring-mint-200">
+                  Sources checked{" "}
+                  {new Date(p.reviewedAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+              )}
             </div>
           </div>
         </section>
@@ -231,6 +239,7 @@ export default async function BlogPostPage({
                         href={reference.href}
                         target="_blank"
                         rel="noopener noreferrer"
+                        data-evidence-source="primary"
                         className="font-semibold text-mint-800 underline underline-offset-4"
                       >
                         {reference.label}
@@ -291,6 +300,7 @@ export default async function BlogPostPage({
                   <Link
                     key={r.slug}
                     href={`/blog/${r.slug}`}
+                    data-indexing-context="related"
                     className="group rounded-2xl border border-gray-200 bg-white p-5 hover:border-mint-400 hover:shadow-md transition"
                   >
                     <div className="text-xs font-semibold text-mint-700 uppercase tracking-wider mb-2">

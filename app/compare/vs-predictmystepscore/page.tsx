@@ -2,24 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
-import { CompareTable, type CompareRow } from "@/components/sections/compare-table";
 import { Button } from "@/components/ui/button";
 
+const REVIEWED_AT = "2026-08-09";
+const PMSS_URL = "https://predictmystepscore.com/";
+
 export const metadata: Metadata = {
-  title: "NBMEcalc vs PredictMyStepScore — Which Predicts Better? | 2026 Comparison",
+  title: "NBMEcalc vs PredictMyStepScore — Source-Checked Comparison",
   description:
-    "Side-by-side comparison of NBMEcalc and PredictMyStepScore. Accuracy, features, pricing, and UX compared using public information.",
-  keywords: [
-    "nbmecalc vs predictmystepscore",
-    "predictmystepscore alternative",
-    "predictmystepscore review",
-    "step 2 predictor comparison",
-  ],
+    "A neutral comparison of NBMEcalc and PredictMyStepScore using features each product currently documents publicly, with unknowns left as unknowns.",
   alternates: { canonical: "https://nbmecalc.com/compare/vs-predictmystepscore" },
   openGraph: {
-    title: "NBMEcalc vs PredictMyStepScore — 2026 Comparison",
+    title: "NBMEcalc vs PredictMyStepScore — Source-Checked Comparison",
     description:
-      "Honest head-to-head between NBMEcalc and PredictMyStepScore: features, accuracy, pricing, UX.",
+      "Compare public exam coverage, inputs, outputs, evidence boundaries, and next steps without unsupported accuracy claims.",
     url: "https://nbmecalc.com/compare/vs-predictmystepscore",
     type: "article",
     images: [
@@ -27,26 +23,38 @@ export const metadata: Metadata = {
         url: "/images/feature-score-range.png",
         width: 2400,
         height: 1792,
-        alt: "NBMEcalc vs PredictMyStepScore",
+        alt: "NBMEcalc and PredictMyStepScore comparison",
       },
     ],
   },
 };
 
-const competitors = ["NBMEcalc", "PredictMyStepScore"];
-
-const rows: CompareRow[] = [
-  { feature: "Free unlimited predictions", values: ["yes", "partial"] },
-  { feature: "Multi-source aggregation (NBME + UWSA + Free 120 + AMBOSS + CMS)", values: ["yes", "no"] },
-  { feature: "Planning range shown", values: ["yes", "no"] },
-  { feature: "Pass probability for Step 1 P/F", values: ["yes", "partial"] },
-  { feature: "Per-subject weakness map", values: ["yes", "no"] },
-  { feature: "Personalized 14-day study plan", values: ["yes", "no"] },
-  { feature: "Downloadable PDF report", values: ["yes", "yes"] },
-  { feature: "Mobile-optimized (responsive)", values: ["yes", "partial"] },
-  { feature: "Transparent methodology document", values: ["yes", "no"] },
-  { feature: "Single-Report price", values: ["yes", "yes"] },
-  { feature: "Multi-Step tracking", values: ["partial", "no"] },
+const evidenceRows = [
+  {
+    criterion: "Public exam scope",
+    nbmecalc: "Step 1, Step 2 CK, and Step 3 planning tools",
+    pmss: "Its homepage states that it supports Step 1, Step 2 CK, and Step 3 predictions",
+  },
+  {
+    criterion: "Publicly described inputs",
+    nbmecalc: "NBME, UWSA, Free 120, AMBOSS, and CMS inputs where compatible",
+    pmss: "Its homepage lists NBME, UWorld, AMBOSS, and Free 120 correlations or conversions",
+  },
+  {
+    criterion: "How uncertainty is presented",
+    nbmecalc: "Shows an experimental planning range and publishes its current limitations",
+    pmss: "Describes results as estimates, not guarantees; the public homepage does not document a shared validation comparison",
+  },
+  {
+    criterion: "Public methodology detail",
+    nbmecalc: "Publishes assumptions, model boundaries, validation status, and a correction log",
+    pmss: "Provides a high-level algorithm description on its homepage; detailed implementation was not confirmed there",
+  },
+  {
+    criterion: "Price comparison",
+    nbmecalc: "The predictor is free; optional paid report and Lifetime access are listed on the pricing page",
+    pmss: "No price was visible on the public homepage during this review; verify the current flow directly before purchasing",
+  },
 ];
 
 export default function VsPMSSPage() {
@@ -58,64 +66,93 @@ export default function VsPMSSPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: "NBMEcalc vs PredictMyStepScore — 2026 Comparison",
+            headline: "NBMEcalc vs PredictMyStepScore — Source-Checked Comparison",
             url: "https://nbmecalc.com/compare/vs-predictmystepscore",
-            author: { "@type": "Organization", name: "NBMEcalc" },
+            author: {
+              "@type": "Organization",
+              name: "NBMEcalc Editorial Team",
+              url: "https://nbmecalc.com/about",
+            },
             datePublished: "2026-05-17",
+            dateModified: REVIEWED_AT,
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": "https://nbmecalc.com/compare/vs-predictmystepscore",
+            },
           }),
         }}
       />
 
       <PageHero
-        badge="Head-to-head review"
+        badge="Source-checked comparison"
         title="NBMEcalc vs PredictMyStepScore"
-        description="PredictMyStepScore has been around longer. We launched in 2026 with a more modern stack. Here is the unvarnished comparison."
+        description="This comparison records only what each product currently documents in public. A missing public detail is marked as unconfirmed—not treated as evidence that a feature does not exist."
         size="md"
       />
 
+      <section className="py-10 bg-white border-b border-gray-200">
+        <div className="container max-w-4xl">
+          <div className="rounded-3xl border border-mint-200 bg-mint-50 p-6 text-sm text-gray-700">
+            <strong className="text-gray-950">Review method:</strong> checked against the public PredictMyStepScore homepage on {REVIEWED_AT}. This is not an accuracy study, a hands-on product test, or a claim that either estimate is validated against the same holdout dataset.
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-5xl">
-          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-8">
-            Feature-by-feature
+          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
+            Evidence table
           </h2>
-          <CompareTable competitors={competitors} rows={rows} />
+          <p className="text-gray-600 mb-8 max-w-3xl">
+            Use this table to decide what to verify next. It does not rank the tools by accuracy.
+          </p>
+          <div className="overflow-x-auto rounded-3xl border border-gray-200">
+            <table className="min-w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-5 py-4 text-left font-bold">Criterion</th>
+                  <th className="px-5 py-4 text-left font-bold text-mint-800">NBMEcalc</th>
+                  <th className="px-5 py-4 text-left font-bold">PredictMyStepScore</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 bg-white align-top">
+                {evidenceRows.map((row) => (
+                  <tr key={row.criterion}>
+                    <th className="px-5 py-4 text-left font-semibold text-gray-950">{row.criterion}</th>
+                    <td className="px-5 py-4 text-gray-700 bg-mint-50/30">{row.nbmecalc}</td>
+                    <td className="px-5 py-4 text-gray-700">{row.pmss}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
       <section className="py-16 lg:py-20 bg-mint-50/40">
-        <div className="container max-w-3xl space-y-6">
-          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-            When PredictMyStepScore may fit
-          </h2>
-          <ul className="space-y-3 text-gray-700 list-disc pl-5">
-            <li>You prefer its single-purpose workflow and interface</li>
-            <li>You have reviewed its current methodology and find it suitable</li>
-            <li>You only need the input sources it currently supports</li>
-          </ul>
-
-          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mt-12">
-            Where NBMEcalc wins
-          </h2>
-          <ul className="space-y-3 text-gray-700 list-disc pl-5">
-            <li>Multi-source aggregation (5 input types vs 2)</li>
-            <li>Estimated planning range with published assumptions</li>
-            <li>Free unlimited predictions without signup</li>
-            <li>
-              Paid report adds a readiness discussion guide and 3 study
-              priorities for your specific input pattern
-            </li>
-            <li>Modern mobile UX — install as a PWA</li>
-            <li>Public methodology document and corrections process</li>
-          </ul>
-
-          <div className="mt-8 rounded-2xl border-2 border-mint-300 bg-white p-6">
-            <h3 className="font-bold text-lg mb-2">Bottom line</h3>
-            <p className="text-gray-700">
-              If you want a single-source NBME → Step 2 CK lookup, both work.
-              If you want multi-source aggregation, a confidence interval, and
-              a paid report that makes a sit-or-postpone call plus tells you
-              what to actually <em>do</em> next, choose NBMEcalc.
+        <div className="container max-w-3xl space-y-8">
+          <div>
+            <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
+              Which one should you use?
+            </h2>
+            <p className="text-gray-700 leading-relaxed">
+              Choose the workflow whose inputs and output explanation match the decision you need to make. Run the same recent practice history only when both tools accept it, record the outputs, and read each product&apos;s limitations before changing an exam plan.
             </p>
+          </div>
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-950">
+            Neither product should be the sole basis for sitting, postponing, or making an academic decision. Use current official assessment feedback and your school or advisor&apos;s process alongside any independent estimate.
+          </div>
+          <div>
+            <h2 className="text-2xl font-extrabold mb-3">Primary source</h2>
+            <a
+              href={PMSS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-evidence-source="primary"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              PredictMyStepScore public homepage
+            </a>
           </div>
         </div>
       </section>
@@ -123,14 +160,17 @@ export default function VsPMSSPage() {
       <section className="py-16 bg-white">
         <div className="container max-w-3xl text-center">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            Try NBMEcalc free
+            Inspect the methods before comparing outputs
           </h2>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
             <Button variant="primary" size="lg" asChild>
-              <Link href="/#calculator">Predict my Step score</Link>
+              <Link href="/#calculator">Try NBMEcalc</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/compare/best-usmle-score-predictor">See full comparison</Link>
+              <Link href="/methodology" data-indexing-context="related">Read the methodology</Link>
+            </Button>
+            <Button variant="outline" size="lg" asChild>
+              <Link href="/compare/best-usmle-score-predictor" data-indexing-context="related">Comparison hub</Link>
             </Button>
           </div>
         </div>

@@ -164,6 +164,19 @@ export default function AmbossConverterPage() {
               NBME family and interpret the full range.
             </p>
           </div>
+
+          <p className="mt-6 text-sm text-gray-700">
+            Choosing between study platforms? Read the{" "}
+            <Link
+              href="/blog/amboss-vs-uworld-which-qbank-wins"
+              data-indexing-context="related"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              source-checked AMBOSS vs UWorld decision guide
+            </Link>
+            , which separates verified product features from personal study
+            preferences.
+          </p>
         </div>
       </section>
 
@@ -199,7 +212,12 @@ export default function AmbossConverterPage() {
               <Link href="#calculator">Convert my AMBOSS score</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/step-2-predictor">Step 2 CK predictor</Link>
+              <Link
+                href="/step-2-predictor"
+                data-indexing-context="related"
+              >
+                Step 2 CK predictor
+              </Link>
             </Button>
           </div>
         </div>

@@ -1,26 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Award } from "lucide-react";
+import { Award, ExternalLink } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
-import { CompareTable, type CompareRow } from "@/components/sections/compare-table";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Best USMLE Score Predictor 2026 — Honest Comparison | NBMEcalc",
+  title: "How to Compare USMLE Score Predictors in 2026 | NBMEcalc",
   description:
-    "We compared every major USMLE score predictor — nbcalc, PredictMyStepScore, AMBOSS Predictor, and NBMEcalc — using public product information. Honest head-to-head feature matrix.",
+    "A source-checked framework for comparing USMLE score predictors by input fit, uncertainty, evidence disclosure, and the decision you need to make.",
   keywords: [
     "best usmle score predictor",
     "usmle score calculator comparison",
     "step 2 predictor review",
     "nbme calculator comparison",
   ],
-  alternates: { canonical: "https://nbmecalc.com/compare/best-usmle-score-predictor" },
+  alternates: {
+    canonical: "https://nbmecalc.com/compare/best-usmle-score-predictor",
+  },
   openGraph: {
-    title: "Best USMLE Score Predictor 2026 — Honest Comparison",
+    title: "How to Compare USMLE Score Predictors in 2026",
     description:
-      "Head-to-head comparison of all major USMLE score predictors with a transparent feature matrix.",
+      "Compare predictor claims without treating a feature checklist as an accuracy study.",
     url: "https://nbmecalc.com/compare/best-usmle-score-predictor",
     type: "article",
     images: [
@@ -34,20 +35,44 @@ export const metadata: Metadata = {
   },
 };
 
-const competitors = ["NBMEcalc", "PredictMyStepScore", "AMBOSS", "nbcalc"];
+const criteria = [
+  {
+    title: "Input fit",
+    body: "Confirm that the tool accepts the exact assessment family and target Step exam you are using. Form names that look similar are not automatically interchangeable.",
+  },
+  {
+    title: "Uncertainty",
+    body: "Prefer a disclosed range and limitations over a precise-looking number with no explanation of model uncertainty.",
+  },
+  {
+    title: "Evidence status",
+    body: "Separate official product facts, internal model assumptions, user reports, and reproducible validation results. They are different levels of evidence.",
+  },
+  {
+    title: "Decision value",
+    body: "Choose the tool whose output answers a real planning question. No independent calculator should replace an official score report or institutional guidance.",
+  },
+];
 
-const rows: CompareRow[] = [
-  { feature: "NBME forms (28-32)", values: ["yes", "yes", "yes", "yes"] },
-  { feature: "UWSA 1 & 2", values: ["yes", "yes", "no", "yes"] },
-  { feature: "Free 120", values: ["yes", "no", "yes", "no"] },
-  { feature: "AMBOSS SA conversion", values: ["yes", "no", "yes", "no"] },
-  { feature: "CMS Form support", values: ["yes", "no", "no", "no"] },
-  { feature: "Planning range shown", values: ["yes", "no", "no", "no"] },
-  { feature: "Personalized 14-day study plan", values: ["yes", "no", "no", "no"] },
-  { feature: "Downloadable PDF report", values: ["yes", "yes", "no", "no"] },
-  { feature: "Mobile-optimized", values: ["yes", "partial", "partial", "no"] },
-  { feature: "Free unlimited use", values: ["yes", "partial", "yes", "yes"] },
-  { feature: "Multi-Step tracking dashboard", values: ["partial", "no", "no", "no"] },
+const publicProductPages = [
+  {
+    name: "NBMEcalc",
+    href: "/methodology",
+    body: "Publishes its current source adjustments, planning-range assumptions, limitations, correction history, and validation status.",
+    external: false,
+  },
+  {
+    name: "PredictMyStepScore",
+    href: "https://predictmystepscore.com/",
+    body: "Its public homepage describes support for Step 1, Step 2, and Step 3 and names NBME, UWorld, AMBOSS, and Free 120 among supported inputs.",
+    external: true,
+  },
+  {
+    name: "AMBOSS Step 2 CK",
+    href: "https://www.amboss.com/us/usmle/step2",
+    body: "AMBOSS publishes its Step 2 CK study-product information on this official page. Verify current inclusions and terms there because product details can change.",
+    external: true,
+  },
 ];
 
 export default function BestPredictorPage() {
@@ -59,113 +84,137 @@ export default function BestPredictorPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: "Best USMLE Score Predictor 2026 — Honest Comparison",
+            headline: "How to Compare USMLE Score Predictors in 2026",
             url: "https://nbmecalc.com/compare/best-usmle-score-predictor",
-            author: { "@type": "Organization", name: "NBMEcalc" },
+            author: { "@type": "Organization", name: "NBMEcalc Editorial Team" },
             datePublished: "2026-05-17",
+            dateModified: "2026-08-09",
+            mainEntityOfPage:
+              "https://nbmecalc.com/compare/best-usmle-score-predictor",
           }),
         }}
       />
 
       <PageHero
-        badge="USMLE predictor comparison"
-        title="Best USMLE Score Predictor 2026"
-        description="We compared every major USMLE Step score predictor on 12 features that matter — accuracy, multi-source support, confidence intervals, mobile UX, and trust signals. Here is the honest matrix."
+        badge="Source-checked comparison"
+        title="How to Compare USMLE Score Predictors"
+        description="There is no verified universal winner. Compare input fit, uncertainty, evidence disclosure, and decision value—and verify product facts at their current public sources."
         size="md"
       />
 
-      <section className="py-16 lg:py-20 bg-white">
+      <section className="bg-white py-16 lg:py-20">
         <div className="container max-w-5xl">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="h-10 w-10 rounded-2xl bg-mint-100 flex items-center justify-center">
+          <div className="mb-8 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-mint-100">
               <Award className="h-5 w-5 text-mint-700" />
             </div>
-            <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-              Feature comparison matrix
+            <h2 className="text-3xl font-extrabold tracking-tight lg:text-4xl">
+              Four checks that matter more than a winner badge
             </h2>
           </div>
-          <CompareTable competitors={competitors} rows={rows} />
-          <p className="text-xs text-gray-500 mt-6">
-            Last updated May 2026. Data sourced from public product pages.
-            Brand names are property of their respective owners.
+          <div className="grid gap-5 md:grid-cols-2">
+            {criteria.map((item) => (
+              <article
+                key={item.title}
+                className="rounded-3xl border border-gray-200 bg-white p-6"
+              >
+                <h3 className="text-lg font-bold text-gray-950">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                  {item.body}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-mint-50/40 py-16 lg:py-20">
+        <div className="container max-w-4xl">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint-800">
+            Sources checked August 9, 2026
           </p>
-        </div>
-      </section>
-
-      <section className="py-16 lg:py-20 bg-mint-50/40">
-        <div className="container max-w-3xl space-y-8">
-          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-            Who wins — and where each tool falls short
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-gray-950">
+            Start with each product&apos;s current public page
           </h2>
+          <p className="mt-3 max-w-3xl leading-relaxed text-gray-700">
+            This is a product-information review, not an accuracy study. A
+            feature is not evidence that a predicted score is calibrated.
+            Unknown or unverified details stay unknown rather than being filled
+            with assumptions.
+          </p>
 
-          <div>
-            <h3 className="text-xl font-bold mb-2 text-mint-800">NBMEcalc (us)</h3>
-            <p className="text-gray-700 leading-relaxed">
-              <strong>Strongest at:</strong> multi-source aggregation, 95%
-              confidence intervals, and personalized study plans.
-              <strong>Weakest at:</strong> Lifetime dashboard timeline still
-              in beta. Recommended if you need an end-to-end Step prep tool.
-            </p>
+          <div className="mt-8 space-y-4">
+            {publicProductPages.map((product) => {
+              const content = (
+                <>
+                  <span className="flex items-center gap-2 font-bold text-gray-950">
+                    {product.name}
+                    {product.external && <ExternalLink className="h-4 w-4" />}
+                  </span>
+                  <span className="mt-2 block text-sm leading-relaxed text-gray-700">
+                    {product.body}
+                  </span>
+                </>
+              );
+
+              return product.external ? (
+                <a
+                  key={product.name}
+                  href={product.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-evidence-source="primary"
+                  className="block rounded-2xl border border-gray-200 bg-white p-5 transition hover:border-mint-400"
+                >
+                  {content}
+                </a>
+              ) : (
+                <Link
+                  key={product.name}
+                  href={product.href}
+                  data-indexing-context="related"
+                  className="block rounded-2xl border border-gray-200 bg-white p-5 transition hover:border-mint-400"
+                >
+                  {content}
+                </Link>
+              );
+            })}
           </div>
 
-          <div>
-            <h3 className="text-xl font-bold mb-2 text-gray-900">PredictMyStepScore</h3>
-            <p className="text-gray-700 leading-relaxed">
-              <strong>Strongest at:</strong> brand recognition, 6+ year track
-              record. <strong>Weakest at:</strong> no confidence intervals,
-              limited input sources, paywall before basic prediction.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold mb-2 text-gray-900">AMBOSS Predictor</h3>
-            <p className="text-gray-700 leading-relaxed">
-              <strong>Strongest at:</strong> direct integration with AMBOSS
-              SA. <strong>Weakest at:</strong> only works inside the AMBOSS
-              ecosystem; no UWSA / NBME-only path.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold mb-2 text-gray-900">nbcalc.netlify.app</h3>
-            <p className="text-gray-700 leading-relaxed">
-              <strong>Strongest at:</strong> top Google search ranking. <strong>Weakest at:</strong>{" "}
-              dated UI, no functionality beyond a basic lookup table, no mobile
-              version, no methodology disclosure.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-white">
-        <div className="container max-w-3xl text-center">
-          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            Try the best one free
-          </h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            No signup. Multi-source aggregation, a planning range, and a personalized
-            study plan — all free. Go straight to the{" "}
+          <p className="mt-7 text-sm leading-relaxed text-gray-700">
+            For a narrower claim-by-claim review, see our{" "}
             <Link
-              href="/step-1-predictor"
-              className="font-semibold text-mint-700 underline underline-offset-2"
+              href="/compare/vs-predictmystepscore"
+              data-indexing-context="related"
+              className="font-semibold text-mint-800 underline underline-offset-4"
             >
-              Step 1 predictor
-            </Link>{" "}
-            or the{" "}
-            <Link
-              href="/step-2-predictor"
-              className="font-semibold text-mint-700 underline underline-offset-2"
-            >
-              Step 2 CK predictor
+              source-checked PredictMyStepScore comparison
             </Link>
             .
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        </div>
+      </section>
+
+      <section className="bg-white py-16">
+        <div className="container max-w-3xl text-center">
+          <h2 className="text-3xl font-extrabold tracking-tight lg:text-4xl">
+            Test the workflow, then inspect the limits
+          </h2>
+          <p className="mx-auto mb-8 mt-3 max-w-2xl text-gray-600">
+            Run an estimate with fictional or your own practice values, then
+            read what the model can and cannot support before using the result.
+          </p>
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Button variant="primary" size="lg" asChild>
               <Link href="/#calculator">Use NBMEcalc free</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/pricing">See pricing</Link>
+              <Link
+                href="/validation"
+                data-indexing-context="related"
+              >
+                View validation status
+              </Link>
             </Button>
           </div>
         </div>

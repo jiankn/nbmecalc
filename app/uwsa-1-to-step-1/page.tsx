@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "UWSA 1 to Step 1 Predictor — Free Pass Probability Calculator",
     description:
-      "Convert your UWSA 1 score into a USMLE Step 1 pass probability. Auto-corrects UWSA 1's known inflation bias.",
+      "Use UWSA 1 as one Step 1 planning input. See the calculator's disclosed internal adjustment, limitations, and experimental estimate.",
     url: "https://nbmecalc.com/uwsa-1-to-step-1",
     type: "website",
     images: [
@@ -53,7 +53,7 @@ const faqs = [
   },
   {
     q: "When should I take UWSA 1?",
-    a: "About 6 weeks before test day. UWSA 1 is best as a mid-dedicated checkpoint after content review and one round of UWorld blocks. Save UWSA 2 for 2-3 weeks out.",
+    a: "Use it when the result can still change your study plan. There is no universal week that fits every learner; choose timing with your school or advisor and preserve recent official readiness evidence for the decision closest to test day.",
   },
   {
     q: "What UWSA 1 score corresponds to passing Step 1?",
@@ -85,6 +85,7 @@ export default function UWSA1ToStep1Page() {
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
               "Free independent planning tool for combining UWorld Self-Assessment 1 with other USMLE Step 1 readiness inputs.",
+            dateModified: "2026-08-09",
           }),
         }}
       />
@@ -122,6 +123,49 @@ export default function UWSA1ToStep1Page() {
           </p>
         </div>
         <Calculator defaultStep="step1" defaultSource="UWSA1" />
+      </section>
+
+      <section className="border-y border-gray-200 bg-white py-12">
+        <div className="container max-w-3xl">
+          <div className="rounded-3xl border border-mint-200 bg-mint-50/40 p-7">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint-800">
+              Sources checked August 9, 2026
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold text-gray-950">
+              Use official readiness evidence as the anchor
+            </h2>
+            <p className="mt-3 text-gray-700">
+              NBME identifies CBSSA as its Step 1 self-assessment family. The
+              −5 adjustment and pass estimate shown here are NBMEcalc model
+              assumptions, not an official NBME, USMLE, or UWorld conversion.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold">
+              <a
+                href="https://www.nbme.org/examinees/self-assessments/"
+                target="_blank"
+                rel="noreferrer"
+                data-evidence-source="primary"
+                className="text-mint-800 underline underline-offset-4"
+              >
+                NBME self-assessments (official)
+              </a>
+              <Link
+                href="/methodology"
+                data-indexing-context="related"
+                className="text-mint-800 underline underline-offset-4"
+              >
+                How the adjustment works
+              </Link>
+              <Link
+                href="/validation"
+                data-indexing-context="related"
+                className="text-mint-800 underline underline-offset-4"
+              >
+                Validation status
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Conversion table */}
@@ -275,14 +319,19 @@ export default function UWSA1ToStep1Page() {
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
             Free, no signup. Add your UWSA 1 plus any NBMEs you have for a
-            tight pass probability estimate.
+            disclosed experimental estimate and planning range.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="primary" size="lg" asChild>
               <Link href="#calculator">Predict my Step 1</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/step-1-predictor">Full Step 1 predictor</Link>
+              <Link
+                href="/step-1-predictor"
+                data-indexing-context="related"
+              >
+                Full Step 1 predictor
+              </Link>
             </Button>
           </div>
         </div>

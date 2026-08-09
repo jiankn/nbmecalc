@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Step 3 Predictor — Free Score Calculator",
     description:
-      "Predict your USMLE Step 3 score from UWSA Step 3 and Free 120. Includes CCS-portion guidance and timing advice for intern year.",
+      "Create an independent Step 3 planning estimate and review official-source guidance for the two-day exam and CCS software.",
     url: "https://nbmecalc.com/step-3-predictor",
     type: "website",
     images: [
@@ -39,86 +39,59 @@ export const metadata: Metadata = {
   },
 };
 
-const passBands = [
+const interpretationSteps = [
   {
-    range: "≥ 230",
-    prob: "99%",
-    color: "mint",
-    label: "Strong pass",
+    label: "Read the range",
     advice:
-      "Plenty of buffer. Focus on the CCS cases — that&apos;s where points are most often lost.",
+      "Treat the output as an estimated planning range. A single percentage is not a guarantee and has not been independently holdout-calibrated.",
   },
   {
-    range: "215-229",
-    prob: "95-98%",
-    color: "mint",
-    label: "Safe",
+    label: "Check the source family",
     advice:
-      "Comfortable margin. One round of UWorld Step 3 + 2-3 CCS cases per day for the last 2 weeks.",
+      "Use Step 3-specific evidence. NBME identifies CCMSA—not Step 1 CBSSA or Step 2 CK CCSSA—as its comprehensive Step 3 self-assessment family.",
   },
   {
-    range: "200-214",
-    prob: "85-94%",
-    color: "blue",
-    label: "Likely pass",
+    label: "Separate MCQ and CCS preparation",
     advice:
-      "Tight but workable. Push hard on FA Step 3 (biostatistics) and CCS practice.",
+      "The calculator does not ingest a scored CCS component. USMLE states that case-simulation performance affects the final Step 3 score, so practice the official interface separately.",
   },
   {
-    range: "190-199",
-    prob: "65-84%",
-    color: "amber",
-    label: "Borderline",
+    label: "Confirm the decision",
     advice:
-      "Real risk. Consider rescheduling 3-4 weeks. CCS performance can rescue or sink the prediction.",
-  },
-  {
-    range: "< 190",
-    prob: "< 65%",
-    color: "rose",
-    label: "High risk",
-    advice:
-      "Delay 6+ weeks. Build a content + UWorld + CCS plan in that order.",
+      "Use current official score standards, your program's guidance, and the full evidence set for scheduling decisions. NBMEcalc does not prescribe a delay interval.",
   },
 ];
-
-const bandColors: Record<string, string> = {
-  mint: "bg-mint-50 border-mint-200 text-mint-900",
-  blue: "bg-blue-50 border-blue-200 text-blue-900",
-  amber: "bg-amber-50 border-amber-200 text-amber-900",
-  rose: "bg-rose-50 border-rose-200 text-rose-900",
-};
 
 const facts = [
   {
     icon: CalendarClock,
     title: "Two-day exam",
-    body: "Day 1: 232 MCQs over 7 hours. Day 2: 180 MCQs + 13 CCS cases (computer-based patient simulations). Most candidates split Days 1 and 2 with 1-2 days off.",
+    body: "The current official format lists up to 232 items on Day 1 and up to 180 items plus 13 to 14 case simulations on Day 2.",
   },
   {
     icon: FileCheck2,
-    title: "When most residents take it",
-    body: "Roughly 70% take Step 3 between PGY-1 and PGY-2. Specialties requiring an H1B visa often push for completion before residency starts.",
+    title: "Official software matters",
+    body: "USMLE tells examinees to run the current Step 3 interactive testing experience and become familiar with the CCS interface before test day.",
   },
   {
     icon: Briefcase,
-    title: "What employers care about",
-    body: "Step 3 is mostly pass/fail in importance. Fellowship programs glance at the score for borderline candidates, but most weight is on Step 2 CK.",
+    title: "Independent responsibility",
+    body: "Step 3 assesses knowledge and skills for assuming independent responsibility for general medical care, with an emphasis on patient management.",
   },
 ];
 
 const faqs = [
   {
     q: "What is the Step 3 passing score?",
-    a: "198. It is the lowest of the three Step exams and the most pass/fail-feeling in stakes for most US graduates.",
+    a: "The current official minimum passing score is 200 for exams administered on or after January 1, 2024. USMLE reviews standards periodically, so verify the current scoring page before relying on this number.",
   },
   {
     q: "Is Step 3 harder than Step 2 CK?",
-    a: "Different. The MCQs are slightly easier per question, but the test is longer (two days, 9 hours of MCQs + CCS) and tests management decisions you have not made before. Most people score 5-15 points lower than their Step 2 CK.",
+    a: "The formats and assessed tasks differ, so there is no universal difficulty or score offset. Step 3 is a two-day exam that includes both multiple-choice items and computer-based case simulations.",
   },
   {
     q: "How is CCS scored?",
-    a: "CCS is graded on a clinical-decision rubric: appropriate workup, correct sequencing, monitoring intervals, avoiding harm. The score gets folded into your composite Step 3 result. Roughly 20-25% of the total Step 3 score comes from CCS.",
+    a: "USMLE states that case-simulation performance affects the Step 3 score and can affect pass/fail. The official CCS materials show that orders, timing, sequencing, location, treatment, and monitoring can affect performance; there is no universal checklist for every case.",
   },
   {
     q: "Which practice resources are predictive?",
@@ -126,7 +99,7 @@ const faqs = [
   },
   {
     q: "When should I take Step 3?",
-    a: "If your program does not pressure you, take it between intern year and PGY-2 (June-August). You have UWorld momentum, you&apos;ve seen ward management decisions live, and PGY-2 brings more responsibility.",
+    a: "Timing depends on eligibility, licensing or visa needs, program requirements, and readiness evidence. Confirm current eligibility and scheduling rules with USMLE and your program rather than relying on a universal training-year window.",
   },
 ];
 
@@ -146,6 +119,7 @@ export default function Step3PredictorPage() {
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
               "Free USMLE Step 3 predictor for residents and IMGs. Estimates a two-day Step 3 score from UWSA Step 3 and Free 120 inputs.",
+            dateModified: "2026-08-09",
           }),
         }}
       />
@@ -210,45 +184,28 @@ export default function Step3PredictorPage() {
         <Calculator defaultStep="step3" />
       </section>
 
-      {/* Pass bands */}
+      {/* Model interpretation */}
       <section className="py-16 lg:py-20 bg-mint-50/30">
         <div className="container max-w-4xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            Step 3 pass-probability bands
+            How to read a Step 3 model estimate
           </h2>
           <p className="text-gray-600 text-lg max-w-3xl mb-10">
-            Bands below assume MCQ-side prediction (CCS not yet graded). CCS
-            typically adds or subtracts up to 5 points depending on
-            performance.
+            The calculator does not score CCS performance and does not replace
+            official assessment feedback. Use these checks before acting on
+            the displayed number.
           </p>
 
-          <div className="space-y-3">
-            {passBands.map((b) => (
+          <div className="grid gap-4 md:grid-cols-2">
+            {interpretationSteps.map((step) => (
               <div
-                key={b.range}
-                className={`rounded-3xl border p-5 flex flex-col sm:flex-row gap-4 sm:items-center ${bandColors[b.color]}`}
+                key={step.label}
+                className="rounded-3xl border border-gray-200 bg-white p-6"
               >
-                <div className="sm:w-28 shrink-0">
-                  <div className="text-xs font-bold uppercase opacity-70">
-                    Predicted
-                  </div>
-                  <div className="text-2xl font-extrabold">{b.range}</div>
-                </div>
-                <div className="sm:w-32 shrink-0">
-                  <div className="text-xs font-bold uppercase opacity-70">
-                    Pass prob.
-                  </div>
-                  <div className="text-xl font-extrabold">{b.prob}</div>
-                </div>
-                <div className="sm:w-28 shrink-0">
-                  <span className="inline-flex items-center rounded-full bg-white/70 px-2.5 py-0.5 text-xs font-bold">
-                    {b.label}
-                  </span>
-                </div>
-                <div
-                  className="flex-1 text-sm leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: b.advice }}
-                />
+                <h3 className="font-bold text-gray-950">{step.label}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                  {step.advice}
+                </p>
               </div>
             ))}
           </div>
@@ -259,42 +216,54 @@ export default function Step3PredictorPage() {
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-3xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            The CCS portion: where most candidates lose points
+            The CCS portion: what the official materials require
           </h2>
           <p className="text-gray-600 text-lg mb-6">
-            CCS is the unique part of Step 3 — 13 computer-based patient
-            simulations where you order labs, treatments, and follow-ups in
-            simulated time. Most residents have never practiced this kind of
-            interface before. Here is what matters.
+            The current Step 3 format includes 13 to 14 computer-based case
+            simulations. The software lets you enter orders, advance simulated
+            time, and change the patient&apos;s location as the case evolves.
           </p>
 
           <div className="space-y-4 text-gray-700 leading-relaxed">
             <p>
-              <strong>1. Order what you would actually order.</strong> The CCS
-              software rewards appropriate workup, not exhaustive workup. Do
-              not shotgun every imaging modality.
+              <strong>1. Learn the current interface.</strong> USMLE explicitly
+              instructs examinees to run its interactive testing experience
+              before test day; the live tutorial is less detailed.
             </p>
             <p>
-              <strong>2. Advance the clock correctly.</strong> A common pitfall:
-              ordering CT in 2 minutes when biologically it takes 30 minutes
-              to result. Use realistic time advances.
+              <strong>2. Think in a changing timeline.</strong> CCS is dynamic:
+              orders, results, treatment, monitoring, and advancing time alter
+              what information appears and what should happen next.
             </p>
             <p>
-              <strong>3. Move the patient to the right setting.</strong> If a
-              ward patient becomes unstable, transfer to ICU. If a stable
-              outpatient walks in, do not admit. Setting transitions are
-              graded.
+              <strong>3. Use case-specific feedback.</strong> The official
+              sample cases explain actions that add to, subtract from, or do
+              not affect performance for that scenario.
             </p>
             <p>
-              <strong>4. Practice with UWorld CCS.</strong> 50 cases minimum.
-              You should be able to hit the &quot;5 must-do orders&quot; on a
-              standard MI workup without thinking.
+              <strong>4. Avoid universal checklists.</strong> USMLE says the CCS
+              database contains thousands of possible tests and treatments,
+              so no fixed list of orders applies to every case.
             </p>
-            <p>
-              <strong>5. Watch the clock on Day 2.</strong> You get ~10-20
-              minutes per case. Move steadily — incomplete cases hurt more
-              than imperfect ones.
-            </p>
+          </div>
+
+          <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold">
+            <a
+              href="https://www.usmle.org/exam-resources/step-3-materials/step-3-formats-questions"
+              target="_blank"
+              rel="noreferrer"
+              data-evidence-source="primary"
+              className="text-mint-800 underline underline-offset-4"
+            >
+              USMLE Step 3 formats and CCS samples
+            </a>
+            <Link
+              href="/blog/step-3-ccs-cases-complete-walkthrough"
+              data-indexing-context="related"
+              className="text-mint-800 underline underline-offset-4"
+            >
+              Read the source-checked CCS walkthrough
+            </Link>
           </div>
         </div>
       </section>
@@ -334,8 +303,8 @@ export default function Step3PredictorPage() {
             Take the guesswork out of Step 3
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Free, instant, and built on Step 3 specifically — not just a Step
-            2 CK calculator with a different label.
+            Combine Step 3-specific inputs, review the full planning range,
+            and confirm high-stakes decisions against official evidence.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="primary" size="lg" asChild>

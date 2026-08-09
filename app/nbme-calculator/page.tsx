@@ -59,51 +59,28 @@ const forms = [
   },
 ];
 
-const interpretation = [
+const decisionSteps = [
   {
-    range: "≤ 215",
-    color: "rose",
-    label: "At risk",
+    label: "1. Confirm the product",
     advice:
-      "Your fundamentals need reinforcement. Push back your test date by 2-4 weeks and revisit UWorld content review.",
+      "Make sure the result came from the assessment family aligned with your target exam: CBSSA for Step 1, CCSSA for Step 2 CK, or CCMSA for Step 3.",
   },
   {
-    range: "216-229",
-    color: "amber",
-    label: "Likely pass",
+    label: "2. Read the official report",
     advice:
-      "Above the current 218 Step 2 CK pass threshold, but the confidence interval still matters. Focus on weak subjects and confirm with another recent assessment.",
+      "Use the score report's readiness guidance, performance profile, and stated uncertainty as the primary interpretation. Reporting is not interchangeable across products.",
   },
   {
-    range: "230-249",
-    color: "blue",
-    label: "Average matching",
+    label: "3. Check agreement",
     advice:
-      "Solid range for most US MD specialties. Practice question-stem speed.",
+      "Compare the result with other recent evidence from the same exam track. A large disagreement is a reason to investigate timing, conditions, and content gaps—not to average blindly.",
   },
   {
-    range: "250-264",
-    color: "mint",
-    label: "Competitive",
+    label: "4. Decide what changes",
     advice:
-      "Strong score. Polishes — high-yield ethics, biostats, and pharm minutiae — pay off here.",
-  },
-  {
-    range: "265+",
-    color: "purple",
-    label: "Elite",
-    advice:
-      "Top decile. Maintain by mixing random UWorld blocks; avoid burnout in the final week.",
+      "Choose the next action based on the official report, your program's guidance, and the decision the new evidence would change. NBMEcalc supplies an independent planning range, not a test-date directive.",
   },
 ];
-
-const colorClasses: Record<string, string> = {
-  rose: "bg-rose-50 border-rose-200 text-rose-900",
-  amber: "bg-amber-50 border-amber-200 text-amber-900",
-  blue: "bg-blue-50 border-blue-200 text-blue-900",
-  mint: "bg-mint-50 border-mint-200 text-mint-900",
-  purple: "bg-purple-50 border-purple-200 text-purple-900",
-};
 
 const faqs = [
   {
@@ -124,7 +101,7 @@ const faqs = [
   },
   {
     q: "Can I retake the same NBME form?",
-    a: "Technically yes, but the score loses validity. You&apos;ll remember roughly 30% of questions, which artificially inflates your score by 10-15 points. Use each form once.",
+    a: "A repeat may be less comparable with a first attempt because prior exposure can affect how you respond. When available, use a fresh form for a new readiness check and interpret any repeat through the official report rather than applying a fixed inflation adjustment.",
   },
   {
     q: "What is a passing score on NBME?",
@@ -146,6 +123,8 @@ export default function NbmeCalculatorPage() {
             description:
               "A beginner-friendly guide to NBME assessment families, official score reports, and independent score estimates.",
             author: { "@type": "Organization", name: "NBMEcalc" },
+            dateModified: "2026-08-09",
+            mainEntityOfPage: "https://nbmecalc.com/nbme-calculator",
           }),
         }}
       />
@@ -185,9 +164,8 @@ export default function NbmeCalculatorPage() {
             </div>
             <ul className="space-y-2 text-sm text-gray-700">
               <li>
-                <strong>NBME forms</strong> = official practice exams for Step
-                1 and Step 2 CK, written by the same people who write the real
-                test.
+                <strong>NBME self-assessments</strong> are official assessment
+                products aligned with different USMLE preparation tracks.
               </li>
               <li>
                 Match the family to the exam: <strong>CBSSA for Step 1,
@@ -267,36 +245,69 @@ export default function NbmeCalculatorPage() {
       <section className="py-16 lg:py-20 bg-mint-50/30">
         <div className="container max-w-4xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            What does my NBME score actually mean?
+            How should I interpret an NBME result?
           </h2>
           <p className="text-gray-600 text-lg max-w-3xl mb-10">
-            Translate your three-digit NBME equivalent into an action plan.
-            Reminder: reporting differs by assessment family, and an
-            independent estimate does not replace the official score report.
+            Avoid universal score bands. Reporting differs by assessment
+            family, and an independent estimate does not replace the official
+            score report.
           </p>
 
-          <div className="space-y-3">
-            {interpretation.map((row) => (
+          <div className="grid gap-4 md:grid-cols-2">
+            {decisionSteps.map((row) => (
               <div
-                key={row.range}
-                className={`rounded-3xl border p-5 flex flex-col sm:flex-row gap-4 sm:items-center ${colorClasses[row.color]}`}
+                key={row.label}
+                className="rounded-3xl border border-gray-200 bg-white p-6"
               >
-                <div className="sm:w-32 shrink-0">
-                  <div className="text-xs font-bold uppercase opacity-70">
-                    NBME
-                  </div>
-                  <div className="text-2xl font-extrabold">{row.range}</div>
-                </div>
-                <div className="sm:w-32 shrink-0">
-                  <span className="inline-flex items-center rounded-full bg-white/70 px-2.5 py-0.5 text-xs font-bold">
-                    {row.label}
-                  </span>
-                </div>
-                <div className="flex-1 text-sm leading-relaxed">
+                <h3 className="font-bold text-gray-950">{row.label}</h3>
+                <div className="mt-2 text-sm leading-relaxed text-gray-700">
                   {row.advice}
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-gray-200 bg-white py-12">
+        <div className="container max-w-4xl">
+          <div className="rounded-3xl border border-mint-200 bg-mint-50/40 p-7">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint-800">
+              Sources checked August 9, 2026
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold text-gray-950">
+              Verify the assessment family before using a calculator
+            </h2>
+            <p className="mt-3 max-w-3xl text-gray-700">
+              NBME&apos;s official self-assessment directory maps CBSSA to Step 1,
+              CCSSA to Step 2 CK, CCMSA to Step 3, and Clinical Science Mastery
+              Series forms to subject-exam preparation.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold">
+              <a
+                href="https://www.nbme.org/examinees/self-assessments/"
+                target="_blank"
+                rel="noreferrer"
+                data-evidence-source="primary"
+                className="text-mint-800 underline underline-offset-4"
+              >
+                NBME self-assessments (official)
+              </a>
+              <Link
+                href="/methodology"
+                data-indexing-context="related"
+                className="text-mint-800 underline underline-offset-4"
+              >
+                Model assumptions and limitations
+              </Link>
+              <Link
+                href="/validation"
+                data-indexing-context="related"
+                className="text-mint-800 underline underline-offset-4"
+              >
+                Current validation status
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -383,7 +394,10 @@ export default function NbmeCalculatorPage() {
               <Link href="#calculator">Try the calculator</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/nbme-score-conversion">
+              <Link
+                href="/nbme-score-conversion"
+                data-indexing-context="related"
+              >
                 View NBME → Step conversion table
               </Link>
             </Button>

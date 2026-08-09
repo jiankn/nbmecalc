@@ -32,6 +32,30 @@ server.stderr.on("data", (chunk) => {
 
 const errors = [];
 const warnings = [];
+const remediatedPaths = new Set([
+  "/about",
+  "/blog",
+  "/blog/amboss-vs-uworld-which-qbank-wins",
+  "/blog/most-tested-topics-step-2-ck",
+  "/blog/night-before-step-exam-what-to-do",
+  "/blog/step-2-ck-subject-weighting-explained",
+  "/blog/step-3-ccs-cases-complete-walkthrough",
+  "/compare/vs-predictmystepscore",
+  "/educators",
+  "/methodology",
+  "/nbme-calculator",
+  "/uwsa-1-to-step-1",
+]);
+const evidenceSensitivePaths = new Set([
+  "/blog/amboss-vs-uworld-which-qbank-wins",
+  "/blog/most-tested-topics-step-2-ck",
+  "/blog/night-before-step-exam-what-to-do",
+  "/blog/step-2-ck-subject-weighting-explained",
+  "/blog/step-3-ccs-cases-complete-walkthrough",
+  "/compare/vs-predictmystepscore",
+  "/nbme-calculator",
+  "/uwsa-1-to-step-1",
+]);
 
 function decodeHtml(value) {
   return value
@@ -96,6 +120,9 @@ try {
   ].map((match) => decodeHtml(match[1]));
 
   if (sitemapUrls.length === 0) errors.push("sitemap.xml contains no URLs");
+  if (sitemapUrls.length !== 29) {
+    errors.push(`sitemap.xml contains ${sitemapUrls.length} URLs, expected 29`);
+  }
 
   const duplicateSitemapUrls = sitemapUrls.filter(
     (url, index) => sitemapUrls.indexOf(url) !== index
@@ -107,6 +134,9 @@ try {
   const titles = new Map();
   const descriptions = new Map();
   const incomingLinks = new Map(
+    sitemapUrls.map((url) => [normalizePath(url), 0])
+  );
+  const contextualIncomingLinks = new Map(
     sitemapUrls.map((url) => [normalizePath(url), 0])
   );
 
@@ -147,6 +177,12 @@ try {
     if (robotsMeta.toLowerCase().includes("noindex")) {
       errors.push(`${pathname} is both noindex and present in sitemap`);
     }
+    if (
+      evidenceSensitivePaths.has(pathname) &&
+      !page.text.includes('data-evidence-source="primary"')
+    ) {
+      errors.push(`${pathname} has no visible primary-source marker`);
+    }
 
     if (title) {
       const paths = titles.get(title) || [];
@@ -163,16 +199,38 @@ try {
       /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi
     )) {
       try {
-        JSON.parse(decodeHtml(jsonLd[1]));
+        const parsed = JSON.parse(decodeHtml(jsonLd[1]));
+        const nodes = parsed?.["@graph"] || [parsed];
+        for (const node of nodes) {
+          const types = Array.isArray(node?.["@type"])
+            ? node["@type"]
+            : [node?.["@type"]];
+          if (!types.includes("Article")) continue;
+          const authors = Array.isArray(node.author)
+            ? node.author
+            : [node.author];
+          if (authors.some((author) => author?.["@type"] === "Person")) {
+            errors.push(`${pathname} Article JSON-LD uses Person authorship`);
+          }
+        }
       } catch (error) {
         errors.push(`${pathname} has invalid JSON-LD: ${error.message}`);
       }
     }
 
-    for (const hrefMatch of page.text.matchAll(/<a[^>]+href="([^"]+)"/gi)) {
+    for (const anchorMatch of page.text.matchAll(/<a\b([^>]*)>/gi)) {
+      const attributes = anchorMatch[1];
+      const hrefMatch = attributes.match(/href="([^"]+)"/i);
+      if (!hrefMatch) continue;
       const linkedPath = normalizePath(decodeHtml(hrefMatch[1]));
       if (linkedPath && incomingLinks.has(linkedPath) && linkedPath !== pathname) {
         incomingLinks.set(linkedPath, incomingLinks.get(linkedPath) + 1);
+        if (/data-indexing-context="related"/i.test(attributes)) {
+          contextualIncomingLinks.set(
+            linkedPath,
+            contextualIncomingLinks.get(linkedPath) + 1
+          );
+        }
       }
     }
   }
@@ -192,6 +250,13 @@ try {
   for (const [pathname, count] of incomingLinks) {
     if (pathname !== "/" && count === 0) {
       warnings.push(`${pathname} has no incoming link from another sitemap page`);
+    }
+  }
+  for (const pathname of remediatedPaths) {
+    if (!contextualIncomingLinks.has(pathname)) {
+      errors.push(`${pathname} is missing from the canonical sitemap`);
+    } else if (contextualIncomingLinks.get(pathname) === 0) {
+      errors.push(`${pathname} has no contextual incoming link from another sitemap page`);
     }
   }
 

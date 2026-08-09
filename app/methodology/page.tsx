@@ -108,6 +108,15 @@ const sourceRows = [
 
 const changes = [
   {
+    date: "2026-08-09",
+    items: [
+      "Rewrote five discovered-but-not-indexed articles around current NBME and USMLE primary sources.",
+      "Removed unsupported score-band, exam-timing, competitor, and CCS checklist claims from affected routes.",
+      "Changed article authorship markup from unverifiable people to the NBMEcalc Editorial Team organization.",
+      "Added contextual hub links and automated evidence checks for the affected sitemap pages.",
+    ],
+  },
+  {
     date: "2026-08-07",
     items: [
       "Relabelled the heuristic interval as an estimated planning range until holdout coverage is published.",
@@ -144,6 +153,7 @@ function SourceLink({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
+        data-evidence-source="primary"
         className={className}
       >
         {label}
@@ -152,7 +162,11 @@ function SourceLink({
   }
 
   return (
-    <Link href={href} className={className}>
+    <Link
+      href={href}
+      data-indexing-context="related"
+      className={className}
+    >
       {label}
     </Link>
   );
@@ -175,7 +189,12 @@ export default function MethodologyPage() {
             </Link>
           </Button>
           <Button variant="secondary" asChild>
-            <Link href="/validation">View validation status</Link>
+            <Link
+              href="/validation"
+              data-indexing-context="related"
+            >
+              View validation status
+            </Link>
           </Button>
         </div>
       </PageHero>
@@ -393,7 +412,7 @@ export default function MethodologyPage() {
               </div>
               <div className="flex items-center justify-between gap-4 py-3">
                 <dt className="text-gray-700">Last methodology update</dt>
-                <dd className="font-bold text-gray-950">Jun 28, 2026</dd>
+                <dd className="font-bold text-gray-950">Aug 9, 2026</dd>
               </div>
             </dl>
           </div>
@@ -402,13 +421,23 @@ export default function MethodologyPage() {
               Reviewing NBMEcalc for a library guide, course, or academic
               support program?
             </p>
-            <Link
-              href="/educators"
-              className="inline-flex items-center gap-2 font-semibold text-mint-700 underline underline-offset-4 hover:text-mint-900"
-            >
-              Open the institutional review page
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
+            <div className="flex flex-wrap gap-x-5 gap-y-3">
+              <Link
+                href="/about"
+                data-indexing-context="related"
+                className="inline-flex items-center gap-2 font-semibold text-mint-700 underline underline-offset-4 hover:text-mint-900"
+              >
+                About the project
+              </Link>
+              <Link
+                href="/educators"
+                data-indexing-context="related"
+                className="inline-flex items-center gap-2 font-semibold text-mint-700 underline underline-offset-4 hover:text-mint-900"
+              >
+                Institutional review page
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

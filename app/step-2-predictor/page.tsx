@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Step 2 Score Predictor & CK Calculator",
     description:
-      "Predict your USMLE Step 2 CK score from NBME, UWSA, Free 120, AMBOSS, and CMS Form inputs. Specialty-matching context included.",
+      "Combine compatible Step 2 CK practice inputs and review the model's assumptions, planning range, and official-source study priorities.",
     url: "https://nbmecalc.com/step-2-predictor",
     type: "website",
     images: [
@@ -38,30 +38,31 @@ export const metadata: Metadata = {
   },
 };
 
-const specialties = [
-  { name: "Dermatology", median: 257, p10: 248, p90: 268 },
-  { name: "Plastic Surgery", median: 256, p10: 246, p90: 267 },
-  { name: "Neurosurgery", median: 255, p10: 244, p90: 267 },
-  { name: "Otolaryngology (ENT)", median: 254, p10: 244, p90: 264 },
-  { name: "Orthopedic Surgery", median: 252, p10: 242, p90: 263 },
-  { name: "Ophthalmology", median: 250, p10: 240, p90: 261 },
-  { name: "Radiology — Diagnostic", median: 248, p10: 236, p90: 260 },
-  { name: "Anesthesiology", median: 246, p10: 234, p90: 258 },
-  { name: "Internal Medicine", median: 245, p10: 232, p90: 257 },
-  { name: "Emergency Medicine", median: 243, p10: 232, p90: 254 },
-  { name: "OB/GYN", median: 243, p10: 232, p90: 254 },
-  { name: "General Surgery", median: 244, p10: 232, p90: 256 },
-  { name: "Pediatrics", median: 243, p10: 232, p90: 254 },
-  { name: "Psychiatry", median: 240, p10: 226, p90: 253 },
-  { name: "Family Medicine", median: 234, p10: 220, p90: 248 },
+const contextChecks = [
+  {
+    title: "Do not turn a score into a match promise",
+    body: "Program selection uses more than one exam result, and historical matched-applicant data does not create a universal specialty cutoff.",
+  },
+  {
+    title: "Use the correct comparison group",
+    body: "If you consult match data, match the applicant type, specialty, cycle, and reported statistic. Do not apply a fixed adjustment from one group to another.",
+  },
+  {
+    title: "Verify the current source",
+    body: "Match reports and program practices change. Use current NRMP publications and individual program information for application planning.",
+  },
+  {
+    title: "Keep readiness and applications separate",
+    body: "Use official assessment feedback for exam readiness and current advising or program data for application strategy. One model output cannot answer both questions.",
+  },
 ];
 
 const sourceCorrections = [
   { src: "CCSSA forms 9-15", note: "Use the equated score report", adj: "Modelled" },
   { src: "UWSA 1", note: "Internal source adjustment", adj: "−5" },
-  { src: "UWSA 2", note: "Most accurate UWSA", adj: "−2" },
-  { src: "Free 120", note: "Best single predictor", adj: "0" },
-  { src: "AMBOSS SA", note: "Runs hot", adj: "−5" },
+  { src: "UWSA 2", note: "Internal source adjustment", adj: "−2" },
+  { src: "Free 120", note: "Percentage input; internal mapping", adj: "0" },
+  { src: "AMBOSS SA", note: "Internal source adjustment", adj: "−5" },
   { src: "CMS Form", note: "Subject-level, no overall", adj: "—" },
 ];
 
@@ -80,11 +81,11 @@ const faqs = [
   },
   {
     q: "Should I take Step 2 CK before submitting ERAS?",
-    a: "Strongly yes. Programs use Step 2 CK as the primary screening filter post-Step-1-P/F. Score reports are released 4 weeks after testing; back-calculate from the September ERAS submission window.",
+    a: "That depends on your application timeline, program requirements, and when an official result is likely to be available. Confirm current reporting guidance with USMLE and discuss application timing with your school or advisor.",
   },
   {
     q: "What is a competitive Step 2 CK score?",
-    a: "Specialty-dependent. Family medicine matches in the 220s, while dermatology and plastic surgery medians sit near 257. See the specialty table above for percentile context.",
+    a: "There is no universal competitive cutoff. If you use match data, select the current applicant group and specialty, then interpret the score alongside the rest of the application and individual program information.",
   },
 ];
 
@@ -176,7 +177,7 @@ export default function Step2PredictorPage() {
         </div>
       </section>
 
-      {/* Specialty context */}
+      {/* Application context */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-5xl">
           <div className="flex items-center gap-3 mb-4">
@@ -184,60 +185,27 @@ export default function Step2PredictorPage() {
               <Trophy className="h-5 w-5 text-mint-700" />
             </div>
             <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-              Step 2 CK by specialty (matched applicants)
+              Keep score context honest
             </h2>
           </div>
           <p className="text-gray-600 text-lg max-w-3xl mb-8">
-            NRMP 2024 Charting Outcomes data for US MD seniors. Numbers are
-            Step 2 CK three-digit scores at the 10th, 50th, and 90th
-            percentiles of <em>matched</em> applicants.
+            A predicted score is not a residency-match forecast. Use these
+            checks before comparing a model output with specialty data.
           </p>
 
-          <div className="overflow-x-auto rounded-3xl border border-gray-200 shadow-sm">
-            <table className="min-w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    Specialty
-                  </th>
-                  <th className="text-right px-5 py-3 font-bold text-gray-900">
-                    p10
-                  </th>
-                  <th className="text-right px-5 py-3 font-bold text-mint-700">
-                    Median
-                  </th>
-                  <th className="text-right px-5 py-3 font-bold text-gray-900">
-                    p90
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 bg-white">
-                {specialties.map((s) => (
-                  <tr key={s.name}>
-                    <td className="px-5 py-3 font-medium text-gray-900">
-                      {s.name}
-                    </td>
-                    <td className="px-5 py-3 text-right text-gray-700">
-                      {s.p10}
-                    </td>
-                    <td className="px-5 py-3 text-right font-bold text-mint-700">
-                      {s.median}
-                    </td>
-                    <td className="px-5 py-3 text-right text-gray-700">
-                      {s.p90}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid gap-4 md:grid-cols-2">
+            {contextChecks.map((item) => (
+              <article
+                key={item.title}
+                className="rounded-3xl border border-gray-200 bg-white p-6"
+              >
+                <h3 className="font-bold text-gray-950">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                  {item.body}
+                </p>
+              </article>
+            ))}
           </div>
-
-          <p className="text-xs text-gray-500 mt-4">
-            Source: NRMP Charting Outcomes in the Match for US Allopathic
-            Seniors, 2024 edition. Step 2 CK columns only; we omit Step 1
-            (pass/fail). For IMGs, subtract roughly 10-15 points across all
-            tiers.
-          </p>
         </div>
       </section>
 
@@ -253,9 +221,9 @@ export default function Step2PredictorPage() {
             </h2>
           </div>
           <p className="text-gray-600 text-lg mb-8">
-            Each practice exam systematically deviates from the real Step 2
-            CK. Our calculator applies these corrections automatically — but
-            here&apos;s the math we use, so you can sanity-check.
+            These values are versioned internal model assumptions. They are not
+            official conversions and are not proof that every assessment has a
+            universal bias.
           </p>
 
           <div className="overflow-hidden rounded-3xl border border-gray-200 shadow-sm">
@@ -266,7 +234,7 @@ export default function Step2PredictorPage() {
                     Source
                   </th>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    Bias
+                    Model handling
                   </th>
                   <th className="text-center px-5 py-3 font-bold text-mint-700">
                     Adjustment
@@ -373,6 +341,7 @@ export default function Step2PredictorPage() {
             <li>
               <Link
                 href="/nbme-score-conversion"
+                data-indexing-context="related"
                 className="underline underline-offset-2"
               >
                 NBME → Step 2 CK conversion tables
@@ -381,6 +350,7 @@ export default function Step2PredictorPage() {
             <li>
               <Link
                 href="/uwsa-2-to-step-2"
+                data-indexing-context="related"
                 className="underline underline-offset-2"
               >
                 Convert UWSA 2 to Step 2 CK
@@ -389,6 +359,7 @@ export default function Step2PredictorPage() {
             <li>
               <Link
                 href="/cms-converter"
+                data-indexing-context="related"
                 className="underline underline-offset-2"
               >
                 CMS Form subject converter
@@ -397,9 +368,37 @@ export default function Step2PredictorPage() {
             <li>
               <Link
                 href="/amboss-converter"
+                data-indexing-context="related"
                 className="underline underline-offset-2"
               >
                 AMBOSS SA → Step 2 CK converter
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/blog/step-2-ck-subject-weighting-explained"
+                data-indexing-context="related"
+                className="underline underline-offset-2"
+              >
+                Official Step 2 CK subject weighting
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/blog/most-tested-topics-step-2-ck"
+                data-indexing-context="related"
+                className="underline underline-offset-2"
+              >
+                Source-checked high-yield priorities
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/blog/night-before-step-exam-what-to-do"
+                data-indexing-context="related"
+                className="underline underline-offset-2"
+              >
+                Official-source exam-day checklist
               </Link>
             </li>
           </ul>
@@ -440,8 +439,8 @@ export default function Step2PredictorPage() {
             What will my Step 2 CK score be?
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Drop your numbers in. Free, no signup. Three weeks of NBME data is
-            enough to get a tight confidence interval.
+            Add your recent Step 2 CK inputs. The result is an independent
+            planning estimate with a model-generated range, not a guarantee.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="primary" size="lg" asChild>

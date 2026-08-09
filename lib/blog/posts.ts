@@ -35,6 +35,8 @@ export interface BlogPost {
   description: string;
   publishedAt: string; // ISO date
   updatedAt?: string;
+  /** Date when the visible claims and source links were last checked. */
+  reviewedAt?: string;
   author: string;
   category: BlogCategory;
   tags: string[];
@@ -843,94 +845,86 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "step-2-ck-subject-weighting-explained",
-    title: "Step 2 CK Subject Weighting Explained",
+    title: "Step 2 CK Subject Weighting: What the Official Outline Says",
     description:
-      "How NBME weights each clinical rotation on Step 2 CK, what the content area bars on your NBME report actually represent, and where to spend your final two weeks.",
+      "Use the official USMLE system, physician-task, and clinical-science ranges to prioritize Step 2 CK review without inventing a fixed topic list.",
     publishedAt: "2026-05-22",
-    author: "Sarah K., MS4",
+    updatedAt: "2026-08-09",
+    reviewedAt: "2026-08-09",
+    author: "NBMEcalc Editorial Team",
     category: "step-2-tips",
     tags: ["step-2-ck", "subjects", "study-plan"],
     readingTime: 8,
     body: [
       {
         type: "p",
-        text: "Step 2 CK isn't 50% Internal Medicine. It's not 25% Surgery. The content distribution is more nuanced — and weighted differently than most students assume. Here's how NBME actually allocates questions across rotations.",
+        text: "Short answer: USMLE does not publish one fixed list of diseases that will appear on every form. It publishes overlapping ranges by organ system, physician task, and clinical science. Use those ranges to organize review, then use your own recent score report to decide where the next study block goes.",
       },
       {
         type: "h2",
-        text: "Approximate content distribution",
+        text: "Official clinical-science ranges",
       },
       {
         type: "ul",
         items: [
-          "Internal Medicine: 30-35%",
-          "Surgery: 12-15%",
-          "Pediatrics: 12-14%",
-          "Obstetrics & Gynecology: 8-10%",
-          "Psychiatry: 8-10%",
-          "Family Medicine: 6-8% (significant overlap with IM)",
-          "Emergency Medicine: 4-6%",
-          "Neurology: 3-4%",
-          "Ethics, Biostats, Patient Safety: 5-8% combined",
-        ],
-      },
-      {
-        type: "chart",
-        variant: "donut",
-        title: "Step 2 CK Approximate Subject Weighting",
-        caption:
-          "Source: estimated from USMLE content outlines and student item recall across multiple Step 2 CK forms (2024-2026). Ranges simplified to midpoints for visualization.",
-        unit: "%",
-        data: [
-          { label: "Internal Medicine", value: 32, highlight: true },
-          { label: "Surgery", value: 14 },
-          { label: "Pediatrics", value: 13 },
-          { label: "OB/GYN", value: 9 },
-          { label: "Psychiatry", value: 9 },
-          { label: "Family Medicine", value: 7 },
-          { label: "Emergency Med", value: 5 },
-          { label: "Neurology", value: 4 },
-          { label: "Ethics/Biostats", value: 7 },
+          "Medicine: 55–65%",
+          "Pediatrics: 17–27%",
+          "Obstetrics & Gynecology: 10–20%",
+          "Psychiatry: 10–15%",
+          "Surgery: 5–15%",
         ],
       },
       {
         type: "callout",
         tone: "info",
-        text: "These percentages drift slightly between forms. Don't optimize to the decimal — but DO recognize that IM is the single largest swing factor.",
+        text: "USMLE says clinical-science totals exceed 100% because many questions are classified in more than one science. Do not add these ranges or convert them into a promised question count.",
       },
       {
         type: "h2",
-        text: "What the NBME content bars actually compare you to",
+        text: "The task being tested matters too",
       },
       {
         type: "p",
-        text: "The content area bars on your NBME report compare you to a reference cohort that NBME selects internally. That cohort is not a representative sample of your competition. Surgery and IM cohorts skew toward higher absolute performance; Psychiatry skews lower. A solid black bar in Surgery is more concerning than the same bar in Psychiatry.",
+        text: "The current physician-task table emphasizes diagnosis, laboratory and diagnostic studies, management, pharmacotherapy, clinical interventions, prevention, prognosis, patient safety, and professionalism. That means a useful review plan should practice decisions and sequencing—not just memorize isolated facts.",
       },
       {
         type: "h2",
-        text: "Where final-two-week effort produces the biggest score gain",
-      },
-      {
-        type: "p",
-        text: "Per-question effort yields the biggest score lift in Internal Medicine, simply because IM accounts for the largest share of items. A 5-percentage-point improvement in IM accuracy gains more points than the same improvement in Neurology. Prioritize IM weaknesses first, then high-yield Surgery and Pediatrics topics.",
-      },
-      {
-        type: "h2",
-        text: "How to read your weakness map",
+        text: "A three-step prioritization rule",
       },
       {
         type: "ol",
         items: [
-          "Find the 2-3 solid black bars on your most recent NBME",
-          "Weight by content share: IM bars matter most, Neuro bars matter least",
-          "Cross-reference with your UWorld percent correct by system",
-          "Spend final dedicated time on the intersection of NBME weak + UWorld weak",
+          "Start with the official content ranges so a narrow topic does not consume a disproportionate share of your time.",
+          "Use the content-area feedback from your most recent assessment to identify where your own performance is lower.",
+          "Choose the intersection: a broadly represented area where your recent report also shows a weakness, then reassess with new questions.",
         ],
       },
       {
         type: "callout",
-        tone: "success",
-        text: "Our paid report includes a personalized weakness map combining your self-reported weak subjects with cohort-level reference data — far more actionable than NBME's reference cohort alone.",
+        tone: "warning",
+        text: "A content-area bar is feedback, not a diagnosis and not a guaranteed point-gain forecast. Confirm any scheduling decision with current official readiness information and more than one recent signal.",
+      },
+      {
+        type: "h2",
+        text: "Related next steps",
+      },
+      {
+        type: "ul",
+        items: [
+          "Use the Step 2 CK predictor to compare recent comprehensive assessments.",
+          "Use the CMS converter only for subject-level context; a CMS form is not a substitute for a comprehensive CCSSA.",
+          "Read the methodology before treating an internal planning range as an official score forecast.",
+        ],
+      },
+    ],
+    references: [
+      {
+        label: "USMLE — Step 2 CK Exam Content and official weighting ranges",
+        href: "https://www.usmle.org/exam-resources/step-2-ck-materials/step-2-ck-content-outline-specifications",
+      },
+      {
+        label: "NBME — Self-Assessments and the exam each assessment family supports",
+        href: "https://www.nbme.org/examinees/self-assessments/",
       },
     ],
   },
@@ -938,159 +932,192 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "night-before-step-exam-what-to-do",
     title: "What to Do the Night Before Your Step Exam",
     description:
-      "An evidence-based pre-exam routine for Step 1, Step 2 CK, or Step 3. What to eat, when to sleep, what to review, and what to absolutely not do.",
+      "A practical USMLE test-day checklist built around the official permit, identification, security, belongings, and break rules.",
     publishedAt: "2026-05-22",
-    author: "Dr. A. Patel, MD",
+    updatedAt: "2026-08-09",
+    reviewedAt: "2026-08-09",
+    author: "NBMEcalc Editorial Team",
     category: "study-plans",
     tags: ["test-day", "step-1", "step-2-ck", "preparation"],
     readingTime: 6,
     body: [
       {
         type: "p",
-        text: "The night before a Step exam contributes far more to your score by what you avoid than by what you accomplish. Here's the short list — and the equally short list of things not to do.",
+        text: "Short answer: use the night before to remove test-center uncertainty. Confirm your permit and ID, review the official rules, plan your route and arrival, pack only items the center permits, and avoid changing a routine that already works for you.",
       },
       {
         type: "h2",
-        text: "Do: protect your sleep",
-      },
-      {
-        type: "p",
-        text: "The single largest controllable variable for next-day cognitive performance is sleep. Aim for your normal sleep duration, not more. Trying to sleep early disrupts your normal circadian timing and produces fragmented sleep that hurts more than it helps. Bed by your usual time minus 30 minutes is optimal.",
-      },
-      {
-        type: "h2",
-        text: "Do: a light review (≤90 minutes)",
-      },
-      {
-        type: "p",
-        text: "If you must review, limit it to 60-90 minutes of HIGH-YIELD pre-built notes — biostats formulas, ethics frameworks, anti-arrhythmic side effects. Do NOT start a new content area. Do NOT do practice questions (they introduce new doubt).",
-      },
-      {
-        type: "callout",
-        tone: "warning",
-        text: "No practice questions the night before. New wrong answers introduce new anxiety with zero compensating benefit.",
-      },
-      {
-        type: "h2",
-        text: "Do: pre-pack everything",
+        text: "The official must-have checklist",
       },
       {
         type: "ul",
         items: [
-          "Government ID (passport or driver's license)",
-          "Scheduling permit (printed copy)",
-          "Snacks: nuts, banana, granola bar — slow-release carbs",
-          "Water bottle (sealed)",
-          "Backup glasses or contacts case",
-          "Layered clothing (testing centers run cold)",
-          "Earplugs (allowed at most centers; check yours)",
+          "Paper or electronic copy of your scheduling permit.",
+          "An acceptable, unexpired government-issued photo ID whose details match your registration.",
+          "A route and arrival plan that gets you to the center at least 30 minutes before the appointment.",
+          "A final review of the current USMLE Rules of Conduct and the test center's instructions.",
         ],
       },
       {
         type: "h2",
-        text: "Don't: caffeine you don't normally use",
+        text: "Pack around the security rules",
       },
       {
         type: "p",
-        text: "If you don't drink coffee, today is not the day to start. Caffeine sensitivity is highly individual; first-time use can cause GI upset, anxiety, and jittery hands — all of which hurt performance.",
+        text: "USMLE requires personal belongings—including phones, watches, study materials, notes, paper, writing tools, and transmitting devices—to be stored before you enter the testing room. Check the current official page and your center's instructions rather than relying on an old packing list.",
+      },
+      {
+        type: "callout",
+        tone: "warning",
+        text: "Do not assume an item is allowed because another test center allowed it. Official USMLE rules and the instructions of your assigned center are the source of truth.",
       },
       {
         type: "h2",
-        text: "Don't: read Reddit",
+        text: "Plan authorized breaks before the exam",
       },
       {
         type: "p",
-        text: "Reddit r/Step2 and r/Step1 spike with anxious 'I just took the test and tanked' posts. Don't read them. You'll either internalize someone else's panic or anchor on an outlier topic. Close the app.",
+        text: "You may leave your testing station for a break only when the break screen is visible. Communication devices may be used only outside the secure testing area during an authorized break. Decide in advance where you will place food, medication, and other permitted personal items, then follow staff instructions on test day.",
+      },
+      {
+        type: "h2",
+        text: "Use a low-risk evening routine",
+      },
+      {
+        type: "ul",
+        items: [
+          "Confirm the alarm, route, permit, ID, and center address before you start winding down.",
+          "Choose familiar food, medication, caffeine, and sleep routines; this page cannot determine what is medically appropriate for you.",
+          "If you feel unwell or unprepared, use the official rescheduling guidance rather than relying on an online score predictor alone.",
+          "Stop studying when additional review is increasing uncertainty rather than resolving a specific question.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "Morning exit check",
+      },
+      {
+        type: "ol",
+        items: [
+          "Permit opened or printed.",
+          "Accepted photo ID in hand.",
+          "Arrival time and route confirmed.",
+          "Personal belongings packed for locker storage.",
+          "Current Rules of Conduct reviewed.",
+        ],
       },
       {
         type: "callout",
         tone: "success",
-        text: "Tomorrow is a regular-ish day with high stakes. Your prep is done. Your job tonight is to not undo it.",
+        text: "A good checklist does not predict your score. It prevents an avoidable permit, identification, timing, belongings, or break-rule problem from becoming the story of test day.",
+      },
+    ],
+    references: [
+      {
+        label: "USMLE — Exam Day Information and Rules of Conduct",
+        href: "https://www.usmle.org/what-to-know/exam-day-information",
+      },
+      {
+        label: "USMLE — Bulletin of Information",
+        href: "https://www.usmle.org/bulletin-information",
       },
     ],
   },
   {
     slug: "amboss-vs-uworld-which-qbank-wins",
-    title: "AMBOSS vs UWorld: Which Q-bank Wins for Step 2 CK?",
+    title: "AMBOSS vs UWorld for Step 2 CK: A Source-Checked Decision Guide",
     description:
-      "An honest comparison of AMBOSS and UWorld for Step 2 CK preparation: question quality, interface, hammer ranking, library depth, pricing, and who each one is actually for.",
+      "Compare the Step 2 CK features each product currently documents, then choose by study workflow, remaining time, and the resources you already own.",
     publishedAt: "2026-05-22",
-    author: "Sarah K., MS4",
+    updatedAt: "2026-08-09",
+    reviewedAt: "2026-08-09",
+    author: "NBMEcalc Editorial Team",
     category: "study-plans",
     tags: ["amboss", "uworld", "qbank", "step-2-ck"],
     readingTime: 9,
     body: [
       {
         type: "p",
-        text: "Pick one Q-bank. That's the right move — two is overkill and you'll burn out doing both. Here's how AMBOSS and UWorld actually compare across the dimensions that matter for Step 2 CK prep.",
+        text: "Short answer: neither product is the universal winner. UWorld currently documents a Step 2 and Shelf QBank with detailed explanations, performance analytics, mobile access, flashcards, a study planner on selected plans, and up to three self-assessments depending on the package. AMBOSS documents an integrated Library and Qbank, study plans, Anki integration, a score predictor, clinical tools, and a separate on-demand Step 2 self-assessment. Choose the workflow you will actually complete.",
       },
       {
         type: "h2",
-        text: "Question quality and difficulty",
-      },
-      {
-        type: "p",
-        text: "UWorld questions skew slightly easier than real Step 2 CK and emphasize classic high-yield patterns. AMBOSS questions skew slightly harder, with more curveball edge cases. Real test day usually feels closer to UWorld in difficulty but closer to AMBOSS in question style novelty.",
-      },
-      {
-        type: "h2",
-        text: "Interface and review experience",
+        text: "What the official product pages confirm",
       },
       {
         type: "ul",
         items: [
-          "UWorld: cleaner interface, faster review, better tablet experience",
-          "AMBOSS: deeper library integration (click any term → instant deep-dive)",
-          "UWorld: longer explanation per question",
-          "AMBOSS: 'hammer rating' indicates question difficulty — useful for triage",
+          "UWorld: Step 2 and Shelf review modes, detailed explanations, subject/system/topic analytics, mobile access, flashcards, and package-dependent self-assessments.",
+          "AMBOSS: integrated medical Library and Qbank, study plans, Anki integration, score predictor, clinical tools, and an on-demand Step 2 self-assessment.",
+          "Both products change packages and features over time; use the linked product pages for the current offer.",
         ],
       },
       {
         type: "h2",
-        text: "Library depth (the AMBOSS advantage)",
-      },
-      {
-        type: "p",
-        text: "AMBOSS's biggest moat is its integrated medical library. When you miss a question, you can click any term in the explanation and land on a comprehensive article. UWorld's explanations are excellent but standalone — you can't drill deeper without leaving the platform.",
-      },
-      {
-        type: "h2",
-        text: "Pricing as of 2026",
+        text: "Choose by the job you need to finish",
       },
       {
         type: "ul",
         items: [
-          "UWorld Step 2 CK Q-bank: $349 for 3 months, $429 for 6 months",
-          "AMBOSS Step 2 CK: $159 for 3 months, $249 for 6 months",
-          "AMBOSS often has student discounts via your school",
-          "UWorld rarely discounts; runs ~2-3 short sales per year",
+          "Choose UWorld when your priority is a dedicated Step 2/Shelf QBank workflow with its documented performance reports and included self-assessments for the selected plan.",
+          "Choose AMBOSS when your priority is moving directly between questions and an integrated medical Library, or when its broader study tools fit your existing workflow.",
+          "If your school already provides one product, calculate the cost and time of finishing that resource before buying a second overlapping QBank.",
+          "If you are early in rotations, compare Shelf integration and review tools. If you are late in dedicated study, prioritize completion, error review, and fresh comprehensive assessments.",
         ],
       },
       {
         type: "h2",
-        text: "Who should pick UWorld",
+        text: "Pricing and package comparison",
       },
       {
         type: "p",
-        text: "Pick UWorld if you want the closest-to-real-test-day question style, you're willing to pay a premium for explanation quality, and you don't need a built-in textbook. UWorld is the default and there's a reason — it's been the gold standard for over a decade.",
-      },
-      {
-        type: "h2",
-        text: "Who should pick AMBOSS",
-      },
-      {
-        type: "p",
-        text: "Pick AMBOSS if you're an IMG who needs to fill content gaps from a non-US medical school, you value the integrated library, you have a shorter prep window and need the hammer rating to triage, or you're price-sensitive. AMBOSS is also strong for Step 1 if you're doing combined prep.",
+        text: "Do not copy a price from an old review. Both companies publish multiple durations and package inclusions, and the offer can change. Compare the total price for the access period you need, included self-assessments, reset options, institutional access, and whether a separate membership is required.",
       },
       {
         type: "callout",
-        tone: "info",
-        text: "Don't do both. The marginal benefit of a second Q-bank is far smaller than the marginal cost in time. Pick one, complete it twice, take NBMEs in between.",
+        tone: "warning",
+        text: "This page does not claim that one QBank is easier, harder, more predictive, or more accurate. The official product pages do not provide a shared head-to-head validation dataset that would support those conclusions.",
+      },
+      {
+        type: "h2",
+        text: "A five-question decision check",
+      },
+      {
+        type: "ol",
+        items: [
+          "Which product do you already have through your school or a current subscription?",
+          "How many questions can you realistically complete and review before your next assessment?",
+          "Do you need an integrated reference library, or mainly a focused QBank and performance workflow?",
+          "Which current package includes the self-assessments and access duration you actually need?",
+          "What result would make you switch resources instead of fixing your review process?",
+        ],
+      },
+      {
+        type: "h2",
+        text: "Use assessments for readiness, not QBank branding",
+      },
+      {
+        type: "p",
+        text: "A QBank is primarily a learning resource. For readiness decisions, compare recent assessments from the correct exam family, the official score report, and the uncertainty around any independent estimate. A brand comparison cannot tell you whether you are ready to test.",
       },
       {
         type: "callout",
         tone: "success",
-        text: "Whatever Q-bank you choose, run your practice scores through our calculator to track your trajectory and project test-day performance.",
+        text: "Choose one primary workflow, define a completion and review target, and schedule a fresh comprehensive assessment. Add a second QBank only when you can name the specific gap it will fill.",
+      },
+    ],
+    references: [
+      {
+        label: "UWorld — Official Step 2 CK QBank features and current plans",
+        href: "https://medical.uworld.com/usmle/usmle-step-2-ck/",
+      },
+      {
+        label: "AMBOSS — Official Step 2 CK preparation features",
+        href: "https://www.amboss.com/us/usmle/step2",
+      },
+      {
+        label: "AMBOSS — Current membership and Qbank pricing",
+        href: "https://www.amboss.com/us/pricing",
       },
     ],
   },
@@ -1338,213 +1365,215 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "most-tested-topics-step-2-ck",
-    title: "Most Tested Topics on Step 2 CK (2026)",
+    title: "Step 2 CK High-Yield Priorities from the Official Content Outline",
     description:
-      "The high-yield topics that appear repeatedly on Step 2 CK forms: diabetic ketoacidosis, pre-eclampsia, anti-arrhythmic toxicities, and the rest of the must-know list.",
+      "Build a Step 2 CK review order from current USMLE system and physician-task ranges instead of an unverifiable list of recalled questions.",
     publishedAt: "2026-05-22",
-    author: "Sarah K., MS4",
+    updatedAt: "2026-08-09",
+    reviewedAt: "2026-08-09",
+    author: "NBMEcalc Editorial Team",
     category: "step-2-tips",
     tags: ["high-yield", "step-2-ck", "study-plan"],
     readingTime: 8,
     body: [
       {
         type: "p",
-        text: "Some topics show up on virtually every Step 2 CK form. They're high-yield because they're high-incidence in clinical practice, easy to write good vignettes for, and they discriminate well between prepared and unprepared students. Master these before you optimize anything else.",
+        text: "Short answer: nobody outside the exam program can verify a disease-by-disease list that appears on every Step 2 CK form. The defensible starting point is the current USMLE content outline, which publishes ranges by system, clinical science, and physician task. Combine those ranges with your own recent performance report.",
       },
       {
         type: "h2",
-        text: "Internal Medicine high-yield",
+        text: "Start with the largest official system ranges",
       },
       {
         type: "ul",
         items: [
-          "DKA management protocol (insulin drip, fluid resuscitation, potassium replacement)",
-          "Heart failure exacerbation triggers and acute management",
-          "Atrial fibrillation: rate control, rhythm control, anticoagulation decisions",
-          "Sepsis bundle and septic shock management",
-          "Anti-arrhythmic side effect profiles (amiodarone in particular)",
-          "DVT/PE diagnosis (Wells criteria) and anticoagulation choice",
-          "Pneumonia: CAP vs HCAP, organism by setting, empiric therapy",
-        ],
-      },
-      {
-        type: "h2",
-        text: "Surgery high-yield",
-      },
-      {
-        type: "ul",
-        items: [
-          "Acute abdomen workup by quadrant",
-          "Small bowel obstruction vs ileus differentiation",
-          "Trauma ABCs and FAST exam interpretation",
-          "Post-op fever timeline (wind, water, wound, walking, wonder drugs)",
-          "Compartment syndrome recognition",
-        ],
-      },
-      {
-        type: "h2",
-        text: "OB/GYN high-yield",
-      },
-      {
-        type: "ul",
-        items: [
-          "Pre-eclampsia diagnostic criteria and severe features",
-          "Postpartum hemorrhage causes (4 T's) and management",
-          "Ectopic pregnancy diagnostic algorithm",
-          "Gestational diabetes screening and management",
-          "Contraception choice by patient profile and contraindications",
-        ],
-      },
-      {
-        type: "h2",
-        text: "Pediatrics high-yield",
-      },
-      {
-        type: "ul",
-        items: [
-          "Developmental milestones by age",
-          "Vaccine schedule and contraindications",
-          "Pediatric airway emergencies (croup vs epiglottitis)",
-          "Failure to thrive workup",
-          "Common rashes by age and pattern",
-        ],
-      },
-      {
-        type: "h2",
-        text: "Psychiatry high-yield",
-      },
-      {
-        type: "ul",
-        items: [
-          "Antidepressant choice and side effect profiles",
-          "Antipsychotic side effects (especially metabolic and EPS)",
-          "Bipolar I vs II distinction and first-line treatment",
-          "Suicidality risk assessment and disposition",
-          "Substance withdrawal timelines and management",
-        ],
-      },
-      {
-        type: "h2",
-        text: "The non-clinical high-yield",
-      },
-      {
-        type: "ul",
-        items: [
-          "Patient autonomy edge cases (Jehovah's Witness, minors, capacity)",
-          "Mandated reporting (abuse, certain infections, gunshot wounds)",
-          "Informed consent exceptions",
-          "Sensitivity, specificity, PPV, NPV calculations",
-          "Likelihood ratios and pre/post-test probability",
-          "Study design strengths and biases",
+          "Nutrition: 15–20%",
+          "Legal/Ethical Issues, Professionalism, Systems-based Practice, and Patient Safety: 10–15%",
+          "Renal/Urinary and Reproductive Systems: 7–13%",
+          "Cardiovascular System: 6–12%",
+          "Musculoskeletal, Skin, and Subcutaneous Tissue: 6–12%",
+          "Behavioral Health, Blood/Immune, Gastrointestinal, Nervous/Special Senses, and Respiratory: each 5–10%",
         ],
       },
       {
         type: "callout",
         tone: "info",
-        text: "Coverage of these topics is the floor, not the ceiling. After you've mastered these, every additional topic you study yields diminishing returns.",
+        text: "These are ranges, not quotas, and USMLE says percentages can change. A question may also be classified across more than one organizing dimension.",
+      },
+      {
+        type: "h2",
+        text: "Prioritize clinical decisions, not isolated trivia",
+      },
+      {
+        type: "p",
+        text: "The physician-task table places substantial weight on diagnosis, diagnostic studies, mixed management, pharmacotherapy, interventions, prevention, and prognosis. Review a topic as a sequence: recognize the presentation, choose the next diagnostic step, start appropriate management, monitor the response, and avoid harm.",
+      },
+      {
+        type: "h2",
+        text: "Turn the outline into a personal study queue",
+      },
+      {
+        type: "ol",
+        items: [
+          "List the broad areas where your latest official or comprehensive assessment shows weaker performance.",
+          "Match each weak area to the current official content ranges.",
+          "Prioritize an area when it is both broadly represented and weak for you.",
+          "Practice the physician task you missed—diagnosis, study selection, management, monitoring, or safety—not just the disease label.",
+          "Recheck with new questions or a fresh assessment instead of repeatedly reviewing the same notes.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "Three example decisions",
+      },
+      {
+        type: "ul",
+        items: [
+          "Broad area + weak report signal: schedule a focused question block and review the missed decision type.",
+          "Narrow area + strong report signal: maintain it, but do not let it displace a broader unresolved weakness.",
+          "Conflicting assessments: do not declare a trend; use another fresh comprehensive signal and review the methodology limitations.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "What this page deliberately does not claim",
+      },
+      {
+        type: "ul",
+        items: [
+          "That a named disease appears on every form.",
+          "That memorizing a recalled-topic list predicts a score increase.",
+          "That one content-area bar should determine whether you sit for or postpone an exam.",
+          "That the published ranges remain unchanged without checking the official page.",
+        ],
       },
       {
         type: "callout",
         tone: "success",
-        text: "Use our calculator to project where you stand right now, then prioritize the high-yield topics tied to your weakest content areas.",
+        text: "The useful question is not “What topic is guaranteed to appear?” It is “Which broad official content area is important, currently weak for me, and tied to a decision skill I can practice today?”",
+      },
+    ],
+    references: [
+      {
+        label: "USMLE — Current Step 2 CK content and physician-task specifications",
+        href: "https://www.usmle.org/exam-resources/step-2-ck-materials/step-2-ck-content-outline-specifications",
+      },
+      {
+        label: "NBME — Comprehensive Clinical Science Self-Assessment for Step 2 CK",
+        href: "https://www.nbme.org/examinees/self-assessments/",
       },
     ],
   },
   {
     slug: "step-3-ccs-cases-complete-walkthrough",
-    title: "Step 3 CCS Cases: Complete Walkthrough",
+    title: "Step 3 CCS Cases: An Official-Source Walkthrough",
     description:
-      "How the Step 3 Computer-based Case Simulations (CCS) work, the scoring rubric, the time-management strategy, and the 10 case archetypes you'll encounter.",
+      "Learn how official USMLE CCS software handles orders, simulated time, location, monitoring, case endings, and sample-case feedback.",
     publishedAt: "2026-05-22",
-    author: "Dr. M. Chen, MD",
+    updatedAt: "2026-08-09",
+    reviewedAt: "2026-08-09",
+    author: "NBMEcalc Editorial Team",
     category: "study-plans",
     tags: ["step-3", "ccs", "study-plan"],
     readingTime: 11,
     body: [
       {
         type: "p",
-        text: "Step 3 Computer-based Case Simulations (CCS) feel completely different from any other exam component you've taken. Unlimited freedom to order tests, advance time, and make management decisions — but every action is scored. Here's how to navigate them.",
+        text: "Short answer: CCS is a dynamic patient-management simulation. You enter orders, request examinations, choose locations, advance simulated time, review results, monitor change, and respond until the case ends. The safest preparation is to practice the official software and study the official sample-case feedback—not memorize a universal order list.",
       },
       {
         type: "h2",
-        text: "What CCS actually is",
-      },
-      {
-        type: "p",
-        text: "CCS is the second day of Step 3. You manage 13 simulated patient cases over ~4 hours. Each case runs for a fixed amount of in-simulation time (10 or 20 minutes real time, days to weeks in simulated time). You order tests, write prescriptions, move the patient between care settings, and advance the clock — all in a stripped-down interface that mimics an EHR.",
-      },
-      {
-        type: "h2",
-        text: "The scoring rubric (what we know)",
+        text: "What the official CCS page confirms",
       },
       {
         type: "ul",
         items: [
-          "Diagnostic completeness: did you order the necessary workup?",
-          "Therapeutic appropriateness: did you start correct treatment?",
-          "Sequencing: did you act in the right order?",
-          "Avoidance of harm: did you avoid contraindicated actions?",
-          "Setting transitions: did you move the patient to the right level of care?",
+          "Each case presents one patient in a consistent software interface.",
+          "The simulation evaluates diagnosis, treatment, monitoring, timing, sequencing, and location.",
+          "You place tests, therapies, procedures, consultations, nursing orders, and counseling through the order sheet.",
+          "Advancing the clock is required to receive results and observe treatment effects.",
+          "A patient's condition can change because of the underlying condition, your management, or both.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "A reliable case workflow",
+      },
+      {
+        type: "ol",
+        items: [
+          "Read the reason for encounter, appearance, vital signs, and history before forming the first action set.",
+          "Request a focused examination when it would be appropriate in real patient care.",
+          "Place necessary diagnostic, therapeutic, monitoring, location, and counseling orders.",
+          "Advance simulated time to the next meaningful result or reassessment point.",
+          "Review the new information, cancel an order that became inappropriate, and update management.",
+          "At the case-end screen, use the remaining permitted actions to finalize care; do not assume an early ending proves success or failure.",
         ],
       },
       {
         type: "callout",
         tone: "info",
-        text: "USMLE doesn't publish the exact rubric. Above is the consensus from prep providers and student debriefs. The exam rewards correct actions and penalizes harmful ones; benign-but-unnecessary actions are largely neutral.",
+        text: "USMLE states that the CCS database contains thousands of possible tests and treatments, so it is not feasible to publish every action that may affect a score. Sample feedback gives examples, not a universal checklist for every patient.",
       },
       {
         type: "h2",
-        text: "Time management",
+        text: "What sample feedback teaches",
       },
       {
         type: "p",
-        text: "Each case has a hard clock. Don't burn real-time minutes deliberating — order what you need, advance the clock, react to changes. Cases that run their full 10 or 20 minutes without you finishing the workup will score lower than cases where you reach a final disposition with time to spare.",
+        text: "The official examples reward clinically appropriate examination, diagnosis, treatment, monitoring, timing, sequencing, and location. They also identify actions that delay necessary care, add avoidable risk, or fail to follow the patient's response. Use those principles to review your reasoning after each practice case.",
       },
       {
         type: "h2",
-        text: "The 10 case archetypes",
-      },
-      {
-        type: "ol",
-        items: [
-          "Acute chest pain (MI rule-out workup, anticoag, transfer to cath lab)",
-          "Acute abdomen (surgical consult, imaging, NPO, IV fluids)",
-          "Septic shock (cultures, fluids, broad-spectrum, vasopressors, ICU)",
-          "DKA (insulin drip, potassium, fluids, monitoring)",
-          "Stroke (CT, tPA window, neurology consult)",
-          "GI bleed (IV access, PRBCs, EGD)",
-          "Pediatric fever (workup by age, empiric antibiotics if indicated)",
-          "Pre-eclampsia (BP control, magnesium, delivery planning)",
-          "Acute psychiatric emergency (safety, hold criteria, restraints rules)",
-          "Outpatient chronic disease management (vaccinations, screenings)",
-        ],
-      },
-      {
-        type: "h2",
-        text: "Common scoring leaks",
+        text: "Common software mistakes to prevent",
       },
       {
         type: "ul",
         items: [
-          "Forgetting baseline vitals and basic labs at presentation",
-          "Failing to update orders when the patient transitions settings (ED → floor → ICU)",
-          "Ordering studies but never checking the results",
-          "Discharging without follow-up scheduling, vaccinations, or counseling",
-          "Skipping the time-advance steps to see if treatment is working",
+          "Entering an order outside the order-sheet section.",
+          "Failing to advance time, so results and treatment effects never appear.",
+          "Assuming nurses or consultants will place monitoring or treatment orders for you.",
+          "Ignoring a message or change in condition after advancing the clock.",
+          "Treating the case-end screen as proof that every prior action was correct or incorrect.",
         ],
       },
       {
         type: "h2",
-        text: "Recommended prep",
+        text: "A practice-review checklist",
+      },
+      {
+        type: "ul",
+        items: [
+          "Did the examination and diagnostic work match the presentation?",
+          "Was urgent treatment sequenced before actions that could delay it?",
+          "Were monitoring and reassessment orders present after treatment?",
+          "Was the patient kept in or moved to an appropriate care location?",
+          "Did any order add risk or discomfort without useful information?",
+          "Did you practice using the current official interface rather than relying only on notes?",
+        ],
+      },
+      {
+        type: "h2",
+        text: "What this guide does not claim",
       },
       {
         type: "p",
-        text: "UWorld's CCS module is the standard. Run through all 50+ practice cases, then practice the official USMLE CCS tutorial software (free download) until the interface is muscle memory. The interface itself is the largest barrier — content knowledge transfers from Step 2 CK with minimal additional study.",
+        text: "This guide does not claim that there are ten guaranteed case archetypes, that one commercial case count is required, or that a single universal order sequence works across patients. The official sample cases and software are the source of truth for the tested interaction model.",
       },
       {
         type: "callout",
         tone: "success",
-        text: "Use our Step 3 predictor to check whether your CCS practice performance is on track for your target score.",
+        text: "Practice until placing orders, advancing time, reviewing results, changing location, and responding to the case-end screen no longer consume attention that should be used for clinical reasoning.",
+      },
+    ],
+    references: [
+      {
+        label: "USMLE — Official Computer-based Case Simulations overview and sample feedback",
+        href: "https://www.usmle.org/exam-resources/step-3-materials/step-3-test-question-formats/computer-based-case-simulations",
+      },
+      {
+        label: "USMLE — Step 3 sample test questions and practice materials",
+        href: "https://www.usmle.org/prepare-your-exam/step-3-materials/step-3-sample-test-questions",
       },
     ],
   },
