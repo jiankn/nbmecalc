@@ -36,16 +36,16 @@ export const metadata: Metadata = {
 };
 
 const conversionTable = [
-  { uwsa: 210, step2: 211, percentile: 5, label: "At risk" },
-  { uwsa: 220, step2: 221, percentile: 14, label: "Likely pass" },
-  { uwsa: 230, step2: 231, percentile: 30, label: "Pass" },
-  { uwsa: 240, step2: 240, percentile: 52, label: "Average" },
-  { uwsa: 245, step2: 244, percentile: 64, label: "Above avg" },
-  { uwsa: 250, step2: 248, percentile: 76, label: "Strong" },
-  { uwsa: 255, step2: 252, percentile: 86, label: "Competitive" },
-  { uwsa: 260, step2: 256, percentile: 92, label: "Top tier" },
-  { uwsa: 265, step2: 260, percentile: 97, label: "Top tier" },
-  { uwsa: 270, step2: 263, percentile: 99, label: "Elite" },
+  { uwsa: 210, step2: 211 },
+  { uwsa: 220, step2: 221 },
+  { uwsa: 230, step2: 231 },
+  { uwsa: 240, step2: 240 },
+  { uwsa: 245, step2: 244 },
+  { uwsa: 250, step2: 248 },
+  { uwsa: 255, step2: 252 },
+  { uwsa: 260, step2: 256 },
+  { uwsa: 265, step2: 260 },
+  { uwsa: 270, step2: 263 },
 ];
 
 const faqs = [
@@ -108,7 +108,7 @@ export default function UWSA2ToStep2Page() {
       <PageHero
         badge="UWSA 2 → Step 2 CK"
         title="UWSA 2 to Step 2 CK: Free Score Predictor"
-        description="UWSA 2 is the most accurate UWorld self-assessment for Step 2 CK. We subtract the known +2 point inflation and weight your prediction with any other inputs you have."
+        description="Use UWSA 2 as one input in an independent Step 2 CK planning estimate. The displayed adjustment is an internal model assumption, not a known universal offset."
         size="md"
       />
 
@@ -118,8 +118,9 @@ export default function UWSA2ToStep2Page() {
             Convert UWSA 2 to Step 2 CK
           </h2>
           <p className="text-gray-600">
-            Pick <strong>Step 2 CK</strong> and add your UWSA 2 score. NBMEs
-            tighten the confidence interval substantially.
+            Pick <strong>Step 2 CK</strong> and add your UWSA 2 score. Compare
+            the resulting range with a recent CCSSA or Free 120 rather than
+            treating the UWSA result as a fixed conversion.
           </p>
         </div>
         <Calculator defaultStep="step2" defaultSource="UWSA2" />
@@ -136,8 +137,8 @@ export default function UWSA2ToStep2Page() {
             </h2>
           </div>
           <p className="text-gray-600 text-lg mb-8">
-            Bias-corrected Step 2 CK estimate plus percentile rank for matched
-            US MD seniors.
+            The table exposes the calculator&apos;s current midpoint mapping. It
+            does not provide an official percentile or residency-competitiveness label.
           </p>
 
           <div className="overflow-x-auto rounded-3xl border border-gray-200 shadow-sm">
@@ -145,9 +146,7 @@ export default function UWSA2ToStep2Page() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">UWSA 2</th>
-                  <th className="text-right px-5 py-3 font-bold text-mint-700">Step 2 CK</th>
-                  <th className="text-right px-5 py-3 font-bold text-gray-900">Percentile</th>
-                  <th className="text-left px-5 py-3 font-bold text-gray-900">Match competitiveness</th>
+                  <th className="text-right px-5 py-3 font-bold text-mint-700">Internal model midpoint</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 bg-white">
@@ -155,22 +154,6 @@ export default function UWSA2ToStep2Page() {
                   <tr key={row.uwsa}>
                     <td className="px-5 py-3 font-mono font-bold text-gray-950">{row.uwsa}</td>
                     <td className="px-5 py-3 text-right font-mono font-bold text-mint-700">{row.step2}</td>
-                    <td className="px-5 py-3 text-right text-gray-700">{row.percentile}th</td>
-                    <td className="px-5 py-3">
-                      <span
-                        className={
-                          row.percentile >= 87
-                            ? "inline-flex items-center rounded-full bg-mint-100 text-mint-800 px-2.5 py-0.5 text-xs font-bold"
-                            : row.percentile >= 49
-                              ? "inline-flex items-center rounded-full bg-blue-100 text-blue-800 px-2.5 py-0.5 text-xs font-bold"
-                              : row.percentile >= 19
-                                ? "inline-flex items-center rounded-full bg-amber-100 text-amber-800 px-2.5 py-0.5 text-xs font-bold"
-                                : "inline-flex items-center rounded-full bg-rose-100 text-rose-800 px-2.5 py-0.5 text-xs font-bold"
-                        }
-                      >
-                        {row.label}
-                      </span>
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -180,7 +163,7 @@ export default function UWSA2ToStep2Page() {
           <p className="text-xs text-gray-500 mt-4">
             * The table applies the calculator&apos;s −2-point internal UWSA 2
             adjustment. It is not an official or validated conversion. The
-            planning range narrows when used alongside multiple recent inputs.
+            range remains model-generated even when several recent inputs agree.
           </p>
         </div>
       </section>

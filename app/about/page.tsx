@@ -34,8 +34,8 @@ const principles = [
   },
   {
     icon: Heart,
-    title: "Built for you, not advertisers",
-    body: "We will never sell your data. The only way we make money is by you choosing to upgrade — and we make sure that choice is worth it.",
+    title: "Free access without data sales",
+    body: "The core calculator stays free. Public educational pages may be supported by clearly labelled advertising, and optional reports fund additional product features. Practice inputs are not sold or passed as ad-targeting parameters.",
   },
   {
     icon: Sparkles,
@@ -48,7 +48,7 @@ const timeline = [
   {
     year: "2025 Q4",
     title: "Idea & first prototype",
-    body: "Frustrated with closed-source predictors and one-size-fits-all advice, the founder built a multi-source predictor in a weekend.",
+    body: "An initial multi-source prototype was developed to compare practice-assessment results without presenting one midpoint as certain.",
   },
   {
     year: "2026 Q1",
@@ -194,7 +194,7 @@ export default function AboutPage() {
             Got feedback or a partnership idea?
           </h2>
           <p className="text-gray-600 mb-8">
-            We read every email. Reach the founder directly at{" "}
+            Reach the project at{" "}
             <a
               href="mailto:hello@nbmecalc.com"
               className="text-mint-700 font-semibold underline"

@@ -108,6 +108,15 @@ const sourceRows = [
 
 const changes = [
   {
+    date: "2026-08-10",
+    items: [
+      "Removed unvalidated Step 1 pass bands and direct scheduling instructions in favor of official-report-first guidance.",
+      "Replaced stale competitor winner tables and unsupported product claims with source-labelled review methods.",
+      "Made unfinished articles unavailable in production and removed unverifiable credential bylines.",
+      "Published editorial authorship, AI-assisted production, sourcing, and correction standards.",
+    ],
+  },
+  {
     date: "2026-08-09",
     items: [
       "Rewrote five discovered-but-not-indexed articles around current NBME and USMLE primary sources.",
@@ -318,6 +327,70 @@ export default function MethodologyPage() {
         </div>
       </section>
 
+      <section id="editorial-standards" className="bg-white py-14 lg:py-20">
+        <div className="container max-w-6xl">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint-800">
+            Editorial standards
+          </p>
+          <h2 className="mt-3 text-3xl font-extrabold text-balance text-gray-950">
+            Who publishes the content, how it is checked, and why it exists
+          </h2>
+          <p className="mt-4 max-w-3xl text-lg leading-relaxed text-gray-700">
+            “NBMEcalc Editorial Team” is an organizational byline for this
+            independent project. It is not a claim of physician review. Named
+            credentials are published only when identity, scope, and approval
+            can be verified publicly.
+          </p>
+
+          <div className="mt-9 grid gap-5 md:grid-cols-3">
+            {[
+              {
+                icon: BookOpenCheck,
+                title: "Source check before indexing",
+                body: "Current official NBME, USMLE, or product documentation is checked for factual claims. Internal mappings and interpretations are labelled separately.",
+              },
+              {
+                icon: ShieldCheck,
+                title: "No invented experience",
+                body: "Articles do not claim first-hand testing, clinical authority, institutional use, or user outcomes without verifiable evidence. Unfinished drafts are unavailable in production.",
+              },
+              {
+                icon: History,
+                title: "Assisted production, human accountability",
+                body: "Editing and image-production tools, including AI-assisted tools, may be used. Decorative images do not depict real reviewers or institutions. Published claims remain the project's responsibility.",
+              },
+            ].map((item) => (
+              <article
+                key={item.title}
+                className="rounded-3xl border border-gray-200 bg-gray-50 p-6"
+              >
+                <item.icon className="h-6 w-6 text-mint-700" aria-hidden="true" />
+                <h3 className="mt-4 text-lg font-bold text-gray-950">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                  {item.body}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-8 rounded-2xl border border-mint-200 bg-mint-50 p-5 text-sm leading-relaxed text-gray-800">
+            The purpose is to help readers interpret practice-assessment
+            evidence without presenting an independent calculator as an
+            official or clinically validated service. Report factual,
+            calculation, attribution, or accessibility problems to{" "}
+            <a
+              href="mailto:hello@nbmecalc.com?subject=Editorial%20correction"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              hello@nbmecalc.com
+            </a>
+            .
+          </div>
+        </div>
+      </section>
+
       <section className="bg-white py-14 lg:py-20">
         <div className="container max-w-5xl">
           <div className="max-w-3xl">
@@ -412,7 +485,7 @@ export default function MethodologyPage() {
               </div>
               <div className="flex items-center justify-between gap-4 py-3">
                 <dt className="text-gray-700">Last methodology update</dt>
-                <dd className="font-bold text-gray-950">Aug 9, 2026</dd>
+                <dd className="font-bold text-gray-950">Aug 10, 2026</dd>
               </div>
             </dl>
           </div>

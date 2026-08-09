@@ -29,7 +29,7 @@ export default function TermsPage() {
         size="sm"
       />
 
-      <LegalContent lastUpdated="August 8, 2026">
+      <LegalContent lastUpdated="August 10, 2026">
         <h2>1. Agreement</h2>
         <p>
           By accessing or using <strong>nbmecalc.com</strong> (the
@@ -47,7 +47,7 @@ export default function TermsPage() {
           NBMEcalc is a statistical predictor that estimates a likely USMLE
           Step score from practice exam inputs (NBME, UWSA, Free 120, AMBOSS,
           CMS Form). Predictions include an estimated planning range and an
-          percentile ranking.
+          estimated percentile ranking.
         </p>
 
         <blockquote>
@@ -205,9 +205,10 @@ export default function TermsPage() {
 
         <h2>12. Changes to Terms</h2>
         <p>
-          We may update these Terms. Material changes will be notified by
-          email at least 30 days in advance. Continued use after changes go
-          into effect means you accept the updated Terms.
+          We may update these Terms. We will post the revised effective date
+          on this page and provide any additional notice required by applicable
+          law. Continued use after changes go into effect means you accept the
+          updated Terms.
         </p>
 
         <h2>13. Governing law &amp; dispute resolution</h2>

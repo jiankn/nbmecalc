@@ -23,9 +23,9 @@ export const metadata: Metadata = {
 const quickFacts = [
   { label: "Product", value: "USMLE Step score predictor (web)" },
   { label: "Founded", value: "2025" },
-  { label: "HQ", value: "Remote (US-based)" },
-  { label: "Team", value: "Independent project — solo founder" },
-  { label: "Revenue model", value: "Freemium ($14.99 reports, $19.99 Founding Lifetime)" },
+  { label: "Operation", value: "Independent remote project" },
+  { label: "Publisher", value: "NBMEcalc" },
+  { label: "Revenue model", value: "Free core tools supported by advertising, with optional paid reports and account features" },
   { label: "Tech stack", value: "Next.js, Cloudflare Pages, Stripe" },
   { label: "Affiliations", value: "Independent — not NBME / USMLE / Kaplan" },
 ];
@@ -33,12 +33,12 @@ const quickFacts = [
 const quotes = [
   {
     quote:
-      "Most score predictors give you a single number with no transparency. We always show a confidence interval — because medicine is about probability, not certainty.",
+      "A score estimate is more useful when readers can see its range, assumptions, and limits instead of receiving one unexplained number.",
     attribution: "Founder, NBMEcalc",
   },
   {
     quote:
-      "Our pricing tiers are deliberately small. We never want a med student stuck deciding whether $14.99 is worth seeing if they will pass.",
+      "The core calculator remains free. Reports and saved-history features are optional, and advertising is kept separate from calculator controls.",
     attribution: "Founder, NBMEcalc",
   },
 ];
@@ -62,7 +62,7 @@ export default function PressPage() {
       <PageHero
         badge="Press kit"
         title="Press &amp; media resources"
-        description="Everything you need to write about NBMEcalc accurately. We respond to press inquiries within 24 hours."
+        description="Current product facts, evidence boundaries, brand assets, and contact information for accurate coverage of NBMEcalc."
         size="md"
       />
 
@@ -97,11 +97,13 @@ export default function PressPage() {
             <p className="text-gray-800 leading-relaxed text-sm">
               <strong>NBMEcalc</strong> is a free USMLE Step score predictor
               that converts NBME, UWSA, Free 120, AMBOSS, and CMS Form scores
-              into a likely Step 1, Step 2 CK, or Step 3 score with a 95%
-              confidence interval. Founded in 2025, the product is built and
+              into an independent Step 1, Step 2 CK, or Step 3 planning estimate
+              with a model-generated range. Founded in 2025, the product is
               maintained as an independent educational project with a public
-              methodology and corrections process. NBMEcalc is not affiliated
-              with the NBME, USMLE, FSMB, UWorld, AMBOSS, or Kaplan.
+              methodology, validation-status page, and corrections process.
+              NBMEcalc does not claim a published holdout validation study and
+              is not affiliated with the NBME, USMLE, FSMB, UWorld, AMBOSS, or
+              Kaplan.
             </p>
           </div>
 
@@ -171,8 +173,9 @@ export default function PressPage() {
               Working on a story?
             </h3>
             <p className="text-black/80 mb-6 max-w-2xl mx-auto">
-              We respond to press inquiries within 24 hours, including
-              interview requests, fact-checking, and exclusive data shares.
+              Send interview requests or fact-checking questions by email. We
+              reply as operating capacity allows and do not promise unpublished
+              user data or outcome statistics.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button variant="secondary" size="lg" asChild>

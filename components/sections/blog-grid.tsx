@@ -29,8 +29,8 @@ export function BlogGrid() {
             Clear and Honest USMLE Knowledge — No Jargon
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Practical guides written by current med students. No filler, no
-            ads, no fluff.
+            Practical, source-checked guides for Step planning. No filler and
+            no unsupported certainty.
           </p>
         </div>
 

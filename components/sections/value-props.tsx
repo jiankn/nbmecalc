@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 
 const cards = [
   {
-    title: "See All Your Practice Exams",
-    body: "NBME, UWSA 1/2, Free 120, AMBOSS, and CMS forms — all in one prediction. Most calculators only handle one source. We do them all.",
+    title: "Combine Supported Assessments",
+    body: "Review supported NBME, UWSA 1/2, Free 120, AMBOSS, and CMS results in one prediction while keeping each assessment family distinct.",
     image: "/images/feature-practice-exams.jpg",
     imageAlt: "Blank pastel practice exam cards arranged on a medical student's desk",
     imageClassName: "group-hover:scale-[1.02]",
@@ -39,7 +39,7 @@ const cards = [
   },
   {
     title: "Decision Support, Not A Verdict",
-    body: "The paid report organizes source weighting, readiness questions, study priorities, and conditions that should prompt a discussion with your advisor.",
+    body: "The free result keeps your estimate, planning range, and assumptions visible. Optional reports package personalized priorities for saving or printing.",
     image: "/images/feature-study-plan.jpg",
     imageAlt: "Blank study planner with pastel sticky notes on a warm wooden desk",
     imageClassName: "group-hover:scale-[1.02]",
@@ -72,10 +72,11 @@ export function ValueProps() {
     <section className="py-20 lg:py-28 bg-white">
       <div className="container">
         <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-balance">
-          How NBMEcalc Saves Your Step Score
+          What the Free Result Includes
         </h2>
         <p className="text-center text-lg text-gray-600 max-w-2xl mx-auto mb-14">
-          Three things every other predictor gets wrong — and how we fix them.
+          A combined estimate, an explicit planning range, and the assumptions
+          needed to interpret both.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

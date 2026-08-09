@@ -29,7 +29,7 @@ const channels = [
     icon: MessageCircle,
     title: "Customer support",
     email: "support@nbmecalc.com",
-    body: "Login problems, missing reports, billing issues. We aim to reply within 24 hours.",
+    body: "Login problems, missing reports, billing issues, and account-access questions.",
   },
   {
     icon: Bug,
@@ -57,7 +57,7 @@ export default function ContactPage() {
       <PageHero
         badge="Contact"
         title="We read every message"
-        description="Pick the inbox below that fits best. We typically respond within one business day."
+        description="Pick the inbox that fits best. Include the affected page, account email when relevant, and enough detail to reproduce the issue."
         size="md"
       />
 
@@ -125,7 +125,8 @@ export default function ContactPage() {
               .
             </p>
             <p className="mt-2">
-              We are a fully remote team. There is no walk-in office.
+              NBMEcalc is operated as an independent remote project. There is
+              no walk-in office.
             </p>
           </div>
         </div>

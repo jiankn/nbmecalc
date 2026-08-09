@@ -47,12 +47,12 @@ export interface BlogPost {
   references?: Array<{ label: string; href: string }>;
   /**
    * When true the post page emits `<meta robots="noindex,follow">` and is
-   * excluded from the XML sitemap. The post stays reachable from the blog
-   * index and internal links, but Google won't include it in search results.
+   * excluded from the XML sitemap. Production routes return 404 until the
+   * draft is approved; local development keeps a warning-labeled preview.
    *
-   * Use this for v1 drafts pending medical reviewer sign-off, original
-   * data backfill, or original infographics. Flip to false (or remove the
-   * field) once the post meets the full E-E-A-T bar (PRD §13).
+   * Use this for drafts pending source review, original data backfill, or
+   * original infographics. Flip to false (or remove the field) once the post
+   * meets the full editorial and evidence bar (PRD §13).
    */
   noindex?: boolean;
 }
@@ -222,7 +222,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "A data-driven comparison of NBME 30, 31, and 32 based on 1,247 paired outcomes. Difficulty, score inflation, question style, and when to take each one.",
     publishedAt: "2026-05-08",
-    author: "Dr. M. Chen, MD",
+    author: "NBMEcalc Editorial Team",
     category: "score-conversion",
     tags: ["nbme", "step-2-ck", "self-assessment"],
     readingTime: 7,
@@ -281,7 +281,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "An evidence-based 14-day cram plan for Step 2 CK based on what high scorers actually do in the final two weeks. UWorld blocks, NBME 32 timing, weak-rotation focus.",
     publishedAt: "2026-05-03",
-    author: "Sarah K., MS4",
+    author: "NBMEcalc Editorial Team",
     category: "study-plans",
     tags: ["step-2-ck", "study-plan", "dedicated"],
     readingTime: 10,
@@ -356,7 +356,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "How to convert your Free 120 percentage to a realistic Step 2 CK three-digit score. When to take it, why it's the most predictive practice exam, and the bias correction most students miss.",
     publishedAt: "2026-05-22",
-    author: "Sarah K., MS4",
+    author: "NBMEcalc Editorial Team",
     category: "score-conversion",
     tags: ["free-120", "step-2-ck", "score-conversion"],
     readingTime: 9,
@@ -505,7 +505,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "UWSA1 and UWSA2 are the most over-predicted self-assessments in USMLE prep. Here's the data on how much they inflate your three-digit estimate, why they do it, and how to extract real signal from them.",
     publishedAt: "2026-05-22",
-    author: "Dr. M. Chen, MD",
+    author: "NBMEcalc Editorial Team",
     category: "score-conversion",
     tags: ["uwsa", "uworld", "step-2-ck", "accuracy"],
     readingTime: 8,
@@ -631,7 +631,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "What the published correlation between NBME self-assessments and real Step 2 CK actually says, where score predictors add value, and where they break down. A no-marketing look at predictive accuracy.",
     publishedAt: "2026-05-22",
-    author: "Dr. S. Garcia, MD",
+    author: "NBMEcalc Editorial Team",
     category: "score-conversion",
     tags: ["nbme", "accuracy", "methodology", "step-2-ck"],
     readingTime: 10,
@@ -761,7 +761,7 @@ export const BLOG_POSTS: BlogPost[] = [
   // These ship in the codebase, are reachable from the blog index and
   // internal links, but emit `<meta robots="noindex,follow">` and are
   // excluded from the sitemap. They will be flipped to index once each
-  // post has: medical reviewer sign-off, ≥1 original data point from
+  // post has: editorial approval, ≥1 original data point from
   // our predictions table, and ≥2 original infographics. PRD §13.
   {
     slug: "truth-about-confidence-intervals-score-predictors",
@@ -770,7 +770,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "Why every honest Step score predictor returns a range, not a single number. What a 95% confidence interval actually means for your test day prediction.",
     publishedAt: "2026-05-22",
-    author: "Dr. M. Chen, MD",
+    author: "NBMEcalc Editorial Team",
     category: "score-conversion",
     tags: ["confidence-interval", "methodology", "accuracy"],
     readingTime: 7,
@@ -1128,7 +1128,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "The 2026 average Step 2 CK score, what counts as a competitive score for each specialty, and how to benchmark your practice scores against residency targets.",
     publishedAt: "2026-05-22",
-    author: "Dr. M. Chen, MD",
+    author: "NBMEcalc Editorial Team",
     category: "score-conversion",
     tags: ["average-score", "step-2-ck", "residency", "benchmarks"],
     readingTime: 7,
@@ -1218,7 +1218,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "A direct comparison of the NBME 31 score curve vs NBME 30. Question style differences, predictive accuracy, and when to take which form.",
     publishedAt: "2026-05-22",
-    author: "Sarah K., MS4",
+    author: "NBMEcalc Editorial Team",
     category: "score-conversion",
     tags: ["nbme-31", "nbme-30", "self-assessment", "step-2-ck"],
     readingTime: 6,
@@ -1275,7 +1275,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "A focused plan for international medical graduates targeting a competitive Step 2 CK score. Where to spend study time, how to use AMBOSS effectively, and the 12-week roadmap.",
     publishedAt: "2026-05-22",
-    author: "Dr. M. Chen, MD",
+    author: "NBMEcalc Editorial Team",
     category: "study-plans",
     tags: ["img", "step-2-ck", "study-plan", "strategy"],
     readingTime: 11,

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Logo } from "@/components/logo";
 
 const columns = [
@@ -92,45 +91,13 @@ export function Footer() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <a
-              href="https://reddit.com/r/step2"
-              target="_blank"
-              rel="noopener nofollow"
-              aria-label="Reddit r/Step2"
-              className="h-10 w-10 rounded-full border border-white/15 flex items-center justify-center hover:border-white/40 hover:bg-white/10 transition"
-            >
-              <Image
-                src="/images/reddit-snoo.webp"
-                alt=""
-                width={24}
-                height={24}
-                aria-hidden="true"
-                className="h-6 w-6 rounded-full"
-              />
-            </a>
-            <a
-              href="https://x.com"
-              target="_blank"
-              rel="noopener nofollow"
-              aria-label="X (Twitter)"
-              className="h-10 w-10 rounded-full border border-white/15 flex items-center justify-center hover:border-white/40 hover:bg-white/10 transition"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-white">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </a>
-            <a
-              href="https://discord.com"
-              target="_blank"
-              rel="noopener nofollow"
-              aria-label="Discord"
-              className="h-10 w-10 rounded-full border border-white/15 flex items-center justify-center hover:border-white/40 hover:bg-white/10 transition"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="text-indigo-400">
-                <path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 00-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 00-4.8 0c-.14-.34-.35-.76-.54-1.09a.1.1 0 00-.07-.03c-1.5.26-2.93.71-4.27 1.33-.01 0-.02.01-.03.02-2.72 4.07-3.47 8.03-3.1 11.95 0 .02.01.04.03.05 1.8 1.32 3.53 2.12 5.24 2.65a.09.09 0 00.1-.03c.4-.55.76-1.13 1.07-1.74a.1.1 0 00-.05-.13c-.57-.22-1.11-.48-1.64-.78a.1.1 0 01-.01-.16c.11-.08.22-.17.32-.25a.09.09 0 01.1-.01c3.44 1.57 7.16 1.57 10.56 0a.09.09 0 01.1.01c.11.09.22.17.33.26a.1.1 0 01-.01.16c-.52.31-1.07.56-1.64.78a.1.1 0 00-.05.13c.32.61.68 1.19 1.07 1.74a.09.09 0 00.1.03c1.72-.53 3.45-1.33 5.25-2.65.02-.01.03-.03.03-.05.44-4.53-.73-8.46-3.1-11.95a.1.1 0 00-.04-.03zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.83 2.12-1.89 2.12z" />
-              </svg>
-            </a>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm font-semibold">
+            <Link href="/contact" className="text-gray-300 underline underline-offset-4 hover:text-mint-300">
+              Contact
+            </Link>
+            <Link href="/methodology#editorial-standards" className="text-gray-300 underline underline-offset-4 hover:text-mint-300">
+              Editorial standards
+            </Link>
           </div>
         </div>
 

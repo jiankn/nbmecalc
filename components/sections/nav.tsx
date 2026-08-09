@@ -2,12 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   Menu,
   X,
   ChevronDown,
-  ArrowRight,
   LayoutDashboard,
   CreditCard,
   Settings,
@@ -16,13 +14,6 @@ import {
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { invalidateSession, useSession } from "@/lib/auth/use-session";
-import { getLifetimeOffer } from "@/lib/lifetime-offer";
-import {
-  LIFETIME_OFFER_BAR_PLACEMENT,
-  LIFETIME_OFFER_BAR_SOURCE,
-  shouldShowLifetimeOfferBar,
-} from "@/lib/lifetime-offer-bar";
-import { trackProductEvent } from "@/lib/product-events";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -51,7 +42,6 @@ const navItems = [
     ],
   },
   { label: "Compare", href: "/compare/best-usmle-score-predictor" },
-  { label: "Pricing", href: "/#pricing" },
   { label: "Blog", href: "/blog" },
 ];
 
@@ -119,16 +109,7 @@ export function Nav() {
   const [signingOut, setSigningOut] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement>(null);
   const scrollSentinelRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
   const session = useSession();
-  const lifetimeOffer = getLifetimeOffer();
-  const hasLifetimeAccess =
-    session.status === "authed" && session.user.lifetimeAccess;
-  const showLifetimeOffer = shouldShowLifetimeOfferBar({
-    pathname,
-    foundingOfferActive: lifetimeOffer.active,
-    hasLifetimeAccess,
-  });
 
   useEffect(() => {
     const sentinel = scrollSentinelRef.current;
@@ -141,23 +122,6 @@ export function Nav() {
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    if (!showLifetimeOffer || session.status === "loading") return;
-
-    const key = `nbmecalc:lifetime-offer-impression:${pathname}`;
-    try {
-      if (sessionStorage.getItem(key)) return;
-      sessionStorage.setItem(key, "1");
-    } catch {
-      // Continue without deduplication when sessionStorage is unavailable.
-    }
-
-    trackProductEvent("lifetime_offer_impression", {
-      path: pathname,
-      placement: LIFETIME_OFFER_BAR_PLACEMENT,
-    });
-  }, [pathname, session.status, showLifetimeOffer]);
 
   useEffect(() => {
     if (!accountOpen) return;
@@ -200,43 +164,12 @@ export function Nav() {
 
   return (
     <>
-      {showLifetimeOffer && (
-        <aside
-          aria-label="Lifetime founding offer"
-          className="fixed inset-x-0 top-0 z-[60] bg-mint-900 text-mint-50"
-        >
-          <Link
-            href={`/pricing?source=${LIFETIME_OFFER_BAR_SOURCE}#pricing`}
-            className="group mx-auto flex min-h-11 max-w-7xl items-center justify-center gap-2.5 px-4 py-2 text-center text-xs font-semibold leading-tight transition-colors hover:bg-mint-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-mint-200 sm:min-h-9 sm:py-1.5 sm:text-sm"
-            onClick={() =>
-              trackProductEvent("lifetime_offer_clicked", {
-                path: pathname,
-                placement: LIFETIME_OFFER_BAR_PLACEMENT,
-              })
-            }
-          >
-            <span className="hidden sm:inline">
-              Founding offer: Lifetime access for a one-time $19.99
-            </span>
-            <span className="sm:hidden">
-              Lifetime access, one-time $19.99
-            </span>
-            <span className="inline-flex shrink-0 items-center gap-1 font-bold underline decoration-mint-300/70 underline-offset-4 group-hover:decoration-mint-100">
-              <span className="hidden sm:inline">View offer</span>
-              <span className="sm:hidden">View</span>
-              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-            </span>
-          </Link>
-        </aside>
-      )}
-
-      {/* Keep the document flow and sticky navigation aligned below the
-          viewport-fixed offer bar. The bar is 44px on mobile and 36px from
-          the sm breakpoint upward. */}
-      {showLifetimeOffer && (
-        <div className="h-11 sm:h-9" aria-hidden="true" />
-      )}
-
+      <a
+        href="#main-content"
+        className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-gray-950 px-5 py-3 text-sm font-bold text-white shadow-xl transition-transform focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-mint-300 focus:ring-offset-2"
+      >
+        Skip to main content
+      </a>
       <div
         ref={scrollSentinelRef}
         className="pointer-events-none h-px w-full -mb-px"
@@ -245,8 +178,7 @@ export function Nav() {
 
       <header
         className={cn(
-          "sticky z-50 w-full transition-all duration-200",
-          showLifetimeOffer ? "top-11 sm:top-9" : "top-0",
+          "sticky top-0 z-50 w-full transition-all duration-200",
           "bg-mint-500",
           scrolled && "shadow-sm backdrop-blur-md bg-mint-500/95"
         )}
@@ -258,21 +190,42 @@ export function Nav() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary navigation">
           {navItems.map((item) =>
             item.children ? (
               <div
                 key={item.label}
                 className="relative"
-                onMouseEnter={() => setOpenDropdown(item.label)}
-                onMouseLeave={() => setOpenDropdown(null)}
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                    setOpenDropdown(null);
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") {
+                    setOpenDropdown(null);
+                    (event.currentTarget.querySelector("button") as HTMLButtonElement | null)?.focus();
+                  }
+                }}
               >
-                <button className="flex items-center gap-1 px-4 py-2 text-base font-semibold text-black hover:opacity-70 transition">
+                <button
+                  type="button"
+                  className="flex items-center gap-1 rounded-lg px-4 py-2 text-base font-semibold text-black transition hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950"
+                  aria-haspopup="true"
+                  aria-expanded={openDropdown === item.label}
+                  aria-controls={`nav-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                  onClick={() =>
+                    setOpenDropdown((open) => (open === item.label ? null : item.label))
+                  }
+                >
                   {item.label}
                   <ChevronDown className="h-4 w-4" />
                 </button>
                 {openDropdown === item.label && (
-                  <div className="absolute left-0 top-full pt-2">
+                  <div
+                    id={`nav-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                    className="absolute left-0 top-full pt-2"
+                  >
                     <div className="min-w-[240px] rounded-2xl border border-gray-100 bg-white p-2 shadow-xl">
                       {item.children.map((child) => (
                         <Link
@@ -420,8 +373,10 @@ export function Nav() {
 
         {/* Mobile hamburger */}
         <button
-          className="lg:hidden p-2 text-black"
+          className="flex h-11 w-11 items-center justify-center rounded-lg text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 lg:hidden"
           aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-navigation"
           onClick={() => setMobileOpen((v) => !v)}
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -430,7 +385,7 @@ export function Nav() {
 
       {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-mint-600 bg-mint-500">
+        <div id="mobile-navigation" className="lg:hidden border-t border-mint-600 bg-mint-500">
           <div className="container py-4 space-y-1">
             {navItems.map((item) =>
               item.children ? (
