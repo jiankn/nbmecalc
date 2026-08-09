@@ -96,7 +96,10 @@ export default async function BlogPostPage({
             datePublished: p.publishedAt,
             dateModified: p.updatedAt ?? p.publishedAt,
             author: {
-              "@type": "Person",
+              "@type":
+                p.author === "NBMEcalc Editorial Team"
+                  ? "Organization"
+                  : "Person",
               name: p.author,
             },
             publisher: {
@@ -216,6 +219,28 @@ export default async function BlogPostPage({
           <div className="container max-w-3xl">
             <BlogBody blocks={p.body} />
 
+            {p.references && p.references.length > 0 && (
+              <section className="mt-12 border-t border-gray-200 pt-8">
+                <h2 className="text-2xl font-extrabold text-gray-950">
+                  Primary references
+                </h2>
+                <ul className="mt-4 space-y-3 text-sm">
+                  {p.references.map((reference) => (
+                    <li key={reference.href}>
+                      <a
+                        href={reference.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-mint-800 underline underline-offset-4"
+                      >
+                        {reference.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
             {/* Tags */}
             {p.tags.length > 0 && (
               <div className="mt-12 pt-8 border-t border-gray-200">
@@ -244,8 +269,9 @@ export default async function BlogPostPage({
               Ready to predict your Step score?
             </h2>
             <p className="text-gray-600 mb-6 max-w-xl mx-auto">
-              Free, no signup. Multi-source aggregation, 95% confidence
-              interval, and a personalized study plan.
+              Free, no signup. Combine compatible practice inputs and read an
+              independent planning range before deciding whether a full report
+              would help.
             </p>
             <Button size="lg" asChild>
               <Link href="/#calculator">Run the calculator</Link>

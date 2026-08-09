@@ -44,3 +44,16 @@ yarn-error.log*
 
 # Logs
 *.log
+
+# Local SEO research, planning, and outreach artifacts
+/.seo/
+/docs/
+/output/
+/reports/
+/tmp/
+/nbmecalc.com-Performance-on-Search-*.zip
+/backlink-ledger.md
+/capability-map.md
+/BACKLINK_*.md
+/FREE_BACKLINK_SUBMISSION_GUIDE.md
+/backlink-submissions/

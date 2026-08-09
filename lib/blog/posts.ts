@@ -41,6 +41,8 @@ export interface BlogPost {
   readingTime: number; // minutes
   /** Body as an array of section blocks; we render server-side without MDX. */
   body: BlogBlock[];
+  /** Primary references used to verify claims in the article. */
+  references?: Array<{ label: string; href: string }>;
   /**
    * When true the post page emits `<meta robots="noindex,follow">` and is
    * excluded from the XML sitemap. The post stays reachable from the blog
@@ -94,88 +96,120 @@ export type BlogBlock =
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "how-to-read-nbme-score-report",
-    noindex: true,
     title: "How to Read Your NBME Score Report (Without Panicking)",
     description:
-      "A line-by-line guide to interpreting your NBME self-assessment report: the equated score, content area performance, and what each color band actually means for Step 2 CK.",
+      "A source-backed guide to reading current CBSSA and CCSSA score reports without mixing Step 1 EPC, Step 2 CK total scores, score ranges, or pass probabilities.",
     publishedAt: "2026-05-12",
-    updatedAt: "2026-05-20",
-    author: "Sarah K., MS4",
+    updatedAt: "2026-08-09",
+    author: "NBMEcalc Editorial Team",
     category: "score-conversion",
-    tags: ["nbme", "score-report", "step-2-ck"],
-    readingTime: 8,
+    tags: ["nbme", "score-report", "step-1", "step-2-ck"],
+    readingTime: 7,
     body: [
       {
         type: "p",
-        text: "Your NBME score report is dense, color-coded, and easy to misread. This guide walks you through every section so you can extract the signal — and ignore the noise — within ten minutes of opening the PDF.",
+        text: "The safest way to read an NBME score report is to identify the assessment family first, then use the scale and readiness fields printed on that report. Current Step 1 CBSSA reports and Step 2 CK CCSSA reports do not use the same headline score, and neither should be reduced to a universal wrong-answer formula.",
       },
       {
         type: "h2",
-        text: "The equated three-digit score is the headline",
-      },
-      {
-        type: "p",
-        text: "The single most important number on the report is the equated three-digit score in the top right. It's on the same 200-280 scale as the real USMLE Step 2 CK exam. But — and this matters — NBMEs systematically under-predict your real Step 2 CK by 3-8 points depending on the form.",
-      },
-      {
-        type: "callout",
-        tone: "info",
-        text: "Quick rule of thumb: add 5 points to your NBME 30 score to estimate your true Step 2 CK level if test day is within 2 weeks.",
-      },
-      {
-        type: "h2",
-        text: "Content area performance bars: what the colors mean",
-      },
-      {
-        type: "p",
-        text: "Below the headline score are content-area bars that show how you scored relative to a national reference cohort. The bars use three colors:",
+        text: "Start with the assessment family",
       },
       {
         type: "ul",
         items: [
-          "Solid black bar: lower performance vs the reference group",
-          "Striped bar: borderline performance",
-          "No bar visible: comparable to or higher than the reference group",
+          "CBSSA: comprehensive basic science self-assessment used for Step 1 readiness.",
+          "CCSSA: comprehensive clinical science self-assessment used for Step 2 CK readiness.",
+          "CCMSA: comprehensive clinical medicine self-assessment used for Step 3 preparation.",
+          "Clinical Science Mastery Series: subject-level forms that should not be treated as comprehensive CCSSA scores.",
         ],
       },
       {
-        type: "p",
-        text: "This is the second most useful section of the report. It tells you exactly which clinical rotations and topic areas to spend your remaining dedicated time on. Don't try to lift everything — focus on the 2-3 areas where you have visible solid black bars.",
-      },
-      {
         type: "h2",
-        text: "What the bands don't tell you",
+        text: "For Step 1 CBSSA, read EPC and the official ranges",
       },
       {
         type: "p",
-        text: "The bands compare you to a reference cohort that NBME selects internally. That cohort is not your actual residency competition. Surgery and Internal Medicine cohorts skew toward higher absolute performance; Psychiatry skews lower. A solid black bar in Surgery is more concerning than the same bar in Psychiatry.",
+        text: "Current CBSSA reports use an equated percent correct (EPC) score instead of the former three-digit Step 1 self-assessment score. NBME states that EPC is statistically adjusted for small differences in form difficulty and can be tracked across repeated CBSSAs.",
+      },
+      {
+        type: "ul",
+        items: [
+          "Your total equated percent correct score.",
+          "Your CBSSA likely score range.",
+          "The Step 1 low-pass range shown on the report.",
+          "NBME's estimated probability of passing if you test within one week.",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "warning",
+        text: "Do not type an EPC percentage into a calculator field that expects a three-digit score. Do not treat a count of wrong answers as EPC; equating means the relationship is not a universal one-to-one formula.",
       },
       {
         type: "h2",
-        text: "Pass probability isn't on the report — calculate it",
+        text: "For Step 2 CK CCSSA, start with the total score and current standard",
       },
       {
         type: "p",
-        text: "NBME no longer reports a direct pass probability since Step 1 went pass/fail. For Step 2 CK, take your equated score, add your typical bias correction, and compare to the 209 pass threshold. Anything above 220 corrected has a >95% pass probability.",
+        text: "A CCSSA report uses a three-digit total score and provides content-area feedback. Some reports also include an estimated probability of passing within one week. The current USMLE Step 2 CK minimum passing score is 218 for exams administered on or after July 1, 2025; older articles that use 214 are outdated.",
       },
       {
         type: "h2",
-        text: "The five-minute action plan",
+        text: "Use content-area feedback for prioritization, not diagnosis",
+      },
+      {
+        type: "p",
+        text: "Content-area results are useful for deciding what to review next. They are not interchangeable with the total score, and a lower area does not prove that one subject caused the total result. Look for repeated patterns across assessments before changing an entire study plan.",
+      },
+      {
+        type: "h2",
+        text: "When two scores disagree",
       },
       {
         type: "ol",
         items: [
-          "Write down your equated three-digit score",
-          "Apply your form's standard bias correction (e.g., +5 for NBME 30)",
-          "Identify the 2-3 content areas with solid black bars",
-          "Plan 6-10 hours of targeted UWorld blocks for each weak area",
-          "Schedule your next NBME 7-10 days out to reassess",
+          "Confirm that both results come from the same assessment family and compatible score scale.",
+          "Check whether either form was repeated, self-paced, interrupted, or taken with outside resources.",
+          "Compare the likely ranges and official probabilities, not only the headline midpoint.",
+          "Look for a trend across more than one recent assessment instead of choosing the most reassuring number.",
+          "Discuss borderline or sharply discordant results with your school or an academic advisor.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "What not to do",
+      },
+      {
+        type: "ul",
+        items: [
+          "Do not add a fixed number of points to every NBME form.",
+          "Do not compare a Step 1 EPC percentage directly with a Step 2 CK three-digit score.",
+          "Do not treat a subject-level CMS result as a comprehensive CCSSA result.",
+          "Do not let an independent calculator override the official report or school guidance.",
         ],
       },
       {
         type: "callout",
         tone: "success",
-        text: "Run your equated score through our predictor for a bias-corrected Step 2 CK estimate with a 95% confidence interval — free, no signup.",
+        text: "Use NBMEcalc after you have identified the correct assessment family and score scale. The calculator's range is an independent planning heuristic, not an official NBME interval.",
+      },
+    ],
+    references: [
+      {
+        label: "NBME — CBSSA score report updates",
+        href: "https://www.nbme.org/cas_overview/cbssa-score-report/",
+      },
+      {
+        label: "NBME — CBSSA readiness guidance",
+        href: "https://www.nbme.org/sites/default/files/2023-02/CBSSA_Guidance.pdf",
+      },
+      {
+        label: "NBME — Self-Assessment Insights common questions",
+        href: "https://www.nbme.org/wp-content/uploads/2026/05/Self-Assessment_Insights.pdf",
+      },
+      {
+        label: "USMLE — Examination results and scoring",
+        href: "https://www.usmle.org/scores-transcripts/examination-results-and-scoring",
       },
     ],
   },

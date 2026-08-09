@@ -55,22 +55,36 @@ function isValidScore(score: number, source: ExamSource): boolean {
 export function Calculator({
   defaultStep = "step2",
   defaultSource = "NBME",
+  defaultFormNumber,
+  singleAssessment = false,
 }: {
   defaultStep?: StepKind;
   defaultSource?: ExamSource;
+  defaultFormNumber?: number;
+  singleAssessment?: boolean;
 } = {}) {
   const [step, setStep] = useState<StepKind>(defaultStep);
   const [exams, setExams] = useState<PracticeExam[]>(() => {
     const forms = getNbmeFormNumbers(defaultStep);
     const sourceDefaults = defaultsForSource(defaultSource, defaultStep);
+    const selectedForm =
+      defaultSource === "NBME" &&
+      typeof defaultFormNumber === "number" &&
+      forms.includes(defaultFormNumber)
+        ? defaultFormNumber
+        : sourceDefaults.formNumber;
+    const firstExam: PracticeExam = {
+      id: "1",
+      source: defaultSource,
+      score: sourceDefaults.score ?? 215,
+      formNumber: selectedForm,
+      takenDaysAgo: 7,
+    };
+
+    if (singleAssessment) return [firstExam];
+
     return [
-      {
-        id: "1",
-        source: defaultSource,
-        score: sourceDefaults.score ?? 215,
-        formNumber: sourceDefaults.formNumber,
-        takenDaysAgo: 7,
-      },
+      firstExam,
       {
         id: "2",
         source: "NBME",

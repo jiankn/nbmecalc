@@ -72,13 +72,16 @@ const formFamilySections = [
     title: "Step 2 CK CCSSA forms 9-15",
     intent: "Use this family for Step 2 CK score conversion and readiness checks.",
     examples: [
-      "NBME 10 Step 2 score conversion",
-      "NBME 11 score conversion",
-      "NBME 14 score conversion",
-      "NBME 15 Step 2 CK score conversion",
+      { label: "NBME 10 Step 2 score conversion" },
+      { label: "NBME 11 score conversion" },
+      { label: "NBME 14 score conversion" },
+      {
+        label: "NBME 15 Step 2 CK score conversion",
+        href: "/nbme-15-score-conversion",
+      },
     ],
     note:
-      "These queries belong on the conversion hub because the user job is the same: enter a recent comprehensive Step 2 practice score and understand the range.",
+      "Most Form queries remain consolidated here. Form 15 has a dedicated pilot because Search Console and the live SERP both show a distinct calculator-shaped task.",
     href: "/step-2-predictor",
     cta: "Open Step 2 predictor",
   },
@@ -86,13 +89,16 @@ const formFamilySections = [
     title: "Step 1 CBSSA forms 26-32",
     intent: "Use this family for Step 1 pass-readiness planning.",
     examples: [
-      "NBME 28 score conversion",
-      "NBME 29 score conversion",
-      "NBME 30 score conversion",
-      "NBME 32 score calculator",
+      { label: "NBME 28 score conversion" },
+      { label: "NBME 29 score conversion" },
+      {
+        label: "NBME 30 score conversion",
+        href: "/nbme-30-score-conversion",
+      },
+      { label: "NBME 32 score calculator", href: "#nbme-32-score-conversion" },
     ],
     note:
-      "Step 1 is pass/fail, so these searches should land on one clear explanation of pass probability rather than separate pages for each form.",
+      "Step 1 is pass/fail. The Form 30 pilot reads the official CBSSA ranges instead of fabricating a raw-wrong-answer formula; Form 32 stays consolidated here to protect its existing ranking.",
     href: "/step-1-predictor",
     cta: "Open Step 1 predictor",
   },
@@ -100,9 +106,9 @@ const formFamilySections = [
     title: "Step 3 CCMSA forms 5-7",
     intent: "Use this family for Step 3 planning, especially when paired with CCS practice.",
     examples: [
-      "NBME 6 Step 3 score conversion",
-      "Step 3 NBME score conversion",
-      "NBME Step 3 score conversion",
+      { label: "NBME 6 Step 3 score conversion" },
+      { label: "Step 3 NBME score conversion" },
+      { label: "NBME Step 3 score conversion" },
     ],
     note:
       "Step 3 search demand is smaller and should strengthen the Step 3 predictor, not become a separate conversion-page cluster.",
@@ -126,6 +132,21 @@ const conversionHubLinks = [
     href: "/cms-converter",
     title: "CMS form conversion",
     desc: "Use subject forms to investigate weak rotations before a comprehensive retest.",
+  },
+  {
+    href: "/nbme-15-score-conversion",
+    title: "NBME 15 score conversion",
+    desc: "Open Step 2 CK with CCSSA Form 15 preselected.",
+  },
+  {
+    href: "/nbme-30-score-conversion",
+    title: "NBME 30 report reader",
+    desc: "Interpret the official Step 1 CBSSA ranges without an invented formula.",
+  },
+  {
+    href: "/blog/how-to-read-nbme-score-report",
+    title: "How to read an NBME score report",
+    desc: "Use the right fields for CBSSA and CCSSA before comparing a trend.",
   },
 ];
 
@@ -266,9 +287,9 @@ export default function NbmeScoreConversionPage() {
             </h2>
             <p className="text-gray-600 text-lg max-w-3xl">
               NBME form numbers are not interchangeable across Step exams.
-              Search queries like &quot;NBME 32 score conversion&quot; and &quot;NBME 10
-              Step 2 score conversion&quot; should be answered here as form-family
-              guidance, not split into thin single-form pages.
+              This hub remains the primary page for the family. Dedicated pages
+              are admitted only when the user task is distinct and the page adds
+              a real preset tool or report workflow.
             </p>
           </div>
 
@@ -289,9 +310,18 @@ export default function NbmeScoreConversionPage() {
                 </div>
                 <ul className="space-y-2 text-sm text-gray-700 mb-4">
                   {section.examples.map((example) => (
-                    <li key={example} className="flex gap-2">
+                    <li key={example.label} className="flex gap-2">
                       <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-mint-600 shrink-0" />
-                      <span>{example}</span>
+                      {example.href ? (
+                        <Link
+                          href={example.href}
+                          className="font-semibold text-mint-800 underline underline-offset-4"
+                        >
+                          {example.label}
+                        </Link>
+                      ) : (
+                        <span>{example.label}</span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -474,7 +504,7 @@ export default function NbmeScoreConversionPage() {
             inputs agree. These related pages cover the other conversion
             searches that showed up in Search Console.
           </p>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {conversionHubLinks.map((tool) => (
               <Link
                 key={tool.href}

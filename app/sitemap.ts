@@ -16,12 +16,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const free120CmsUpdate = new Date("2026-07-22");
   const educatorResourceUpdate = new Date("2026-07-17");
   const validationUpdate = new Date("2026-08-07");
+  const formPilotUpdate = new Date("2026-08-09");
 
   const liveRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: homepageUpdate, changeFrequency: "weekly", priority: 1.0 },
 
     // Core SEO landing pages
     { url: `${SITE_URL}/nbme-score-conversion`, lastModified: seoContentUpdate, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${SITE_URL}/nbme-15-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
+    { url: `${SITE_URL}/nbme-30-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
     { url: `${SITE_URL}/nbme-calculator`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/step-1-predictor`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-2-predictor`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
