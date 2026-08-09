@@ -34,19 +34,18 @@ export const metadata: Metadata = {
 };
 
 const competitors = ["NBMEcalc", "AMBOSS Predictor"];
+const REVIEWED_AT = "August 10, 2026";
 
 const rows: CompareRow[] = [
-  { feature: "Works without AMBOSS subscription", values: ["yes", "no"] },
-  { feature: "Exam-specific NBME forms", values: ["yes", "yes"] },
-  { feature: "UWSA 1 & 2 input", values: ["yes", "no"] },
+  { feature: "Use without a paid subscription", values: ["yes", "no"] },
+  { feature: "Accepts multiple practice results", values: ["yes", "yes"] },
+  { feature: "NBME form inputs", values: ["yes", "yes"] },
   { feature: "Free 120 input", values: ["yes", "yes"] },
-  { feature: "CMS Form subject input", values: ["yes", "no"] },
-  { feature: "Multi-input weighted aggregation", values: ["yes", "no"] },
-  { feature: "Planning range shown", values: ["yes", "no"] },
-  { feature: "Personalized study plan", values: ["yes", "no"] },
-  { feature: "Free unlimited use", values: ["yes", "yes"] },
-  { feature: "Mobile / PWA", values: ["yes", "partial"] },
-  { feature: "Detailed methodology document", values: ["yes", "no"] },
+  { feature: "UWSA input named on public product page", values: ["yes", "partial"] },
+  { feature: "CMS subject-form input", values: ["yes", "partial"] },
+  { feature: "Planning range shown", values: ["yes", "yes"] },
+  { feature: "Passing probability shown", values: ["yes", "yes"] },
+  { feature: "Public evidence / methodology material", values: ["yes", "yes"] },
 ];
 
 export default function VsAmbossPage() {
@@ -69,12 +68,18 @@ export default function VsAmbossPage() {
       <PageHero
         badge="Head-to-head review"
         title="NBMEcalc vs AMBOSS Step 2 CK Predictor"
-        description="AMBOSS's predictor is a free hook to drive subscription upgrades — it only works inside their ecosystem. NBMEcalc is source-agnostic. Here is the comparison."
+        description="A source-labeled comparison of access, supported inputs, output ranges, and published evidence. Product facts were checked against AMBOSS's public Score Predictor page."
         size="md"
       />
 
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-5xl">
+          <div className="mb-8 rounded-2xl border border-gray-200 bg-gray-50 p-5 text-sm leading-relaxed text-gray-700">
+            <strong className="text-gray-950">Review method:</strong> public
+            product information checked {REVIEWED_AT}. A partial mark means the
+            feature was not clearly confirmed on the reviewed public page; it
+            does not prove the feature is absent. This is not an accuracy study.
+          </div>
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-8">
             Feature-by-feature
           </h2>
@@ -85,33 +90,47 @@ export default function VsAmbossPage() {
       <section className="py-16 lg:py-20 bg-mint-50/40">
         <div className="container max-w-3xl space-y-6">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-            When AMBOSS Predictor makes sense
+            When the AMBOSS workflow may fit
           </h2>
           <p className="text-gray-700 leading-relaxed">
-            If you are already a heavy AMBOSS user — questions, library, and SA
-            — their built-in predictor is convenient and well-integrated. You
-            get a quick estimate inside the same tab.
+            AMBOSS states that its Score Predictor accepts practice-exam
+            results, updates as results are added, displays a score range and
+            passing probability, and connects the output with its study tools.
+            It also states that submitting results for a prediction requires
+            an active subscription. Verify current access and inclusions on
+            the official page before choosing it.
           </p>
 
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mt-12">
-            When NBMEcalc wins
+            When the NBMEcalc workflow may fit
           </h2>
           <ul className="space-y-3 text-gray-700 list-disc pl-5">
-            <li>You used UWorld + NBMEs (no AMBOSS subscription required)</li>
-            <li>You want to combine multiple sources for a tighter prediction</li>
-            <li>You want an estimated planning range with its assumptions stated</li>
-            <li>You want a personalized study plan based on your weak rotations</li>
-            <li>You don&apos;t want to be locked into a specific Q-bank brand</li>
+            <li>You want to calculate without an account or subscription</li>
+            <li>You want to enter the source types explicitly supported here</li>
+            <li>You want the internal adjustments and limitations published alongside the tool</li>
+            <li>You accept that NBMEcalc has not published a holdout validation report</li>
           </ul>
 
           <div className="mt-8 rounded-2xl border-2 border-mint-300 bg-white p-6">
             <h3 className="font-bold text-lg mb-2">Bottom line</h3>
             <p className="text-gray-700">
-              AMBOSS Predictor is a feature, not a tool. NBMEcalc is a
-              dedicated, source-agnostic predictor. If you use multiple Q-banks
-              (most students do), NBMEcalc combines them into a single
-              multi-source estimate.
+              Choose based on input compatibility, access, evidence disclosure,
+              and the decision you need to make—not a winner label. Neither
+              product should replace official assessment feedback or an
+              institution&apos;s test-date process.
             </p>
+          </div>
+
+          <div className="mt-8 text-sm font-semibold">
+            <a
+              href="https://www.amboss.com/us/usmle/score-predictor"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-evidence-source="primary"
+              className="text-mint-800 underline underline-offset-4"
+            >
+              AMBOSS Score Predictor — official product page
+            </a>
           </div>
         </div>
       </section>

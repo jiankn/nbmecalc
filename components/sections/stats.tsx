@@ -1,7 +1,3 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-
 const stats = [
   {
     value: 3,
@@ -61,40 +57,11 @@ function CountStat({
   label: string;
   sub: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [n, setN] = useState(0);
-  const [hasRun, setHasRun] = useState(false);
-
-  useEffect(() => {
-    if (!ref.current || hasRun) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting && !hasRun) {
-            setHasRun(true);
-            const duration = 1200;
-            const start = performance.now();
-            const tick = (now: number) => {
-              const t = Math.min((now - start) / duration, 1);
-              const eased = 1 - Math.pow(1 - t, 3);
-              setN(Math.round(eased * value));
-              if (t < 1) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-    obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [value, hasRun]);
-
   return (
-    <div ref={ref} className="text-center">
+    <div className="text-center">
       <div className="text-5xl lg:text-6xl font-extrabold tabular-nums tracking-tight mb-2">
         {prefix}
-        {n.toLocaleString()}
+        {value.toLocaleString()}
         {suffix}
       </div>
       <div className="text-base font-bold mb-1">{label}</div>

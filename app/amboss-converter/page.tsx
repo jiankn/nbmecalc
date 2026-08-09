@@ -36,14 +36,14 @@ export const metadata: Metadata = {
 };
 
 const conversionTable = [
-  { amboss: 200, step2: 211, status: "At risk" },
-  { amboss: 215, step2: 220, status: "Likely pass" },
-  { amboss: 230, step2: 230, status: "Pass" },
-  { amboss: 245, step2: 240, status: "Average" },
-  { amboss: 255, step2: 246, status: "Above avg" },
-  { amboss: 265, step2: 252, status: "Strong" },
-  { amboss: 275, step2: 257, status: "Competitive" },
-  { amboss: 285, step2: 262, status: "Top tier" },
+  { amboss: 200, step2: 211 },
+  { amboss: 215, step2: 220 },
+  { amboss: 230, step2: 230 },
+  { amboss: 245, step2: 240 },
+  { amboss: 255, step2: 246 },
+  { amboss: 265, step2: 252 },
+  { amboss: 275, step2: 257 },
+  { amboss: 285, step2: 262 },
 ];
 
 const faqs = [
@@ -57,7 +57,7 @@ const faqs = [
   },
   {
     q: "Should I take AMBOSS Self-Assessment if I have NBMEs?",
-    a: "Lower priority. Use AMBOSS as a content review tool; rely on NBMEs and Free 120 for prediction.",
+    a: "Choose an assessment based on the decision it would change, timing, cost, and whether you need another comprehensive result. Compare any AMBOSS result with current official assessment feedback rather than using a universal hierarchy.",
   },
   {
     q: "What AMBOSS score predicts a 250 Step 2 CK?",
@@ -113,7 +113,7 @@ export default function AmbossConverterPage() {
           </h2>
           <p className="text-gray-600">
             Pick <strong>Step 2 CK</strong> and choose <strong>AMBOSS</strong>{" "}
-            as the source. Adding NBMEs is highly recommended.
+            as the source. Compare it with a recent CCSSA or Free 120 when available.
           </p>
         </div>
         <Calculator defaultStep="step2" defaultSource="AMBOSS" />
@@ -139,8 +139,7 @@ export default function AmbossConverterPage() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">AMBOSS SA</th>
-                  <th className="text-right px-5 py-3 font-bold text-mint-700">Step 2 CK (corrected)</th>
-                  <th className="text-left px-5 py-3 font-bold text-gray-900">Status</th>
+                  <th className="text-right px-5 py-3 font-bold text-mint-700">Internal model midpoint</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 bg-white">
@@ -148,7 +147,6 @@ export default function AmbossConverterPage() {
                   <tr key={row.amboss}>
                     <td className="px-5 py-3 font-mono font-bold text-gray-950">{row.amboss}</td>
                     <td className="px-5 py-3 text-right font-mono font-bold text-mint-700">{row.step2}</td>
-                    <td className="px-5 py-3 text-gray-700">{row.status}</td>
                   </tr>
                 ))}
               </tbody>

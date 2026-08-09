@@ -4,17 +4,17 @@ const steps = [
   {
     number: "1",
     title: "Gather Your Practice Exams",
-    body: "Collect your latest NBME, UWSA, Free 120, AMBOSS, or CMS form scores. Most students have 3–5 by exam week.",
+    body: "Collect the recent NBME, UWSA, Free 120, AMBOSS, or CMS form scores you want to review together.",
   },
   {
     number: "2",
     title: "Enter Each Score",
-    body: "No signup, no email. Just type them in. We support all NBME forms (28–32), UWSA 1/2, Free 120, and more.",
+    body: "No signup or email is required. Choose the exam step first so the calculator can show the compatible form and score options.",
   },
   {
     number: "3",
     title: "Get Your Range",
-    body: "See your point estimate and estimated planning range instantly. Unlock the full PDF — source notes, readiness questions, and 3 highest-leverage moves — for $14.99.",
+    body: "See your point estimate and estimated planning range instantly. Keep using the calculator for free; printable reports and saved tracking stay optional.",
   },
 ];
 

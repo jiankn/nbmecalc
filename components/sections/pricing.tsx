@@ -18,29 +18,24 @@ const standardPlans = [
   {
     kind: "free" as const,
     name: "Free",
-    description: "Try your first prediction. No account needed.",
+    description: "Run core predictions. No account needed.",
     price: "$0",
     cta: "Start Free",
     ctaHref: "/#calculator",
     features: [
-      "1 score prediction",
+      "Core score calculations",
       "Estimated planning range",
       "Percentile ranking",
-      "Basic result summary",
+      "Pass estimate and result summary",
     ],
-    excluded: [
-      "PDF report download",
-      "Readiness discussion guide",
-      "Multi-Step tracking",
-      "Unlimited refreshes",
-    ],
+    excluded: [],
   },
   {
     kind: "single" as const,
     name: "Single Report",
-    description: "One complete PDF with your full breakdown.",
+    description: "Optional printable report for one result.",
     price: "$14.99",
-    cta: "Calculate to unlock",
+    cta: "Create a free result first",
     ctaHref: SINGLE_REPORT_CALCULATOR_PATH,
     features: [
       "Everything in Free",
@@ -49,13 +44,13 @@ const standardPlans = [
       "Subject-level weakness map",
       "Score trajectory analysis",
     ],
-    excluded: ["Multi-Step tracking", "Unlimited refreshes"],
+    excluded: ["Saved multi-Step timeline", "Email reminders"],
   },
 ];
 
 const lifetimeFeatures = [
   "Everything in Single Report",
-  "Unlimited predictions & refreshes",
+  "Saved predictions & refreshes",
   "Multi-Step tracking (1, 2 CK, 3)",
   "Real-time score timeline",
   "Priority support",
@@ -121,11 +116,11 @@ export function Pricing() {
     <section id="pricing" className="py-20 lg:py-28 bg-gray-50">
       <div className="container">
         <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-balance">
-          Simple, Transparent Pricing
+          Free core tools, optional upgrades
         </h2>
         <p className="text-center text-lg text-gray-600 max-w-2xl mx-auto mb-12">
-          Start free. Pay once when you need a full report or unlimited
-          tracking. No subscriptions or recurring charges.
+          Calculate and review your planning range for free. Pay only when you
+          want a printable report or saved long-term tracking.
         </p>
 
         {error && (

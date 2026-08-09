@@ -106,7 +106,7 @@ export default async function CheckoutSuccessPage({
               </p>
               <p>
                 <strong className="text-gray-900">Need help?</strong> Reply to
-                the receipt email and we&apos;ll respond within 24 hours.
+                the receipt email or contact hello@nbmecalc.com.
               </p>
             </div>
 

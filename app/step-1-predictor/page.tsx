@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShieldAlert, Target, TrendingUp, AlertTriangle } from "lucide-react";
+import { AlertTriangle, BookOpenCheck, FileCheck2, History } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
@@ -37,90 +37,55 @@ export const metadata: Metadata = {
   },
 };
 
-const passBands = [
+const interpretationChecks = [
   {
-    range: "≥ 215",
-    prob: "99%",
-    color: "mint",
-    label: "Very safe",
-    advice:
-      "Coast mode. Maintain with random UWorld mixed blocks. Avoid burnout.",
+    label: "Use the official report first",
+    detail:
+      "Read the estimated probability of passing, likely score range, and low-pass range printed on the current CBSSA report before consulting an independent model.",
   },
   {
-    range: "200-214",
-    prob: "95-98%",
-    color: "mint",
-    label: "Safe",
-    advice:
-      "Good buffer. Spend remaining time on highest-yield weak spots (pharm, micro).",
+    label: "Confirm the score scale",
+    detail:
+      "Current CBSSA reporting uses equated percent correct (EPC). Do not enter EPC into a field that expects a legacy three-digit practice score.",
   },
   {
-    range: "190-199",
-    prob: "85-94%",
-    color: "blue",
-    label: "Likely pass",
-    advice:
-      "Comfortable but not certain. Two more NBMEs in the next 3 weeks will tighten the picture.",
+    label: "Look for agreement",
+    detail:
+      "Compare several recent, unused assessments taken under similar conditions. A consistent trend is more informative than choosing the most reassuring result.",
   },
   {
-    range: "180-189",
-    prob: "65-84%",
-    color: "amber",
-    label: "Borderline",
-    advice:
-      "1 in 5 students at this level fail. Consider pushing your test date back 2-3 weeks.",
-  },
-  {
-    range: "170-179",
-    prob: "35-64%",
-    color: "rose",
-    label: "Coin flip",
-    advice:
-      "Strong recommendation: delay 4+ weeks, switch to content-review mode (First Aid + Sketchy + dedicated UWorld).",
-  },
-  {
-    range: "< 170",
-    prob: "< 35%",
-    color: "rose",
-    label: "High risk",
-    advice:
-      "Do not take the exam yet. Build a 6-8 week intensive plan and re-evaluate.",
+    label: "Escalate uncertain decisions",
+    detail:
+      "If the official probability, score range, and recent trend disagree, discuss the full reports with your school or academic advisor before changing an exam date.",
   },
 ];
 
-const bandColors: Record<string, string> = {
-  mint: "bg-mint-50 border-mint-200 text-mint-900",
-  blue: "bg-blue-50 border-blue-200 text-blue-900",
-  amber: "bg-amber-50 border-amber-200 text-amber-900",
-  rose: "bg-rose-50 border-rose-200 text-rose-900",
-};
-
-const matters = [
+const officialSignals = [
   {
-    icon: Target,
-    title: "Failing has consequences",
-    body: "A Step 1 fail appears on your USMLE transcript permanently. Roughly 50% of failers don&apos;t match into competitive specialties even after passing on retake.",
+    icon: FileCheck2,
+    title: "Pass/fail reporting",
+    body: "USMLE reports Step 1 outcomes as pass/fail. Current scoring and transcript rules should be checked on the official USMLE site.",
   },
   {
-    icon: TrendingUp,
-    title: "Step 2 CK is now the screening score",
-    body: "Programs use Step 2 CK as the primary numeric filter. But a Step 1 fail still flags applicants in the same way a low GPA does.",
+    icon: BookOpenCheck,
+    title: "CBSSA readiness fields",
+    body: "NBME's current CBSSA report provides EPC, a likely range, the Step 1 low-pass range, and an estimated probability of passing within the stated testing window.",
   },
   {
-    icon: ShieldAlert,
-    title: "IMGs face higher scrutiny",
-    body: "International medical graduates without a US clinical year are especially affected — Step 1 first-attempt result is one of the strongest filtering signals.",
+    icon: History,
+    title: "Policies can change",
+    body: "Eligibility, attempt limits, score reporting, and rescheduling rules are controlled by USMLE and the registration entities—not by this calculator.",
   },
 ];
 
 const faqs = [
   {
     q: "What is a passing score on Step 1 now?",
-    a: "Step 1 is pass/fail. There is no three-digit score on your transcript anymore. NBME uses a single internal threshold (around 196 equated) — if you cross it, you pass.",
+    a: "Step 1 results are reported as pass/fail. Use the current USMLE scoring page for the official standard and the current CBSSA report for readiness information; NBMEcalc does not publish an unofficial numeric cutoff.",
   },
   {
     q: "How predictive is my NBME score for passing Step 1?",
-    a: "Very. Students scoring ≥ 200 on NBME 30, 31, or 32 within two weeks of test day have a > 95% pass rate. Below 180, the pass rate drops below 60%.",
+    a: "The current CBSSA report includes NBME's estimated probability of passing within the stated testing window. That official probability is the primary readiness signal; NBMEcalc's output is an independent, unvalidated planning estimate.",
   },
   {
     q: "Does the calculator account for the new pass/fail format?",
@@ -128,11 +93,11 @@ const faqs = [
   },
   {
     q: "Should I take Step 1 if my latest NBME is below 200?",
-    a: "It depends on your timeline and trajectory. If three NBMEs in a row are below 200 and you have not improved despite full dedicated, push the date. If you went from 175 → 198 in four weeks, you are on the trajectory to pass.",
+    a: "There is no universal decision rule based on one unofficial three-digit threshold. Review the scale and probability printed on your current CBSSA report, compare recent unused forms, and discuss borderline or conflicting evidence with your school or advisor.",
   },
   {
     q: "Can I retake Step 1 if I fail?",
-    a: "Yes, up to four attempts total per the latest USMLE policy. But each fail appears on your transcript and is visible to residency programs. Plan to pass on attempt one.",
+    a: "USMLE publishes the current attempt-limit and eligibility rules. Because those rules can change and may interact with registration-entity requirements, verify the official policy rather than relying on a calculator page.",
   },
 ];
 
@@ -173,7 +138,7 @@ export default function Step1PredictorPage() {
       <PageHero
         badge="Step 1 is pass/fail"
         title="Step 1 Predictor: Calculate Your Pass Probability"
-        description="Step 1 went pass/fail in January 2022. The number on your NBME no longer maps to a three-digit transcript score — but it still maps to a pass probability. Find yours below."
+        description="Step 1 results are reported as pass/fail. Read the probability and range on your current CBSSA report first, then use this independent estimate only as a secondary planning view."
         size="md"
       />
 
@@ -183,13 +148,13 @@ export default function Step1PredictorPage() {
           <AlertTriangle className="h-6 w-6 text-amber-700 shrink-0 mt-0.5" />
           <div>
             <h2 className="font-bold text-amber-900 mb-1">
-              Pass/fail does not mean low-stakes
+              Do not use this page as a test-date directive
             </h2>
             <p className="text-sm text-amber-900 leading-relaxed">
-              Failing Step 1 stays on your transcript permanently and is
-              visible to every residency program you apply to. A pass with no
-              margin and a fail look similar on paper — but a comfortable
-              pass-rate prediction protects you from a bad test-day surprise.
+              NBMEcalc has not published a holdout validation study for its
+              Step 1 probability estimate. Use the official CBSSA report,
+              current USMLE rules, and your school or advisor&apos;s process for
+              any decision to sit, postpone, or repeat an assessment.
             </p>
           </div>
         </div>
@@ -203,32 +168,28 @@ export default function Step1PredictorPage() {
           </h2>
           <p className="text-gray-600">
             Pick <strong>Step 1</strong> in the form below, add your NBME /
-            UWSA / Free 120 scores, and submit. The result shows your pass
-            probability and equated three-digit score.
+            UWSA / Free 120 inputs, and submit. The result shows an independent
+            model estimate and planning range; it does not replace the
+            probability printed on an official CBSSA report.
           </p>
         </div>
         <Calculator defaultStep="step1" />
       </section>
 
-      {/* Worked example */}
+      {/* Interpretation example */}
       <section className="py-12 bg-white border-t border-gray-100">
         <div className="container max-w-3xl">
           <h2 className="text-2xl lg:text-3xl font-extrabold mb-3">
-            A worked example
+            How to review several recent assessments
           </h2>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Say you sat three assessments in your final three weeks:{" "}
-            <strong>NBME 30 = 201</strong>, <strong>NBME 31 = 197</strong>, and{" "}
-            <strong>UWSA 1 = 208</strong>. The model equates each form to a common
-            scale, weights your most recent results more heavily, and reports a
-            range rather than a single number — so one slightly lower form does
-            not sink the estimate. This profile lands in the{" "}
-            <strong>~95–98% pass band</strong>: a comfortable pass with margin,
-            where the right move is to maintain rather than cram.
-          </p>
+          <ol className="list-decimal space-y-3 pl-5 text-gray-700 leading-relaxed">
+            <li>Confirm that each input belongs to Step 1 and that you entered the scale shown on its report.</li>
+            <li>Read the official probability and likely range on every current CBSSA report.</li>
+            <li>Note whether recent unused forms agree under similar timing and test conditions.</li>
+            <li>Use NBMEcalc only to summarize that pattern, then investigate any disagreement instead of averaging it away.</li>
+          </ol>
           <p className="text-sm text-gray-500 italic">
-            Illustrative only — your own result depends on your exact forms,
-            dates, and how closely they cluster. See the{" "}
+            The model uses internal mappings and recency weights. See the{" "}
             <Link
               href="/methodology"
               className="text-mint-700 underline underline-offset-2"
@@ -240,74 +201,85 @@ export default function Step1PredictorPage() {
         </div>
       </section>
 
-      {/* Pass bands */}
+      {/* Interpretation checks */}
       <section className="py-16 lg:py-20 bg-mint-50/30">
         <div className="container max-w-4xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            Step 1 pass-probability bands
+            Four checks before interpreting a Step 1 estimate
           </h2>
           <p className="text-gray-600 text-lg max-w-3xl mb-10">
-            Independent model bands for planning only. Step 1 is pass/fail;
-            use the probability and readiness guidance in your official CBSSA
-            report as the primary source.
+            These checks prevent a model midpoint from being mistaken for an
+            official pass probability or a universal scheduling rule.
           </p>
 
-          <div className="space-y-3">
-            {passBands.map((b) => (
+          <div className="grid gap-4 md:grid-cols-2">
+            {interpretationChecks.map((check) => (
               <div
-                key={b.range}
-                className={`rounded-3xl border p-5 flex flex-col sm:flex-row gap-4 sm:items-center ${bandColors[b.color]}`}
+                key={check.label}
+                className="rounded-3xl border border-gray-200 bg-white p-6"
               >
-                <div className="sm:w-28 shrink-0">
-                  <div className="text-xs font-bold uppercase opacity-70">
-                    Equated
-                  </div>
-                  <div className="text-2xl font-extrabold">{b.range}</div>
-                </div>
-                <div className="sm:w-32 shrink-0">
-                  <div className="text-xs font-bold uppercase opacity-70">
-                    Pass prob.
-                  </div>
-                  <div className="text-xl font-extrabold">{b.prob}</div>
-                </div>
-                <div className="sm:w-28 shrink-0">
-                  <span className="inline-flex items-center rounded-full bg-white/70 px-2.5 py-0.5 text-xs font-bold">
-                    {b.label}
-                  </span>
-                </div>
-                <div className="flex-1 text-sm leading-relaxed">
-                  {b.advice}
-                </div>
+                <h3 className="font-bold text-gray-950">{check.label}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                  {check.detail}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Why score still matters */}
+      {/* Official signals */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-5xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3 text-center">
-            Why Step 1 still matters even when pass/fail
+            What the official sources establish
           </h2>
           <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
-            Some students hear &quot;pass/fail&quot; and assume the exam is no
-            longer high-stakes. That is wrong. Here is why.
+            Keep official policy and report facts separate from NBMEcalc&apos;s
+            internal assumptions.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {matters.map((m) => (
+            {officialSignals.map((signal) => (
               <div
-                key={m.title}
+                key={signal.title}
                 className="rounded-3xl border border-gray-200 bg-white p-6"
               >
-                <m.icon className="h-6 w-6 text-mint-600 mb-3" />
-                <h3 className="font-bold mb-1">{m.title}</h3>
-                <p
-                  className="text-sm text-gray-600 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: m.body }}
-                />
+                <signal.icon className="h-6 w-6 text-mint-600 mb-3" />
+                <h3 className="font-bold mb-1">{signal.title}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {signal.body}
+                </p>
               </div>
             ))}
+          </div>
+          <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm font-semibold">
+            <a
+              href="https://www.nbme.org/examinees/self-assessments/comprehensive-basic-science-self-assessment"
+              target="_blank"
+              rel="noreferrer"
+              data-evidence-source="primary"
+              className="text-mint-800 underline underline-offset-4"
+            >
+              NBME CBSSA information
+            </a>
+            <a
+              href="https://www.usmle.org/scores-transcripts/examination-results-and-scoring"
+              target="_blank"
+              rel="noreferrer"
+              data-evidence-source="primary"
+              className="text-mint-800 underline underline-offset-4"
+            >
+              USMLE results and scoring
+            </a>
+            <a
+              href="https://www.usmle.org/bulletin-information"
+              target="_blank"
+              rel="noreferrer"
+              data-evidence-source="primary"
+              className="text-mint-800 underline underline-offset-4"
+            >
+              Current USMLE Bulletin
+            </a>
           </div>
         </div>
       </section>
@@ -316,33 +288,32 @@ export default function Step1PredictorPage() {
       <section className="py-16 lg:py-20 bg-gray-50">
         <div className="container max-w-3xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            What to do based on your prediction
+            What to do when the signals disagree
           </h2>
           <div className="space-y-4 text-gray-700 leading-relaxed">
             <p>
-              <strong>≥ 95% pass probability:</strong> Stop adding study time.
-              Sleep, exercise, and run two random UWorld blocks a day for
-              calibration. Reschedule is unnecessary.
+              <strong>Check comparability.</strong> Confirm that the assessments
+              use the same Step 1 family and were taken under comparable
+              conditions without outside resources.
             </p>
             <p>
-              <strong>85-95% pass probability:</strong> One more NBME 7-10
-              days out. If trajectory is flat, take the exam. If it&apos;s
-              dropping, push 1-2 weeks.
+              <strong>Read the official uncertainty.</strong> Compare each
+              report&apos;s probability and likely range rather than relying on
+              one calculator midpoint.
             </p>
             <p>
-              <strong>65-85% pass probability:</strong> Move the test back 2-3
-              weeks. Use a structured 14-day plan: identify your three weakest
-              subjects, do 80 questions/day in those, and re-take NBME 31 or
-              32.
+              <strong>Identify the decision.</strong> Write down what new
+              evidence would change your plan: another unused assessment,
+              updated school guidance, or review of the content-area report.
             </p>
             <p>
-              <strong>&lt; 65% pass probability:</strong> Move the test back at
-              least 4 weeks. Switch to content-review mode: First Aid +
-              Sketchy + Pathoma. Do not just grind UWorld.
+              <strong>Ask for a second review.</strong> Borderline, declining,
+              or sharply inconsistent results deserve review by your school or
+              academic advisor; NBMEcalc does not prescribe a delay interval.
             </p>
             <p className="text-sm text-gray-500 italic">
-              All recommendations assume you have ≥ 3 weeks of dedicated
-              remaining. If less, be more conservative.
+              This framework is educational and does not replace official
+              assessment feedback or institution-specific requirements.
             </p>
           </div>
         </div>
@@ -434,8 +405,8 @@ export default function Step1PredictorPage() {
             Know your Step 1 pass margin
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Three NBMEs plus your latest UWSA gives you a tight prediction. Run
-            yours now — free, no signup.
+            Combine recent inputs for a secondary planning view, then compare
+            the result with the probability and range on your official reports.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="primary" size="lg" asChild>

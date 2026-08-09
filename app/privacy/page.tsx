@@ -29,7 +29,7 @@ export default function PrivacyPage() {
         size="sm"
       />
 
-      <LegalContent lastUpdated="May 17, 2026">
+      <LegalContent lastUpdated="August 10, 2026">
         <h2>1. Who we are</h2>
         <p>
           nbmecalc.com (&quot;NBMEcalc&quot;, &quot;we&quot;, &quot;us&quot;,
@@ -47,16 +47,12 @@ export default function PrivacyPage() {
         <h3>2.1 Information you provide</h3>
         <ul>
           <li>
-            <strong>Email address</strong> — when you create an account, buy a
-            report, or subscribe to our newsletter.
+            <strong>Email address</strong> — when you create an account, sign
+            in, buy a report, or contact support.
           </li>
           <li>
             <strong>Practice exam scores</strong> — NBME, UWSA, Free 120,
             AMBOSS, CMS Form scores you enter into the predictor.
-          </li>
-          <li>
-            <strong>Optional profile data</strong> — target exam date, school
-            type (US MD/DO/IMG), notes you choose to add.
           </li>
           <li>
             <strong>Payment information</strong> — handled by{" "}
@@ -87,8 +83,8 @@ export default function PrivacyPage() {
         <ul>
           <li>To run the score predictor and return your results.</li>
           <li>
-            To send the prediction PDF, account confirmations, and (if you
-            opted in) study tips and product updates.
+            To send prediction PDFs, account confirmations, security messages,
+            and service-related support.
           </li>
           <li>To improve the algorithm — only aggregated, anonymized data.</li>
           <li>To prevent abuse and rate-limit requests.</li>
@@ -111,8 +107,9 @@ export default function PrivacyPage() {
             prevention.
           </li>
           <li>
-            <strong>Consent</strong> — marketing emails, optional cookies. You
-            can withdraw consent any time.
+            <strong>Consent</strong> — optional outcome feedback and advertising
+            cookies where consent is required. You can withdraw consent through
+            the applicable control.
           </li>
           <li>
             <strong>Legal obligation</strong> — tax records, lawful requests.
@@ -123,19 +120,26 @@ export default function PrivacyPage() {
         <p>We share data only with these processors, under data-processing agreements:</p>
         <ul>
           <li>
-            <strong>Cloudflare</strong> — hosting, CDN, edge database (D1) and
-            file storage (R2). Region-aware: EU data stays in EU edge nodes.
+            <strong>Cloudflare</strong> — hosting, CDN, security, edge database
+            (D1), and file storage (R2). Processing locations depend on the
+            configured Cloudflare services and applicable provider terms.
           </li>
           <li>
             <strong>Stripe</strong> — payment processing.
           </li>
           <li>
-            <strong>Postal SMTP</strong> — transactional and marketing email
-            delivery.
+            <strong>Postal</strong> — transactional email delivery.
           </li>
           <li>
             <strong>Cloudflare Web Analytics</strong> — aggregate traffic and
             performance analytics.
+          </li>
+          <li>
+            <strong>Google AdSense</strong> — advertising on eligible public
+            pages. Google and its advertising partners may use cookies, IP
+            addresses, or similar identifiers to serve, measure, and prevent
+            fraud in ads. We do not send your practice-exam inputs to Google as
+            advertising targeting parameters.
           </li>
         </ul>
         <p>
@@ -175,40 +179,55 @@ export default function PrivacyPage() {
             you logged in. Expires after 30 days. Strictly necessary.
           </li>
           <li>
-            <strong>Cookie banner state</strong> (<code>nb_cookies</code>) —
-            remembers your cookie choice for 30 days. Strictly necessary.
+            <strong>Disclaimer acknowledgment</strong> (
+            <code>nbmecalc_disclaimer_ack</code>) — remembers for 30 days that
+            you dismissed the educational-use notice. Stored locally in your
+            browser.
           </li>
           <li>
             <strong>Analytics</strong> — Cloudflare Web Analytics is designed
             to operate without cross-site tracking cookies. First-party funnel
             events are stored server-side according to the retention period above.
           </li>
+          <li>
+            <strong>Advertising</strong> — Google and third-party advertising
+            vendors may place or read cookies and use web beacons or IP
+            addresses when ads are enabled. Where required, advertising loads
+            only under the choices collected by a Google-certified consent
+            management platform. You can manage personalized advertising in
+            your consent choices or through Google Ads Settings.
+          </li>
         </ul>
         <p>
-          You can control cookies via your browser settings or our cookie
-          banner.
+          You can control cookies through your browser settings and, where
+          displayed, the advertising consent controls.
         </p>
 
         <h2>8. Your rights</h2>
         <p>You have the right to:</p>
         <ul>
           <li>
-            <strong>Access</strong> a copy of your data — export as JSON from
-            your dashboard.
+            <strong>Access</strong> a copy of your data — request it from{" "}
+            <a href="mailto:privacy@nbmecalc.com">privacy@nbmecalc.com</a>.
           </li>
           <li>
-            <strong>Rectify</strong> inaccurate data — edit in your dashboard.
+            <strong>Rectify</strong> inaccurate account data — contact us if a
+            field cannot be corrected through the available account controls.
           </li>
           <li>
-            <strong>Erase</strong> your data — one-click delete from{" "}
-            <em>Settings → Delete account</em>. Hard-deletes within 30 days.
+            <strong>Erase</strong> your account data — use{" "}
+            <em>Settings → Delete account</em> or contact us. Records that must
+            be retained for fraud, tax, or legal purposes follow their stated
+            retention periods.
           </li>
           <li>
             <strong>Restrict / object to</strong> processing — email{" "}
             <a href="mailto:privacy@nbmecalc.com">privacy@nbmecalc.com</a>.
           </li>
           <li>
-            <strong>Data portability</strong> — JSON export covers everything.
+            <strong>Data portability</strong> — request a machine-readable copy
+            of applicable account data by email. A self-service export is not
+            currently available.
           </li>
           <li>
             <strong>Lodge a complaint</strong> with your local supervisory
@@ -219,9 +238,10 @@ export default function PrivacyPage() {
 
         <h2>9. International transfers</h2>
         <p>
-          Cloudflare provides region-aware data residency. EU user data is
-          stored in EU edge locations. Where data is transferred outside the
-          EEA (e.g. Stripe in the US), we rely on Standard Contractual Clauses.
+          Our service providers may process data in multiple countries. Where
+          cross-border safeguards are required, we rely on the provider&apos;s
+          applicable data-protection terms and transfer mechanisms. Contact us
+          for the current processor information relevant to your request.
         </p>
 
         <h2>10. Children</h2>
@@ -233,18 +253,18 @@ export default function PrivacyPage() {
 
         <h2>11. Security</h2>
         <ul>
-          <li>HTTPS everywhere with HSTS.</li>
-          <li>Data encrypted at rest in Cloudflare D1.</li>
+          <li>HTTPS is used for the public service.</li>
+          <li>Hosting and database safeguards are provided through Cloudflare.</li>
           <li>Magic Link tokens are single-use, expire in 1 hour.</li>
           <li>No card data stored on our servers — Stripe handles all payments.</li>
-          <li>Strict Content Security Policy.</li>
+          <li>Access controls and rate limits protect account and prediction routes.</li>
         </ul>
 
         <h2>12. Changes to this policy</h2>
         <p>
-          We will email registered users at least 30 days before any material
-          change. The &quot;Last updated&quot; date above always reflects the
-          current version.
+          We will post material changes on this page and provide additional
+          notice where required. The &quot;Last updated&quot; date above identifies
+          the current published version.
         </p>
 
         <h2>13. Contact</h2>

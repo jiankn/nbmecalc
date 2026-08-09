@@ -5,6 +5,7 @@ import { Clock, Tag, ArrowRight } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
 import { BlogBody } from "@/components/blog-body";
+import { AdSlot } from "@/components/ads/ad-slot";
 import {
   BLOG_POSTS,
   CATEGORY_LABELS,
@@ -17,7 +18,7 @@ import {
 } from "@/lib/blog/images";
 
 export function generateStaticParams() {
-  return BLOG_POSTS.map((p) => ({ slug: p.slug }));
+  return BLOG_POSTS.filter((p) => !p.noindex).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -34,9 +35,9 @@ export async function generateMetadata({
     description: post.description,
     keywords: post.tags,
     alternates: { canonical: `https://nbmecalc.com/blog/${post.slug}` },
-    // Drafts (noindex) stay reachable from internal links but are hidden
-    // from Google search results until they meet the full E-E-A-T bar
-    // (medical reviewer sign-off, original data, infographics).
+    // Draft metadata is available during local editorial preview. Production
+    // requests for drafts return 404 below, so unfinished claims do not become
+    // part of the public site-quality surface.
     robots: post.noindex
       ? { index: false, follow: true }
       : { index: true, follow: true },
@@ -69,12 +70,13 @@ export default async function BlogPostPage({
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) notFound();
+  if (post.noindex && process.env.NODE_ENV === "production") notFound();
   const p = post!;
   const related = getRelatedPosts(p.slug, 3);
 
   return (
     <PageShell>
-      {p.noindex && (
+      {p.noindex && process.env.NODE_ENV !== "production" && (
         <div className="border-b border-amber-200 bg-amber-50">
           <div className="container max-w-4xl py-4 text-sm text-amber-950">
             <strong>Editorial review in progress:</strong> this draft may
@@ -167,7 +169,12 @@ export default async function BlogPostPage({
               {p.description}
             </p>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-6 text-sm text-gray-600">
-              <span className="font-semibold text-gray-900">{p.author}</span>
+              <Link
+                href="/methodology#editorial-standards"
+                className="font-semibold text-gray-900 underline decoration-gray-300 underline-offset-4 hover:decoration-mint-600"
+              >
+                {p.author}
+              </Link>
               <span>·</span>
               <time dateTime={p.publishedAt}>
                 {new Date(p.publishedAt).toLocaleDateString("en-US", {
@@ -226,6 +233,10 @@ export default async function BlogPostPage({
         <section className="py-12 lg:py-16 bg-white">
           <div className="container max-w-3xl">
             <BlogBody blocks={p.body} />
+
+            {!p.noindex && (
+              <AdSlot placement="blog-inline" className="not-prose my-12" />
+            )}
 
             {p.references && p.references.length > 0 && (
               <section className="mt-12 border-t border-gray-200 pt-8">

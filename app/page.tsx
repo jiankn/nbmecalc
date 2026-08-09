@@ -6,11 +6,12 @@ import { Calculator } from "@/components/sections/calculator";
 import { Stats } from "@/components/sections/stats";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { Comparison } from "@/components/sections/comparison";
-import { Pricing } from "@/components/sections/pricing";
 import { ResourceHub } from "@/components/sections/resource-hub";
 import { Reviewers } from "@/components/sections/reviewers";
 import { FAQ } from "@/components/sections/faq";
 import { BlogGrid } from "@/components/sections/blog-grid";
+import { OptionalUpgrades } from "@/components/sections/optional-upgrades";
+import { AdSlot } from "@/components/ads/ad-slot";
 import { Footer } from "@/components/sections/footer";
 import { CookieBanner } from "@/components/sections/cookie-banner";
 
@@ -90,18 +91,22 @@ export default function HomePage() {
         }}
       />
       <Nav />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <Hero />
-        <ValueProps />
         <Calculator />
+        <ValueProps />
         <Stats />
         <HowItWorks />
         <Comparison />
-        <Pricing />
+        <AdSlot
+          placement="home-content"
+          className="container my-8 max-w-5xl lg:my-10"
+        />
         <ResourceHub />
         <Reviewers />
         <FAQ />
         <BlogGrid />
+        <OptionalUpgrades />
       </main>
       <Footer />
       <CookieBanner />

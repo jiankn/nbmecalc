@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { FunnelPageView } from "@/components/funnel-page-view";
+import { AdSenseScript } from "@/components/ads/adsense-script";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -85,6 +86,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${jakarta.variable} ${mono.variable}`}>
       <body className="font-sans antialiased">
+        <AdSenseScript />
         <FunnelPageView />
         {children}
       </body>

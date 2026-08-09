@@ -226,10 +226,9 @@ function PhonePreviewContent() {
         ))}
       </div>
 
-      {/* CTA */}
-      <button className="mt-4 w-full rounded-full bg-black text-white text-xs font-semibold py-2.5">
-        Get Full Report — $14.99
-      </button>
+      <div className="mt-4 rounded-xl bg-gray-950 px-3 py-2.5 text-center text-xs font-semibold text-white">
+        Free result · No signup required
+      </div>
     </div>
   );
 }

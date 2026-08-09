@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { trackProductEvent } from "@/lib/product-events";
 import { PredictionFeedbackOptIn } from "@/components/prediction-feedback-opt-in";
+import { AdSlot } from "@/components/ads/ad-slot";
 import { formatUsd, getLifetimeOffer } from "@/lib/lifetime-offer";
 import {
   buildLifetimeResumePath,
@@ -235,8 +236,8 @@ export function Calculator({
       path: window.location.pathname,
     });
     // 1. Instant client-side compute. UX must not depend on the network.
-    //    Only the free preview is computed in the browser; the full paid
-    //    report is synthesized server-side (see /api/predict + lib/predict).
+    //    The complete core result is computed in the browser. Optional saved
+    //    reports are synthesized server-side (see /api/predict + lib/predict).
     const r = predictPreview(exams, step, daysUntil);
     setResult(r);
     trackProductEvent("result_viewed", {
@@ -605,22 +606,25 @@ export function Calculator({
 
         {/* Result */}
         {result && result.pointEstimate > 0 && (
-          <ResultCard
-            result={result}
-            step={step}
-            weakSubjects={weakSubjects}
-            onToggleWeakSubject={toggleWeakSubject}
-            onUpgrade={() => {
-              trackProductEvent("paywall_opened", {
-                step,
-                path: window.location.pathname,
-                ...(predictionId ? { predictionId } : {}),
-              });
-              setShowPaywall(true);
-            }}
-            hasLifetime={hasLifetime}
-            predictionId={predictionId}
-          />
+          <>
+            <ResultCard
+              result={result}
+              step={step}
+              weakSubjects={weakSubjects}
+              onToggleWeakSubject={toggleWeakSubject}
+              onUpgrade={() => {
+                trackProductEvent("paywall_opened", {
+                  step,
+                  path: window.location.pathname,
+                  ...(predictionId ? { predictionId } : {}),
+                });
+                setShowPaywall(true);
+              }}
+              hasLifetime={hasLifetime}
+              predictionId={predictionId}
+            />
+            <AdSlot placement="calculator-result" className="mt-12" />
+          </>
         )}
 
         {/* Paywall modal */}
@@ -780,7 +784,7 @@ function ResultCard({
           </h4>
           <span className="text-xs text-gray-500 flex items-center gap-1 shrink-0">
             <Lock className="h-3 w-3" />
-            Free preview
+            Free result
           </span>
         </div>
         <p className="text-xs text-gray-500 mb-4 flex gap-1.5">
@@ -878,24 +882,23 @@ function ResultCard({
         {result.cohortNote}
       </p>
 
-      {/* Lifetime members already own the full report, so we send
-          them straight to it instead of asking for the one-off $14.99. */}
-      <div className="mt-8 rounded-2xl bg-black text-white p-6">
+      {/* Optional paid workflow appears only after the complete free result. */}
+      <div className="mt-8 rounded-2xl border border-gray-200 bg-gray-50 p-5 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1">
-            <div className="text-xs font-semibold uppercase tracking-wider text-mint-400 mb-1">
-              {hasLifetime ? "Included with Lifetime" : "Unlock Full Report"}
+            <div className="text-xs font-semibold text-mint-800 mb-1">
+              {hasLifetime ? "Included with Lifetime" : "Optional next step"}
             </div>
-            <div className="text-lg font-bold mb-1">
-              Get your day-by-day plan + complete subject map
+            <div className="text-lg font-bold text-gray-950 mb-1">
+              Save, export, and track this result
             </div>
-            <div className="text-sm text-gray-300">
-              Includes a downloadable PDF, source-weighting notes, uncertainty
-              assumptions, and a study-plan framework.
+            <div className="text-sm text-gray-700">
+              Your score and planning range above are free. Optional reports
+              add a printable PDF, a personalized study plan, and saved history.
             </div>
           </div>
           {hasLifetime ? (
-            <Button variant="mint" size="lg" className="shrink-0" asChild>
+            <Button variant="outline" size="md" className="shrink-0" asChild>
               <a
                 href={
                   predictionId
@@ -903,17 +906,17 @@ function ResultCard({
                     : "/dashboard/predictions"
                 }
               >
-                View full report
+                Open saved report
               </a>
             </Button>
           ) : (
             <Button
-              variant="mint"
-              size="lg"
+              variant="outline"
+              size="md"
               onClick={onUpgrade}
               className="shrink-0"
             >
-              Get Report, $14.99
+              See report options
             </Button>
           )}
         </div>
@@ -1079,10 +1082,11 @@ function PaywallModal({
             <Sparkles className="h-8 w-8 text-mint-700" />
           </div>
           <h3 className="text-2xl font-bold mb-2">
-            Unlock Your Full Step Report
+            Optional report and tracking tools
           </h3>
           <p className="text-gray-600">
-            Get your full personalized report + downloadable PDF instantly.
+            Your score and planning range remain free. Choose an upgrade only
+            if you want a printable report or saved long-term tracking.
           </p>
         </div>
 
@@ -1098,7 +1102,7 @@ function PaywallModal({
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-bold">Single Report</span>
-                  <Badge variant="mint">Most Popular</Badge>
+                  <Badge variant="mint">One-time</Badge>
                 </div>
                 <div className="text-2xl font-extrabold">$14.99</div>
                 <div className="text-xs text-gray-600">
@@ -1117,7 +1121,7 @@ function PaywallModal({
                   <>Redirecting to checkout…</>
                 ) : (
                   <>
-                    Get My Report <ArrowRight className="h-4 w-4" />
+                    Download My Report <ArrowRight className="h-4 w-4" />
                   </>
                 )}
               </span>
@@ -1194,7 +1198,15 @@ function PaywallModal({
           </div>
         )}
 
-        <div className="mt-6 text-center text-xs text-gray-500">
+        <button
+          type="button"
+          onClick={onClose}
+          className="mt-5 w-full rounded-full px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint-500"
+        >
+          Continue with my free result
+        </button>
+
+        <div className="mt-3 text-center text-xs text-gray-500">
           🔒 Secure checkout via Stripe. Digital product, non-refundable.
         </div>
       </div>

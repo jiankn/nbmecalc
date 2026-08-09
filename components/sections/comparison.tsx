@@ -1,160 +1,82 @@
 import Link from "next/link";
-import { Check, X, Minus, Sparkles } from "lucide-react";
+import { BookOpenCheck, Calculator, FileWarning, ListChecks } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 
-type Cell = "yes" | "no" | "partial";
-
-const competitors = ["NBMEcalc", "PredictMyStepScore", "AMBOSS", "NBcalc"];
-
-const rows: { feature: string; values: Cell[] }[] = [
-  { feature: "NBME forms (28-32)",   values: ["yes",  "yes",  "yes",  "yes"] },
-  { feature: "UWSA 1 & 2",           values: ["yes",  "yes",  "no",   "yes"] },
-  { feature: "Free 120",             values: ["yes",  "no",   "yes",  "no"] },
-  { feature: "AMBOSS Score Pred.",   values: ["yes",  "no",   "yes",  "no"] },
-  { feature: "CMS practice forms",   values: ["yes",  "no",   "no",   "no"] },
-  { feature: "Planning range shown", values: ["yes", "no", "no",   "no"] },
-  { feature: "Personalized study plan", values: ["yes", "no", "no",   "no"] },
-  { feature: "Downloadable PDF report", values: ["yes", "no", "no",   "no"] },
-  { feature: "Mobile (PWA)",            values: ["yes", "partial", "partial", "no"] },
-  { feature: "Free to use",             values: ["yes", "yes", "partial", "yes"] },
+const checks = [
+  {
+    icon: Calculator,
+    title: "Compatible inputs",
+    body: "Combine supported NBME, UWSA, Free 120, AMBOSS, and CMS results while keeping each assessment family distinct.",
+  },
+  {
+    icon: ListChecks,
+    title: "A range, not a promise",
+    body: "The free result includes a midpoint and model-generated planning range. It is not a verified 95% interval or an official score report.",
+  },
+  {
+    icon: BookOpenCheck,
+    title: "Public assumptions",
+    body: "Source adjustments, recency weighting, known limits, and material corrections are documented in the public methodology.",
+  },
+  {
+    icon: FileWarning,
+    title: "A clear decision boundary",
+    body: "High-stakes scheduling decisions should be checked against official assessment feedback and your school or advisor's process.",
+  },
 ];
-
-function CellIcon({ cell }: { cell: Cell }) {
-  if (cell === "yes")
-    return <Check className="h-5 w-5 text-mint-600 mx-auto" strokeWidth={3} />;
-  if (cell === "no")
-    return <X className="h-5 w-5 text-gray-300 mx-auto" />;
-  return <Minus className="h-5 w-5 text-yellow-500 mx-auto" />;
-}
 
 export function Comparison() {
   return (
-    <section className="py-20 lg:py-28 bg-gray-50">
-      <div className="container">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-balance">
-            Why NBMEcalc Is the Most Complete Predictor
+    <section className="bg-gray-50 py-20 lg:py-28">
+      <div className="container max-w-6xl">
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint-800">
+            Before you rely on a predictor
+          </p>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-balance sm:text-4xl lg:text-5xl">
+            Check the Evidence, Not a Winner Badge
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            We compared the four most popular USMLE Step predictors. Here&apos;s
-            how NBMEcalc stacks up on the features med students actually need.
+          <p className="mt-4 text-lg leading-relaxed text-gray-600">
+            Predictor feature lists change and do not establish accuracy. These
+            are the four checks NBMEcalc exposes so you can judge the result on
+            its evidence and limitations.
           </p>
         </div>
 
-        {/* Desktop table */}
-        <div className="hidden md:block overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left p-5 text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                  Feature
-                </th>
-                {competitors.map((name, i) => (
-                  <th
-                    key={name}
-                    className={cn(
-                      "p-5 text-center",
-                      i === 0 && "bg-mint-50"
-                    )}
-                  >
-                    <div
-                      className={cn(
-                        "font-bold",
-                        i === 0 ? "text-mint-800" : "text-gray-700"
-                      )}
-                    >
-                      {name}
-                    </div>
-                    {i === 0 && (
-                      <Badge variant="mint" className="mt-2 inline-flex">
-                        <Sparkles className="h-3 w-3 mr-1" /> Recommended
-                      </Badge>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, idx) => (
-                <tr
-                  key={row.feature}
-                  className={cn(
-                    "border-b border-gray-100 last:border-0",
-                    idx % 2 === 1 && "bg-gray-50/40"
-                  )}
-                >
-                  <td className="p-4 text-sm font-medium text-gray-900">
-                    {row.feature}
-                  </td>
-                  {row.values.map((cell, i) => (
-                    <td
-                      key={i}
-                      className={cn(
-                        "p-4 text-center",
-                        i === 0 && "bg-mint-50/50"
-                      )}
-                    >
-                      <CellIcon cell={cell} />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-              <tr>
-                <td className="p-5"></td>
-                <td className="p-5 bg-mint-50">
-                  <Button size="md" className="w-full" asChild>
-                    <Link href="#calculator">Try Free →</Link>
-                  </Button>
-                </td>
-                <td colSpan={3}></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Mobile stacked cards */}
-        <div className="md:hidden space-y-6">
-          {competitors.map((name, i) => (
-            <div
-              key={name}
-              className={cn(
-                "rounded-2xl border p-5",
-                i === 0
-                  ? "border-mint-300 bg-mint-50"
-                  : "border-gray-200 bg-white"
-              )}
+        <div className="grid gap-5 md:grid-cols-2">
+          {checks.map((check) => (
+            <article
+              key={check.title}
+              className="rounded-3xl border border-gray-200 bg-white p-7"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="font-bold text-lg">{name}</div>
-                {i === 0 && <Badge variant="mint">Recommended</Badge>}
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-mint-100">
+                <check.icon className="h-5 w-5 text-mint-800" aria-hidden="true" />
               </div>
-              <ul className="space-y-2 text-sm">
-                {rows.map((row) => (
-                  <li
-                    key={row.feature}
-                    className="flex items-center justify-between"
-                  >
-                    <span className="text-gray-700">{row.feature}</span>
-                    <CellIcon cell={row.values[i]} />
-                  </li>
-                ))}
-              </ul>
-              {i === 0 && (
-                <Button size="md" className="w-full mt-4" asChild>
-                  <Link href="#calculator">Try NBMEcalc Free →</Link>
-                </Button>
-              )}
-            </div>
+              <h3 className="mt-5 text-xl font-bold text-gray-950">
+                {check.title}
+              </h3>
+              <p className="mt-2 leading-relaxed text-gray-700">{check.body}</p>
+            </article>
           ))}
         </div>
 
-        <p className="text-xs text-gray-600 text-center mt-6">
-          Comparison based on public information from each tool&apos;s landing
-          page as of May 2026. Brand names are property of their respective
-          owners.
-        </p>
+        <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Button size="lg" asChild>
+            <Link href="#calculator">Use the free calculator</Link>
+          </Button>
+          <Button variant="outline" size="lg" asChild>
+            <Link href="/methodology" data-indexing-context="related">
+              Read methodology and limitations
+            </Link>
+          </Button>
+          <Link
+            href="/compare/best-usmle-score-predictor"
+            data-indexing-context="related"
+            className="px-3 py-2 text-sm font-semibold text-mint-800 underline underline-offset-4"
+          >
+            Comparison framework
+          </Link>
+        </div>
       </div>
     </section>
   );

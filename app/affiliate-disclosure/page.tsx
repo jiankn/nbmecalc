@@ -29,18 +29,19 @@ export default function AffiliateDisclosurePage() {
         size="sm"
       />
 
-      <LegalContent lastUpdated="May 17, 2026">
+      <LegalContent lastUpdated="August 10, 2026">
         <h2>1. The short version</h2>
         <p>
-          We sometimes link to third-party USMLE prep products (e.g. UWorld,
-          AMBOSS, Anki add-ons). When we do, the link <strong>may</strong> be
-          an affiliate link — meaning we earn a small commission if you
-          subscribe, at no extra cost to you.
+          NBMEcalc does not currently publish active affiliate links. Links to
+          NBME, USMLE, AMBOSS, UWorld, and other resources are presently
+          provided as references or product-information sources, not as paid
+          endorsements.
         </p>
         <p>
-          We <strong>only recommend products we use ourselves or that our
-          medical reviewers endorse</strong>. We never accept payment to
-          recommend a product. Editorial integrity beats affiliate revenue.
+          If an affiliate relationship is activated later, the material
+          connection will be disclosed next to the link and before any review
+          or comparison that could be affected. We do not claim personal use or
+          medical-reviewer endorsement without verifiable evidence.
         </p>
 
         <h2>2. FTC compliance</h2>
@@ -90,14 +91,10 @@ export default function AffiliateDisclosurePage() {
 
         <h2>5. Current affiliate partners</h2>
         <p>
-          We update this list periodically. Currently active programs (or in
-          negotiation):
+          Current active affiliate programs:
         </p>
         <ul>
-          <li>UWorld (USMLE Q-bank)</li>
-          <li>AMBOSS (medical education library)</li>
-          <li>Anki add-on bundles (third-party marketplaces)</li>
-          <li>Selected Step prep books via Amazon Associates</li>
+          <li>None as of August 10, 2026.</li>
         </ul>
         <p>
           We are <strong>not</strong> affiliated with NBME, USMLE-Rx, Kaplan

@@ -52,9 +52,62 @@ const evidenceSensitivePaths = new Set([
   "/blog/night-before-step-exam-what-to-do",
   "/blog/step-2-ck-subject-weighting-explained",
   "/blog/step-3-ccs-cases-complete-walkthrough",
+  "/compare/vs-amboss-predictor",
+  "/compare/vs-nbcalc",
   "/compare/vs-predictmystepscore",
   "/nbme-calculator",
+  "/step-1-predictor",
   "/uwsa-1-to-step-1",
+]);
+const frozenSeo = new Map([
+  [
+    "/",
+    {
+      title: "Free NBME Score Calculator for USMLE Step Scores | NBMEcalc",
+      description: "Free NBME score calculator and USMLE Step predictor. Convert NBME, UWSA, Free 120, AMBOSS, and CMS scores into a Step 1, Step 2 CK, or Step 3 prediction with confidence intervals.",
+      h1: "NBME Score Calculator — Predict Your Step Score in 5 Seconds",
+    },
+  ],
+  [
+    "/nbme-score-conversion",
+    {
+      title: "NBME Score Converter & Conversion Chart | NBMEcalc",
+      description: "Use the free NBME score converter for Step 2 CK estimates and Step 1 readiness planning. Supports current CCSSA and CBSSA form families with a transparent planning range.",
+      h1: "NBME Score Converter and Conversion Chart",
+    },
+  ],
+  [
+    "/nbme-calculator",
+    {
+      title: "NBME Self-Assessment Guide: Forms & Scores | NBMEcalc",
+      description: "Learn the difference between CBSSA, CCSSA, and CCMSA forms, how to read an NBME score report, and when to use an independent score calculator.",
+      h1: "NBME Self-Assessments: Forms, Scores, and Next Steps",
+    },
+  ],
+  [
+    "/step-1-predictor",
+    {
+      title: "Step 1 Predictor — Pass Probability Calculator (Free) | NBMEcalc",
+      description: "Free Step 1 predictor that calculates your USMLE Step 1 pass probability from NBME, UWSA, and Free 120 scores. Step 1 is pass/fail since 2022 — know your margin before test day.",
+      h1: "Step 1 Predictor: Calculate Your Pass Probability",
+    },
+  ],
+  [
+    "/step-2-predictor",
+    {
+      title: "Step 2 Score Predictor & CK Calculator | NBMEcalc",
+      description: "Free Step 2 score predictor and CK calculator. Combine CCSSA forms 9-15, UWSA, Free 120, AMBOSS, and CMS inputs with a transparent planning range.",
+      h1: "Step 2 Score Predictor and CK Calculator",
+    },
+  ],
+  [
+    "/step-3-predictor",
+    {
+      title: "Step 3 Score Predictor & USMLE Calculator | NBMEcalc",
+      description: "Free USMLE Step 3 predictor. Estimate your two-day Step 3 score from UWSA Step 3 self-assessments and Free 120. Pass probability + percentile + study plan.",
+      h1: "Step 3 Score Predictor and USMLE Calculator",
+    },
+  ],
 ]);
 
 function decodeHtml(value) {
@@ -70,6 +123,13 @@ function decodeHtml(value) {
 function firstMatch(html, pattern) {
   const match = html.match(pattern);
   return match ? decodeHtml(match[1].trim()) : "";
+}
+
+function visibleText(value) {
+  return decodeHtml(value)
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function normalizePath(href) {
@@ -161,6 +221,9 @@ try {
       /<link\s+rel="canonical"\s+href="([\s\S]*?)"\s*\/?>/i
     );
     const h1Count = [...page.text.matchAll(/<h1(?:\s[^>]*)?>/gi)].length;
+    const h1 = visibleText(
+      page.text.match(/<h1(?:\s[^>]*)?>([\s\S]*?)<\/h1>/i)?.[1] || ""
+    );
     const robotsMeta = firstMatch(
       page.text,
       /<meta\s+name="robots"\s+content="([\s\S]*?)"\s*\/?>/i
@@ -176,6 +239,18 @@ try {
     }
     if (robotsMeta.toLowerCase().includes("noindex")) {
       errors.push(`${pathname} is both noindex and present in sitemap`);
+    }
+    const frozen = frozenSeo.get(pathname);
+    if (frozen) {
+      if (title !== frozen.title) {
+        errors.push(`${pathname} frozen title changed from "${frozen.title}" to "${title}"`);
+      }
+      if (description !== frozen.description) {
+        errors.push(`${pathname} frozen description changed`);
+      }
+      if (h1 !== frozen.h1) {
+        errors.push(`${pathname} frozen H1 changed from "${frozen.h1}" to "${h1}"`);
+      }
     }
     if (
       evidenceSensitivePaths.has(pathname) &&
@@ -271,6 +346,57 @@ try {
     if (redirect.response.headers.get("location") !== "/nbme-score-conversion") {
       errors.push(`${pathname} redirects to an unexpected destination`);
     }
+  }
+
+  const productionDraft = await fetchText(
+    "/blog/nbme-30-vs-31-vs-32-which-is-hardest",
+    "manual"
+  );
+  if (productionDraft.response.status !== 404) {
+    errors.push(
+      `Production draft returned ${productionDraft.response.status}, expected 404`
+    );
+  }
+
+  for (const pathname of ["/login", "/recover", "/verify"]) {
+    const utilityPage = await fetchText(pathname, "manual");
+    if (utilityPage.response.status !== 200) {
+      errors.push(
+        `${pathname} returned ${utilityPage.response.status}, expected 200`
+      );
+      continue;
+    }
+    const robotsMeta = firstMatch(
+      utilityPage.text,
+      /<meta\s+name="robots"\s+content="([\s\S]*?)"\s*\/?>/i
+    );
+    if (!robotsMeta.toLowerCase().includes("noindex")) {
+      errors.push(`${pathname} is missing a noindex robots directive`);
+    }
+  }
+
+  const home = await fetchText("/");
+  if (home.response.headers.get("x-content-type-options") !== "nosniff") {
+    errors.push("Homepage is missing X-Content-Type-Options: nosniff");
+  }
+  if (home.response.headers.get("x-frame-options") !== "DENY") {
+    errors.push("Homepage is missing X-Frame-Options: DENY");
+  }
+  if (
+    !home.response.headers
+      .get("permissions-policy")
+      ?.includes("geolocation=()")
+  ) {
+    errors.push("Homepage is missing the restricted Permissions-Policy");
+  }
+
+  const adsTxt = await fetchText("/ads.txt");
+  if (!adsTxt.response.ok) errors.push("ads.txt does not return 200");
+  if (!adsTxt.response.headers.get("content-type")?.startsWith("text/plain")) {
+    errors.push("ads.txt is not served as text/plain");
+  }
+  if (/<(?:html|script)\b/i.test(adsTxt.text)) {
+    errors.push("ads.txt unexpectedly contains HTML or script markup");
   }
 
   console.log(

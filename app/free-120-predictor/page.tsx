@@ -39,15 +39,15 @@ export const metadata: Metadata = {
 };
 
 const conversionTable = [
-  { pct: 50, step2: 217, status: "At risk" },
-  { pct: 60, step2: 228, status: "Pass" },
-  { pct: 65, step2: 234, status: "Pass" },
-  { pct: 70, step2: 240, status: "Average" },
-  { pct: 75, step2: 246, status: "Above avg" },
-  { pct: 80, step2: 252, status: "Strong" },
-  { pct: 85, step2: 257, status: "Competitive" },
-  { pct: 90, step2: 262, status: "Top tier" },
-  { pct: 95, step2: 268, status: "Elite" },
+  { pct: 50, step2: 217 },
+  { pct: 60, step2: 228 },
+  { pct: 65, step2: 234 },
+  { pct: 70, step2: 240 },
+  { pct: 75, step2: 246 },
+  { pct: 80, step2: 252 },
+  { pct: 85, step2: 257 },
+  { pct: 90, step2: 262 },
+  { pct: 95, step2: 268 },
 ];
 
 const faqs = [
@@ -317,8 +317,7 @@ export default function Free120PredictorPage() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">Free 120 %</th>
-                  <th className="text-right px-5 py-3 font-bold text-mint-700">Step 2 CK</th>
-                  <th className="text-left px-5 py-3 font-bold text-gray-900">Match competitiveness</th>
+                  <th className="text-right px-5 py-3 font-bold text-mint-700">Internal model midpoint</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 bg-white">
@@ -326,7 +325,6 @@ export default function Free120PredictorPage() {
                   <tr key={row.pct}>
                     <td className="px-5 py-3 font-mono font-bold text-gray-950">{row.pct}%</td>
                     <td className="px-5 py-3 text-right font-mono font-bold text-mint-700">{row.step2}</td>
-                    <td className="px-5 py-3 text-gray-700">{row.status}</td>
                   </tr>
                 ))}
               </tbody>

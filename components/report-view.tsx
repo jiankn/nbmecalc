@@ -54,11 +54,8 @@ const STEP_LABEL: Record<PredictionResult["step"], string> = {
 };
 
 /**
- * Pass-probability narrative bands.
- *
- * We deliberately avoid superlatives like "guaranteed" or "100%". The model
- * itself caps probability at 0.99 (see passProbabilityLogistic) and our
- * copy here matches that: even the top band says "Very Strong", not "Sure".
+ * Narrative bands for the experimental internal pass estimate. These labels
+ * describe model output only and deliberately avoid test-date directives.
  */
 function passBand(p: number): {
   label: string;
@@ -67,37 +64,37 @@ function passBand(p: number): {
 } {
   if (p >= 0.95)
     return {
-      label: "Very Strong",
+      label: "Higher model estimate",
       tone: "green",
       explainer:
-        "Your inputs point to a high pass probability. Maintain pace; don't over-study. Take 1 rest day in the final week.",
+        "Your inputs produce a higher internal estimate. Confirm it against the official score report and your advisor's readiness process.",
     };
   if (p >= 0.85)
     return {
-      label: "Solid",
+      label: "Moderately high estimate",
       tone: "mint",
       explainer:
-        "Strong margin above threshold. Focus on shoring up subject-area gaps highlighted below — small lifts there compound.",
+        "The internal estimate is above the model threshold, but it is not a validated probability or an official readiness decision.",
     };
   if (p >= 0.7)
     return {
-      label: "Adequate",
+      label: "Mixed estimate",
       tone: "amber",
       explainer:
-        "Pass is likely, but the margin is thinner than it looks. Targeted prep on your weakest subjects (below) will lift you the most per hour.",
+        "The model output has less separation from its threshold. Compare recent official assessments and investigate disagreements.",
     };
   if (p >= 0.5)
     return {
-      label: "Borderline",
+      label: "Uncertain estimate",
       tone: "orange",
       explainer:
-        "Coin-flip territory. Re-test on a fresh NBME within 7 days to recalibrate. Rest, then attack your weak areas systematically.",
+        "Treat this internal estimate as uncertain. Use official assessment feedback and seek a second review before changing a test date.",
     };
   return {
-    label: "At Risk",
+    label: "Lower model estimate",
     tone: "red",
     explainer:
-      "Significant fail risk. Strongly consider postponing — 4 weeks of focused, weak-subject prep can shift this prediction by 8-15 points.",
+      "The internal estimate is below the model threshold. It cannot determine whether you should sit or reschedule; review official evidence with an advisor.",
   };
 }
 

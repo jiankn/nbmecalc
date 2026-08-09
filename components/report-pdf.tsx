@@ -1461,37 +1461,37 @@ function passBand(prob: number): {
 } {
   if (prob >= 0.95)
     return {
-      label: "Very strong",
+      label: "Higher model estimate",
       tone: "green",
       explainer:
-        "Comfortably above the line. Focus on stamina and refining weak topics rather than cramming new content.",
+        "Your inputs produce a higher internal estimate. Confirm it against the official score report and your advisor's readiness process.",
     };
   if (prob >= 0.85)
     return {
-      label: "Strong",
+      label: "Moderately high estimate",
       tone: "green",
       explainer:
-        "On track to pass. Maintain momentum and shore up your weakest two subjects.",
+        "The internal estimate is above the model threshold, but it is not a validated probability or an official readiness decision.",
     };
   if (prob >= 0.7)
     return {
-      label: "Likely pass",
+      label: "Mixed estimate",
       tone: "mint",
       explainer:
-        "Likely to pass, but the margin is thinner than you might want. Add focused review on weak subjects.",
+        "The model output has less separation from its threshold. Compare recent official assessments and investigate disagreements.",
     };
   if (prob >= 0.5)
     return {
-      label: "Borderline",
+      label: "Uncertain estimate",
       tone: "amber",
       explainer:
-        "Close to a coin flip. Consider postponing if your timeline allows, or aggressively shore up the weakest 2-3 subjects.",
+        "Treat this internal estimate as uncertain. Use official assessment feedback and seek a second review before changing a test date.",
     };
   return {
-    label: "Risk of failing",
+    label: "Lower model estimate",
     tone: "red",
     explainer:
-      "High risk. Strongly consider rescheduling and rebuilding the weakest subjects from foundations.",
+      "The internal estimate is below the model threshold. It cannot determine whether you should sit or reschedule; review official evidence with an advisor.",
   };
 }
 

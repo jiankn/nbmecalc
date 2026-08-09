@@ -52,7 +52,7 @@ export default function CheckoutCancelPage() {
                     >
                       pricing page
                     </Link>
-                    . We respond within 24 hours.
+                    . We&apos;ll review your message as soon as possible.
                   </p>
                 </div>
               </div>
