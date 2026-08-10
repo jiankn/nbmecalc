@@ -109,12 +109,19 @@ const formFamilySections = [
     title: "Step 3 CCMSA forms 5-7",
     intent: "Use this family for Step 3 planning, especially when paired with CCS practice.",
     examples: [
-      { label: "NBME 6 Step 3 score conversion" },
+      {
+        label: "NBME 6 Step 3 score conversion",
+        href: "/step-3-predictor#ccmsa-conversion",
+      },
+      {
+        label: "NBME 7 Step 3 score conversion",
+        href: "/step-3-predictor#ccmsa-conversion",
+      },
       { label: "Step 3 NBME score conversion" },
       { label: "NBME Step 3 score conversion" },
     ],
     note:
-      "Step 3 search demand is smaller and should strengthen the Step 3 predictor, not become a separate conversion-page cluster.",
+      "Step 3 search demand is smaller and should strengthen the Step 3 predictor, not become a separate conversion-page cluster. The CCMSA table and its per-form limits live on that page.",
     href: "/step-3-predictor",
     cta: "Open Step 3 predictor",
   },

@@ -107,8 +107,8 @@ const frozenSeo = new Map([
   [
     "/step-3-predictor",
     {
-      title: "Step 3 Score Predictor & USMLE Calculator | NBMEcalc",
-      description: "Free USMLE Step 3 predictor. Estimate your two-day Step 3 score from UWSA Step 3 self-assessments and Free 120. Pass probability + percentile + study plan.",
+      title: "Step 3 Score Conversion & Predictor — NBME CCMSA Forms 5-7",
+      description: "Convert an NBME 6 or NBME 7 CCMSA score into a 3-digit Step 3 estimate. Includes the conversion table, why one curve covers Forms 5-7, and what it cannot tell you.",
       h1: "Step 3 Score Predictor and USMLE Calculator",
     },
   ],

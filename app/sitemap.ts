@@ -20,18 +20,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Console export: the affected pages held page-one positions with
   // near-zero CTR because their snippets did not match query wording.
   const snippetRewriteUpdate = new Date("2026-08-10");
+  // CCMSA Form 5-7 conversion table added to the Step 3 predictor. Step 3
+  // form demand is served by strengthening that page rather than by a
+  // per-form page cluster, so only these two URLs change.
+  const ccmsaConversionUpdate = new Date("2026-08-11");
 
   const liveRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: snippetRewriteUpdate, changeFrequency: "weekly", priority: 1.0 },
 
     // Core SEO landing pages
-    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: snippetRewriteUpdate, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: ccmsaConversionUpdate, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/nbme-15-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
     { url: `${SITE_URL}/nbme-30-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
     { url: `${SITE_URL}/nbme-calculator`, lastModified: indexingRemediationUpdate, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/step-1-predictor`, lastModified: adsenseTrustUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-2-predictor`, lastModified: indexingRemediationUpdate, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${SITE_URL}/step-3-predictor`, lastModified: indexingRemediationUpdate, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${SITE_URL}/step-3-predictor`, lastModified: ccmsaConversionUpdate, changeFrequency: "weekly", priority: 0.85 },
 
     // Marketing and trust pages. Legal and utility pages stay reachable from
     // the footer, but are kept out of the XML sitemap so the sitemap only
