@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title:
-    "NBME Score Converter & Conversion Chart | NBMEcalc",
+    "NBME Score Conversion Chart — Step 2 CK, Step 1 & Step 3 Forms",
   description:
-    "Use the free NBME score converter for Step 2 CK estimates and Step 1 readiness planning. Supports current CCSSA and CBSSA form families with a transparent planning range.",
+    "Convert an NBME form score into a 3-digit Step estimate. Covers CCSSA forms 9-15 (Step 2 CK), CBSSA 26-32 (Step 1), and CCMSA 5-7 (Step 3). Free, no signup.",
   keywords: [
     "nbme score converter",
     "nbme score conversion",
@@ -19,12 +19,15 @@ export const metadata: Metadata = {
     "nbme step 2 score converter",
     "nbme step 1 conversion",
     "nbme conversion chart",
+    "nbme 32 score conversion",
+    "nbme 30 score conversion",
+    "nbme score conversion step 3",
   ],
   alternates: { canonical: "https://nbmecalc.com/nbme-score-conversion" },
   openGraph: {
-    title: "NBME Score Converter & Conversion Chart",
+    title: "NBME Score Conversion Chart — Step 2 CK, Step 1 & Step 3 Forms",
     description:
-      "Convert NBME practice scores into an independent Step 2 CK estimate or Step 1 pass probability.",
+      "Convert an NBME form score into a 3-digit Step estimate. Covers CCSSA forms 9-15, CBSSA 26-32, and CCMSA 5-7.",
     url: "https://nbmecalc.com/nbme-score-conversion",
     type: "article",
     images: [

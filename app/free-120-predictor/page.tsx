@@ -7,9 +7,9 @@ import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Free 120 Step 2 Score Conversion Calculator | NBMEcalc",
+  title: "Free 120 to Step 2 Score Conversion Calculator (2019/2021/New)",
   description:
-    "Compare current, 2021, and 2019 Free 120 versions, then convert percent correct into an independent Step 2 CK estimate with a confidence interval.",
+    "Enter your Free 120 percent correct and get a 3-digit Step 2 CK estimate in seconds. Covers the new, 2021, and 2019 forms. Free, no signup.",
   keywords: [
     "free 120 step 2 score conversion",
     "step 2 free 120 score conversion",
@@ -19,12 +19,18 @@ export const metadata: Metadata = {
     "free 120 score calculator",
     "free 120 score converter step 2",
     "free 120 to step 2",
+    "free 120 conversion step 2",
+    "free 120 calculator step 2",
+    "old free 120 score conversion step 2",
+    "2019 free 120 step 2 score conversion",
+    "2021 free 120 step 2 score conversion",
+    "new free 120 score conversion step 2",
   ],
   alternates: { canonical: "https://nbmecalc.com/free-120-predictor" },
   openGraph: {
-    title: "Free 120 Step 2 Score Conversion Calculator",
+    title: "Free 120 to Step 2 Score Conversion Calculator (2019/2021/New)",
     description:
-      "Compare current, 2021, and 2019 Free 120 versions, then calculate an independent Step 2 CK estimate with a confidence interval.",
+      "Enter your Free 120 percent correct and get a 3-digit Step 2 CK estimate in seconds. Covers the new, 2021, and 2019 forms.",
     url: "https://nbmecalc.com/free-120-predictor",
     type: "website",
     images: [

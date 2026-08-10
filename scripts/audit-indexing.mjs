@@ -59,20 +59,24 @@ const evidenceSensitivePaths = new Set([
   "/step-1-predictor",
   "/uwsa-1-to-step-1",
 ]);
+// Baseline snapshots that guard already-ranking pages against accidental
+// metadata drift. Rebase an entry only alongside a deliberate rewrite.
+// `/` and `/nbme-score-conversion` were rebased on 2026-08-10 after the
+// Search Console export showed page-one positions with near-zero CTR.
 const frozenSeo = new Map([
   [
     "/",
     {
-      title: "Free NBME Score Calculator for USMLE Step Scores | NBMEcalc",
-      description: "Free NBME score calculator and USMLE Step predictor. Convert NBME, UWSA, Free 120, AMBOSS, and CMS scores into a Step 1, Step 2 CK, or Step 3 prediction with confidence intervals.",
+      title: "Free NBME Score Calculator — Step Score Estimate in Seconds",
+      description: "Convert NBME, CMS, Free 120, UWSA, or AMBOSS percent correct into a 3-digit Step 1, Step 2 CK, or Step 3 estimate. Free, no signup, with a planning range.",
       h1: "NBME Score Calculator — Predict Your Step Score in 5 Seconds",
     },
   ],
   [
     "/nbme-score-conversion",
     {
-      title: "NBME Score Converter & Conversion Chart | NBMEcalc",
-      description: "Use the free NBME score converter for Step 2 CK estimates and Step 1 readiness planning. Supports current CCSSA and CBSSA form families with a transparent planning range.",
+      title: "NBME Score Conversion Chart — Step 2 CK, Step 1 & Step 3 Forms",
+      description: "Convert an NBME form score into a 3-digit Step estimate. Covers CCSSA forms 9-15 (Step 2 CK), CBSSA 26-32 (Step 1), and CCMSA 5-7 (Step 3). Free, no signup.",
       h1: "NBME Score Converter and Conversion Chart",
     },
   ],

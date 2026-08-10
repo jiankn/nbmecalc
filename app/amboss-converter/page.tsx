@@ -7,10 +7,14 @@ import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "AMBOSS to Step 2 CK Converter — Free Score Calculator | NBMEcalc",
+  title: "AMBOSS Score Predictor to Step 2 CK — Free Converter, No Login",
   description:
-    "Use an AMBOSS Self-Assessment as one input in an independent Step 2 CK estimate. Includes a planning range and transparent model limitations.",
+    "Turn an AMBOSS Self-Assessment or Score Predictor result into an independent 3-digit Step 2 CK estimate. Free, no login, with a planning range.",
   keywords: [
+    "amboss score predictor step 2",
+    "amboss step 2 score predictor",
+    "amboss predictor step 2",
+    "amboss calculator step 2",
     "amboss to step",
     "amboss to step 2",
     "amboss self assessment",
@@ -19,9 +23,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://nbmecalc.com/amboss-converter" },
   openGraph: {
-    title: "AMBOSS to Step 2 CK Converter — Free Score Calculator",
+    title: "AMBOSS Score Predictor to Step 2 CK — Free Converter",
     description:
-      "Independent estimate from an AMBOSS Self-Assessment input to a Step 2 CK planning range.",
+      "Turn an AMBOSS Self-Assessment or Score Predictor result into an independent 3-digit Step 2 CK estimate. Free, no login.",
     url: "https://nbmecalc.com/amboss-converter",
     type: "website",
     images: [
