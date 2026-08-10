@@ -69,7 +69,7 @@ export const predictions = sqliteTable(
     /** Full PredictionResult JSON. Source for rendering report / PDF. */
     resultSnapshot: text("result_snapshot").notNull(),
 
-    /** "v1.0" today. Bumped on algorithm changes (PRD §10.3). */
+    /** Bumped on algorithm changes (PRD §10.3). */
     algorithmVersion: text("algorithm_version").notNull(),
 
     // --- Request metadata ---

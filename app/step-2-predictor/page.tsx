@@ -344,7 +344,7 @@ export default function Step2PredictorPage() {
                 data-indexing-context="related"
                 className="underline underline-offset-2"
               >
-                NBME → Step 2 CK conversion tables
+                How to read CCSSA Total Scores
               </Link>
             </li>
             <li>
@@ -448,7 +448,7 @@ export default function Step2PredictorPage() {
             </Button>
             <Button variant="outline" size="lg" asChild>
               <Link href="/nbme-score-conversion">
-                See full NBME → Step 2 CK conversion table
+                Learn how to read CCSSA scores
               </Link>
             </Button>
           </div>

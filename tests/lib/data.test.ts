@@ -13,16 +13,37 @@
  */
 import { describe, expect, it } from "vitest";
 import {
+  ALGORITHM_VERSION,
   buildPersonalizedWeakSubjects,
   buildPostponeRecommendation,
   buildScoreTrajectory,
   buildSourceInsight,
   buildTargetGap,
   computeBaseline,
+  convertExam,
+  isExamSourceSupportedForStep,
   type CohortSubjectAverage,
   type PracticeExam,
 } from "@/lib/data";
 import { predictStepScore } from "@/lib/predict";
+
+describe("current NBME score-family handling", () => {
+  it("accepts direct NBME input only for Step 2 CCSSA", () => {
+    expect(isExamSourceSupportedForStep("NBME", "step1")).toBe(false);
+    expect(isExamSourceSupportedForStep("NBME", "step2")).toBe(true);
+    expect(isExamSourceSupportedForStep("NBME", "step3")).toBe(false);
+  });
+
+  it("keeps the CCSSA Total Score as the Step 2 assessment midpoint", () => {
+    expect(
+      convertExam(
+        { id: "ccssa", source: "NBME", formNumber: 15, score: 240 },
+        "step2"
+      )
+    ).toBe(240);
+    expect(ALGORITHM_VERSION).toBe("v1.2");
+  });
+});
 
 describe("computeBaseline freshness", () => {
   const inputs: PracticeExam[] = [

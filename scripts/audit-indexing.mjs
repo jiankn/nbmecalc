@@ -68,7 +68,7 @@ const frozenSeo = new Map([
     "/",
     {
       title: "Free NBME Score Calculator — Step Score Estimate in Seconds",
-      description: "Convert NBME, CMS, Free 120, UWSA, or AMBOSS percent correct into a 3-digit Step 1, Step 2 CK, or Step 3 estimate. Free, no signup, with a planning range.",
+      description: "Combine Step 2 CCSSA, UWSA, Free 120, AMBOSS, or CMS results into an independent Step estimate and planning range. Free, no signup.",
       h1: "NBME Score Calculator — Predict Your Step Score in 5 Seconds",
     },
   ],
@@ -76,8 +76,8 @@ const frozenSeo = new Map([
     "/nbme-score-conversion",
     {
       title: "NBME Score Conversion Chart — Step 2 CK, Step 1 & Step 3 Forms",
-      description: "Convert an NBME form score into a 3-digit Step estimate. Covers CCSSA forms 9-15 (Step 2 CK), CBSSA 26-32 (Step 1), and CCMSA 5-7 (Step 3). Free, no signup.",
-      h1: "NBME Score Converter and Conversion Chart",
+      description: "Read NBME score reports without mixing scales: Step 2 CCSSA Total Scores, Step 1 CBSSA EPC and pass probability, and Step 3 CCMSA limits.",
+      h1: "NBME Score Conversion and Report Guide",
     },
   ],
   [
@@ -92,7 +92,7 @@ const frozenSeo = new Map([
     "/step-1-predictor",
     {
       title: "Step 1 Predictor — Pass Probability Calculator (Free) | NBMEcalc",
-      description: "Free Step 1 predictor that calculates your USMLE Step 1 pass probability from NBME, UWSA, and Free 120 scores. Step 1 is pass/fail since 2022 — know your margin before test day.",
+      description: "Estimate Step 1 pass readiness from compatible UWSA and Free 120 inputs. For a current NBME CBSSA, use the probability and EPC range on the official report.",
       h1: "Step 1 Predictor: Calculate Your Pass Probability",
     },
   ],
@@ -107,9 +107,9 @@ const frozenSeo = new Map([
   [
     "/step-3-predictor",
     {
-      title: "Step 3 Score Predictor & USMLE Calculator | NBMEcalc",
-      description: "Free USMLE Step 3 predictor. Estimate your two-day Step 3 score from UWSA Step 3 self-assessments and Free 120. Pass probability + percentile + study plan.",
-      h1: "Step 3 Score Predictor and USMLE Calculator",
+      title: "NBME 6 & 7 Step 3 Score Conversion — Limits & Alternatives",
+      description: "There is no official one-to-one CCMSA-to-Step 3 conversion. See the current 10-800 scale, why Forms 6 and 7 are not converted here, and what to use instead.",
+      h1: "Step 3 Predictor: NBME 6 & 7 Conversion Limits",
     },
   ],
 ]);

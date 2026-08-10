@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 const cards = [
   {
     title: "Combine Supported Assessments",
-    body: "Review supported NBME, UWSA 1/2, Free 120, AMBOSS, and CMS results in one prediction while keeping each assessment family distinct.",
+    body: "Review supported CCSSA, UWSA 1/2, Free 120, AMBOSS, and CMS results in one prediction while keeping each assessment family distinct.",
     image: "/images/feature-practice-exams.jpg",
     imageAlt: "Blank pastel practice exam cards arranged on a medical student's desk",
     imageClassName: "group-hover:scale-[1.02]",

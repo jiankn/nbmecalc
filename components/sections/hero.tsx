@@ -8,8 +8,8 @@ import { IPhoneMockup } from "@/components/iphone-mockup";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
-  { key: "step1", label: "Step 1", placeholder: "Enter your NBME 30 score (e.g., 220)" },
-  { key: "step2", label: "Step 2 CK", placeholder: "Enter your NBME 31 score (e.g., 235)" },
+  { key: "step1", label: "Step 1", placeholder: "Enter your UWSA 1 score (e.g., 220)" },
+  { key: "step2", label: "Step 2 CK", placeholder: "Enter your CCSSA Form 14 score (e.g., 235)" },
   { key: "step3", label: "Step 3", placeholder: "Enter your UWSA score (e.g., 215)" },
   { key: "free120", label: "Free 120", placeholder: "Enter your Free 120 % (e.g., 78)" },
 ] as const;
@@ -32,7 +32,7 @@ export function Hero() {
           detail: {
             score: numericScore,
             step: activeStep === "free120" ? "step2" : activeStep === "step3" ? "step3" : activeStep === "step1" ? "step1" : "step2",
-            source: activeStep === "free120" ? "FREE120" : activeStep === "step3" ? "UWSA1" : "NBME",
+            source: activeStep === "free120" ? "FREE120" : activeStep === "step3" || activeStep === "step1" ? "UWSA1" : "NBME",
           },
         })
       );
@@ -61,7 +61,7 @@ export function Hero() {
 
           {/* Sub */}
           <p className="text-lg lg:text-xl text-black/75 max-w-[560px] leading-relaxed">
-            Combine your NBME, UWSA, or Free 120 scores into an independent
+            Combine compatible CCSSA, UWSA, or Free 120 scores into an independent
             Step estimate with an{" "}
             <span className="font-semibold text-black">
               estimated planning range

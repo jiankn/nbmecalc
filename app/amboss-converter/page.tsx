@@ -105,7 +105,7 @@ export default function AmbossConverterPage() {
 
       <PageHero
         badge="AMBOSS → Step 2 CK"
-        title="AMBOSS to Step 2 CK Converter"
+        title="AMBOSS Score Predictor to Step 2 CK"
         description="Use an AMBOSS Self-Assessment as one input in an independent Step 2 CK estimate. The source adjustment is a model assumption, not an official conversion."
         size="md"
       />

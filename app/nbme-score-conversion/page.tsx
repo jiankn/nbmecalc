@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Check, AlertTriangle, TrendingUp, BookOpen } from "lucide-react";
+import { Check, AlertTriangle, BookOpen } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title:
     "NBME Score Conversion Chart — Step 2 CK, Step 1 & Step 3 Forms",
   description:
-    "Convert an NBME form score into a 3-digit Step estimate. Covers CCSSA forms 9-15 (Step 2 CK), CBSSA 26-32 (Step 1), and CCMSA 5-7 (Step 3). Free, no signup.",
+    "Read NBME score reports without mixing scales: Step 2 CCSSA Total Scores, Step 1 CBSSA EPC and pass probability, and Step 3 CCMSA limits.",
   keywords: [
     "nbme score converter",
     "nbme score conversion",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "NBME Score Conversion Chart — Step 2 CK, Step 1 & Step 3 Forms",
     description:
-      "Convert an NBME form score into a 3-digit Step estimate. Covers CCSSA forms 9-15, CBSSA 26-32, and CCMSA 5-7.",
+      "Read CCSSA, CBSSA, and CCMSA reports without treating their different score scales as interchangeable.",
     url: "https://nbmecalc.com/nbme-score-conversion",
     type: "article",
     images: [
@@ -41,18 +41,28 @@ export const metadata: Metadata = {
   },
 };
 
-// Step 2 CK conversion table (more detailed than the lib/data.ts version
-// for SEO depth)
-const step2Table = [
-  { nbme: 200, step2: 218 },
-  { nbme: 210, step2: 225 },
-  { nbme: 220, step2: 232 },
-  { nbme: 230, step2: 240 },
-  { nbme: 240, step2: 248 },
-  { nbme: 250, step2: 254 },
-  { nbme: 260, step2: 260 },
-  { nbme: 270, step2: 265 },
-  { nbme: 280, step2: 270 },
+const step2ReportChecklist = [
+  {
+    field: "Total CCSSA Score",
+    officialMeaning:
+      "A 1-300 estimate of Step 2 CK performance under comparable knowledge and testing conditions.",
+    calculatorUse:
+      "Enter it unchanged. NBMEcalc keeps it as the assessment midpoint.",
+  },
+  {
+    field: "Score range",
+    officialMeaning:
+      "The report's uncertainty around the Total CCSSA Score.",
+    calculatorUse:
+      "Read it alongside, not as a replacement for, NBMEcalc's model-generated range.",
+  },
+  {
+    field: "Content-area feedback",
+    officialMeaning:
+      "Relative strengths and weaknesses within the assessed content.",
+    calculatorUse:
+      "Use it for study planning; it is not another overall score input.",
+  },
 ];
 
 const step1ReportChecklist = [
@@ -109,12 +119,19 @@ const formFamilySections = [
     title: "Step 3 CCMSA forms 5-7",
     intent: "Use this family for Step 3 planning, especially when paired with CCS practice.",
     examples: [
-      { label: "NBME 6 Step 3 score conversion" },
+      {
+        label: "NBME 6 Step 3 score conversion",
+        href: "/step-3-predictor#ccmsa-conversion",
+      },
+      {
+        label: "NBME 7 Step 3 score conversion",
+        href: "/step-3-predictor#ccmsa-conversion",
+      },
       { label: "Step 3 NBME score conversion" },
       { label: "NBME Step 3 score conversion" },
     ],
     note:
-      "Step 3 search demand is smaller and should strengthen the Step 3 predictor, not become a separate conversion-page cluster.",
+      "Step 3 search demand is served on one evidence page. It explains the current 10-800 CCMSA scale and why NBMEcalc does not publish an unsupported Form 6/7 conversion table.",
     href: "/step-3-predictor",
     cta: "Open Step 3 predictor",
   },
@@ -225,8 +242,8 @@ export default function NbmeScoreConversionPage() {
 
       <PageHero
         badge="NBME → Step conversion"
-        title="NBME Score Converter and Conversion Chart"
-        description="Convert current Step 2 CK CCSSA scores into an independent estimate, or use Step 1 CBSSA results for readiness planning. Add multiple recent inputs for a more useful planning range."
+        title="NBME Score Conversion and Report Guide"
+        description="Start with the score scale printed on the report. Current CCSSA, CBSSA, and CCMSA reports are different products, so this page shows what can be entered and what should be read directly."
         size="md"
       />
 
@@ -248,9 +265,9 @@ export default function NbmeScoreConversionPage() {
                 Checking Step 1 readiness?
               </h2>
               <p className="text-sm text-gray-600">
-                Choose Step 1 and enter your CBSSA result. Step 1 is pass/fail,
-                so the useful output is pass probability—not a predicted
-                transcript score.
+                Current CBSSA reports use EPC and provide an official pass
+                probability. Read those fields directly; do not enter EPC in
+                the calculator&apos;s Step 2 CCSSA field.
               </p>
             </div>
           </div>
@@ -265,18 +282,16 @@ export default function NbmeScoreConversionPage() {
           </h2>
           <div className="mt-4 space-y-3 leading-relaxed text-gray-700">
             <p>
-              For an <strong>NBME 32 score conversion</strong>, select Step 1,
-              choose NBME Form 32, and enter the three-digit equated score shown
-              on your report. Do not enter percent correct into a field labeled
-              for a three-digit score.
+              For a current <strong>NBME 32 score conversion</strong>, start
+              with the equated percent correct, likely range, and estimated
+              probability of passing printed on the CBSSA report. There is no
+              supported reason to force that EPC onto the Step 2 CCSSA scale.
             </p>
             <p>
-              The current model applies a small +1 form-specific adjustment
-              before aggregation. That is a disclosed internal assumption—not
-              an official NBME conversion. For a test-date decision, use the
+              NBMEcalc therefore does not accept current Form 32 EPC as a
+              direct NBME calculator input. For a test-date decision, use the
               official report&apos;s estimated probability of passing and low-pass
-              range first, then use this page to compare Form 32 with your other
-              recent evidence.
+              range, then compare it qualitatively with other recent evidence.
             </p>
           </div>
         </div>
@@ -343,23 +358,31 @@ export default function NbmeScoreConversionPage() {
         </div>
       </section>
 
-      {/* Step 2 CK conversion table */}
+      {/* Step 2 CK report fields */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-5xl">
           <div className="mb-8">
             <div className="inline-flex items-center gap-2 rounded-full bg-mint-100 px-3 py-1 text-xs font-bold text-mint-800 mb-3">
-              <TrendingUp className="h-3 w-3" />
-              Independent model — assumptions published
+              <BookOpen className="h-3 w-3" />
+              Official report first
             </div>
             <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
               NBME to Step 2 CK Conversion Chart
             </h2>
             <p className="text-gray-600 text-lg max-w-3xl">
-              If you are asking <em>&quot;What does my NBME score actually mean?&quot;</em>,{" "}
-              the table below exposes the calculator&apos;s current piecewise
-              midpoint mapping. It does not include invented percentile or
-              residency-competitiveness labels.
+              The quick answer is that a current CCSSA Total Score already
+              estimates Step 2 CK performance. Enter that 1-300 score unchanged;
+              converting 240 into a different midpoint would double-transform
+              the report&apos;s estimate.
             </p>
+            <a
+              href="https://www.nbme.org/wp-content/uploads/2026/04/Comprehensive_Clinical_Science_Self-Assessment_Sample.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-block text-sm font-semibold text-mint-800 underline underline-offset-4"
+            >
+              Check the current official CCSSA sample report
+            </a>
           </div>
 
           <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
@@ -367,24 +390,30 @@ export default function NbmeScoreConversionPage() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    NBME score
+                    Official report field
                   </th>
                   <th className="text-left px-5 py-3 font-bold text-gray-900">
-                    Internal model midpoint
+                    What it means
+                  </th>
+                  <th className="text-left px-5 py-3 font-bold text-gray-900">
+                    What NBMEcalc does
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {step2Table.map((row) => (
+                {step2ReportChecklist.map((row) => (
                   <tr
-                    key={row.nbme}
+                    key={row.field}
                     className="hover:bg-mint-50/40 transition"
                   >
-                    <td className="px-5 py-3 font-mono font-bold text-gray-950">
-                      {row.nbme}
+                    <td className="px-5 py-3 font-bold text-gray-950">
+                      {row.field}
                     </td>
-                    <td className="px-5 py-3 font-mono text-mint-700 font-bold">
-                      {row.step2}
+                    <td className="px-5 py-3 text-gray-700">
+                      {row.officialMeaning}
+                    </td>
+                    <td className="px-5 py-3 text-gray-700">
+                      {row.calculatorUse}
                     </td>
                   </tr>
                 ))}
@@ -393,9 +422,9 @@ export default function NbmeScoreConversionPage() {
           </div>
 
           <p className="text-xs text-gray-500 mt-4">
-            * Independent estimates only. Timing, assessment family, and
-            agreement with other recent inputs affect the useful range. This
-            table does not replace the official NBME score report.
+            Source: current NBME CCSSA sample score report. NBMEcalc&apos;s combined
+            multi-source output remains an independent, unvalidated planning
+            estimate and does not replace the official report.
           </p>
         </div>
       </section>
@@ -526,12 +555,13 @@ export default function NbmeScoreConversionPage() {
       <section className="py-16 lg:py-20 bg-gray-50">
         <div className="container max-w-3xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-6">
-            How we built these conversion tables
+            How the calculator treats supported scores
           </h2>
           <div className="prose prose-lg max-w-none text-gray-700">
             <p>
-              The current calculator uses piecewise score mappings,
-              source-specific adjustments, and recency weighting. These are
+              A current Step 2 CCSSA Total Score is retained as the assessment
+              midpoint. Other supported sources use source-specific mappings
+              and recency weighting. Those additional mappings are
               <strong> independent model assumptions</strong>, not official
               NBME or USMLE conversion rules.
             </p>

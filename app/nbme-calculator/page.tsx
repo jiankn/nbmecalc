@@ -192,8 +192,9 @@ export default function NbmeCalculatorPage() {
             Run the calculator
           </h2>
           <p className="text-gray-600">
-            Enter your NBME scores below to get an adjusted Step prediction
-            with an estimated planning range.
+            Enter a current Step 2 CCSSA Total Score below to get a planning
+            range, or use this guide to read CBSSA and CCMSA reports on their
+            own scales.
           </p>
         </div>
         <Calculator />
@@ -335,8 +336,8 @@ export default function NbmeCalculatorPage() {
               <GraduationCap className="h-6 w-6 text-mint-600 mb-3" />
               <h3 className="font-bold mb-1">Multi-source aggregation</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
-                One NBME ≠ your real ability. We combine NBME, UWSA, Free 120,
-                and AMBOSS into a single weighted estimate.
+                One result ≠ your real ability. We combine compatible CCSSA,
+                UWSA, Free 120, and AMBOSS inputs into a weighted estimate.
               </p>
             </div>
             <div className="rounded-3xl border border-gray-200 bg-white p-6">
@@ -398,7 +399,7 @@ export default function NbmeCalculatorPage() {
                 href="/nbme-score-conversion"
                 data-indexing-context="related"
               >
-                View NBME → Step conversion table
+                Read the NBME score report guide
               </Link>
             </Button>
           </div>
