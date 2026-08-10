@@ -183,7 +183,7 @@ export function Nav() {
           scrolled && "shadow-sm backdrop-blur-md bg-mint-500/95"
         )}
       >
-      <div className="container flex h-[72px] items-center justify-between gap-4">
+      <div className="container flex h-[54px] items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <Logo width={180} height={40} />
@@ -280,7 +280,7 @@ export function Nav() {
               <Button
                 variant="secondary"
                 size="sm"
-                className="border-0 bg-white hover:bg-gray-50"
+                className="border-0 bg-white shadow-sm hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md active:translate-y-0"
                 asChild
               >
                 <Link href={TRY_FREE_HREF}>Get started</Link>

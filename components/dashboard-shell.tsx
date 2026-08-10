@@ -79,7 +79,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Nav />
-        <div className="flex min-h-[calc(100vh-72px)] items-center justify-center">
+        <div className="flex min-h-[calc(100vh-54px)] items-center justify-center">
           <div className="text-gray-500">Loading…</div>
         </div>
       </div>
