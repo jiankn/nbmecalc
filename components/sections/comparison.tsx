@@ -6,7 +6,7 @@ const checks = [
   {
     icon: Calculator,
     title: "Compatible inputs",
-    body: "Combine supported NBME, UWSA, Free 120, AMBOSS, and CMS results while keeping each assessment family distinct.",
+    body: "Combine supported CCSSA, UWSA, Free 120, AMBOSS, and CMS results while keeping each assessment family distinct.",
   },
   {
     icon: ListChecks,

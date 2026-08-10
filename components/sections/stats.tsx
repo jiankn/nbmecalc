@@ -9,7 +9,7 @@ const stats = [
     value: 6,
     suffix: "",
     label: "Input Source Types",
-    sub: "NBME, UWSA 1/2, Free 120, AMBOSS, and CMS",
+    sub: "CCSSA, UWSA 1/2, Free 120, AMBOSS, and CMS",
   },
   {
     value: 1,

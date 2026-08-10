@@ -30,6 +30,8 @@
 import { NextResponse } from "next/server";
 import {
   ALGORITHM_VERSION,
+  EXAM_SOURCES,
+  isExamSourceSupportedForStep,
   type ExamSource,
   type PracticeExam,
   type PredictionResult,
@@ -91,6 +93,7 @@ function parseBody(raw: unknown): PredictBody | { error: string } {
   if (typeof b.step !== "string" || !STEP_VALUES.has(b.step as StepKind)) {
     return { error: "`step` must be one of step1, step2, step3." };
   }
+  const step = b.step as StepKind;
   if (!Array.isArray(b.exams) || b.exams.length === 0) {
     return { error: "`exams` must be a non-empty array." };
   }
@@ -118,6 +121,23 @@ function parseBody(raw: unknown): PredictBody | { error: string } {
     if (!isFiniteNumber(e.score)) {
       return { error: `exams[${i}].score must be a number.` };
     }
+    const source = e.source as ExamSource;
+    if (!isExamSourceSupportedForStep(source, step)) {
+      return {
+        error:
+          `exams[${i}] uses NBME with ${step}. Direct NBME input supports ` +
+          "Step 2 CCSSA Total Scores only; current CBSSA and CCMSA reports use different scales.",
+      };
+    }
+    const sourceMeta = EXAM_SOURCES.find((item) => item.key === source)!;
+    if (
+      (e.score as number) < sourceMeta.scoreRange[0] ||
+      (e.score as number) > sourceMeta.scoreRange[1]
+    ) {
+      return {
+        error: `exams[${i}].score must be between ${sourceMeta.scoreRange[0]} and ${sourceMeta.scoreRange[1]} for ${sourceMeta.label}.`,
+      };
+    }
     if (e.formNumber !== undefined && !isFiniteNumber(e.formNumber)) {
       return { error: `exams[${i}].formNumber must be a number when present.` };
     }
@@ -128,7 +148,7 @@ function parseBody(raw: unknown): PredictBody | { error: string } {
     }
     exams.push({
       id: String(e.id),
-      source: e.source as ExamSource,
+      source,
       score: e.score as number,
       formNumber: e.formNumber as number | undefined,
       takenDaysAgo: e.takenDaysAgo as number | undefined,
@@ -173,7 +193,7 @@ function parseBody(raw: unknown): PredictBody | { error: string } {
     options = { targetScore, selfReportedWeakSubjects };
   }
 
-  return { step: b.step as StepKind, exams, daysUntilExam, options };
+  return { step, exams, daysUntilExam, options };
 }
 
 // ---------------------------------------------------------------------------

@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title:
-    "Step 3 Score Conversion & Predictor — NBME CCMSA Forms 5-7",
+    "NBME 6 & 7 Step 3 Score Conversion — Limits & Alternatives",
   description:
-    "Convert an NBME 6 or NBME 7 CCMSA score into a 3-digit Step 3 estimate. Includes the conversion table, why one curve covers Forms 5-7, and what it cannot tell you.",
+    "There is no official one-to-one CCMSA-to-Step 3 conversion. See the current 10-800 scale, why Forms 6 and 7 are not converted here, and what to use instead.",
   keywords: [
     "nbme 6 step 3 score conversion",
     "nbme 7 step 3 score conversion",
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://nbmecalc.com/step-3-predictor" },
   openGraph: {
-    title: "Step 3 Score Conversion & Predictor — NBME CCMSA Forms 5-7",
+    title: "NBME 6 & 7 Step 3 Score Conversion — Limits & Alternatives",
     description:
-      "Convert an NBME 6 or NBME 7 CCMSA score into a 3-digit Step 3 estimate, and see why one curve covers all three current CCMSA forms.",
+      "The current CCMSA report uses a 10-800 scale and is not intended to predict Step 3. See the supported alternatives.",
     url: "https://nbmecalc.com/step-3-predictor",
     type: "website",
     images: [
@@ -44,27 +44,27 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * CCMSA total score -> internal Step 3 midpoint.
- *
- * Generated from the same anchors and interpolation the calculator uses
- * (NBME_TO_STEP.step3 in lib/data.ts), so the published table and the tool
- * cannot drift apart. There is deliberately no per-form variant: no entry
- * exists in NBME_FORM_BIAS for Forms 5, 6, or 7, so all three resolve to
- * this one curve.
- */
-const ccmsaTable = [
-  { ccmsa: 200, step3: 200 },
-  { ccmsa: 210, step3: 207 },
-  { ccmsa: 220, step3: 213 },
-  { ccmsa: 230, step3: 220 },
-  { ccmsa: 240, step3: 226 },
-  { ccmsa: 250, step3: 233 },
-  { ccmsa: 260, step3: 240 },
-  { ccmsa: 270, step3: 246 },
-  { ccmsa: 280, step3: 252 },
-  { ccmsa: 290, step3: 256 },
-  { ccmsa: 300, step3: 260 },
+const ccmsaReportFacts = [
+  {
+    field: "Assessment Score",
+    currentReport: "10-800 scale",
+    implication: "Do not enter it in a 1-300 CCSSA field.",
+  },
+  {
+    field: "Reference distribution",
+    currentReport: "Mean 500; standard deviation 100",
+    implication: "This describes the CCMSA scale, not the Step 3 scale.",
+  },
+  {
+    field: "Official intended use",
+    currentReport: "Identify strengths and weaknesses",
+    implication: "NBME says CCMSA is not intended to predict Step 3 performance.",
+  },
+  {
+    field: "NBMEcalc handling",
+    currentReport: "No CCMSA-to-Step 3 curve",
+    implication: "The calculator accepts other supported Step 3 inputs instead.",
+  },
 ];
 
 const interpretationSteps = [
@@ -76,7 +76,7 @@ const interpretationSteps = [
   {
     label: "Check the source family",
     advice:
-      "Use Step 3-specific evidence. NBME identifies CCMSA—not Step 1 CBSSA or Step 2 CK CCSSA—as its comprehensive Step 3 self-assessment family.",
+      "Use Step 3-specific evidence. CCMSA is the relevant NBME family, but its current report explicitly says it is diagnostic rather than a Step 3 prediction.",
   },
   {
     label: "Separate MCQ and CCS preparation",
@@ -123,15 +123,15 @@ const faqs = [
   },
   {
     q: "How do I convert an NBME 6 score to a Step 3 score?",
-    a: "Enter the three-digit total score printed on your CCMSA Form 6 report into the calculator with Step 3 selected. NBMEcalc maps it through the conversion table on this page — a 240 resolves to roughly 226. The result is a planning estimate, not an official conversion.",
+    a: "There is no official one-to-one conversion. The current CCMSA report uses a 10-800 Assessment Score and states that CCMSA is not intended to predict Step 3 performance. NBMEcalc therefore does not convert a Form 6 score into an invented three-digit Step 3 midpoint.",
   },
   {
     q: "Is the NBME 7 conversion different from NBME 6?",
-    a: "No. NBMEcalc applies one curve to CCMSA Forms 5, 6, and 7, because the score printed on your report has already been equated for form difficulty by NBME. A separate table per form would imply a difficulty correction we have no data to support.",
+    a: "NBMEcalc does not publish a conversion curve for either form. A lack of public form-specific calibration is not evidence that Forms 6 and 7 predict Step 3 identically; use the diagnostic feedback on each official report instead.",
   },
   {
     q: "Which practice resources are predictive?",
-    a: "Use resources designed for Step 3, including UWSA Step 3, the Step 3 sample questions, and NBME Comprehensive Clinical Medicine Self-Assessments (CCMSA). Step 1 CBSSA and Step 2 CK CCSSA form numbers are not interchangeable with Step 3 forms.",
+    a: "No single practice resource guarantees a Step 3 result. NBME's current CCMSA report is diagnostic rather than predictive. If you use UWSA or sample-question results in NBMEcalc, treat the output as an independent planning estimate and compare it with your broader readiness evidence.",
   },
   {
     q: "When should I take Step 3?",
@@ -176,8 +176,8 @@ export default function Step3PredictorPage() {
 
       <PageHero
         badge="Predict your two-day exam"
-        title="Step 3 Score Predictor and USMLE Calculator"
-        description="Combine Step 3-specific CCMSA, UWSA, and sample-question results into an independent score estimate and pass probability with a confidence interval."
+        title="Step 3 Predictor: NBME 6 & 7 Conversion Limits"
+        description="Combine supported UWSA and sample-question inputs into an independent Step 3 planning estimate. Read current CCMSA diagnostic feedback directly from the official report."
         size="md"
       />
 
@@ -220,41 +220,47 @@ export default function Step3PredictorPage() {
         <Calculator defaultStep="step3" />
       </section>
 
-      {/* CCMSA form conversion */}
+      {/* CCMSA score-scale answer */}
       <section id="ccmsa-conversion" className="py-16 lg:py-20 bg-white border-t border-gray-200">
         <div className="container max-w-3xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-4">
             How do you convert an NBME CCMSA score to a Step 3 score?
           </h2>
           <p className="text-lg text-gray-800 leading-relaxed mb-8">
-            Enter the three-digit total score from your CCMSA report with Step 3
-            selected. NBMEcalc maps it through the curve below: a 240 resolves to
-            about 226, a 260 to about 240. The same curve covers Forms 5, 6, and
-            7, because the score on your report is already equated for form
-            difficulty.
+            You cannot make a supported one-to-one conversion from the current
+            CCMSA report to a Step 3 score. The report uses a 10-800 Assessment
+            Score and explicitly says CCMSA is not intended to predict Step 3
+            performance. NBMEcalc therefore does not accept that number as a
+            three-digit NBME input or publish a substitute conversion curve.
           </p>
 
-          <div className="rounded-3xl border border-gray-200 overflow-hidden mb-4">
+          <div className="rounded-3xl border border-gray-200 overflow-hidden mb-6">
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
                     <th className="text-left px-5 py-3 font-bold text-gray-900">
-                      CCMSA total score
+                      Report item
                     </th>
                     <th className="text-left px-5 py-3 font-bold text-gray-900">
-                      Internal model midpoint
+                      Current report
+                    </th>
+                    <th className="text-left px-5 py-3 font-bold text-gray-900">
+                      Practical implication
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {ccmsaTable.map((row) => (
-                    <tr key={row.ccmsa} className="hover:bg-mint-50/40 transition">
-                      <td className="px-5 py-3 font-mono font-bold text-gray-950">
-                        {row.ccmsa}
+                  {ccmsaReportFacts.map((row) => (
+                    <tr key={row.field} className="hover:bg-mint-50/40 transition">
+                      <td className="px-5 py-3 font-bold text-gray-950">
+                        {row.field}
                       </td>
-                      <td className="px-5 py-3 font-mono text-mint-700 font-bold">
-                        {row.step3}
+                      <td className="px-5 py-3 text-gray-700">
+                        {row.currentReport}
+                      </td>
+                      <td className="px-5 py-3 text-gray-700">
+                        {row.implication}
                       </td>
                     </tr>
                   ))}
@@ -262,53 +268,58 @@ export default function Step3PredictorPage() {
               </table>
             </div>
           </div>
-          <p className="text-xs text-gray-500 italic mb-12">
-            Midpoints only. The calculator reports a planning range around each
-            midpoint, and Step 3 has the sparsest data of the three Steps.
+          <p className="text-sm text-gray-600 mb-12">
+            Verify these fields in the{" "}
+            <a
+              href="https://www.nbme.org/wp-content/uploads/2026/05/Comprehensive_Medicine_Science_Self-Assessment_Sample.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              current official CCMSA sample score report
+            </a>
+            .
           </p>
 
           <h3 className="text-2xl font-extrabold tracking-tight mb-3">
             NBME 6 and NBME 7 Step 3 score conversion
           </h3>
           <p className="text-gray-700 leading-relaxed mb-4">
-            Forms 5, 6, and 7 are the Comprehensive Clinical Medicine
-            Self-Assessments NBME currently lists for Step 3. Select the form you
-            sat in the calculator above and enter its total score — Form 6 and
-            Form 7 read from the same table, so a 250 on either resolves to about
-            233.
+            Searchers often ask for a single number for Form 6 or Form 7, but
+            the current report does not provide a Step 3 prediction. NBMEcalc
+            does not publish separate form curves, and it also does not assume
+            the two forms have identical predictive behavior. Neither claim is
+            supported by a public, reproducible calibration dataset.
           </p>
           <p className="text-gray-700 leading-relaxed mb-12">
-            Do not carry a Step 1 CBSSA or Step 2 CK CCSSA form number into this
-            field. Those families use different scales, and a Form 6 in the CCMSA
-            series is a different assessment from a Form 6 elsewhere. If you are
-            converting for a different Step, use the{" "}
+            Use the report&apos;s content-area feedback to identify strengths and
+            weaknesses. If you also have a supported UWSA or sample-question
+            result, enter that separately in the calculator above. For the
+            differences among NBME report families, use the{" "}
             <Link
               href="/nbme-score-conversion"
               className="text-mint-800 underline underline-offset-4 font-semibold"
             >
-              NBME score conversion chart for CCSSA and CBSSA forms
+              NBME score report guide
             </Link>
             .
           </p>
 
           <h3 className="text-2xl font-extrabold tracking-tight mb-3">
-            Why there is no separate table for each CCMSA form
+            Why there is no CCMSA-to-Step 3 conversion table
           </h3>
           <p className="text-gray-700 leading-relaxed mb-4">
-            Published per-form Step 3 conversion charts imply a difficulty
-            correction between Form 6 and Form 7. NBMEcalc does not apply one,
-            for a specific reason: the equating has already happened. NBME
-            reports a scaled score that accounts for how hard the particular form
-            was, which is the whole point of reporting a scaled score rather than
-            a raw count.
+            A conversion table would need paired CCMSA and Step 3 outcomes,
+            documented inclusion rules, enough observations across the score
+            range, and out-of-sample error reporting. This repository currently
+            contains none of those ingredients.
           </p>
           <p className="text-gray-700 leading-relaxed">
-            Applying a second correction on top of that would double-count form
-            difficulty. Where NBMEcalc does hold form-level adjustments — the
-            Step 1 CBSSA series — they exist because there is evidence to support
-            them. For CCMSA there is not, so the honest table is one table. That
-            is a limitation of the model, stated rather than hidden behind
-            invented per-form numbers.
+            The absence of data supports a limit, not a numerical assumption.
+            If a versioned, auditable calibration dataset becomes available,
+            the model can be evaluated and this page can be revised with measured
+            error. Until then, the useful answer is the score-scale distinction
+            and the official report&apos;s stated purpose.
           </p>
         </div>
       </section>

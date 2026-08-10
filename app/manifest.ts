@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "NBMEcalc — USMLE Step Score Predictor",
     short_name: "NBMEcalc",
     description:
-      "Free independent USMLE planning tool. Combine NBME, UWSA, Free 120, AMBOSS, or CMS inputs into an estimate with a transparent range.",
+      "Free independent USMLE planning tool. Combine compatible CCSSA, UWSA, Free 120, AMBOSS, or CMS inputs into an estimate with a transparent range.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

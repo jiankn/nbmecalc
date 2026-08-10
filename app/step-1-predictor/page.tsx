@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title:
     "Step 1 Predictor — Pass Probability Calculator (Free) | NBMEcalc",
   description:
-    "Free Step 1 predictor that calculates your USMLE Step 1 pass probability from NBME, UWSA, and Free 120 scores. Step 1 is pass/fail since 2022 — know your margin before test day.",
+    "Estimate Step 1 pass readiness from compatible UWSA and Free 120 inputs. For a current NBME CBSSA, use the probability and EPC range on the official report.",
   keywords: [
     "step 1 predictor",
     "usmle step 1 calculator",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Step 1 Predictor — Pass Probability Calculator (Free)",
     description:
-      "Calculate your USMLE Step 1 pass probability from any combination of NBME, UWSA, and Free 120 scores.",
+      "Estimate Step 1 pass readiness from UWSA and Free 120 inputs, with official-report-first guidance for current NBME CBSSA results.",
     url: "https://nbmecalc.com/step-1-predictor",
     type: "website",
     images: [
@@ -116,7 +116,7 @@ export default function Step1PredictorPage() {
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free USMLE Step 1 pass probability calculator. Combines NBME, UWSA, and Free 120 scores into a single pass probability estimate with confidence interval.",
+              "Free USMLE Step 1 planning calculator for compatible UWSA and Free 120 inputs, with official-report-first guidance for current NBME CBSSA results.",
           }),
         }}
       />
@@ -167,10 +167,10 @@ export default function Step1PredictorPage() {
             Run the Step 1 calculator
           </h2>
           <p className="text-gray-600">
-            Pick <strong>Step 1</strong> in the form below, add your NBME /
-            UWSA / Free 120 inputs, and submit. The result shows an independent
-            model estimate and planning range; it does not replace the
-            probability printed on an official CBSSA report.
+            Pick <strong>Step 1</strong> below and add compatible UWSA or Free
+            120 inputs. Current CBSSA reports use equated percent correct, so
+            read their official pass probability and likely range directly
+            instead of entering that EPC in a three-digit field.
           </p>
         </div>
         <Calculator defaultStep="step1" />
@@ -183,7 +183,7 @@ export default function Step1PredictorPage() {
             How to review several recent assessments
           </h2>
           <ol className="list-decimal space-y-3 pl-5 text-gray-700 leading-relaxed">
-            <li>Confirm that each input belongs to Step 1 and that you entered the scale shown on its report.</li>
+            <li>Confirm that each calculator input belongs to Step 1 and uses a supported scale.</li>
             <li>Read the official probability and likely range on every current CBSSA report.</li>
             <li>Note whether recent unused forms agree under similar timing and test conditions.</li>
             <li>Use NBMEcalc only to summarize that pattern, then investigate any disagreement instead of averaging it away.</li>
@@ -347,7 +347,7 @@ export default function Step1PredictorPage() {
                 data-indexing-context="related"
                 className="underline underline-offset-2"
               >
-                Full NBME score conversion tables
+                NBME score report guide
               </Link>
             </li>
             <li>

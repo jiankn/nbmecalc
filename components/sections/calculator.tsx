@@ -13,6 +13,7 @@ import {
   getDefaultNbmeFormNumber,
   getNbmeFormNumbers,
   getSubjectTaxonomy,
+  isExamSourceSupportedForStep,
   type PracticeExam,
   type ExamSource,
   type StepKind,
@@ -48,7 +49,12 @@ function defaultsForSource(
   };
 }
 
-function isValidScore(score: number, source: ExamSource): boolean {
+function isValidScore(
+  score: number,
+  source: ExamSource,
+  step: StepKind
+): boolean {
+  if (!isExamSourceSupportedForStep(source, step)) return false;
   const meta = EXAM_SOURCES.find((s) => s.key === source)!;
   return score >= meta.scoreRange[0] && score <= meta.scoreRange[1];
 }
@@ -66,23 +72,52 @@ export function Calculator({
 } = {}) {
   const [step, setStep] = useState<StepKind>(defaultStep);
   const [exams, setExams] = useState<PracticeExam[]>(() => {
+    const effectiveDefaultSource = isExamSourceSupportedForStep(
+      defaultSource,
+      defaultStep
+    )
+      ? defaultSource
+      : "UWSA2";
     const forms = getNbmeFormNumbers(defaultStep);
-    const sourceDefaults = defaultsForSource(defaultSource, defaultStep);
+    const sourceDefaults = defaultsForSource(
+      effectiveDefaultSource,
+      defaultStep
+    );
     const selectedForm =
-      defaultSource === "NBME" &&
+      effectiveDefaultSource === "NBME" &&
       typeof defaultFormNumber === "number" &&
       forms.includes(defaultFormNumber)
         ? defaultFormNumber
         : sourceDefaults.formNumber;
     const firstExam: PracticeExam = {
       id: "1",
-      source: defaultSource,
+      source: effectiveDefaultSource,
       score: sourceDefaults.score ?? 215,
       formNumber: selectedForm,
       takenDaysAgo: 7,
     };
 
     if (singleAssessment) return [firstExam];
+
+    if (defaultStep !== "step2") {
+      const secondSource: ExamSource =
+        effectiveDefaultSource === "UWSA1" ? "UWSA2" : "UWSA1";
+      return [
+        firstExam,
+        {
+          id: "2",
+          source: secondSource,
+          ...defaultsForSource(secondSource, defaultStep),
+          takenDaysAgo: 14,
+        } as PracticeExam,
+        {
+          id: "3",
+          source: "FREE120",
+          ...defaultsForSource("FREE120", defaultStep),
+          takenDaysAgo: 5,
+        } as PracticeExam,
+      ];
+    }
 
     return [
       firstExam,
@@ -178,17 +213,28 @@ export function Calculator({
   }, [step, exams, daysUntil, targetScore, weakSubjects]);
 
   const allInputsValid = useMemo(
-    () => exams.every((e) => isValidScore(e.score, e.source)),
-    [exams]
+    () => exams.every((e) => isValidScore(e.score, e.source, step)),
+    [exams, step]
+  );
+
+  const hasUnsupportedNbme = useMemo(
+    () =>
+      exams.some(
+        (exam) =>
+          exam.source === "NBME" &&
+          !isExamSourceSupportedForStep(exam.source, step)
+      ),
+    [exams, step]
   );
 
   function addExam() {
-    const defaults = defaultsForSource("NBME", step);
+    const source: ExamSource = step === "step2" ? "NBME" : "UWSA2";
+    const defaults = defaultsForSource(source, step);
     setExams((prev) => [
       ...prev,
       {
         id: Math.random().toString(36).slice(2),
-        source: "NBME",
+        source,
         ...defaults,
       } as PracticeExam,
     ]);
@@ -418,12 +464,20 @@ export function Calculator({
                     className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer"
                   >
                     {EXAM_SOURCES.map((s) => (
-                      <option key={s.key} value={s.key}>
+                      <option
+                        key={s.key}
+                        value={s.key}
+                        disabled={!isExamSourceSupportedForStep(s.key, step)}
+                      >
                         {s.label}
+                        {s.key === "NBME" && step !== "step2"
+                          ? " (Step 2 only)"
+                          : ""}
                       </option>
                     ))}
                   </select>
-                  {exam.source === "NBME" && (
+                  {exam.source === "NBME" &&
+                    isExamSourceSupportedForStep(exam.source, step) && (
                     <>
                       <label
                         htmlFor={`${controlIdPrefix}-form`}
@@ -471,7 +525,7 @@ export function Calculator({
                     }
                     className={cn(
                       "w-20 text-right font-mono font-semibold tabular-nums rounded-md px-2 py-1 focus:outline-none focus:ring-2",
-                      isValidScore(exam.score, exam.source)
+                      isValidScore(exam.score, exam.source, step)
                         ? "bg-gray-50 focus:ring-mint-500"
                         : "bg-red-50 ring-2 ring-red-300 focus:ring-red-500"
                     )}
@@ -526,7 +580,7 @@ export function Calculator({
             className="w-full rounded-2xl border-2 border-dashed border-gray-300 bg-transparent py-3 text-sm font-semibold text-mint-700 hover:border-mint-500 hover:bg-mint-50 transition flex items-center justify-center gap-2"
           >
             <Plus className="h-4 w-4" />
-            Add another exam (NBME / UWSA / Free 120 / AMBOSS)
+            Add another exam ({step === "step2" ? "NBME / " : ""}UWSA / Free 120 / AMBOSS)
           </button>
 
           <hr className="my-6 border-gray-100" />
@@ -592,8 +646,9 @@ export function Calculator({
 
           {!allInputsValid && exams.length > 0 && (
             <p className="mt-3 text-xs text-center text-red-600 font-medium">
-              One or more scores are outside the valid range for their source.
-              Hover the input for the expected range.
+              {hasUnsupportedNbme
+                ? "Current CBSSA and CCMSA reports use different scales. Direct NBME input is supported only for Step 2 CCSSA Total Scores; use the official NBME report for Step 1 or Step 3 interpretation."
+                : "One or more scores are outside the valid range for their source. Hover the input for the expected range."}
             </p>
           )}
 

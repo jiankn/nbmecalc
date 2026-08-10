@@ -110,7 +110,7 @@ export default async function SharedPredictionPage({
                   See your own realistic score range
                 </h2>
                 <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-gray-600">
-                  Add your NBME, UWSA, Free 120, AMBOSS, or CMS scores. No
+                  Add compatible CCSSA, UWSA, Free 120, AMBOSS, or CMS results. No
                   signup required.
                 </p>
                 <Button size="lg" className="mt-5 w-full sm:w-auto" asChild>

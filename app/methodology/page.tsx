@@ -108,6 +108,15 @@ const sourceRows = [
 
 const changes = [
   {
+    date: "2026-08-11",
+    items: [
+      "Separated current NBME score scales: CBSSA EPC (0-100), CCSSA Total Score (1-300), and CCMSA Assessment Score (10-800).",
+      "Stopped applying a second curve to Step 2 CCSSA Total Scores and preserved the report score as the assessment midpoint.",
+      "Blocked new direct NBME inputs for Step 1 and Step 3, where current reports use incompatible scales and provide different official interpretations.",
+      "Replaced the unsupported CCMSA-to-Step 3 conversion table with the current report scale, intended use, and evidence requirements for any future calibration.",
+    ],
+  },
+  {
     date: "2026-08-10",
     items: [
       "Removed unvalidated Step 1 pass bands and direct scheduling instructions in favor of official-report-first guidance.",

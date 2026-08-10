@@ -4,7 +4,7 @@ const steps = [
   {
     number: "1",
     title: "Gather Your Practice Exams",
-    body: "Collect the recent NBME, UWSA, Free 120, AMBOSS, or CMS form scores you want to review together.",
+    body: "Collect compatible CCSSA, UWSA, Free 120, AMBOSS, or CMS results you want to review together.",
   },
   {
     number: "2",
@@ -73,8 +73,8 @@ function PhoneSteps() {
 
       <div className="space-y-2">
         {[
-          { source: "NBME 30", score: 220, color: "#34D399" },
-          { source: "NBME 31", score: 235, color: "#34D399" },
+          { source: "CCSSA Form 14", score: 235, color: "#34D399" },
+          { source: "CCSSA Form 15", score: 242, color: "#34D399" },
           { source: "UWSA 2", score: 241, color: "#A78BFA" },
         ].map((e) => (
           <div

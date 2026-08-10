@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   applicationName: "NBMEcalc",
   title: "NBMEcalc — Predict Your USMLE Step Score in 5 Seconds",
   description:
-    "Free independent USMLE Step planning tool. Combine NBME, UWSA, or Free 120 scores into an estimate with a transparent planning range.",
+    "Free independent USMLE Step planning tool. Combine compatible CCSSA, UWSA, or Free 120 results into an estimate with a transparent planning range.",
   keywords: [
     "nbme calculator",
     "nbme score calculator",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Predict Your USMLE Step Score in 5 Seconds — NBMEcalc",
     description:
-      "Free, no signup. Combine NBME, UWSA, Free 120, and AMBOSS inputs into an estimate with a transparent planning range.",
+      "Free, no signup. Combine compatible CCSSA, UWSA, Free 120, and AMBOSS inputs into an estimate with a transparent planning range.",
     url: "https://nbmecalc.com",
     siteName: "NBMEcalc",
     locale: "en_US",
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Predict Your USMLE Step Score in 5 Seconds",
     description:
-      "Free, multi-source NBME / UWSA / Free 120 predictor with confidence intervals.",
+      "Free, multi-source CCSSA / UWSA / Free 120 predictor with confidence intervals.",
     images: [defaultOgImage],
   },
   robots: {

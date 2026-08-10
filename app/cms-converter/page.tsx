@@ -112,7 +112,7 @@ const cmsRelatedTools = [
   {
     href: "/step-2-predictor",
     title: "Step 2 CK predictor",
-    desc: "Combine CMS, NBME, UWSA, Free 120, and AMBOSS inputs in one forecast.",
+    desc: "Combine CMS, CCSSA, UWSA, Free 120, and AMBOSS inputs in one forecast.",
   },
 ];
 

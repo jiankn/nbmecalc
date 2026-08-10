@@ -17,7 +17,7 @@ import { CookieBanner } from "@/components/sections/cookie-banner";
 
 const homeTitle = "Free NBME Score Calculator — Step Score Estimate in Seconds";
 const homeDescription =
-  "Convert NBME, CMS, Free 120, UWSA, or AMBOSS percent correct into a 3-digit Step 1, Step 2 CK, or Step 3 estimate. Free, no signup, with a planning range.";
+  "Combine Step 2 CCSSA, UWSA, Free 120, AMBOSS, or CMS results into an independent Step estimate and planning range. Free, no signup.";
 
 export const metadata: Metadata = {
   title: homeTitle,

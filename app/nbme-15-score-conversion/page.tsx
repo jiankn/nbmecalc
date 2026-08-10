@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: "Is this an official NBME 15 conversion?",
-    a: "No. NBMEcalc applies its published internal Step 2 mapping and shows a planning range. It does not reproduce NBME's proprietary equating and is not affiliated with NBME or USMLE.",
+    a: "No. The current CCSSA Total Score already estimates Step 2 CK performance. NBMEcalc preserves that score as the assessment midpoint, then adds an independent planning range or combines it with other inputs. It is not affiliated with NBME or USMLE.",
   },
   {
     q: "What is the current Step 2 CK passing score?",
@@ -105,7 +105,7 @@ export default function Nbme15ScoreConversionPage() {
       <PageHero
         badge="Step 2 CK · CCSSA Form 15"
         title="NBME 15 Score Conversion Calculator"
-        description="Form 15 is preselected. Enter the three-digit total score from your CCSSA report to see NBMEcalc's independent estimate and planning range, then add another recent assessment if you want a stronger trend."
+        description="Form 15 is preselected. Enter the Total CCSSA Score from your report; NBMEcalc keeps that official estimate as the midpoint and adds an independent planning range."
         size="md"
       />
 
@@ -138,9 +138,9 @@ export default function Nbme15ScoreConversionPage() {
               <div className="mt-5 space-y-4 leading-relaxed text-gray-700">
                 <p>
                   Use the <strong>CCSSA total score</strong> printed on your
-                  Form 15 report. NBMEcalc maps that score onto its current
-                  internal Step 2 curve and reports a midpoint plus a wider
-                  planning range.
+                  Form 15 report. That score already estimates Step 2 CK
+                  performance, so NBMEcalc keeps it as the assessment midpoint
+                  and reports a wider planning range around it.
                 </p>
                 <p>
                   The model does not apply a secret Form 15 bonus or claim an

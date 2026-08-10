@@ -6,10 +6,11 @@
  * an equated three-digit USMLE Step score, then a weighted average is taken
  * with a confidence interval.
  *
- * Internal calibration anchors. These are model assumptions, not official
- * NBME/USMLE conversions and not a published validation result:
+ * Internal calibration anchors for non-NBME sources. These are model
+ * assumptions, not official NBME/USMLE conversions and not a published
+ * validation result:
  *
- *   NBME 240 → Step 2 CK ~250 (Step 1 P/F equiv ~240)
+ *   CCSSA Total Score 240 → Step 2 CK midpoint 240 (the report score itself)
  *   UWSA2 250 → Step 2 CK ~248 (UWSA2 runs ~+2 hot)
  *   UWSA1 250 → Step 2 CK ~245 (UWSA1 runs ~+5 hot)
  *   Free 120 75% → Step 2 CK ~247
@@ -36,7 +37,7 @@
  * version stored alongside the input snapshot lets us re-render a past
  * report under its original algorithm by branching on this string.
  */
-export const ALGORITHM_VERSION = "v1.1" as const;
+export const ALGORITHM_VERSION = "v1.2" as const;
 export type AlgorithmVersion = typeof ALGORITHM_VERSION;
 
 // Premium-report module types are defined in `./report-modules` to keep the
@@ -253,8 +254,10 @@ export interface PredictOptions {
 // ---------------------------------------------------------------------------
 
 /**
- * NBME score (200-300, 3-digit equated) → equated USMLE Step score.
- * Step 1 / 2 / 3 each have their own slope.
+ * Internal three-digit planning curves used for UWSA, CMS, and legacy report
+ * compatibility. Direct NBME input does not share one scale across all Steps:
+ * current CBSSA reports use 0-100 EPC, CCSSA uses a 1-300 Total Score, and
+ * CCMSA uses a 10-800 Assessment Score.
  *
  * Anchor pairs (NBME, Step):
  *   Step 1: (200, 198), (220, 215), (240, 232), (260, 245), (280, 256)
@@ -289,9 +292,9 @@ const NBME_TO_STEP: Record<StepKind, Array<[number, number]>> = {
 };
 
 /**
- * NBME form-difficulty correction. Newer forms are harder per question;
- * older forms over-estimated raw scores. Applied as a small additive bump
- * BEFORE the lookup in NBME_TO_STEP.
+ * Legacy Step 1 report compatibility only. New calculator requests cannot use
+ * current CBSSA/CCMSA scores in the direct NBME field because their scales do
+ * not match the Step 2 CCSSA Total Score scale.
  */
 const NBME_FORM_BIAS: Record<number, number> = {
   28: -3, // older form, over-predicts
@@ -383,6 +386,13 @@ function interpolate(
 export function convertExam(exam: PracticeExam, step: StepKind): number {
   switch (exam.source) {
     case "NBME": {
+      // NBME defines the current CCSSA Total Score as an estimate of Step 2 CK
+      // performance under comparable conditions. Applying another curve here
+      // would transform an estimate that has already been reported.
+      if (step === "step2") return Math.round(exam.score);
+
+      // Preserve historical Step 1/3 report replays. New UI/API requests are
+      // blocked by isExamSourceSupportedForStep before reaching this branch.
       const formBias = exam.formNumber
         ? NBME_FORM_BIAS[exam.formNumber] ?? 0
         : 0;
@@ -762,12 +772,12 @@ export interface ExamSourceMeta {
 export const EXAM_SOURCES: ExamSourceMeta[] = [
   {
     key: "NBME",
-    label: "NBME",
+    label: "NBME CCSSA",
     color: "#34D399",
-    scoreRange: [200, 300],
+    scoreRange: [1, 300],
     unit: "score",
-    defaultScore: 215,
-    hint: "3-digit equated NBME score",
+    defaultScore: 240,
+    hint: "CCSSA Total Score (1-300; Step 2 CK only)",
   },
   {
     key: "UWSA1",
@@ -839,6 +849,19 @@ export function getNbmeFormNumbers(step: StepKind): readonly number[] {
 export function getDefaultNbmeFormNumber(step: StepKind): number {
   const forms = getNbmeFormNumbers(step);
   return forms[forms.length - 1];
+}
+
+/**
+ * The direct NBME field accepts the current 1-300 CCSSA Total Score only.
+ * Current CBSSA and CCMSA reports use different scales and already provide
+ * their own official interpretations, so treating them as the same input
+ * would create a false cross-assessment conversion.
+ */
+export function isExamSourceSupportedForStep(
+  source: ExamSource,
+  step: StepKind
+): boolean {
+  return source !== "NBME" || step === "step2";
 }
 
 /**

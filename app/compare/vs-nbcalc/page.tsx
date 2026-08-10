@@ -146,7 +146,7 @@ export default function VsNbcalcPage() {
               <Link href="/#calculator">Predict my Step score</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/nbme-score-conversion">Full NBME conversion table</Link>
+              <Link href="/nbme-score-conversion">NBME score report guide</Link>
             </Button>
           </div>
         </div>
