@@ -15,9 +15,9 @@ import { AdSlot } from "@/components/ads/ad-slot";
 import { Footer } from "@/components/sections/footer";
 import { CookieBanner } from "@/components/sections/cookie-banner";
 
-const homeTitle = "Free NBME Score Calculator for USMLE Step Scores | NBMEcalc";
+const homeTitle = "Free NBME Score Calculator — Step Score Estimate in Seconds";
 const homeDescription =
-  "Free NBME score calculator and USMLE Step predictor. Convert NBME, UWSA, Free 120, AMBOSS, and CMS scores into a Step 1, Step 2 CK, or Step 3 prediction with confidence intervals.";
+  "Convert NBME, CMS, Free 120, UWSA, or AMBOSS percent correct into a 3-digit Step 1, Step 2 CK, or Step 3 estimate. Free, no signup, with a planning range.";
 
 export const metadata: Metadata = {
   title: homeTitle,

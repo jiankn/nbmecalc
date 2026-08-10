@@ -7,21 +7,24 @@ import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "UWSA 2 to Step 2 CK Predictor — Free Score Calculator | NBMEcalc",
+  title: "UWSA 2 to Step 2 CK Score Conversion — Free Calculator + Chart",
   description:
-    "Free UWSA 2 to USMLE Step 2 CK planning tool. Applies a disclosed −2 internal source adjustment and shows an estimated planning range.",
+    "Convert your UWSA 2 score into a 3-digit Step 2 CK estimate with a full conversion chart. Applies a disclosed -2 source adjustment. Free, no signup.",
   keywords: [
     "uwsa 2 to step 2",
     "uwsa 2 step 2 conversion",
+    "uwsa 2 step 2 score conversion",
+    "uwsa2 step 2",
+    "uwsa step 2 score conversion",
     "uworld self assessment 2",
     "uwsa 2 predictor",
     "step 2 ck uwsa",
   ],
   alternates: { canonical: "https://nbmecalc.com/uwsa-2-to-step-2" },
   openGraph: {
-    title: "UWSA 2 to Step 2 CK Predictor — Free Score Calculator",
+    title: "UWSA 2 to Step 2 CK Score Conversion — Free Calculator + Chart",
     description:
-      "Convert your UWSA 2 score into an independent Step 2 CK estimate and combine it with a recent CCSSA or Free 120 result.",
+      "Convert your UWSA 2 score into a 3-digit Step 2 CK estimate with a full conversion chart and a disclosed source adjustment.",
     url: "https://nbmecalc.com/uwsa-2-to-step-2",
     type: "website",
     images: [

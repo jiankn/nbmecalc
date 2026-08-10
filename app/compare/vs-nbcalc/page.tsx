@@ -6,20 +6,22 @@ import { CompareTable, type CompareRow } from "@/components/sections/compare-tab
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "NBMEcalc vs nbcalc.netlify.app — Modern Alternative | 2026",
+  title: "nbcalc.netlify.app Alternative — Adds CMS, Free 120 & UWSA",
   description:
-    "Compare NBMEcalc and the original nbcalc.netlify.app. Modern UI, multi-source inputs, confidence intervals, and study plans vs a basic lookup table.",
+    "Looking for nbcalc? See how it compares with NBMEcalc: the same free NBME lookup, plus CMS forms, Free 120, UWSA, and a planning range. No signup.",
   keywords: [
-    "nbmecalc vs nbcalc",
+    "nbcalc",
+    "nbcalc netlify",
     "nbcalc alternative",
     "nbcalc netlify alternative",
+    "nbmecalc vs nbcalc",
     "modern nbme calculator",
   ],
   alternates: { canonical: "https://nbmecalc.com/compare/vs-nbcalc" },
   openGraph: {
-    title: "NBMEcalc vs nbcalc.netlify.app — 2026 Comparison",
+    title: "nbcalc.netlify.app Alternative — Adds CMS, Free 120 & UWSA",
     description:
-      "Modern multi-source predictor vs the original basic NBME lookup table.",
+      "Looking for nbcalc? See how it compares with NBMEcalc: the same free NBME lookup, plus CMS forms, Free 120, UWSA, and a planning range.",
     url: "https://nbmecalc.com/compare/vs-nbcalc",
     type: "article",
     images: [
