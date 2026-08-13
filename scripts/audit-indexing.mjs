@@ -41,6 +41,7 @@ const remediatedPaths = new Set([
   "/blog/step-2-ck-subject-weighting-explained",
   "/blog/step-3-ccs-cases-complete-walkthrough",
   "/compare/vs-predictmystepscore",
+  "/cms-forms-step-2-ck",
   "/educators",
   "/methodology",
   "/nbme-calculator",
@@ -55,6 +56,7 @@ const evidenceSensitivePaths = new Set([
   "/compare/vs-amboss-predictor",
   "/compare/vs-nbcalc",
   "/compare/vs-predictmystepscore",
+  "/cms-forms-step-2-ck",
   "/nbme-calculator",
   "/step-1-predictor",
   "/uwsa-1-to-step-1",
@@ -184,8 +186,8 @@ try {
   ].map((match) => decodeHtml(match[1]));
 
   if (sitemapUrls.length === 0) errors.push("sitemap.xml contains no URLs");
-  if (sitemapUrls.length !== 29) {
-    errors.push(`sitemap.xml contains ${sitemapUrls.length} URLs, expected 29`);
+  if (sitemapUrls.length !== 30) {
+    errors.push(`sitemap.xml contains ${sitemapUrls.length} URLs, expected 30`);
   }
 
   const duplicateSitemapUrls = sitemapUrls.filter(

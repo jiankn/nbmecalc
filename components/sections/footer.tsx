@@ -19,6 +19,7 @@ const columns = [
       { label: "NBME Score Conversion", href: "/nbme-score-conversion" },
       { label: "NBME Score Calculator", href: "/" },
       { label: "NBME Forms Guide", href: "/nbme-calculator" },
+      { label: "CMS Forms Step 2 Guide", href: "/cms-forms-step-2-ck" },
       { label: "Methodology & Sources", href: "/methodology" },
       { label: "Validation Status", href: "/validation" },
       { label: "For Educators & Libraries", href: "/educators" },

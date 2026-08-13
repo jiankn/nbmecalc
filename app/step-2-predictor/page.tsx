@@ -367,6 +367,15 @@ export default function Step2PredictorPage() {
             </li>
             <li>
               <Link
+                href="/cms-forms-step-2-ck"
+                data-indexing-context="related"
+                className="underline underline-offset-2"
+              >
+                Choose CMS forms for Step 2 CK
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/amboss-converter"
                 data-indexing-context="related"
                 className="underline underline-offset-2"

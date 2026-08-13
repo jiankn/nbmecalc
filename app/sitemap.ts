@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const formPilotUpdate = new Date("2026-08-09");
   const indexingRemediationUpdate = new Date("2026-08-09");
   const adsenseTrustUpdate = new Date("2026-08-10");
+  const cmsFormsGuideUpdate = new Date("2026-08-13");
   // Current NBME score-family correction: CCSSA keeps its 1-300 Total Score;
   // CBSSA EPC and CCMSA 10-800 scores are no longer treated as interchangeable
   // calculator inputs. Step 3 form demand stays consolidated on one page.
@@ -47,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/free-120-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/amboss-converter`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/cms-converter`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${SITE_URL}/cms-forms-step-2-ck`, lastModified: cmsFormsGuideUpdate, changeFrequency: "monthly", priority: 0.78 },
 
     // Comparison pages
     { url: `${SITE_URL}/compare/best-usmle-score-predictor`, lastModified: indexingRemediationUpdate, changeFrequency: "monthly", priority: 0.75 },

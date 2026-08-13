@@ -262,6 +262,17 @@ export default function CmsConverterPage() {
               review next.
             </p>
             <p>
+              If you are still deciding which subject to test, use the{" "}
+              <Link
+                href="/cms-forms-step-2-ck"
+                className="font-semibold text-mint-700 underline underline-offset-4"
+              >
+                CMS Forms for Step 2 CK guide
+              </Link>{" "}
+              to compare the eight official content areas, pacing modes, and
+              legal purchase path before opening this score tool.
+            </p>
+            <p>
               <strong>Recommended workflow:</strong> start with the content
               areas in your official comprehensive score report, choose the
               matching CMS subject, review the explanations, and then confirm
