@@ -45,6 +45,13 @@ export function ResourceHub() {
             >
               Step 2 CK predictor
             </Link>
+            . Not sure which assessment family you took? Start with the{" "}
+            <Link
+              href="/nbme-calculator"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              NBME self-assessment forms and score guide
+            </Link>
             .
           </p>
           <p className="text-base font-semibold text-gray-900 mt-6">
