@@ -375,6 +375,18 @@ export default function NbmeScoreConversionPage() {
               converting 240 into a different midpoint would double-transform
               the report&apos;s estimate.
             </p>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-600">
+              If your goal is to test one weak clinical area rather than overall
+              readiness, use the guide to{" "}
+              <Link
+                href="/cms-forms-step-2-ck"
+                data-indexing-context="related"
+                className="font-semibold text-mint-800 underline underline-offset-4"
+              >
+                choose a CMS subject form
+              </Link>
+              .
+            </p>
             <a
               href="https://www.nbme.org/wp-content/uploads/2026/04/Comprehensive_Clinical_Science_Self-Assessment_Sample.pdf"
               target="_blank"

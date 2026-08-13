@@ -239,6 +239,19 @@ export default function NbmeCalculatorPage() {
               </tbody>
             </table>
           </div>
+          <p className="mt-5 max-w-3xl text-sm leading-relaxed text-gray-600">
+            Preparing for a subject-level check instead of a comprehensive
+            readiness exam? Compare the subjects, timing, and official access in
+            the{" "}
+            <Link
+              href="/cms-forms-step-2-ck"
+              data-indexing-context="related"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              CMS Forms for Step 2 CK
+            </Link>{" "}
+            guide.
+          </p>
         </div>
       </section>
 
