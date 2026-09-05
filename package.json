@@ -15,7 +15,8 @@
     "deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name=nbmecalc",
     "deploy:pdf-worker": "npx wrangler deploy --config workers/pdf-renderer/wrangler.toml",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "seo:indexnow": "node scripts/indexnow-submit.mjs"
   },
   "dependencies": {
     "@cloudflare/puppeteer": "^1.0.6",

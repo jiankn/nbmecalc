@@ -133,3 +133,12 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           npx wrangler pages deploy .vercel/output/static --project-name=nbmecalc --branch=main
+
+      - name: Ping IndexNow
+        # Tells Bing/Yandex/Seznam that the sitemap URLs changed. Advisory
+        # only — the engines still crawl on their own schedule — so a failure
+        # here must never fail an otherwise good deploy.
+        continue-on-error: true
+        run: |
+          sleep 30
+          node scripts/indexnow-submit.mjs
