@@ -1,7 +1,7 @@
 # NBMEcalc 外链建设计划与统计台账
 
 更新日期：2026-08-08
-维护文件：本文件是项目内锚文本、落地页和外链状态的汇总入口。已有的 [6 周投放计划](./nbmecalc-backlink-plan.md) 与 [首批免费提交指南](./FREE_BACKLINK_SUBMISSION_GUIDE.md) 保留为话术和平台细节参考。
+维护文件：本文件是项目内锚文本、落地页和外链状态的汇总入口。已有的 [6 周投放计划](./nbmecalc-backlink-plan.md) 与 [首批免费提交指南](./FREE_BACKLINK_SUBMISSION_GUIDE.md) 保留为话术和平台细节参考。完整的跨生态能力与已核验根域以 [capability-map.md](./capability-map.md) 和 [backlink-ledger.md](./backlink-ledger.md) 为准；本文件的 P1–P15 仅是早期执行队列。
 
 每轮执行记录见 [BACKLINK_PROGRESS_LOG.md](./BACKLINK_PROGRESS_LOG.md)。重新接力时先读取日志最后一条，再按“下一步”和“验收标准”推进。
 
@@ -69,7 +69,7 @@
 | P12 | YouTube USMLE 博主 | A14 或对应工具页 | 对应页面 | 真实演示/说明，描述区链接 | 通常 nofollow，待核验 | Planned |
 | P13 | Quora/医学生博客 | A14、A6 或对应专题锚文本 | 对应页面 | 回答真实问题或获得编辑许可 | 属性待核验 | Planned |
 | P14 | 竞品提及回收 | A17 | 对应 `/compare/*` | 只在真实竞品语境中提供替代方案 | 需逐页核验 | Planned |
-| P15 | npm Registry | A6，辅助 A14 | `https://nbmecalc.com/nbme-score-conversion`，辅助 `/methodology` | `packages/nbmecalc-score-conversion` 可安装包；README 解释真实能力和限制 | README 链接待核验 | Pending user action |
+| P15 | npm Registry | A6，辅助 A14 | `https://nbmecalc.com/nbme-score-conversion`，辅助 `/methodology` | `packages/nbmecalc-score-conversion` v1.0.0；公开 README 和包元数据 | `rel` 未自动复核（npm Cloudflare 403）；用户已在浏览器验收 | Complete |
 
 不优先投入 Uneed、Fazier、泛目录批量提交站；若平台要求付费、徽章交换、无关内容或只有不可索引链接，标记为 `Rejected` 或 `Blocked`。
 
@@ -77,20 +77,20 @@
 
 统计口径遵循技能要求：公开列表数和唯一引荐根域分开计算；同一个根域下的多个页面只算一个 referring domain；只有最终公开详情页验证通过才计入已完成。
 
-| 指标 | 当前基线（2026-08-08） | 统计方法 |
+| 指标 | 当前汇总（2026-08-09） | 统计方法 |
 |---|---:|---|
-| 源仓库/配置资产 | 1 个公开源仓库；6 个本地/可准备资产已推送 | GitHub 源仓库已公开并有包 README/CI；README 外链为平台 `nofollow`，不计入完成列表 |
-| 完成的公开列表 | 0 | `Status = Complete` 且有公开 URL |
-| 唯一引荐根域 | 0 | 已完成公开 URL 的根域去重 |
-| Follow + 可索引 | 0 | 页面 2xx、无 noindex，且目标链接无 `nofollow`/`ugc`/`sponsored` |
-| Nofollow / UGC | 0 已验证 | 只在最终 DOM 和 `rel` 验证后计数 |
+| 源仓库/配置资产 | 多个公开开发者仓库与文档资产 | 详见 `capability-map.md`；不把源仓库本身当成独立外链列表 |
+| 完成的公开列表 | 17 | 详见 `backlink-ledger.md` 的逐页验收记录 |
+| 唯一引荐根域 | 17 | 已完成公开 URL 的根域去重 |
+| Follow + 可索引 | 16 | 页面 2xx、无 noindex，且目标链接无 `nofollow`/`ugc`/`sponsored` |
+| Nofollow / UGC | 1 已验证 | Glama 公开条目；不计入 ordinary-follow 目标 |
 | Noindex | 0 已验证 | 检查 HTML 与 `X-Robots-Tag` |
-| Prepared assets | 2 个 | npm 包及其专用 CI 已完成本地验证，尚未形成公共列表 |
+| Prepared assets | 现有资产已覆盖主要生态 | 不新增无独立用途的重复语言包装器 |
 | Planned | 13 个平台/来源 | P1-P4、P6-P14 |
 | Blocked | 1 个 | P5，等待站内明确开放许可 |
-| Pending user action | 1 个 | P15，等待 npm 登录/2FA 和最终发布 |
-| Rejected | 0 | 发现不符合硬门槛的平台后记录原因 |
-| 待用户完成的账号动作 | 14 类来源中的账号/邮箱/2FA | 包括 P15 npm；不在聊天中收集密码或 token |
+| Pending user action | 1 个 | JetBrains Marketplace 首次人工上传与 Vendor profile 授权 |
+| Rejected | 33 | 历史候选因 nofollow/noindex、付费、无关或不可控审核被淘汰 |
+| 待用户完成的账号动作 | 1 类 | JetBrains Marketplace；不在聊天中收集密码或 token |
 
 ### 目标页可用性检查（2026-08-08）
 

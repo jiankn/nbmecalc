@@ -6,9 +6,9 @@ import { CompareTable, type CompareRow } from "@/components/sections/compare-tab
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "nbcalc.netlify.app Alternative — Adds CMS, Free 120 & UWSA",
+  title: "nbcalc.netlify.app Alternative — Adds Free 120 & UWSA",
   description:
-    "Looking for nbcalc? See how it compares with NBMEcalc: the same free NBME lookup, plus CMS forms, Free 120, UWSA, and a planning range. No signup.",
+    "Looking for nbcalc? See how it compares with NBMEcalc: the same free NBME lookup, plus Free 120, UWSA, and a planning range. No signup.",
   keywords: [
     "nbcalc",
     "nbcalc netlify",
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://nbmecalc.com/compare/vs-nbcalc" },
   openGraph: {
-    title: "nbcalc.netlify.app Alternative — Adds CMS, Free 120 & UWSA",
+    title: "nbcalc.netlify.app Alternative — Adds Free 120 & UWSA",
     description:
-      "Looking for nbcalc? See how it compares with NBMEcalc: the same free NBME lookup, plus CMS forms, Free 120, UWSA, and a planning range.",
+      "Looking for nbcalc? See how it compares with NBMEcalc: the same free NBME lookup, plus Free 120, UWSA, and a planning range.",
     url: "https://nbmecalc.com/compare/vs-nbcalc",
     type: "article",
     images: [
@@ -36,14 +36,14 @@ export const metadata: Metadata = {
 };
 
 const competitors = ["NBMEcalc", "nbcalc.netlify.app"];
-const REVIEWED_AT = "August 10, 2026";
+const REVIEWED_AT = "September 6, 2026";
 
 const rows: CompareRow[] = [
   { feature: "Works in a browser without login", values: ["yes", "yes"] },
   { feature: "Step 2 NBME form input", values: ["yes", "yes"] },
   { feature: "UWSA input", values: ["yes", "yes"] },
   { feature: "Free 120 input confirmed on reviewed page", values: ["yes", "partial"] },
-  { feature: "CMS subject-form input confirmed on reviewed page", values: ["yes", "partial"] },
+  { feature: "CMS subject-score guidance", values: ["partial", "partial"] },
   { feature: "Multi-input weighted aggregation", values: ["yes", "no"] },
   { feature: "Model-generated planning range", values: ["yes", "partial"] },
   { feature: "Public methodology and limitations page", values: ["yes", "partial"] },

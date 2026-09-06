@@ -46,7 +46,7 @@ export default function TermsPage() {
         <p>
           NBMEcalc is a statistical predictor that estimates a likely USMLE
           Step score from compatible practice inputs (Step 2 CCSSA, UWSA, Free
-          120, AMBOSS, CMS Form). Predictions include an estimated planning range and an
+          120, AMBOSS). Predictions include an estimated planning range and an
           estimated percentile ranking.
         </p>
 

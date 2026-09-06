@@ -47,7 +47,6 @@ const VALID_SOURCES: ExamSource[] = [
   "UWSA2",
   "FREE120",
   "AMBOSS",
-  "CMS",
 ];
 const VALID_STEPS: StepKind[] = ["step1", "step2", "step3"];
 

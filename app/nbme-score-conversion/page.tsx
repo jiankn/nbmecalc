@@ -150,7 +150,7 @@ const conversionHubLinks = [
   },
   {
     href: "/cms-converter",
-    title: "CMS form conversion",
+    title: "CMS score interpretation",
     desc: "Use subject forms to investigate weak rotations before a comprehensive retest.",
   },
   {

@@ -17,7 +17,7 @@ import { CookieBanner } from "@/components/sections/cookie-banner";
 
 const homeTitle = "Free NBME Score Calculator — Step Score Estimate in Seconds";
 const homeDescription =
-  "Combine Step 2 CCSSA, UWSA, Free 120, AMBOSS, or CMS results into an independent Step estimate and planning range. Free, no signup.";
+  "Combine Step 2 CCSSA, UWSA, Free 120, or AMBOSS results into an independent Step estimate and planning range. Free, no signup.";
 
 export const metadata: Metadata = {
   title: homeTitle,

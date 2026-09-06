@@ -31,9 +31,9 @@ export function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
         switch (block.type) {
           case "p":
             return (
-              <p key={i} className="text-gray-700 leading-relaxed my-5">
-                {block.text}
-              </p>
+              <p key={i} className="text-gray-700 leading-relaxed my-5"
+                dangerouslySetInnerHTML={{ __html: block.text }}
+              />
             );
           case "h2":
             return (
@@ -60,9 +60,9 @@ export function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
                 className="list-disc pl-6 space-y-2 my-5 text-gray-700"
               >
                 {block.items.map((item, j) => (
-                  <li key={j} className="leading-relaxed">
-                    {item}
-                  </li>
+                  <li key={j} className="leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: item }}
+                  />
                 ))}
               </ul>
             );
@@ -73,9 +73,9 @@ export function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
                 className="list-decimal pl-6 space-y-2 my-5 text-gray-700"
               >
                 {block.items.map((item, j) => (
-                  <li key={j} className="leading-relaxed">
-                    {item}
-                  </li>
+                  <li key={j} className="leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: item }}
+                  />
                 ))}
               </ol>
             );
@@ -85,7 +85,7 @@ export function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
                 key={i}
                 className="border-l-4 border-mint-500 pl-5 my-6 italic text-gray-700"
               >
-                <p className="mb-1">{block.text}</p>
+                <p className="mb-1" dangerouslySetInnerHTML={{ __html: block.text }} />
                 {block.attr && (
                   <cite className="not-italic text-sm text-gray-500">
                     — {block.attr}
@@ -101,7 +101,7 @@ export function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
                 className={`my-6 rounded-2xl border p-5 flex gap-3 ${style.container}`}
               >
                 {style.icon}
-                <p className="leading-relaxed">{block.text}</p>
+                <p className="leading-relaxed" dangerouslySetInnerHTML={{ __html: block.text }} />
               </div>
             );
           }

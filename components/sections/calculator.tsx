@@ -473,7 +473,7 @@ export function Calculator({
                     }
                     className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer"
                   >
-                    {EXAM_SOURCES.map((s) => (
+                    {EXAM_SOURCES.filter((s) => s.key !== "CMS").map((s) => (
                       <option
                         key={s.key}
                         value={s.key}
@@ -591,7 +591,7 @@ export function Calculator({
           >
             <Plus className="h-4 w-4" />
             Add another exam (
-            {step === "step2" ? "NBME / UWSA / Free 120 / AMBOSS / CMS" : "UWSA / Free 120"}
+            {step === "step2" ? "NBME / UWSA / Free 120 / AMBOSS" : "UWSA / Free 120"}
             )
           </button>
 

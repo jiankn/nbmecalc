@@ -4,7 +4,7 @@ const steps = [
   {
     number: "1",
     title: "Gather Your Practice Exams",
-    body: "Collect compatible CCSSA, UWSA, Free 120, AMBOSS, or CMS results you want to review together.",
+    body: "Collect compatible CCSSA, UWSA, Free 120, or AMBOSS results you want to review together.",
   },
   {
     number: "2",

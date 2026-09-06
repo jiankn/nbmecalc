@@ -3,15 +3,16 @@
 **[Use the free NBME Score Calculator →](https://nbmecalc.com)**
 
 NBMEcalc is a free USMLE Step score predictor for combining NBME, UWSA,
-Free 120, AMBOSS, and CMS results. It returns an independent planning estimate
-with a 95% confidence interval instead of presenting a single score as certain.
+Free 120, and AMBOSS results. It returns an independent planning estimate
+with a model-generated planning range instead of presenting a single score as
+certain.
 
 ## Live Tools
 
 - [Free NBME Score Calculator](https://nbmecalc.com) — combine multiple practice exams in one Step score forecast.
 - [NBME Score Conversion Calculator and Chart](https://nbmecalc.com/nbme-score-conversion) — review current CCSSA and CBSSA form families.
 - [Free 120 Step 2 Score Conversion](https://nbmecalc.com/free-120-predictor) — compare current, 2021, and 2019 Free 120 versions.
-- [CMS Form Score Conversion](https://nbmecalc.com/cms-converter) — use subject-form results to investigate weak rotations.
+- [CMS Score Interpretation](https://nbmecalc.com/cms-converter) — read the official 1–30 CMS scale and subject-exam correspondence.
 
 NBMEcalc is an independent educational tool and is not affiliated with or
 endorsed by NBME, FSMB, or USMLE.
@@ -28,6 +29,24 @@ endorsed by NBME, FSMB, or USMLE.
 - **Payments**: Stripe Checkout
 - **Email**: Postal HTTP API for magic-link email delivery
 - **Tests**: Vitest (pure-logic units in `lib/**`)
+
+## Ad-supported free experience
+
+Public calculator results, selected homepage content, and indexed blog posts
+have low-density AdSense placements. Ads are disabled unless a valid publisher
+id and placement-specific slot ids are provided at build time:
+
+```bash
+NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT=ca-pub-1234567890123456
+NEXT_PUBLIC_GOOGLE_ADSENSE_SLOT_CALCULATOR_RESULT=1234567890
+NEXT_PUBLIC_GOOGLE_ADSENSE_SLOT_HOME_CONTENT=2345678901
+NEXT_PUBLIC_GOOGLE_ADSENSE_SLOT_BLOG_INLINE=3456789012
+```
+
+Configure Google Privacy & messaging (or another Google-certified CMP) before
+serving ads in regions where consent is required. The public `/ads.txt` route
+is generated from the configured publisher id. Keep ads out of forms, result
+controls, account pages, checkout, and paid reports.
 
 ## Quick Start
 
@@ -57,9 +76,8 @@ nbmecalc/
 │   └── sections/
 │       ├── nav.tsx         # 1. Top navigation
 │       ├── hero.tsx        # 2. Hero with iPhone mockup
-│       ├── logo-wall.tsx   # 3. Trust school list
-│       ├── value-props.tsx # 4. 3-column value cards
-│       ├── calculator.tsx  # 5. Live predictor (CORE)
+│       ├── value-props.tsx # Product evidence and limitations
+│       ├── calculator.tsx  # Live predictor (CORE)
 │       ├── reviews.tsx     # 6. Reddit quotes
 │       ├── stats.tsx       # 7. Stats with count-up
 │       ├── how-it-works.tsx# 8. 3-step explainer

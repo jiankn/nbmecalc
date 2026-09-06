@@ -20,15 +20,7 @@ const officialCmsUrl =
 export const metadata: Metadata = {
   title: "CMS Forms for Step 2 CK: Subjects, Timing & Study Plan",
   description:
-    "See all eight NBME CMS subjects, the official 50-question format, current $21 price, where to buy, and a focused Step 2 CK study workflow.",
-  keywords: [
-    "cms forms step 2 ck",
-    "cms forms step 2",
-    "nbme cms forms",
-    "what are cms forms",
-    "how many cms forms",
-    "clinical science mastery series",
-  ],
+    "See all 8 NBME CMS subjects, the official 50-question format, current $21 price, where to buy, and a focused Step 2 CK study workflow.",
   alternates: { canonical: pageUrl },
   openGraph: {
     title: "CMS Forms for Step 2 CK: Subjects, Timing & Study Plan",
@@ -144,11 +136,11 @@ export default function CmsFormsStep2CkPage() {
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      name: "CMS Forms for Step 2 CK: Subjects, Timing and Study Plan",
+      name: "CMS Forms for Step 2 CK: Subjects, Timing, and Study Plan",
       url: pageUrl,
       description:
         "An official-source guide to NBME Clinical Science Mastery Series subjects, format, access, and Step 2 CK study use.",
-      dateModified: "2026-08-13",
+      dateModified: "2026-09-06",
       inLanguage: "en-US",
       isPartOf: {
         "@type": "WebSite",
@@ -195,9 +187,9 @@ export default function CmsFormsStep2CkPage() {
       />
 
       <PageHero
-        badge="Official-source CMS guide · Reviewed Aug. 13, 2026"
+        badge="Official-source CMS guide · Reviewed Sep. 6, 2026"
         title="CMS Forms for Step 2 CK: Subjects, Timing, and Study Plan"
-        description="CMS forms are 50-question, subject-focused NBME self-assessments. Use this guide to choose the right subject, find the official forms, and keep a CMS result separate from overall Step 2 CK readiness."
+        description="NBME lists 8 CMS subjects, with 50 questions per form. Use this guide to choose the right subject, find the official forms, and keep a CMS result separate from overall Step 2 CK readiness."
         size="md"
       >
         <div className="flex flex-col justify-center gap-3 sm:flex-row">
@@ -231,8 +223,18 @@ export default function CmsFormsStep2CkPage() {
           </div>
           <p className="mt-4 text-center text-xs text-gray-500">
             Format, access, and price checked against NBME&apos;s official Clinical
-            Science Mastery Series page on August 13, 2026. Availability and
+            Science Mastery Series page on September 6, 2026. Availability and
             price can change.
+          </p>
+          <p className="mt-3 text-center text-sm text-gray-600">
+            Looking for the current total number of forms? Read{" "}
+            <Link
+              href="/blog/how-many-cms-forms-step-2-ck"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              how NBME lists CMS availability
+            </Link>
+            .
           </p>
         </div>
       </section>

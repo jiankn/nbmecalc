@@ -145,3 +145,126 @@
 1. 配置仓库 Secret `NPM_TOKEN` 并手动运行发布 job，发布前确认包名仍可用。
 2. 审计 npm 公共页面的 HTTP、robots、README 可见锚文本和 `rel`，通过后再把 P15 记为 `Complete`。
 3. 选择一个主题匹配的教育资源清单，提交一次 GitHub PR；合并后审计最终渲染文件并单独统计其 `rel`。
+
+## 2026-08-08 · Round 5 · npm v1.0.0 验收完成
+
+### 完成项
+
+- `nbmecalc-score-conversion@1.0.0` 已在 npm Registry 公开。
+- 公共验收地址：`https://www.npmjs.com/package/nbmecalc-score-conversion`。
+- Registry tarball：`https://registry.npmjs.org/nbmecalc-score-conversion/-/nbmecalc-score-conversion-1.0.0.tgz`。
+- GitHub Actions 手动发布运行 `31263041431` 已完成，结论为 `success`。
+- 用户于 2026-08-08 在浏览器确认公共页面并指示本地标记验收完成。
+
+### 验收结果
+
+- P15 状态：`Complete`。
+- 完成的公开列表：`1`。
+- 唯一引荐根域：`1`（`npmjs.com`）。
+- 自动化最终 DOM 审计被 npm Cloudflare 403 challenge 阻止，因此未把该链接声明为 follow 或 nofollow；用户浏览器验收作为本轮完成依据。
+
+### 下一步
+
+1. 7 天后复查 npm 页面公开性、索引指令和链接 `rel`。
+2. 下一项继续处理一个主题匹配的 GitHub 教育资源清单 PR，不批量投递。
+
+## 2026-08-09 · Round 6 · 既有开发者资产盘点与待审队列复核
+
+### 完成项
+
+- 按公开 Java 仓库的历史审计记录，将既有跨生态资产同步到本项目的 [能力地图](./capability-map.md) 与 [外链总台账](./backlink-ledger.md)。
+- 已核验历史合格根域为 15 个；加上用户验收的 npm `1.0.0`，当前完成公开列表和唯一根域均为 16。
+- 复核当前待审平台：
+  - Package Control PR [#9510](https://github.com/sublimehq/package_control_channel/pull/9510) 仍为 Open，目录详情页仍未公开；
+  - Open VSX 的 SPA 路径返回 200，但其扩展 API 返回 404，未形成公开条目；
+  - NetBeans 预期门户路由仅返回通用页面，不能当作验收；
+  - MCP Hub 预期详情页仍未公开。
+
+### 当前状态
+
+- 新增构建：`0`。现有语言库和编辑器资产已足够，不新增重复包装器。
+- 可立即验收的新增平台：`0`。
+- 需用户授权后可推进：Open VSX、JetBrains Marketplace；其余项目均在第三方审核队列。
+
+### 下一步
+
+1. 等待 Package Control、NetBeans 或 MCP Hub 出现公共详情页后，先做最终页面审计再计入新根域。
+2. 若要主动推进，优先处理 Open VSX 的 Publisher Agreement 与 `OVSX_PAT`，它使用现有已测试 VS Code 扩展并可带来一个新根域。
+
+## 2026-08-09 · Round 7 · Open VSX 扩展发布与验收完成
+
+### 完成项
+
+- 用户已配置 `OVSX_PAT` GitHub Secret。
+- 触发 [Publish Open VSX](https://github.com/jiankn/nbmecalc-vscode/actions/runs/31293145756) 手动工作流；依赖安装、5 个测试、VSIX 打包、publisher namespace 创建及发布全部成功。
+- 工作流日志确认发布：`jiankn.nbmecalc-score-tools v0.1.0`。
+- Registry API 最终返回公开版本与可下载 VSIX：`https://open-vsx.org/api/jiankn/nbmecalc-score-tools/0.1.0`。
+- 最终页面审计通过：
+  - `https://open-vsx.org/extension/jiankn/nbmecalc-score-tools` 返回 HTTP 200；
+  - 未发现页面级 `noindex` 或 `X-Robots-Tag`；
+  - `USMLE Step score calculator` 精确指向 `https://nbmecalc.com/`；
+  - 目标锚文本 `rel` 为空，属于 ordinary follow。
+
+### 当前状态
+
+- Open VSX：`Complete`，新增 `open-vsx.org` 根域。
+- 完成公开列表：`17`；唯一引荐根域：`17`；已核验 ordinary-follow + indexable 根域：`16`。
+- 待处理：Package Control、JetBrains Marketplace、NetBeans Plugin Portal、MCP Hub。
+
+### 下一步
+
+1. 继续等待三个已提交平台生成公共详情页；公开后先审计，后计数。
+2. 若要主动新增下一根域，下一项是 JetBrains Marketplace 的首次人工上传与 Vendor profile 授权。
+
+## 2026-08-09 · Round 8 · 待审队列与 JetBrains 发布通道复核
+
+### 完成项
+
+- 发布后镜像检索没有发现可单独验收的新根域；搜索结果仅返回已有主站、GitHub、Maven Central、docs.rs 等已记录页面。
+- 复核 Package Control PR [#9510](https://github.com/sublimehq/package_control_channel/pull/9510)：仍为 Open，无 review、comment、status check 或可由仓库端修复的冲突。
+- 复核 `jiankn/nbmecalc-jetbrains`：
+  - `Publish JetBrains Marketplace` 手动工作流已存在；
+  - 工作流会执行测试、插件构建和配置验证后才发布；
+  - 目前没有 GitHub Actions Secret，预期名称为 `JETBRAINS_MARKETPLACE_TOKEN`。
+
+### 当前状态
+
+- 新增公开外链：`0`（Open VSX 已是上一轮新增并验收）。
+- 无用户操作可继续的项目：Package Control、NetBeans、MCP Hub，均等待第三方审核。
+- 可由一次用户授权主动推进的项目：JetBrains Marketplace。
+
+### 下一步
+
+1. 用户完成 JetBrains Marketplace 首次开发者授权并将 token 作为 `JETBRAINS_MARKETPLACE_TOKEN` 添加到仓库 Secret 后，运行发布工作流。
+2. 发布后审计 `plugins.jetbrains.com` 公开详情页的 HTTP、robots、精确锚文本和 `rel`，通过才计入新根域。
+
+## 2026-08-09 · Round 9 · JetBrains 自动发布首轮验证
+
+### 完成项
+
+- 确认 `jiankn/nbmecalc-jetbrains` 的 GitHub Actions Secret `JETBRAINS_MARKETPLACE_TOKEN` 已配置。
+- 触发 [Publish JetBrains Marketplace workflow 31318724351](https://github.com/jiankn/nbmecalc-jetbrains/actions/runs/31318724351)。
+- `./gradlew test buildPlugin verifyPluginProjectConfiguration --stacktrace` 完成成功；测试、插件 ZIP 构建与配置校验通过。
+
+### 验证结果与阻塞
+
+- `publishPlugin` 上传阶段返回：`Cannot find plugin`。
+- 这是 Marketplace 的首发规则，不是 token 或代码/构建失败：官方要求第一个版本先通过后台 `Add new plugin` 手动上传，以补全许可证、仓库 URL 等页面资料；之后 GitHub workflow 才能自动发布更新。
+- 通过独立临时 JDK 在本机构建并校验了首发 ZIP：`backlink-artifacts/nbmecalc-jetbrains-0.1.0.zip`（287,049 bytes，包含插件 JAR 与依赖）；未安装或修改系统 Java。
+
+### 当前状态与下一步
+
+- JetBrains Marketplace 首发 ZIP 已提交，当前为 `pending Marketplace review`；没有公共详情页，不能计入新增根域。
+- 用户在 [Marketplace Profile](https://plugins.jetbrains.com/author/me) 点击 **Add new plugin**，上传 [本地首发 ZIP](./backlink-artifacts/nbmecalc-jetbrains-0.1.0.zip)，填写首发页面资料并提交。
+- 用户完成首发后，等待并审计最终公开页面的 HTTP、robots、精确锚文本与 `rel`；后续版本更新才运行 `publish-jetbrains.yml`。
+
+## 2026-08-09 · Round 10 · JetBrains Marketplace 审核中
+
+### 当前状态
+
+- 用户已手动提交 `nbmecalc-jetbrains-0.1.0.zip` 首发版本，等待 JetBrains Marketplace 审核。
+- 状态标记为 `pending Marketplace review`；没有公开详情页、HTTP/robots/锚文本/`rel` 验收证据，不计入新增外链或引荐根域。
+
+### 下一步
+
+- 审核通过且公开详情页出现后，立即运行最终页面审计；通过后才将 `plugins.jetbrains.com` 计入完成统计。

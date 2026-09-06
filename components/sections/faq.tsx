@@ -8,7 +8,7 @@ import {
 const faqs = [
   {
     q: "What is nbmecalc.com?",
-    a: "nbmecalc.com is an independent USMLE planning tool that combines compatible Step 2 CCSSA, UWSA, Free 120, AMBOSS, and CMS results into a Step estimate with an estimated range. Current Step 1 CBSSA and Step 3 CCMSA reports are interpreted on their own official scales.",
+    a: "nbmecalc.com is an independent USMLE planning tool that combines compatible Step 2 CCSSA, UWSA, Free 120, and AMBOSS results into a Step estimate with an estimated range. Current Step 1 CBSSA, CMS, and Step 3 CCMSA reports are interpreted on their own official scales.",
   },
   {
     q: "How accurate is your prediction?",
@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "How is NBMEcalc different from PredictMyStepScore?",
-    a: "NBMEcalc supports compatible CCSSA, UWSA, Free 120, AMBOSS, and CMS inputs in one calculation. It reports its source adjustments, an estimated planning range, and a study-plan framework. Compare each tool's current methodology before relying on its result.",
+    a: "NBMEcalc supports compatible CCSSA, UWSA, Free 120, and AMBOSS inputs in one calculation. It reports its source adjustments, an estimated planning range, and a study-plan framework. Compare each tool's current methodology before relying on its result.",
   },
   {
     q: "How is NBMEcalc different from AMBOSS Predictor?",

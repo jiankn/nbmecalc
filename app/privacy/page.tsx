@@ -52,7 +52,7 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Practice exam scores</strong> — NBME, UWSA, Free 120,
-            AMBOSS, CMS Form scores you enter into the predictor.
+            and AMBOSS scores you enter into the predictor.
           </li>
           <li>
             <strong>Payment information</strong> — handled by{" "}

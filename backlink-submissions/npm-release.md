@@ -1,6 +1,6 @@
 # npm 发布提交包：`nbmecalc-score-conversion`
 
-状态：Prepared，等待 npm 账号绑定、最终 `npm publish` 和公共页面验证。
+状态：Complete。`1.0.0` 已发布，用户已在浏览器验收公共页面。
 
 ## 发布前确认
 
@@ -45,3 +45,12 @@ Record the public package URL, publication date, package version, rendered READM
 `https://www.npmjs.com/package/nbmecalc-score-conversion`
 
 This package listing counts as one public listing and, if indexable, one referring root domain (`npmjs.com`). It must not be counted as complete from the source repository alone.
+
+## Completed acceptance
+
+- Public package: `https://www.npmjs.com/package/nbmecalc-score-conversion`
+- Published version: `1.0.0`
+- Registry tarball: `https://registry.npmjs.org/nbmecalc-score-conversion/-/nbmecalc-score-conversion-1.0.0.tgz`
+- GitHub Actions run: `https://github.com/jiankn/nbmecalc/actions/runs/31263041431` (`success`)
+- User browser acceptance: confirmed on 2026-08-08
+- Automated final-DOM `rel` audit: npm returned a Cloudflare 403 challenge; no follow/nofollow classification is claimed from automation.

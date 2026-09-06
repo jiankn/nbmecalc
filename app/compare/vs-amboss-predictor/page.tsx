@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 };
 
 const competitors = ["NBMEcalc", "AMBOSS Predictor"];
-const REVIEWED_AT = "August 10, 2026";
+const REVIEWED_AT = "September 6, 2026";
 
 const rows: CompareRow[] = [
   { feature: "Use without a paid subscription", values: ["yes", "no"] },
@@ -42,7 +42,7 @@ const rows: CompareRow[] = [
   { feature: "NBME form inputs", values: ["yes", "yes"] },
   { feature: "Free 120 input", values: ["yes", "yes"] },
   { feature: "UWSA input named on public product page", values: ["yes", "partial"] },
-  { feature: "CMS subject-form input", values: ["yes", "partial"] },
+  { feature: "CMS subject-score guidance", values: ["partial", "partial"] },
   { feature: "Planning range shown", values: ["yes", "yes"] },
   { feature: "Passing probability shown", values: ["yes", "yes"] },
   { feature: "Public evidence / methodology material", values: ["yes", "yes"] },
@@ -141,7 +141,7 @@ export default function VsAmbossPage() {
             Try the source-agnostic alternative
           </h2>
           <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-            Works with UWorld, NBME, UWSA, Free 120, and CMS forms — run the{" "}
+            Works with UWorld, NBME, UWSA, and Free 120 results — run the{" "}
             <Link
               href="/step-2-predictor"
               className="font-semibold text-mint-700 underline underline-offset-2"

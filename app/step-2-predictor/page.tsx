@@ -8,23 +8,14 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title:
-    "Step 2 Score Predictor & CK Calculator | NBMEcalc",
+    "Step 2 CK Score Predictor — Free USMLE Calculator | NBMEcalc",
   description:
-    "Free Step 2 score predictor and CK calculator. Combine CCSSA forms 9-15, UWSA, Free 120, AMBOSS, and CMS inputs with a transparent planning range.",
-  keywords: [
-    "step 2 score predictor",
-    "step 2 score calculator",
-    "step 2 ck score calculator",
-    "usmle step 2 ck score predictor",
-    "step 2 predictor",
-    "step 2 ck calculator",
-    "step 2 score converter",
-  ],
+    "Free Step 2 CK score predictor and calculator. Combine CCSSA forms 9-15, UWSA, Free 120, and AMBOSS inputs with a transparent planning range.",
   alternates: { canonical: "https://nbmecalc.com/step-2-predictor" },
   openGraph: {
-    title: "Step 2 Score Predictor & CK Calculator",
+    title: "Step 2 CK Score Predictor — Free USMLE Calculator",
     description:
-      "Combine compatible Step 2 CK practice inputs and review the model's assumptions, planning range, and official-source study priorities.",
+      "Free Step 2 CK score predictor. Combine compatible practice inputs and review the model's assumptions, planning range, and official-source study priorities.",
     url: "https://nbmecalc.com/step-2-predictor",
     type: "website",
     images: [
@@ -63,7 +54,6 @@ const sourceCorrections = [
   { src: "UWSA 2", note: "Internal source adjustment", adj: "−2" },
   { src: "Free 120", note: "Percentage input; internal mapping", adj: "0" },
   { src: "AMBOSS SA", note: "Preserve reported 3-digit estimate; lower source weight", adj: "0" },
-  { src: "CMS Form", note: "Subject-level, no overall", adj: "—" },
 ];
 
 const faqs = [
@@ -98,13 +88,13 @@ export default function Step2PredictorPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebApplication",
-            name: "Step 2 CK Predictor",
+            name: "Step 2 CK Score Predictor",
             url: "https://nbmecalc.com/step-2-predictor",
             applicationCategory: "EducationalApplication",
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free USMLE Step 2 CK predictor that combines NBME, UWSA, Free 120, AMBOSS, and CMS Form scores into a weighted estimate with a transparent planning range.",
+              "Free USMLE Step 2 CK score predictor that combines NBME, UWSA, Free 120, and AMBOSS scores into a weighted estimate with a transparent planning range.",
           }),
         }}
       />
@@ -124,9 +114,9 @@ export default function Step2PredictorPage() {
       />
 
       <PageHero
-        badge="Free Step 2 CK score calculator"
-        title="Step 2 Score Predictor and CK Calculator"
-        description="Combine Step 2 CK CCSSA, UWSA, Free 120, AMBOSS, and CMS inputs into one independent estimate. Review the midpoint together with its estimated planning range."
+        badge="Free Step 2 CK score predictor"
+        title="Step 2 CK Score Predictor and Calculator"
+        description="Free USMLE Step 2 CK score predictor. Combine CCSSA, UWSA, Free 120, and AMBOSS inputs into one independent estimate. Review the midpoint together with its estimated planning range."
         size="md"
       />
 
@@ -362,7 +352,7 @@ export default function Step2PredictorPage() {
                 data-indexing-context="related"
                 className="underline underline-offset-2"
               >
-                CMS Form subject converter
+                CMS score interpretation guide
               </Link>
             </li>
             <li>

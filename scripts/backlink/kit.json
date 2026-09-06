@@ -1,0 +1,48 @@
+{
+  "$comment": "Single source of truth for every field a directory/outreach form asks for. Edit here, never per-submission.",
+  "brand": "NBMEcalc",
+  "vendor": "NBMEcalc",
+  "homepage": "https://nbmecalc.com/",
+  "contactEmailSlot": "<long-lived business inbox, prefer @nbmecalc.com>",
+  "pricing": "Freemium",
+  "pricingNote": "Core CMS/conversion tools are free in-browser; paid report tiers exist, so Freemium is the accurate answer wherever both options are offered.",
+  "categories": ["Education", "Medical Education", "Digital Assessments and Tests", "Study Tools"],
+  "tags": ["USMLE", "Step 2 CK", "medical education", "CMS forms", "shelf exams", "assessment", "clinical rotations", "study planning"],
+  "image": "public/images/feature-score-range.png",
+  "disclosure": "NBMEcalc is an independent educational planning resource. It is not affiliated with, endorsed by, or sponsored by NBME or USMLE. CMS results are subject-level study signals and should not be treated as direct official Step 2 CK score conversions.",
+  "forbiddenClaims": [
+    "official conversion",
+    "NBME-approved",
+    "NBME-endorsed",
+    "validated prediction",
+    "guaranteed score",
+    "accurate to the point",
+    "predicts your real score"
+  ],
+  "copy": {
+    "tagline60": "Interpret CMS form results and plan Step 2 CK study by subject.",
+    "tagline80": "Interpret CMS form results and plan Step 2 CK study by clinical subject.",
+    "short160": "Free educational tool and guide for interpreting CMS form results during USMLE Step 2 CK preparation.",
+    "short240": "Free browser tool that turns NBME, UWSA, Free 120, AMBOSS and CMS practice results into subject-level study signals and a Step score range with stated uncertainty. Independent educational resource, not affiliated with NBME or USMLE.",
+    "long": "NBMEcalc helps medical students interpret Clinical Science Mastery Series (CMS) form results during USMLE Step 2 CK preparation. Enter a CMS score or percent-correct result to review subject-level study signals across Internal Medicine, Surgery, Pediatrics, Obstetrics and Gynecology, Psychiatry, and Family Medicine.\n\nThe guide explains how CMS reports can inform rotation-specific study priorities and why a subject-focused CMS result should not be treated as a direct official Step 2 CK score conversion. Learners can use the resource alongside comprehensive readiness assessments when planning their next study block.\n\nNBMEcalc is free to access in a browser. It is an independent educational planning resource and is not affiliated with, endorsed by, or sponsored by NBME or USMLE."
+  },
+  "anchorRouting": [
+    { "id": "A1", "intent": "brand", "anchor": "NBMEcalc", "target": "https://nbmecalc.com/" },
+    { "id": "A2", "intent": "brand-bare", "anchor": "nbmecalc.com", "target": "https://nbmecalc.com/" },
+    { "id": "A3", "intent": "generic-product", "anchor": "free USMLE score predictor", "target": "https://nbmecalc.com/" },
+    { "id": "A5", "intent": "nbme-calculator", "anchor": "NBME score calculator", "target": "https://nbmecalc.com/" },
+    { "id": "A6", "intent": "nbme-conversion", "anchor": "NBME score conversion calculator", "target": "https://nbmecalc.com/nbme-score-conversion" },
+    { "id": "A7", "intent": "cms", "anchor": "CMS form score conversion guide", "target": "https://nbmecalc.com/cms-converter" },
+    { "id": "A8", "intent": "cms-branded", "anchor": "NBMEcalc CMS Form Score Interpretation Guide", "target": "https://nbmecalc.com/cms-converter" },
+    { "id": "A9", "intent": "free120", "anchor": "Free 120 Step 2 score conversion", "target": "https://nbmecalc.com/free-120-predictor" },
+    { "id": "A10", "intent": "step1", "anchor": "Step 1 predictor", "target": "https://nbmecalc.com/step-1-predictor" },
+    { "id": "A11", "intent": "step2", "anchor": "Step 2 CK predictor", "target": "https://nbmecalc.com/step-2-predictor" },
+    { "id": "A12", "intent": "step3", "anchor": "Step 3 predictor", "target": "https://nbmecalc.com/step-3-predictor" },
+    { "id": "A13", "intent": "amboss", "anchor": "AMBOSS converter", "target": "https://nbmecalc.com/amboss-converter" },
+    { "id": "A14", "intent": "methodology", "anchor": "methodology and assumptions", "target": "https://nbmecalc.com/methodology" },
+    { "id": "A15", "intent": "validation", "anchor": "NBMEcalc validation status", "target": "https://nbmecalc.com/validation" },
+    { "id": "A16", "intent": "machine-readable", "anchor": "validation status JSON", "target": "https://nbmecalc.com/validation-status.json" }
+  ],
+  "defaultTarget": "https://nbmecalc.com/cms-converter",
+  "defaultAnchorId": "A8"
+}

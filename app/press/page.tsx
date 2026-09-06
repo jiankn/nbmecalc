@@ -96,7 +96,7 @@ export default function PressPage() {
           <div className="rounded-2xl bg-gray-50 border border-gray-200 p-6 mb-12">
             <p className="text-gray-800 leading-relaxed text-sm">
               <strong>NBMEcalc</strong> is a free USMLE Step score predictor
-              that combines compatible CCSSA, UWSA, Free 120, AMBOSS, and CMS
+              that combines compatible CCSSA, UWSA, Free 120, and AMBOSS
               Form results into an independent Step planning estimate
               with a model-generated range. Founded in 2025, the product is
               maintained as an independent educational project with a public

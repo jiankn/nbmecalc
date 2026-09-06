@@ -912,7 +912,7 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "ul",
         items: [
           "Use the Step 2 CK predictor to compare recent comprehensive assessments.",
-          "Use the CMS converter only for subject-level context; a CMS form is not a substitute for a comprehensive CCSSA.",
+          "Use the CMS score guide only for subject-level context; a CMS form is not a substitute for a comprehensive CCSSA.",
           "Read the methodology before treating an internal planning range as an official score forecast.",
         ],
       },
@@ -1574,6 +1574,166 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         label: "USMLE — Step 3 sample test questions and practice materials",
         href: "https://www.usmle.org/prepare-your-exam/step-3-materials/step-3-sample-test-questions",
+      },
+    ],
+  },
+  {
+    slug: "how-many-cms-forms-step-2-ck",
+    title: "How Many CMS Forms Are There for Step 2 CK?",
+    description:
+      "NBME lists 8 CMS subjects and multiple forms per subject, but no stable public total. Learn how to check current availability and choose what to take.",
+    publishedAt: "2026-09-06",
+    updatedAt: "2026-09-06",
+    reviewedAt: "2026-09-06",
+    author: "NBMEcalc Editorial Team",
+    category: "step-2-tips",
+    tags: ["cms-forms", "step-2-ck", "nbme", "study-plan"],
+    readingTime: 5,
+    body: [
+      {
+        type: "p",
+        text: "The exact number of CMS forms currently available is not published as a stable total on NBME's public overview. NBME confirms 8 Clinical Science Mastery Series subjects and says multiple forms are available for each one. Because availability can change by subject, check the product choices in MyNBME when you are ready to purchase.",
+      },
+      {
+        type: "h2",
+        text: "What are CMS forms?",
+      },
+      {
+        type: "p",
+        text: "CMS stands for Clinical Science Mastery Series. These are subject-focused, 50-question self-assessments created by the NBME (the same organization that writes the USMLE). Each form covers a single clinical subject and is designed to help students assess knowledge for that specific area.",
+      },
+      {
+        type: "callout",
+        tone: "info",
+        text: "CMS forms are not the same as NBME comprehensive self-assessments (CCSSA). A CCSSA covers all Step 2 CK subjects in one 200-question sitting. A CMS form tests one subject in 50 questions. Do not use a CMS score to predict your overall Step 2 CK result.",
+      },
+      {
+        type: "h2",
+        text: "The answer: 8 subjects, with a changing number of forms",
+      },
+      {
+        type: "p",
+        text: "The public NBME page lists 8 clinical subjects and says each has multiple forms. It does not provide a permanent all-subject form count or a table of the highest form number available in every subject. A form number is also not the same thing as a count of forms currently for sale, because older versions may no longer be offered.",
+      },
+      {
+        type: "ul",
+        items: [
+          "Clinical Neurology",
+          "Emergency Medicine",
+          "Family Medicine",
+          "Medicine",
+          "Obstetrics and Gynecology",
+          "Pediatrics",
+          "Psychiatry",
+          "Surgery",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "info",
+        text: "For an exact current count, sign in to the MyNBME Examinee Portal and inspect the available products for each subject. Treat blog lists and the highest form number as dated clues, not as the official current inventory.",
+      },
+      {
+        type: "h2",
+        text: "How many CMS forms should I do for Step 2 CK?",
+      },
+      {
+        type: "p",
+        text: "NBME does not publish a universal number that every Step 2 CK student should complete. Use the following editorial framework to decide whether another subject form will answer a real study question:",
+      },
+      {
+        type: "ul",
+        items: [
+          "Start with one form in a subject that a CCSSA, clerkship result, or error log identifies as weak.",
+          "Review every missed question and use the official content feedback before deciding whether another form in that subject would add useful evidence.",
+          "For a shelf exam, stay within the matching CMS subject and choose from the forms currently offered in MyNBME.",
+          "For overall Step 2 CK readiness, return to a comprehensive assessment rather than treating a larger CMS count as proof of readiness.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "Key facts about CMS forms",
+      },
+      {
+        type: "ul",
+        items: [
+          "Each form has 50 multiple-choice questions.",
+          "Standard-paced mode: 75 minutes (1 hour 15 minutes).",
+          "Self-paced mode: up to 5 hours.",
+          "Current price: $21 per form (checked September 2026).",
+          "Purchase through the MyNBME Examinee Portal. Each form is accessible for one year after purchase.",
+          "The CMS total score ranges from 1 to 30. The report PDF shows the Subject Exam score that approximately corresponds to that result.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "CMS forms vs. CCSSA: which should you prioritize?",
+      },
+      {
+        type: "p",
+        text: "For overall Step 2 CK readiness, prioritize comprehensive assessments (CCSSA, UWSA, Free 120). CMS forms are supplements, not replacements. Use them to investigate a suspected weak subject identified by a comprehensive assessment, not as your primary readiness signal.",
+      },
+      {
+        type: "callout",
+        tone: "warning",
+        text: "A CMS score describes one subject and cannot be directly converted to a 3-digit Step 2 CK score. NBMEcalc does not accept new CMS scores as predictor inputs. Use a recent comprehensive assessment when you need an overall readiness estimate.",
+      },
+      {
+        type: "h2",
+        text: "How to choose which CMS subject to take",
+      },
+      {
+        type: "ol",
+        items: [
+          "Start with evidence: review your most recent CCSSA or clerkship results and identify the subject with the lowest content-area performance.",
+          "Choose the matching CMS subject: select the Clinical Science Mastery Series area that matches the identified weakness.",
+          "Check current availability: use the MyNBME portal to see which form versions are actually offered for that subject.",
+          "After completing the form: classify every missed question (knowledge gap, misread clue, sequencing error, changed answer). The category determines what to review, not just the score.",
+          "Return to comprehensive evidence: after targeted review, confirm progress with a fresh CCSSA or other comprehensive assessment.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "How to use your CMS score",
+      },
+      {
+        type: "p",
+        text: "The CMS total score ranges from 1 to 30. Use the score interpretation in the official report PDF, including the Subject Exam score that NBME says approximately corresponds to the self-assessment result. Keep that subject-level result separate from the 1-300 score reported for a comprehensive Step 2 CK CCSSA.",
+      },
+      {
+        type: "p",
+        text: "Use NBMEcalc's <a href=\"/cms-converter\" class=\"font-semibold text-mint-700 underline underline-offset-4\">CMS Score Interpretation Guide</a> to identify the fields in the report and understand why no direct Step 2 CK conversion is offered. For subjects, format, pacing, and purchase information, see the <a href=\"/cms-forms-step-2-ck\" class=\"font-semibold text-mint-700 underline underline-offset-4\">CMS Forms for Step 2 CK guide</a>.",
+      },
+      {
+        type: "h2",
+        text: "Bottom line",
+      },
+      {
+        type: "p",
+        text: "NBME offers CMS forms across 8 clinical subjects, with multiple versions available in each subject. Its public overview does not state one stable total across all subjects. Check MyNBME for the current inventory, use CMS results for subject-level review, and confirm overall readiness with a comprehensive assessment.",
+      },
+      {
+        type: "callout",
+        tone: "success",
+        text: "Have a CMS report open? Use the <a href=\"/cms-converter\" class=\"font-semibold text-mint-700 underline underline-offset-4\">CMS Score Interpretation Guide</a>. When you have compatible comprehensive or Step 2-specific results, continue with the <a href=\"/step-2-predictor\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 2 CK Predictor</a>.",
+      },
+    ],
+    references: [
+      {
+        label: "NBME — Clinical Science Mastery Series official product page",
+        href: "https://www.nbme.org/examinees/self-assessments/clinical-science-mastery-series/",
+      },
+      {
+        label: "NBME — MyNBME Examinee Portal",
+        href: "https://mynbme.nbme.org/",
+      },
+      {
+        label: "NBME — INSIGHTS User Guide",
+        href: "https://www.nbme.org/sites/default/files/2024-01/INSIGHTS_User_Guide.pdf",
+      },
+      {
+        label: "USMLE — Step 2 CK content description and specifications",
+        href: "https://www.usmle.org/step-2-ck",
       },
     ],
   },

@@ -4,7 +4,7 @@
 
 | 文件 | 平台/用途 | 目标 URL | 状态 |
 |---|---|---|---|
-| `npm-release.md` | npm package release | `https://nbmecalc.com/nbme-score-conversion` | Prepared |
+| `npm-release.md` | npm package release | `https://nbmecalc.com/nbme-score-conversion` | Complete: v1.0.0 published and user-accepted |
 | `github-resource-list-entry.md` | GitHub 教育资源清单 PR | `https://nbmecalc.com/nbme-score-conversion` 或 `/validation` | Prepared |
 | `../FREE_BACKLINK_SUBMISSION_GUIDE.md` | SaaSHub、Product Hunt、SDN、UIC Library、OER、G2/Capterra | `https://nbmecalc.com/cms-converter` | Prepared / OER Blocked |
 

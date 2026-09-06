@@ -37,7 +37,7 @@ const evidenceRows = [
   },
   {
     criterion: "Publicly described inputs",
-    nbmecalc: "NBME, UWSA, Free 120, AMBOSS, and CMS inputs where compatible",
+    nbmecalc: "NBME, UWSA, Free 120, and AMBOSS inputs where compatible",
     pmss: "Its homepage lists NBME, UWorld, AMBOSS, and Free 120 correlations or conversions",
   },
   {

@@ -57,3 +57,7 @@ yarn-error.log*
 /BACKLINK_*.md
 /FREE_BACKLINK_SUBMISSION_GUIDE.md
 /backlink-submissions/
+
+# Backlink pipeline cache (cloned upstream datasets + generated queues)
+/.backlink-cache/
+/backlink-artifacts/

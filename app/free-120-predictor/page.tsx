@@ -103,11 +103,11 @@ const relatedTools = [
   {
     href: "/step-2-predictor",
     title: "Step 2 CK predictor",
-    desc: "Combine CCSSA, UWSA, Free 120, AMBOSS, and CMS inputs in one forecast.",
+    desc: "Combine compatible CCSSA, UWSA, Free 120, and AMBOSS inputs in one forecast.",
   },
   {
     href: "/cms-converter",
-    title: "CMS form converter",
+    title: "CMS score interpretation guide",
     desc: "Use subject forms to diagnose weak rotations before a comprehensive retest.",
   },
 ];

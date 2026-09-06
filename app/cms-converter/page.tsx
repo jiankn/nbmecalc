@@ -3,32 +3,20 @@ import Link from "next/link";
 import { LayoutGrid, Microscope } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
-import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 
+const insightsGuideUrl =
+  "https://www.nbme.org/sites/default/files/2024-01/INSIGHTS_User_Guide.pdf";
+
 export const metadata: Metadata = {
-  title: "CMS Form Score Conversion & NBME Forms Guide | NBMEcalc",
+  title: "CMS Score Conversion: Read the NBME 1–30 Score | NBMEcalc",
   description:
-    "Convert CMS form percentages into an independent subject-level estimate. Learn how NBME Clinical Science Mastery Series forms support Step 2 CK preparation.",
-  keywords: [
-    "cms form score conversion",
-    "cms score conversion",
-    "cms forms score conversion",
-    "cms form score conversion pdf",
-    "nbme cms score conversion",
-    "how to calculate cms form score",
-    "nbme cms forms",
-    "cms exams",
-    "cms form to step",
-    "cms converter",
-    "clinical science mastery series",
-    "shelf exam predictor",
-  ],
+    "Learn how to read the NBME CMS 1–30 total score, find the approximate Subject Exam score on your report, and avoid unsupported Step 2 CK conversions.",
   alternates: { canonical: "https://nbmecalc.com/cms-converter" },
   openGraph: {
-    title: "CMS Form Score Conversion & NBME Forms Guide",
+    title: "CMS Score Conversion: Read the NBME 1–30 Score",
     description:
-      "Free converter from NBME CMS subject forms (shelf exams) to Step 2 CK subject estimates. Identify weak rotations before test day.",
+      "Read the official CMS total score and its approximate Subject Exam equivalent without treating a subject form as a Step 2 CK prediction.",
     url: "https://nbmecalc.com/cms-converter",
     type: "website",
     images: [
@@ -36,7 +24,7 @@ export const metadata: Metadata = {
         url: "/images/feature-score-range.png",
         width: 2400,
         height: 1792,
-        alt: "CMS Form to Step 2 CK conversion",
+        alt: "How to interpret an NBME CMS score report",
       },
     ],
   },
@@ -44,9 +32,14 @@ export const metadata: Metadata = {
 
 const reportFields = [
   {
-    field: "Total equated percent correct (EPC)",
-    supports: "Comparison within the same CMS subject across forms and time",
-    limit: "It is not a 3-digit Step 2 CK score",
+    field: "CMS total score (1–30)",
+    supports: "The official total reported for a Clinical Science Mastery Series form",
+    limit: "It is not a percent correct or a 3-digit Step 2 CK score",
+  },
+  {
+    field: "Approximate Subject Exam score",
+    supports: "The corresponding subject-exam estimate printed in the score report PDF",
+    limit: "It is not an overall Step 2 CK estimate",
   },
   {
     field: "Content-area feedback",
@@ -66,11 +59,11 @@ const faqs = [
   },
   {
     q: "How do I calculate a CMS form score from the PDF report?",
-    a: "Use the Total Equated Percent Correct (EPC) score shown in the current official report, then enter that 0-100 value as a CMS Form input. Do not enter an old scaled score or treat the result as a direct Step 2 CK conversion.",
+    a: "Use the 1-30 CMS total score printed on the official report. The same PDF provides the Subject Exam score that approximately corresponds to it, so no third-party arithmetic is needed.",
   },
   {
-    q: "Can a CMS EPC score be converted directly to a 250 Step 2 CK score?",
-    a: "No official one-to-one conversion exists. NBMEcalc treats CMS EPC as a lower-weight subject signal under an internal, unvalidated mapping. Use a recent comprehensive assessment and its official report for overall readiness.",
+    q: "Can a CMS score be converted directly to a 250 Step 2 CK score?",
+    a: "No. NBME publishes an approximate correspondence to the matching Subject Exam, not a one-to-one CMS-to-Step 2 CK conversion. Use a recent comprehensive assessment and its official report for overall readiness.",
   },
   {
     q: "Are CMS Forms worth taking if I am studying for Step 2 CK directly?",
@@ -85,7 +78,7 @@ const cmsPdfSteps = [
   },
   {
     title: "Use the native score first",
-    body: "Enter the Total Equated Percent Correct (EPC) from a current report. EPC is already adjusted for small form-difficulty differences and uses a 0-100 scale.",
+    body: "Read the 1-30 CMS total score and the approximate Subject Exam score from the official PDF. Keep both separate from Step 2 CK's 1-300 score scale.",
   },
   {
     title: "Compare against a comprehensive form",
@@ -107,7 +100,7 @@ const cmsRelatedTools = [
   {
     href: "/step-2-predictor",
     title: "Step 2 CK predictor",
-    desc: "Combine CMS, CCSSA, UWSA, Free 120, and AMBOSS inputs in one forecast.",
+    desc: "Combine compatible comprehensive and Step 2-specific inputs in one forecast.",
   },
 ];
 
@@ -119,14 +112,11 @@ export default function CmsConverterPage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "WebApplication",
-            name: "CMS Form Converter",
+            "@type": "WebPage",
+            name: "CMS Score Conversion Guide",
             url: "https://nbmecalc.com/cms-converter",
-            applicationCategory: "EducationalApplication",
-            operatingSystem: "Any",
-            offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free converter from NBME CMS subject form percentages to Step 2 CK subject estimates.",
+              "Guide to reading the NBME CMS 1-30 total score and the approximate Subject Exam score printed on the official report.",
           }),
         }}
       />
@@ -146,24 +136,34 @@ export default function CmsConverterPage() {
       />
 
       <PageHero
-        badge="CMS subject forms → Step 2 CK"
-        title="CMS Form Score Conversion and NBME Forms Guide"
-        description="Use Clinical Science Mastery Series results to investigate subject-level strengths and weaknesses. The calculator provides an independent estimate, not an official Step 2 CK conversion."
+        badge="Official CMS score scale"
+        title="CMS Score Conversion: How to Read the NBME 1–30 Score"
+        description="Clinical Science Mastery Series reports use a 1–30 total score and provide an approximate score on the matching NBME Subject Exam scale. They do not provide a direct Step 2 CK conversion."
         size="md"
       />
 
-      <section id="calculator" className="py-12 bg-mint-50/30 border-b border-gray-200">
-        <div className="container max-w-3xl mb-6">
+      <section className="py-12 bg-mint-50/30 border-b border-gray-200">
+        <div className="container max-w-3xl">
           <h2 className="text-2xl lg:text-3xl font-extrabold mb-2">
-            Enter your CMS Total EPC score
+            There is no official CMS-to-Step 2 CK formula
           </h2>
-          <p className="text-gray-600">
-            Pick <strong>Step 2 CK</strong>, choose <strong>CMS Form</strong>, and
-            enter the report&apos;s 0-100 Total EPC score. Best paired with a
-            recent comprehensive assessment.
+          <p className="text-gray-700 leading-relaxed">
+            NBME reports CMS performance on a 1–30 scale and tells you where
+            that result approximately falls on the corresponding Subject Exam
+            scale. Read those fields directly. Use a comprehensive CCSSA when
+            the question is overall Step 2 CK readiness.
           </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Button variant="primary" asChild>
+              <a href={insightsGuideUrl} target="_blank" rel="noopener noreferrer">
+                Read the NBME scoring guide
+              </a>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/cms-forms-step-2-ck">Choose a CMS subject</Link>
+            </Button>
+          </div>
         </div>
-        <Calculator defaultStep="step2" defaultSource="CMS" singleAssessment />
       </section>
 
       <section className="py-16 lg:py-20 bg-white">
@@ -177,9 +177,9 @@ export default function CmsConverterPage() {
             </h2>
           </div>
           <p className="text-gray-600 text-lg mb-8">
-            CMS score conversion starts by identifying what the official
-            report actually gives you. Do not treat a subject-form result as
-            a comprehensive Step 2 CK conversion.
+            Start with the fields printed in the official report. A CMS result
+            describes one clinical subject and uses a different score scale
+            from a comprehensive Step 2 CK assessment.
           </p>
 
           <div className="overflow-x-auto rounded-3xl border border-gray-200 shadow-sm">
@@ -208,12 +208,12 @@ export default function CmsConverterPage() {
       <section className="py-16 lg:py-20 bg-white border-b border-gray-200">
         <div className="container max-w-4xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            How to calculate a CMS form score from your PDF
+            How to read a CMS form score from your PDF
           </h2>
           <p className="text-gray-600 text-lg mb-8">
             A CMS PDF helps diagnose one subject, while comprehensive Step 2
             readiness still needs a broader assessment. Follow these three
-            checks before entering the number in any CMS score converter.
+            checks before comparing the result with any other assessment.
           </p>
 
           <div className="grid gap-4 md:grid-cols-3">
@@ -274,11 +274,11 @@ export default function CmsConverterPage() {
               matching CMS subject, review the explanations, and then confirm
               progress with a fresh comprehensive assessment. When you have
               results from more than one source, add them to the{" "}
-              <Link href="/" className="font-semibold text-mint-700 underline underline-offset-4">
-                NBME score calculator
+              <Link href="/step-2-predictor" className="font-semibold text-mint-700 underline underline-offset-4">
+                Step 2 CK predictor
               </Link>{" "}
-              for a combined forecast instead of projecting one CMS subject
-              score across the whole exam.
+              with compatible comprehensive or Step 2-specific results instead
+              of projecting one CMS subject score across the whole exam.
             </p>
           </div>
         </div>
@@ -333,11 +333,11 @@ export default function CmsConverterPage() {
       <section className="py-16 bg-mint-50/40">
         <div className="container max-w-3xl text-center">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            Find your weak rotation in 5 minutes
+            Continue with the right assessment
           </h2>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
             <Button variant="primary" size="lg" asChild>
-              <Link href="#calculator">Convert my CMS scores</Link>
+              <Link href="/cms-forms-step-2-ck">Choose a CMS subject</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
               <Link href="/step-2-predictor">Step 2 CK predictor</Link>

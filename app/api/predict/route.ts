@@ -123,6 +123,12 @@ function parseBody(raw: unknown): PredictBody | { error: string } {
     }
     const source = e.source as ExamSource;
     if (!isExamSourceSupportedForStep(source, step)) {
+      if (source === "CMS") {
+        return {
+          error:
+            "CMS scores are not accepted for new predictions because NBME does not publish a direct CMS-to-Step conversion.",
+        };
+      }
       return {
         error: `exams[${i}] uses ${source} with ${step}, but that source is supported for Step 2 CK only.`,
       };

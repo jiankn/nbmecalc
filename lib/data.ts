@@ -2,7 +2,7 @@
  * USMLE Step Score Prediction Engine
  * ==================================
  *
- * Each input source (NBME, UWSA1/2, Free 120, AMBOSS, CMS) is first converted to
+ * Each supported input source (NBME, UWSA1/2, Free 120, AMBOSS) is converted to
  * an equated three-digit USMLE Step score, then a weighted average is taken
  * with an estimated planning range.
  *
@@ -260,7 +260,7 @@ export interface PredictOptions {
 // ---------------------------------------------------------------------------
 
 /**
- * Internal three-digit planning curves used for UWSA, CMS, and legacy report
+ * Internal three-digit planning curves used for UWSA and legacy report
  * compatibility. Direct NBME input does not share one scale across all Steps:
  * current CBSSA reports use 0-100 EPC, CCSSA uses a 1-300 Total Score, and
  * CCMSA uses a 10-800 Assessment Score.
@@ -349,9 +349,9 @@ function uwsaToEquated(
  * The planning range is widened later for CMS-only inputs because CMS is a
  * subject assessment rather than a comprehensive Step 2 CK assessment.
  *
- * Current CMS reports use a 0-100 equated percent correct (EPC) score. CMS is
- * treated as a subject-level signal, not a substitute for a comprehensive
- * assessment. The mapping below is an internal assumption.
+ * Legacy CMS inputs are retained only so previously saved reports can still be
+ * rendered. New calculator requests reject CMS because the current 1-30 CMS
+ * total score has no published direct conversion to a Step 2 CK score.
  */
 function cmsToEquated(rawScore: number, step: StepKind): number {
   return percentToEquated(rawScore, step);
@@ -445,7 +445,7 @@ function passProbabilityLogistic(
  *   - Recency: takenDaysAgo (if provided) decays as exp(-days / 30).
  *     If not provided, falls back to position-based weight (later in array = more recent).
  *   - Internal source weights: NBME/UWSA2/Free120 = 1.0, UWSA1 = 0.85,
- *     AMBOSS = 0.75, CMS = 0.6. These are unvalidated model assumptions.
+ *     AMBOSS = 0.75. The CMS weight is retained for legacy report rendering.
  *
  * CI:
  *   - Base half-width: 12 / sqrt(n_effective)
@@ -515,7 +515,7 @@ export function computeBaseline(
   // It is not yet calibrated to a published holdout cohort or 95% coverage.
   const nEffective = exams.length;
   let ciHalfWidth = 16 / Math.sqrt(nEffective);
-  // Bump for low-quality-only inputs (e.g. only AMBOSS or CMS).
+  // Bump for low-quality-only inputs (e.g. only AMBOSS or a legacy CMS input).
   const onlyLowQuality = exams.every(
     (e) => sourceQuality[e.source] < 0.85
   );
@@ -812,12 +812,12 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
   },
   {
     key: "CMS",
-    label: "CMS Form",
+    label: "CMS Form (legacy)",
     color: "#F87171",
     scoreRange: [0, 100],
     unit: "percent",
     defaultScore: 68,
-    hint: "Total equated percent correct (EPC) from the current CMS report",
+    hint: "Legacy saved-report compatibility; unavailable for new predictions",
   },
 ];
 
@@ -848,15 +848,16 @@ export function getDefaultNbmeFormNumber(step: StepKind): number {
 
 /**
  * The direct NBME field accepts the current 1-300 CCSSA Total Score only.
- * Current CBSSA and CCMSA reports use different scales and already provide
- * their own official interpretations, so treating them as the same input
- * would create a false cross-assessment conversion.
+ * Current CBSSA, CCMSA, and CMS reports use different scales and provide their
+ * own official interpretations, so treating them as the same input would
+ * create a false cross-assessment conversion.
  */
 export function isExamSourceSupportedForStep(
   source: ExamSource,
   step: StepKind
 ): boolean {
-  return !["NBME", "AMBOSS", "CMS"].includes(source) || step === "step2";
+  if (source === "CMS") return false;
+  return !["NBME", "AMBOSS"].includes(source) || step === "step2";
 }
 
 /**

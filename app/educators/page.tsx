@@ -72,9 +72,9 @@ const reviewLinks = [
     body: "Primary learner-facing calculator for combining recent Step 2 CK practice-assessment inputs.",
   },
   {
-    title: "CMS Form Converter",
+    title: "CMS Score Interpretation Guide",
     href: "/cms-converter",
-    body: "Subject-level interpretation tool with an explicit warning that CMS forms are not official direct Step conversions.",
+    body: "Subject-level report guide explaining the official 1-30 scale and why CMS forms are not direct Step conversions.",
   },
   {
     title: "Methodology & Limitations",

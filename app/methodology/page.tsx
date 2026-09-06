@@ -47,7 +47,7 @@ const calculationSteps = [
   },
   {
     title: "Align assessment families",
-    body: "Results are mapped to a shared internal scale while keeping comprehensive and subject-specific products distinct.",
+    body: "Only compatible comprehensive and Step-specific results are mapped to the internal planning scale.",
   },
   {
     title: "Weight the evidence",
@@ -68,7 +68,6 @@ const strongerSignals = [
 const cautionSignals = [
   "Only one assessment is available.",
   "Most results are old or missing dates.",
-  "The inputs are mainly subject-specific CMS forms.",
   "Different assessment families disagree substantially.",
 ];
 
@@ -105,12 +104,12 @@ const sourceRows = [
     label: "AMBOSS Step 2 Self-Assessment",
   },
   {
-    topic: "CMS subject-exam input scale",
+    topic: "CMS self-assessment score scale",
     status: "Official",
     detail:
-      "Current Clinical Science reports use a 0-100 Total Equated Percent Correct score. It is not a 3-digit Step 2 CK score.",
-    href: "https://www.nbme.org/wp-content/uploads/2026/04/Clinical_Science_Examinee_Performance_Report.pdf",
-    label: "NBME sample performance report",
+      "The Clinical Science Mastery Series total score ranges from 1-30. The report PDF provides the approximately corresponding Subject Exam score; NBME does not publish a direct Step 2 CK conversion.",
+    href: "https://www.nbme.org/sites/default/files/2024-01/INSIGHTS_User_Guide.pdf",
+    label: "NBME INSIGHTS User Guide",
   },
   {
     topic: "Score conversion coefficients",
@@ -127,7 +126,7 @@ const changes = [
     date: "2026-09-06",
     items: [
       "Updated AMBOSS input to the 3-digit score shown in the Step 2 Self-Assessment report and removed the unsupported universal five-point correction.",
-      "Restricted current CMS input to the report's 0-100 Total Equated Percent Correct scale.",
+      "Corrected the CMS total-score description to the official 1-30 scale and stopped accepting new CMS predictor inputs because no direct Step 2 CK conversion is published.",
       "Updated the Step 3 passing threshold from the legacy 198 value to the current official score of 200.",
       "Replaced outcome language that implied validated confidence or a universally superior source with explicit internal-assumption language.",
     ],

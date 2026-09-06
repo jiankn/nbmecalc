@@ -16,6 +16,11 @@
     "deploy:pdf-worker": "npx wrangler deploy --config workers/pdf-renderer/wrangler.toml",
     "test": "vitest run",
     "test:watch": "vitest",
+    "backlink:sync": "node scripts/backlink/sync-sources.mjs",
+    "backlink:harvest": "node scripts/backlink/harvest.mjs",
+    "backlink:qualify": "node scripts/backlink/qualify.mjs",
+    "backlink:draft": "node scripts/backlink/draft.mjs",
+    "backlink:audit": "node scripts/backlink/audit.mjs",
     "seo:indexnow": "node scripts/indexnow-submit.mjs"
   },
   "dependencies": {
