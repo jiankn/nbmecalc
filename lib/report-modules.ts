@@ -40,10 +40,9 @@ import type {
 export interface RiskProfile {
   /**
    * Shape of the prediction band. Used by UI to pick tone + headline.
-   * - asymmetric_downside: a known-hot source (UWSA1, AMBOSS) is inflating
-   *   the ceiling, so the floor is more credible than the ceiling.
-   * - asymmetric_upside: NBME (most trustworthy) is the top source while
-   *   weaker sources drag the floor down — the ceiling is more credible.
+   * - asymmetric_downside: a lower-weight source sits above the other inputs,
+   *   so the planning range should be treated cautiously.
+   * - asymmetric_upside: CCSSA is the top source while other inputs sit lower.
    * - tight_balanced: sources agree, narrow CI.
    * - wide_balanced: sources roughly agree, but few inputs → wide CI.
    */
@@ -72,7 +71,7 @@ export function buildRiskProfile(input: {
   const ceiling = input.ciUpper;
   const spread = ceiling - floor;
 
-  // Typical CI half-width is calibrated against ~16/√n in `predictStepScore`.
+  // Compare with the internal ~16/√n range rule in `predictStepScore`.
   // For n=2 that's ~22 pts spread; for n=3 ~18 pts; for n=4 ~16 pts.
   const n = Math.max(1, input.inputCount);
   const typicalSpread = Math.round((16 / Math.sqrt(n)) * 2);
@@ -97,17 +96,17 @@ export function buildRiskProfile(input: {
   if (sourceSpread >= 6 && sourceRows.length >= 2) {
     const top = sourceRows[0];
     const bottom = sourceRows[sourceRows.length - 1];
-    const hotSources: ExamSource[] = ["UWSA1", "AMBOSS"];
+    const lowerWeightSources: ExamSource[] = ["UWSA1", "AMBOSS"];
 
-    if (hotSources.includes(top.source)) {
+    if (lowerWeightSources.includes(top.source)) {
       shape = "asymmetric_downside";
-      rootCause = `Your ${top.label} average (${top.averageEquated}) sits ${sourceSpread} pts above your ${bottom.label} average (${bottom.averageEquated}). ${top.label} is known to over-predict the real exam. Your floor is the more credible read.`;
-    } else if (top.source === "NBME" && !hotSources.includes(bottom.source)) {
+      rootCause = `Your ${top.label} average (${top.averageEquated}) sits ${sourceSpread} pts above your ${bottom.label} average (${bottom.averageEquated}). This model assigns ${top.label} a lower internal weight; the difference has not been resolved by a published NBMEcalc validation cohort.`;
+    } else if (top.source === "NBME" && !lowerWeightSources.includes(bottom.source)) {
       shape = "asymmetric_upside";
-      rootCause = `Your NBME average (${top.averageEquated}) is your strongest signal — and it sits ${sourceSpread} pts above your other inputs. NBME is the gold standard for prediction; the ceiling is more trustworthy than the spread suggests.`;
-    } else if (bottom.source === "NBME" && !hotSources.includes(top.source)) {
+      rootCause = `Your CCSSA average (${top.averageEquated}) sits ${sourceSpread} pts above your other inputs. Read the official CCSSA report first and use this model's range as supporting context.`;
+    } else if (bottom.source === "NBME" && !lowerWeightSources.includes(top.source)) {
       shape = "asymmetric_downside";
-      rootCause = `Your NBME numbers (${bottom.averageEquated}) sit ${sourceSpread} pts below your other sources. NBME is the most trustworthy single signal — your real ceiling is closer to that lower number, not the higher ones.`;
+      rootCause = `Your CCSSA average (${bottom.averageEquated}) sits ${sourceSpread} pts below your other sources. Review the official CCSSA report and the assessment dates before relying on the higher combined midpoint.`;
     } else {
       shape = spread >= typicalSpread + 3 ? "wide_balanced" : "tight_balanced";
       rootCause = `Your sources span ${sourceSpread} pts but no single source is clearly more reliable than the others. Treat the point estimate as the honest middle.`;
@@ -121,10 +120,10 @@ export function buildRiskProfile(input: {
   }
 
   const headlineByShape: Record<RiskProfile["shape"], string> = {
-    asymmetric_downside: `You have more downside risk than upside. Plan for your floor (${floor}), not your ceiling (${ceiling}).`,
-    asymmetric_upside: `Your ceiling (${ceiling}) is well-supported. Lower-quality inputs are dragging your floor down — trust the higher number.`,
-    tight_balanced: `Your prediction band is tight (${floor}–${ceiling}). The model has high confidence in this estimate.`,
-    wide_balanced: `Your prediction spans ${spread} pts (${floor}–${ceiling}). This wider band reflects genuine uncertainty in your inputs.`,
+    asymmetric_downside: `A lower-weight source sits above your other inputs. Review the official reports and the full ${floor}–${ceiling} planning range before making a decision.`,
+    asymmetric_upside: `Your CCSSA input sits above your other sources. Review why they differ and use the official report alongside the ${floor}–${ceiling} planning range.`,
+    tight_balanced: `Your model-generated planning range is narrow (${floor}–${ceiling}). It has not been calibrated to verified coverage on a published holdout cohort.`,
+    wide_balanced: `Your model-generated planning range spans ${spread} pts (${floor}–${ceiling}), reflecting uncertainty in the supplied inputs.`,
   };
 
   return {
@@ -369,13 +368,13 @@ export function buildAntiPatterns(input: {
     });
   }
 
-  // Hot source in inputs → don't anchor expectations to it
+  // Lower-weight source in inputs → don't anchor expectations to one result
   if (sources.has("UWSA1") || sources.has("AMBOSS")) {
-    const inflated: ExamSource = sources.has("UWSA1") ? "UWSA1" : "AMBOSS";
-    const label = inflated === "UWSA1" ? "UWSA1" : "AMBOSS Self-Assessment";
+    const lowerWeightSource: ExamSource = sources.has("UWSA1") ? "UWSA1" : "AMBOSS";
+    const label = lowerWeightSource === "UWSA1" ? "UWSA1" : "AMBOSS Self-Assessment";
     items.push({
       title: `Do not anchor your expectations to your ${label} score`,
-      reason: `${label} receives an internal source adjustment that is not an official conversion. Do not anchor a high-stakes decision to one input.`,
+      reason: `${label} receives a lower internal source weight that has not been validated on a published holdout cohort. Do not anchor a high-stakes decision to one input.`,
       basedOn: `You submitted a ${label} score.`,
     });
   }

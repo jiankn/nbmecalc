@@ -1,4 +1,4 @@
-import type { StepKind } from "@/lib/data";
+import { PASS_THRESHOLDS, type StepKind } from "@/lib/data";
 
 export type ScoreFeedbackAction =
   | "pass_240_plus"
@@ -22,12 +22,6 @@ export interface ScoreFeedbackOutcome {
 const TOKEN_VERSION = 1;
 const TOKEN_TTL_MS = 540 * 24 * 60 * 60 * 1000;
 const DAY_MS = 24 * 60 * 60 * 1000;
-
-export const PASS_THRESHOLDS: Record<StepKind, number> = {
-  step1: 196,
-  step2: 218,
-  step3: 198,
-};
 
 export function getScoreFeedbackSecret(env: Record<string, unknown>): string | null {
   const explicit = env.SCORE_FEEDBACK_SECRET;
@@ -119,7 +113,7 @@ export function inferOutcomeFromScore(
   actualScore: number,
   step: StepKind | null | undefined
 ): ScoreFeedbackOutcome {
-  const threshold = step ? PASS_THRESHOLDS[step] : 198;
+  const threshold = step ? PASS_THRESHOLDS[step] : PASS_THRESHOLDS.step3;
   return {
     passFail: actualScore >= threshold ? "pass" : "fail",
     scoreBand: scoreBandFromScore(actualScore),

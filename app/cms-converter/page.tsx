@@ -44,14 +44,9 @@ export const metadata: Metadata = {
 
 const reportFields = [
   {
-    field: "Equated score",
-    supports: "Comparison within the same CMS subject and form family",
-    limit: "Not a direct Step 2 CK score",
-  },
-  {
-    field: "Percent correct",
-    supports: "A simple record of questions answered correctly",
-    limit: "Different forms may not have identical difficulty",
+    field: "Total equated percent correct (EPC)",
+    supports: "Comparison within the same CMS subject across forms and time",
+    limit: "It is not a 3-digit Step 2 CK score",
   },
   {
     field: "Content-area feedback",
@@ -71,11 +66,11 @@ const faqs = [
   },
   {
     q: "How do I calculate a CMS form score from the PDF report?",
-    a: "Use the score or percent-correct value shown in the official report, then enter it as a CMS Form input in the calculator. The result should be treated as a subject-level planning signal, not a direct Step 2 CK score.",
+    a: "Use the Total Equated Percent Correct (EPC) score shown in the current official report, then enter that 0-100 value as a CMS Form input. Do not enter an old scaled score or treat the result as a direct Step 2 CK conversion.",
   },
   {
-    q: "What CMS Form percentage maps to a 250 Step 2 CK?",
-    a: "There is no official one-to-one CMS-to-Step 2 conversion. Scores in the low-to-mid 70s across multiple CMS subjects are generally a strong subject-level signal, but you still need a recent comprehensive form to estimate an overall Step 2 CK score.",
+    q: "Can a CMS EPC score be converted directly to a 250 Step 2 CK score?",
+    a: "No official one-to-one conversion exists. NBMEcalc treats CMS EPC as a lower-weight subject signal under an internal, unvalidated mapping. Use a recent comprehensive assessment and its official report for overall readiness.",
   },
   {
     q: "Are CMS Forms worth taking if I am studying for Step 2 CK directly?",
@@ -90,7 +85,7 @@ const cmsPdfSteps = [
   },
   {
     title: "Use the native score first",
-    body: "If the report gives a 3-digit equated score, enter that. If it only gives percent correct, enter the percentage and keep the uncertainty wider.",
+    body: "Enter the Total Equated Percent Correct (EPC) from a current report. EPC is already adjusted for small form-difficulty differences and uses a 0-100 scale.",
   },
   {
     title: "Compare against a comprehensive form",
@@ -160,14 +155,15 @@ export default function CmsConverterPage() {
       <section id="calculator" className="py-12 bg-mint-50/30 border-b border-gray-200">
         <div className="container max-w-3xl mb-6">
           <h2 className="text-2xl lg:text-3xl font-extrabold mb-2">
-            Convert CMS Form % to Step 2 CK
+            Enter your CMS Total EPC score
           </h2>
           <p className="text-gray-600">
-            Pick <strong>Step 2 CK</strong> and choose <strong>CMS Form</strong>{" "}
-            as the source. Best paired with multiple inputs.
+            Pick <strong>Step 2 CK</strong>, choose <strong>CMS Form</strong>, and
+            enter the report&apos;s 0-100 Total EPC score. Best paired with a
+            recent comprehensive assessment.
           </p>
         </div>
-        <Calculator defaultStep="step2" defaultSource="CMS" />
+        <Calculator defaultStep="step2" defaultSource="CMS" singleAssessment />
       </section>
 
       <section className="py-16 lg:py-20 bg-white">

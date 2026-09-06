@@ -25,7 +25,7 @@ const principles = [
   {
     icon: Target,
     title: "Honesty over hype",
-    body: "We show confidence intervals, not a single &quot;magic&quot; number. We tell you when our model is uncertain.",
+    body: "We show a model-generated planning range alongside the midpoint and explain that the range is not yet holdout-calibrated.",
   },
   {
     icon: ShieldCheck,

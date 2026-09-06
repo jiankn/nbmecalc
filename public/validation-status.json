@@ -1,10 +1,15 @@
 {
   "site": "https://nbmecalc.com",
-  "status_version": "2026-08-07",
+  "status_version": "2026-09-06",
+  "algorithm_version": "v1.3",
   "model_status": "planning_heuristic_not_holdout_validated",
   "published_validation_cohort_size": 0,
   "verified_95_percent_interval": false,
   "verified_error_rate": false,
+  "current_input_scales": {
+    "amboss_step_2_self_assessment": "3-digit reported score",
+    "cms_clinical_science_mastery_series": "0-100 Total Equated Percent Correct"
+  },
   "outcome_collection": {
     "active": true,
     "requires_explicit_opt_in": true,

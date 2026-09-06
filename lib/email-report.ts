@@ -19,7 +19,7 @@ export interface ReportEmailData {
   stepLabel: string;
   /** Predicted score */
   pointEstimate: number;
-  /** 95% CI bounds */
+  /** Model-generated planning-range bounds */
   ciLower: number;
   ciUpper: number;
   /** Pass probability 0–1 */

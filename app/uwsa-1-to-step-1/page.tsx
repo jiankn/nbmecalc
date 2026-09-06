@@ -119,10 +119,11 @@ export default function UWSA1ToStep1Page() {
           </h2>
           <p className="text-gray-600">
             Pick <strong>Step 1</strong> below and enter your UWSA 1 score. Add
-            NBME or Free 120 inputs for a tighter prediction.
+            Free 120 only when you want another model input, and use the
+            official CBSSA report for current Step 1 readiness guidance.
           </p>
         </div>
-        <Calculator defaultStep="step1" defaultSource="UWSA1" />
+        <Calculator defaultStep="step1" defaultSource="UWSA1" singleAssessment />
       </section>
 
       <section className="border-y border-gray-200 bg-white py-12">

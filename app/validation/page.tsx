@@ -34,7 +34,7 @@ export default function ValidationPage() {
   return (
     <PageShell>
       <PageHero
-        badge="Evidence status · August 7, 2026"
+        badge="Evidence status · September 6, 2026"
         title="NBMEcalc Validation Status"
         description="The current model is an independent planning heuristic. A reproducible outcome cohort and holdout report have not yet been published, so NBMEcalc does not claim a verified error rate, calibrated 95% interval, or clinical decision accuracy."
         size="md"
@@ -47,7 +47,7 @@ export default function ValidationPage() {
               icon={CheckCircle2}
               title="Published now"
               items={[
-                "Model version and source assumptions",
+                "Model version v1.3 and source assumptions",
                 "Input weighting and range rules",
                 "Outcome inclusion and privacy policy",
                 "Machine-readable validation status",

@@ -38,14 +38,9 @@ import type {
   TargetGap,
   TestDayProtocol,
 } from "@/lib/data";
+import { PASS_THRESHOLDS } from "@/lib/data";
 
 void _Printer; // keep lucide tree-shake happy if we relocate later
-
-const PASS_THRESHOLD: Record<PredictionResult["step"], number> = {
-  step1: 196,
-  step2: 218,
-  step3: 198,
-};
 
 const STEP_LABEL: Record<PredictionResult["step"], string> = {
   step1: "Step 1",
@@ -118,7 +113,7 @@ export function ReportView({
   purchasedAt: Date;
 }) {
   const stepLabel = STEP_LABEL[result.step];
-  const threshold = PASS_THRESHOLD[result.step];
+  const threshold = PASS_THRESHOLDS[result.step];
   const margin = result.pointEstimate - threshold;
   const band = passBand(result.passProbability);
 

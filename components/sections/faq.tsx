@@ -20,7 +20,7 @@ const faqs = [
   },
   {
     q: "Is my data private?",
-    a: "Yes. We don't store your scores unless you create an account. Anonymous predictions are processed in your browser and discarded after you leave. We never sell data, never share with third parties. Read our full privacy policy.",
+    a: "Prediction requests, including anonymous calculation snapshots, may be retained for up to 12 months as described in our Privacy Policy. We do not send practice-exam inputs to advertising partners or sell personal data.",
   },
   {
     q: "How is NBMEcalc different from PredictMyStepScore?",
@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: "How is NBMEcalc different from AMBOSS Predictor?",
-    a: "AMBOSS Predictor is a lead-generation tool for AMBOSS subscriptions — it works best if you're already paying for AMBOSS. NBMEcalc is independent, free, and works with whatever practice exams you already have.",
+    a: "AMBOSS provides a score predictor within its study ecosystem. NBMEcalc is an independent tool that combines compatible report values from several sources and publishes its current assumptions and validation status. Compare both products' current methods before relying on an estimate.",
   },
   {
     q: "Why do you charge for the full report?",

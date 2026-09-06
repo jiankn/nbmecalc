@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "NBMEcalc vs AMBOSS Predictor — 2026 Comparison",
   description:
-    "Compare NBMEcalc and AMBOSS Step 2 CK Predictor. Multi-source input vs ecosystem lock-in, confidence intervals, mobile UX, and pricing compared.",
+    "Compare NBMEcalc and AMBOSS Step 2 CK Predictor across supported inputs, planning ranges, published evidence, mobile UX, and pricing.",
   keywords: [
     "nbmecalc vs amboss",
     "amboss predictor alternative",

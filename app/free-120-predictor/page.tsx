@@ -157,7 +157,7 @@ export default function Free120PredictorPage() {
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free converter from NBME Free 120 percentage to USMLE Step prediction with confidence interval.",
+              "Free converter from NBME Free 120 percentage to a USMLE Step planning estimate and model-generated range.",
           }),
         }}
       />
@@ -193,7 +193,7 @@ export default function Free120PredictorPage() {
             source and enter your percentage correct.
           </p>
         </div>
-        <Calculator defaultStep="step2" defaultSource="FREE120" />
+        <Calculator defaultStep="step2" defaultSource="FREE120" singleAssessment />
       </section>
 
       <section className="py-14 lg:py-16 bg-white border-b border-gray-200">

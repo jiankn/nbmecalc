@@ -10,6 +10,7 @@ import { useSession } from "@/lib/auth/use-session";
 import {
   predictPreview,
   EXAM_SOURCES,
+  PASS_THRESHOLDS,
   getDefaultNbmeFormNumber,
   getNbmeFormNumbers,
   getSubjectTaxonomy,
@@ -217,11 +218,10 @@ export function Calculator({
     [exams, step]
   );
 
-  const hasUnsupportedNbme = useMemo(
+  const hasUnsupportedSource = useMemo(
     () =>
       exams.some(
         (exam) =>
-          exam.source === "NBME" &&
           !isExamSourceSupportedForStep(exam.source, step)
       ),
     [exams, step]
@@ -263,12 +263,22 @@ export function Calculator({
     const defaultForm = getDefaultNbmeFormNumber(nextStep);
     setStep(nextStep);
     setExams((prev) =>
-      prev.map((exam) =>
-        exam.source === "NBME" &&
-        !allowedForms.includes(exam.formNumber ?? -1)
-          ? { ...exam, formNumber: defaultForm }
-          : exam
-      )
+      prev.map((exam) => {
+        if (!isExamSourceSupportedForStep(exam.source, nextStep)) {
+          return {
+            ...exam,
+            source: "UWSA2" as const,
+            ...defaultsForSource("UWSA2", nextStep),
+          };
+        }
+        if (
+          exam.source === "NBME" &&
+          !allowedForms.includes(exam.formNumber ?? -1)
+        ) {
+          return { ...exam, formNumber: defaultForm };
+        }
+        return exam;
+      })
     );
     setResult(null);
   }
@@ -470,7 +480,7 @@ export function Calculator({
                         disabled={!isExamSourceSupportedForStep(s.key, step)}
                       >
                         {s.label}
-                        {s.key === "NBME" && step !== "step2"
+                        {!isExamSourceSupportedForStep(s.key, step)
                           ? " (Step 2 only)"
                           : ""}
                       </option>
@@ -580,7 +590,9 @@ export function Calculator({
             className="w-full rounded-2xl border-2 border-dashed border-gray-300 bg-transparent py-3 text-sm font-semibold text-mint-700 hover:border-mint-500 hover:bg-mint-50 transition flex items-center justify-center gap-2"
           >
             <Plus className="h-4 w-4" />
-            Add another exam ({step === "step2" ? "NBME / " : ""}UWSA / Free 120 / AMBOSS)
+            Add another exam (
+            {step === "step2" ? "NBME / UWSA / Free 120 / AMBOSS / CMS" : "UWSA / Free 120"}
+            )
           </button>
 
           <hr className="my-6 border-gray-100" />
@@ -646,8 +658,8 @@ export function Calculator({
 
           {!allInputsValid && exams.length > 0 && (
             <p className="mt-3 text-xs text-center text-red-600 font-medium">
-              {hasUnsupportedNbme
-                ? "Current CBSSA and CCMSA reports use different scales. Direct NBME input is supported only for Step 2 CCSSA Total Scores; use the official NBME report for Step 1 or Step 3 interpretation."
+              {hasUnsupportedSource
+                ? "That assessment source uses a Step 2-specific report scale. For Step 1 or Step 3, use a supported input and read the official comprehensive-assessment report for the target exam."
                 : "One or more scores are outside the valid range for their source. Hover the input for the expected range."}
             </p>
           )}
@@ -730,8 +742,7 @@ function ResultCard({
   const ciWidth = ((clamp(result.ciUpper) - clamp(result.ciLower)) / range) * 100;
   const pointPct = ((clamp(result.pointEstimate) - min) / range) * 100;
 
-  const passThreshold =
-    result.step === "step1" ? 196 : result.step === "step2" ? 218 : 198;
+  const passThreshold = PASS_THRESHOLDS[result.step];
   const passThresholdPct = ((passThreshold - min) / range) * 100;
 
   // Sort subjects by cohort average descending so weak spots naturally bubble

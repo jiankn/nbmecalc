@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { TrendingDown, AlertCircle } from "lucide-react";
+import { FileInput, AlertCircle } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "AMBOSS Score Predictor to Step 2 CK — Free Converter, No Login",
+  title: "Use Your AMBOSS Step 2 Score — Free Planning Range",
   description:
-    "Turn an AMBOSS Self-Assessment or Score Predictor result into an independent 3-digit Step 2 CK estimate. Free, no login, with a planning range.",
+    "Enter the 3-digit score from your AMBOSS Step 2 Self-Assessment report and get an independent planning range. Free, no login, with clear limitations.",
   keywords: [
     "amboss score predictor step 2",
     "amboss step 2 score predictor",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://nbmecalc.com/amboss-converter" },
   openGraph: {
-    title: "AMBOSS Score Predictor to Step 2 CK — Free Converter",
+    title: "Use Your AMBOSS Step 2 Score — Free Planning Range",
     description:
-      "Turn an AMBOSS Self-Assessment or Score Predictor result into an independent 3-digit Step 2 CK estimate. Free, no login.",
+      "Enter the 3-digit score from your AMBOSS Step 2 Self-Assessment report and review it in an independent planning range.",
     url: "https://nbmecalc.com/amboss-converter",
     type: "website",
     images: [
@@ -39,25 +39,32 @@ export const metadata: Metadata = {
   },
 };
 
-const conversionTable = [
-  { amboss: 200, step2: 211 },
-  { amboss: 215, step2: 220 },
-  { amboss: 230, step2: 230 },
-  { amboss: 245, step2: 240 },
-  { amboss: 255, step2: 246 },
-  { amboss: 265, step2: 252 },
-  { amboss: 275, step2: 257 },
-  { amboss: 285, step2: 262 },
+const inputGuide = [
+  {
+    reportValue: "3-digit score",
+    action: "Enter this value",
+    example: "245",
+  },
+  {
+    reportValue: "Percent correct",
+    action: "Do not enter it here",
+    example: "Use the 3-digit report score",
+  },
+  {
+    reportValue: "Percentile",
+    action: "Do not enter it here",
+    example: "Percentile is a different scale",
+  },
 ];
 
 const faqs = [
   {
     q: "How accurate is AMBOSS Self-Assessment for Step 2 CK?",
-    a: "The calculator applies an internal AMBOSS source adjustment, but a reproducible validation study is not published. Combine it with a recent CCSSA or Free 120 and use the full range.",
+    a: "NBMEcalc preserves the 3-digit AMBOSS estimate and gives it a lower internal weight when combining sources, but a reproducible validation study is not published. Compare it with a recent CCSSA or Free 120 and use the full planning range.",
   },
   {
-    q: "Why does AMBOSS over-predict?",
-    a: "We do not publish evidence for a universal AMBOSS offset. Differences may reflect question mix, timing, or the population taking the assessment, so this site labels its adjustment as an internal assumption.",
+    q: "Should I enter my AMBOSS percent correct or 3-digit score?",
+    a: "Enter the 3-digit score shown in your AMBOSS Step 2 Self-Assessment report. Do not enter a block percentage or percentile, because those values use different scales.",
   },
   {
     q: "Should I take AMBOSS Self-Assessment if I have NBMEs?",
@@ -65,7 +72,7 @@ const faqs = [
   },
   {
     q: "What AMBOSS score predicts a 250 Step 2 CK?",
-    a: "There is no official one-to-one AMBOSS-to-Step 2 CK conversion. Enter the score as one input and compare the resulting range with a recent comprehensive assessment.",
+    a: "AMBOSS already reports its own 3-digit estimate. NBMEcalc preserves that value as the AMBOSS input, applies a lower internal source weight when combining assessments, and displays an unvalidated planning range rather than claiming a universal point correction.",
   },
 ];
 
@@ -105,52 +112,60 @@ export default function AmbossConverterPage() {
 
       <PageHero
         badge="AMBOSS → Step 2 CK"
-        title="AMBOSS Score Predictor to Step 2 CK"
-        description="Use an AMBOSS Self-Assessment as one input in an independent Step 2 CK estimate. The source adjustment is a model assumption, not an official conversion."
+        title="Use Your AMBOSS Step 2 Score Predictor Result"
+        description="Enter the 3-digit score from your AMBOSS Step 2 Self-Assessment report. NBMEcalc keeps that reported estimate as the input and shows an independent planning range with explicit limitations."
         size="md"
       />
 
       <section id="calculator" className="py-12 bg-mint-50/30 border-b border-gray-200">
         <div className="container max-w-3xl mb-6">
           <h2 className="text-2xl lg:text-3xl font-extrabold mb-2">
-            Convert AMBOSS to Step 2 CK
+            Enter your 3-digit AMBOSS Step 2 score
           </h2>
           <p className="text-gray-600">
-            Pick <strong>Step 2 CK</strong> and choose <strong>AMBOSS</strong>{" "}
-            as the source. Compare it with a recent CCSSA or Free 120 when available.
+            Use the 3-digit score from the AMBOSS report—not percent correct or
+            percentile. Add a recent CCSSA or Free 120 later if you want to
+            compare independent signals.
           </p>
         </div>
-        <Calculator defaultStep="step2" defaultSource="AMBOSS" />
+        <Calculator
+          defaultStep="step2"
+          defaultSource="AMBOSS"
+          singleAssessment
+        />
       </section>
 
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-4xl">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-10 w-10 rounded-2xl bg-amber-100 flex items-center justify-center">
-              <TrendingDown className="h-5 w-5 text-amber-700" />
+              <FileInput className="h-5 w-5 text-amber-700" />
             </div>
             <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
-              AMBOSS → Step 2 CK conversion
+              Which AMBOSS report value should I enter?
             </h2>
           </div>
           <p className="text-gray-600 text-lg mb-8">
-            The calculator applies its documented internal AMBOSS adjustment.
-            It is not an official fixed-point conversion.
+            The AMBOSS Step 2 Self-Assessment already provides a 3-digit score.
+            Enter that score unchanged. NBMEcalc uses its own weighting and
+            planning-range assumptions when you combine it with other sources.
           </p>
 
           <div className="overflow-x-auto rounded-3xl border border-gray-200 shadow-sm">
             <table className="min-w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="text-left px-5 py-3 font-bold text-gray-900">AMBOSS SA</th>
-                  <th className="text-right px-5 py-3 font-bold text-mint-700">Internal model midpoint</th>
+                  <th className="text-left px-5 py-3 font-bold text-gray-900">Report value</th>
+                  <th className="text-left px-5 py-3 font-bold text-mint-700">What to do</th>
+                  <th className="text-left px-5 py-3 font-bold text-gray-900">Example</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 bg-white">
-                {conversionTable.map((row) => (
-                  <tr key={row.amboss}>
-                    <td className="px-5 py-3 font-mono font-bold text-gray-950">{row.amboss}</td>
-                    <td className="px-5 py-3 text-right font-mono font-bold text-mint-700">{row.step2}</td>
+                {inputGuide.map((row) => (
+                  <tr key={row.reportValue}>
+                    <td className="px-5 py-3 font-bold text-gray-950">{row.reportValue}</td>
+                    <td className="px-5 py-3 text-gray-700">{row.action}</td>
+                    <td className="px-5 py-3 text-gray-700">{row.example}</td>
                   </tr>
                 ))}
               </tbody>
@@ -160,14 +175,34 @@ export default function AmbossConverterPage() {
           <div className="mt-6 rounded-2xl bg-amber-50 border border-amber-200 p-5 flex gap-3">
             <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-900">
-              <strong>Note:</strong> AMBOSS-only estimates rely on an internal
-              source adjustment that has not been published as a reproducible
-              validation study. Pair it with an assessment from the correct
-              NBME family and interpret the full range.
+              <strong>Evidence limit:</strong> NBMEcalc has not published a
+              reproducible validation study for its AMBOSS weighting or planning
+              range. Use the official AMBOSS report as the source of the 3-digit
+              input and compare high-stakes decisions with current official
+              assessment guidance.
             </p>
           </div>
 
           <p className="mt-6 text-sm text-gray-700">
+            See how AMBOSS describes its 3-digit Self-Assessment report in its{" "}
+            <a
+              href="https://www.amboss.com/us/usmle/self-assessment/step2"
+              rel="noopener noreferrer"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              official Step 2 Self-Assessment page
+            </a>
+            . For NBMEcalc&apos;s internal handling, read the{" "}
+            <Link
+              href="/methodology"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              methodology and limitations
+            </Link>
+            .
+          </p>
+
+          <p className="mt-4 text-sm text-gray-700">
             Choosing between study platforms? Read the{" "}
             <Link
               href="/blog/amboss-vs-uworld-which-qbank-wins"

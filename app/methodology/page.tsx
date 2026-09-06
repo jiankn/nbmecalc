@@ -97,6 +97,22 @@ const sourceRows = [
     label: "NBME portfolio update",
   },
   {
+    topic: "AMBOSS Step 2 input scale",
+    status: "Official product report",
+    detail:
+      "The AMBOSS Step 2 Self-Assessment report provides a 3-digit score. NBMEcalc accepts that 3-digit value without applying a universal point correction.",
+    href: "https://www.amboss.com/us/usmle/self-assessment/step2",
+    label: "AMBOSS Step 2 Self-Assessment",
+  },
+  {
+    topic: "CMS subject-exam input scale",
+    status: "Official",
+    detail:
+      "Current Clinical Science reports use a 0-100 Total Equated Percent Correct score. It is not a 3-digit Step 2 CK score.",
+    href: "https://www.nbme.org/wp-content/uploads/2026/04/Clinical_Science_Examinee_Performance_Report.pdf",
+    label: "NBME sample performance report",
+  },
+  {
     topic: "Score conversion coefficients",
     status: "Internal assumption",
     detail:
@@ -107,6 +123,15 @@ const sourceRows = [
 ];
 
 const changes = [
+  {
+    date: "2026-09-06",
+    items: [
+      "Updated AMBOSS input to the 3-digit score shown in the Step 2 Self-Assessment report and removed the unsupported universal five-point correction.",
+      "Restricted current CMS input to the report's 0-100 Total Equated Percent Correct scale.",
+      "Updated the Step 3 passing threshold from the legacy 198 value to the current official score of 200.",
+      "Replaced outcome language that implied validated confidence or a universally superior source with explicit internal-assumption language.",
+    ],
+  },
   {
     date: "2026-08-11",
     items: [

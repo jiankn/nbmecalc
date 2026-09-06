@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Predict Your USMLE Step Score in 5 Seconds",
     description:
-      "Free, multi-source CCSSA / UWSA / Free 120 predictor with confidence intervals.",
+      "Free, multi-source CCSSA / UWSA / Free 120 predictor with an estimated planning range.",
     images: [defaultOgImage],
   },
   robots: {

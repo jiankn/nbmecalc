@@ -523,17 +523,18 @@ export default function NbmeScoreConversionPage() {
               <div className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-2">
                 AMBOSS Self-Assessment
               </div>
-              <div className="text-xl font-extrabold mb-1">Internal adjustment</div>
+              <div className="text-xl font-extrabold mb-1">Reported 3-digit score</div>
               <p className="text-sm text-gray-600 leading-relaxed">
-                AMBOSS inputs receive an internal adjustment that has not been
-                published as a validated conversion.
+                Enter the 3-digit estimate shown on the Step 2 Self-Assessment
+                report. The model preserves that value and uses a lower,
+                unvalidated source weight when combining assessments.
               </p>
             </div>
           </div>
 
           <p className="text-sm text-gray-600 mt-6">
-            All adjustments are baked into <Link href="#calculator" className="text-mint-700 font-semibold underline">our calculator</Link>.
-            You only need to enter the raw score.
+            Model handling is built into <Link href="#calculator" className="text-mint-700 font-semibold underline">our calculator</Link>.
+            Enter the value from the corresponding report scale.
           </p>
         </div>
       </section>

@@ -1,6 +1,6 @@
 {
   "name": "nbmecalc-score-conversion",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Deterministic NBME, UWSA, Free 120, AMBOSS, and CMS score interpretation helpers for USMLE study planning.",
   "type": "module",
   "main": "./index.js",

@@ -5,7 +5,7 @@
  * USMLE conversions and not a published validation result.
  */
 
-export const ALGORITHM_VERSION = "v1.1";
+export const ALGORITHM_VERSION = "v1.3";
 
 const SOURCES = new Set(["NBME", "UWSA1", "UWSA2", "FREE120", "AMBOSS", "CMS"]);
 const STEPS = new Set(["step1", "step2", "step3"]);
@@ -25,7 +25,7 @@ const SOURCE_QUALITY = {
   AMBOSS: 0.75,
   CMS: 0.6,
 };
-const PASS_THRESHOLDS = { step1: 196, step2: 218, step3: 198 };
+const PASS_THRESHOLDS = { step1: 196, step2: 218, step3: 200 };
 
 function assertStep(step) {
   if (!STEPS.has(step)) throw new TypeError(`Unsupported step: ${step}`);
@@ -56,15 +56,24 @@ function interpolate(anchors, value) {
   return anchors.at(-1)[1];
 }
 
-function percentToEquated(percent, step, source) {
+function percentToEquated(percent, step) {
   const baseAt75 = { step1: 232, step2: 248, step3: 226 }[step];
-  return Math.round(baseAt75 + (percent - 75) - (source === "AMBOSS" ? 5 : 0));
+  return Math.round(baseAt75 + (percent - 75));
 }
 
 /** Convert one practice-assessment result to the internal three-digit scale. */
 export function convertExam(exam, step) {
   assertStep(step);
   assertExam(exam);
+  if (["NBME", "AMBOSS", "CMS"].includes(exam.source) && step !== "step2") {
+    throw new TypeError(`${exam.source} input is supported only for Step 2`);
+  }
+  if (exam.source === "AMBOSS" && (exam.score < 100 || exam.score > 300)) {
+    throw new RangeError("AMBOSS input must be the 3-digit reported score");
+  }
+  if (exam.source === "CMS" && (exam.score < 0 || exam.score > 100)) {
+    throw new RangeError("CMS input must be the 0-100 Total EPC score");
+  }
 
   switch (exam.source) {
     case "NBME": {
@@ -76,13 +85,11 @@ export function convertExam(exam, step) {
     case "UWSA2":
       return interpolate(NBME_TO_STEP[step], exam.score - 2);
     case "FREE120":
-      return percentToEquated(exam.score, step, "FREE120");
+      return percentToEquated(exam.score, step);
     case "AMBOSS":
-      return percentToEquated(exam.score, step, "AMBOSS");
+      return Math.round(exam.score);
     case "CMS":
-      return exam.score >= 150
-        ? interpolate(NBME_TO_STEP[step], exam.score)
-        : percentToEquated(exam.score, step, "FREE120");
+      return percentToEquated(exam.score, step);
     default:
       throw new TypeError(`Unsupported source: ${exam.source}`);
   }

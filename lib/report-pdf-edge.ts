@@ -1,5 +1,9 @@
 import type { ReportData } from "@/lib/session-report";
-import type { PracticeExam, PredictionResult } from "@/lib/data";
+import {
+  PASS_THRESHOLDS,
+  type PracticeExam,
+  type PredictionResult,
+} from "@/lib/data";
 
 const PAGE_WIDTH = 595.28;
 const PAGE_HEIGHT = 841.89;
@@ -10,12 +14,6 @@ const STEP_LABEL: Record<PredictionResult["step"], string> = {
   step1: "Step 1",
   step2: "Step 2 CK",
   step3: "Step 3",
-};
-
-const PASS_THRESHOLD: Record<PredictionResult["step"], number> = {
-  step1: 196,
-  step2: 218,
-  step3: 198,
 };
 
 type FontName = "regular" | "bold";
@@ -147,7 +145,7 @@ export function createReportPdf(data: ReportData): Uint8Array {
   const writer = new PdfWriter();
   const result = data.result;
   const stepLabel = STEP_LABEL[result.step];
-  const threshold = PASS_THRESHOLD[result.step];
+  const threshold = PASS_THRESHOLDS[result.step];
   const issued = formatDate(data.purchasedAt);
 
   writer.heading("NBMEcalc Premium Score Report", 21);

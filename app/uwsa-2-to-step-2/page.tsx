@@ -126,7 +126,7 @@ export default function UWSA2ToStep2Page() {
             treating the UWSA result as a fixed conversion.
           </p>
         </div>
-        <Calculator defaultStep="step2" defaultSource="UWSA2" />
+        <Calculator defaultStep="step2" defaultSource="UWSA2" singleAssessment />
       </section>
 
       <section className="py-16 lg:py-20 bg-white">

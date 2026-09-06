@@ -93,7 +93,7 @@ const faqs = [
   },
   {
     q: "What three-digit score does the NBME report?",
-    a: "Reporting differs by assessment family and can change over time. Use the official score report as the source of truth; this site provides an independent estimate and confidence interval, not an official conversion.",
+    a: "Reporting differs by assessment family and can change over time. Use the official score report as the source of truth; this site provides an independent estimate and model-generated planning range, not an official conversion.",
   },
   {
     q: "Which NBME should I take first?",
@@ -178,7 +178,7 @@ export default function NbmeCalculatorPage() {
               </li>
               <li>
                 Use a <strong>calculator like this one</strong> to adjust for
-                recency, multiple inputs, and confidence interval.
+                recency, multiple inputs, and a model-generated planning range.
               </li>
             </ul>
           </div>

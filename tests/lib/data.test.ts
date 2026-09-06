@@ -14,6 +14,8 @@
 import { describe, expect, it } from "vitest";
 import {
   ALGORITHM_VERSION,
+  EXAM_SOURCES,
+  PASS_THRESHOLDS,
   buildPersonalizedWeakSubjects,
   buildPostponeRecommendation,
   buildScoreTrajectory,
@@ -41,7 +43,17 @@ describe("current NBME score-family handling", () => {
         "step2"
       )
     ).toBe(240);
-    expect(ALGORITHM_VERSION).toBe("v1.2");
+    expect(ALGORITHM_VERSION).toBe("v1.3");
+  });
+
+  it("uses the current AMBOSS, CMS, and Step 3 public scales", () => {
+    expect(convertExam({ id: "amboss", source: "AMBOSS", score: 245 }, "step2")).toBe(245);
+    expect(EXAM_SOURCES.find((source) => source.key === "AMBOSS")?.scoreRange).toEqual([100, 300]);
+    expect(EXAM_SOURCES.find((source) => source.key === "CMS")?.scoreRange).toEqual([0, 100]);
+    expect(PASS_THRESHOLDS.step3).toBe(200);
+    expect(isExamSourceSupportedForStep("AMBOSS", "step1")).toBe(false);
+    expect(isExamSourceSupportedForStep("AMBOSS", "step2")).toBe(true);
+    expect(isExamSourceSupportedForStep("CMS", "step3")).toBe(false);
   });
 });
 

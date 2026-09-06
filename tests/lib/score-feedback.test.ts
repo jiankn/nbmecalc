@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createScoreFeedbackToken,
   estimateScoreReleaseDate,
+  inferOutcomeFromScore,
   outcomeFromAction,
   parseExamDate,
   verifyScoreFeedbackToken,
@@ -55,5 +56,12 @@ describe("score feedback dates", () => {
     const releaseDate = new Date(estimateScoreReleaseDate(examDate));
     expect(releaseDate.getUTCDay()).toBe(3);
     expect(releaseDate.getTime()).toBeGreaterThan(examDate);
+  });
+});
+
+describe("score feedback thresholds", () => {
+  it("uses the current Step 3 minimum passing score", () => {
+    expect(inferOutcomeFromScore(199, "step3").passFail).toBe("fail");
+    expect(inferOutcomeFromScore(200, "step3").passFail).toBe("pass");
   });
 });

@@ -4,7 +4,7 @@
  *
  * Each input source (NBME, UWSA1/2, Free 120, AMBOSS, CMS) is first converted to
  * an equated three-digit USMLE Step score, then a weighted average is taken
- * with a confidence interval.
+ * with an estimated planning range.
  *
  * Internal calibration anchors for non-NBME sources. These are model
  * assumptions, not official NBME/USMLE conversions and not a published
@@ -14,12 +14,12 @@
  *   UWSA2 250 → Step 2 CK ~248 (UWSA2 runs ~+2 hot)
  *   UWSA1 250 → Step 2 CK ~245 (UWSA1 runs ~+5 hot)
  *   Free 120 75% → Step 2 CK ~247
- *   AMBOSS SA 65% → Step 2 CK ~245 (AMBOSS runs ~+5 hot vs NBME)
+ *   AMBOSS Step 2 Self-Assessment 245 → model input 245
  *
  * Pass thresholds:
  *   Step 1: 196 (pass/fail since 2022 — predicted 3-digit equivalent shown)
  *   Step 2 CK: 218 (effective July 1, 2025)
- *   Step 3: 198
+ *   Step 3: 200 (effective January 1, 2024)
  *
  * This module is pure (no I/O, no globals beyond `Math` / `Date`). The
  * calculator UI imports it client-side for instant feedback, AND the
@@ -37,8 +37,14 @@
  * version stored alongside the input snapshot lets us re-render a past
  * report under its original algorithm by branching on this string.
  */
-export const ALGORITHM_VERSION = "v1.2" as const;
+export const ALGORITHM_VERSION = "v1.3" as const;
 export type AlgorithmVersion = typeof ALGORITHM_VERSION;
+
+export const PASS_THRESHOLDS: Record<StepKind, number> = {
+  step1: 196,
+  step2: 218,
+  step3: 200,
+};
 
 // Premium-report module types are defined in `./report-modules` to keep the
 // algorithm file small. We re-export them here so existing consumers (UI,
@@ -305,16 +311,11 @@ const NBME_FORM_BIAS: Record<number, number> = {
 };
 
 /**
- * Free 120 / AMBOSS percent-correct → equated 3-digit USMLE.
- * These are official-style percent-correct exams.
- *
- * Free 120 is treated as a late-stage readiness signal; AMBOSS
- * Self-Assessment receives a source-specific adjustment.
+ * Free 120 percent-correct → an internal 3-digit planning midpoint.
  */
 function percentToEquated(
   percent: number,
-  step: StepKind,
-  source: "FREE120" | "AMBOSS"
+  step: StepKind
 ): number {
   // Step-2 calibration:  60% → 234, 70% → 244, 75% → 248,
   //                      80% → 254, 90% → 263.
@@ -325,9 +326,7 @@ function percentToEquated(
     step3: 226,
   };
   const slopePerPercent = 1.0;
-  let equated = stepBaseAt75[step] + (percent - 75) * slopePerPercent;
-  // AMBOSS over-predicts ~5 points; subtract.
-  if (source === "AMBOSS") equated -= 5;
+  const equated = stepBaseAt75[step] + (percent - 75) * slopePerPercent;
   return Math.round(equated);
 }
 
@@ -341,24 +340,21 @@ function uwsaToEquated(
   uwsaNum: 1 | 2
 ): number {
   const bias = uwsaNum === 1 ? 5 : 2;
-  // After bias correction, UWSA tracks NBME closely; reuse NBME table.
+  // Reuse the internal NBME table after the versioned model adjustment.
   return interpolate(NBME_TO_STEP[step], rawScore - bias);
 }
 
 /**
  * CMS Form (subject-level NBME): treat each form as a single subject signal.
- * Lower predictive power; CI gets widened later for CMS-only inputs.
+ * The planning range is widened later for CMS-only inputs because CMS is a
+ * subject assessment rather than a comprehensive Step 2 CK assessment.
  *
- * CMS is treated as a subject-level signal, not a substitute for a
- * comprehensive assessment. The mapping below is an internal assumption.
+ * Current CMS reports use a 0-100 equated percent correct (EPC) score. CMS is
+ * treated as a subject-level signal, not a substitute for a comprehensive
+ * assessment. The mapping below is an internal assumption.
  */
 function cmsToEquated(rawScore: number, step: StepKind): number {
-  // Map CMS percent-correct (most users report 0-100) to equated Step.
-  // If user enters as a 3-digit (>= 150), assume already an NBME-equivalent.
-  if (rawScore >= 150) {
-    return interpolate(NBME_TO_STEP[step], rawScore);
-  }
-  return percentToEquated(rawScore, step, "FREE120"); // similar slope
+  return percentToEquated(rawScore, step);
 }
 
 function interpolate(
@@ -403,9 +399,13 @@ export function convertExam(exam: PracticeExam, step: StepKind): number {
     case "UWSA2":
       return uwsaToEquated(exam.score, step, 2);
     case "FREE120":
-      return percentToEquated(exam.score, step, "FREE120");
+      return percentToEquated(exam.score, step);
     case "AMBOSS":
-      return percentToEquated(exam.score, step, "AMBOSS");
+      // AMBOSS reports its Step 2 Self-Assessment result on a 3-digit scale.
+      // Preserve that reported estimate and let source weighting/range rules
+      // express this model's uncertainty instead of applying an unsupported
+      // universal point correction.
+      return Math.round(exam.score);
     case "CMS":
       return cmsToEquated(exam.score, step);
   }
@@ -430,14 +430,9 @@ function passProbabilityLogistic(
   step: StepKind,
   ciHalfWidth: number
 ): number {
-  const threshold: Record<StepKind, number> = {
-    step1: 196,
-    step2: 218,
-    step3: 198,
-  };
   // σ grows with our own uncertainty (CI half-width) but never below 8.
   const sigma = Math.max(8, ciHalfWidth * 0.7);
-  const z = (point - threshold[step]) / sigma;
+  const z = (point - PASS_THRESHOLDS[step]) / sigma;
   const raw = 1 / (1 + Math.exp(-z));
   // Cap at 99% — never claim absolute certainty.
   return Math.min(0.99, Math.max(0.01, raw));
@@ -449,8 +444,8 @@ function passProbabilityLogistic(
  * Weighting:
  *   - Recency: takenDaysAgo (if provided) decays as exp(-days / 30).
  *     If not provided, falls back to position-based weight (later in array = more recent).
- *   - Source quality: NBME/UWSA2/Free120 = 1.0, UWSA1 = 0.85, AMBOSS = 0.75,
- *     CMS = 0.6 (less correlated).
+ *   - Internal source weights: NBME/UWSA2/Free120 = 1.0, UWSA1 = 0.85,
+ *     AMBOSS = 0.75, CMS = 0.6. These are unvalidated model assumptions.
  *
  * CI:
  *   - Base half-width: 12 / sqrt(n_effective)
@@ -786,7 +781,7 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     scoreRange: [180, 300],
     unit: "score",
     defaultScore: 220,
-    hint: "Runs ~5 pts hot vs real Step",
+    hint: "3-digit score; model applies a disclosed internal −5 adjustment",
   },
   {
     key: "UWSA2",
@@ -795,7 +790,7 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     scoreRange: [180, 300],
     unit: "score",
     defaultScore: 220,
-    hint: "Runs ~2 pts hot vs real Step",
+    hint: "3-digit score; model applies a disclosed internal −2 adjustment",
   },
   {
     key: "FREE120",
@@ -810,19 +805,19 @@ export const EXAM_SOURCES: ExamSourceMeta[] = [
     key: "AMBOSS",
     label: "AMBOSS SA",
     color: "#60A5FA",
-    scoreRange: [30, 100],
-    unit: "percent",
-    defaultScore: 58,
-    hint: "AMBOSS Self-Assessment % correct (runs ~5 pts hot)",
+    scoreRange: [100, 300],
+    unit: "score",
+    defaultScore: 245,
+    hint: "3-digit score from the AMBOSS Step 2 Self-Assessment report",
   },
   {
     key: "CMS",
     label: "CMS Form",
     color: "#F87171",
-    scoreRange: [40, 300],
-    unit: "score",
+    scoreRange: [0, 100],
+    unit: "percent",
     defaultScore: 68,
-    hint: "Subject form: enter % correct OR equated 3-digit if available",
+    hint: "Total equated percent correct (EPC) from the current CMS report",
   },
 ];
 
@@ -861,7 +856,7 @@ export function isExamSourceSupportedForStep(
   source: ExamSource,
   step: StepKind
 ): boolean {
-  return source !== "NBME" || step === "step2";
+  return !["NBME", "AMBOSS", "CMS"].includes(source) || step === "step2";
 }
 
 /**
@@ -1057,7 +1052,7 @@ export function buildSourceInsight(
   if (spread < 4) {
     return {
       rows,
-      insight: `Your scores are consistent across sources (within ${spread} pts). This is a strong signal — your prediction is well-supported.`,
+      insight: `Your source estimates are within ${spread} points of one another. That agreement is useful context, but the combined range is not holdout-validated.`,
     };
   }
 
@@ -1073,15 +1068,15 @@ function sourceComparisonHint(top: ExamSource, bottom: ExamSource): string {
     return "UWSA1 receives an internal source adjustment. Compare it with the official report from the comprehensive assessment for your target exam.";
   }
   if (top === "AMBOSS" && bottom === "NBME") {
-    return "AMBOSS Self-Assessment over-predicts by ~5 pts. Trust the NBME read.";
+    return "These are separate estimates. Use the official CCSSA report as the primary readiness evidence and treat the combined result as an internal planning estimate.";
   }
   if (top === "FREE120" && bottom === "NBME") {
     return "Free 120 covers fewer questions than a full NBME. Use it as a confidence check, not the headline number.";
   }
   if (top === "NBME" && bottom !== "NBME") {
-    return "Your NBME numbers are the gold standard for prediction. Treat lower-tier sources as supporting evidence only.";
+    return "Use the official comprehensive assessment report as the primary readiness evidence and treat other sources as supporting context.";
   }
-  return "A spread this wide usually means the two sources test different question styles. Trust the lower number when planning.";
+  return "The source estimates differ. Check assessment dates and report scales before using the combined midpoint for planning.";
 }
 
 /**

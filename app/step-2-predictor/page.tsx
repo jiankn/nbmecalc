@@ -62,7 +62,7 @@ const sourceCorrections = [
   { src: "UWSA 1", note: "Internal source adjustment", adj: "−5" },
   { src: "UWSA 2", note: "Internal source adjustment", adj: "−2" },
   { src: "Free 120", note: "Percentage input; internal mapping", adj: "0" },
-  { src: "AMBOSS SA", note: "Internal source adjustment", adj: "−5" },
+  { src: "AMBOSS SA", note: "Preserve reported 3-digit estimate; lower source weight", adj: "0" },
   { src: "CMS Form", note: "Subject-level, no overall", adj: "—" },
 ];
 

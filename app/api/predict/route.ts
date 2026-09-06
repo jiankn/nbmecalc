@@ -124,9 +124,7 @@ function parseBody(raw: unknown): PredictBody | { error: string } {
     const source = e.source as ExamSource;
     if (!isExamSourceSupportedForStep(source, step)) {
       return {
-        error:
-          `exams[${i}] uses NBME with ${step}. Direct NBME input supports ` +
-          "Step 2 CCSSA Total Scores only; current CBSSA and CCMSA reports use different scales.",
+        error: `exams[${i}] uses ${source} with ${step}, but that source is supported for Step 2 CK only.`,
       };
     }
     const sourceMeta = EXAM_SOURCES.find((item) => item.key === source)!;

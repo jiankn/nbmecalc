@@ -118,7 +118,7 @@ const jsonLd = {
     "@type": "Product",
     name: "NBMEcalc USMLE Step Score Predictor",
     description:
-      "Multi-source USMLE Step score predictor with confidence intervals, PDF reports, and personalized study plans.",
+      "Multi-source USMLE Step score predictor with model-generated planning ranges, PDF reports, and personalized study plans.",
     brand: { "@type": "Brand", name: "NBMEcalc" },
     offers: [
       {

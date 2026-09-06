@@ -13,7 +13,7 @@ export interface ConvertedExam extends PracticeExam {
 }
 
 export interface ScoreEstimate {
-  algorithmVersion: "v1.1";
+  algorithmVersion: "v1.3";
   step: StepKind;
   pointEstimate: number;
   ciLower: number;
@@ -25,6 +25,6 @@ export interface ScoreEstimate {
   converted: ConvertedExam[];
 }
 
-export declare const ALGORITHM_VERSION: "v1.1";
+export declare const ALGORITHM_VERSION: "v1.3";
 export declare function convertExam(exam: PracticeExam, step: StepKind): number;
 export declare function computeEstimate(exams: PracticeExam[], step: StepKind): ScoreEstimate;

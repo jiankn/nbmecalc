@@ -293,7 +293,7 @@ describe("buildAntiPatterns", () => {
     const r = buildAntiPatterns({
       exams: [
         { id: "1", source: "UWSA1", score: 250 },
-        { id: "2", source: "AMBOSS", score: 70 },
+        { id: "2", source: "AMBOSS", score: 245 },
         { id: "3", source: "CMS", score: 70 },
       ],
       step: "step2",

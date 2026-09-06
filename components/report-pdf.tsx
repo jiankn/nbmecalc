@@ -23,6 +23,7 @@ import type {
   RiskProfile,
   TestDayProtocol,
 } from "@/lib/data";
+import { PASS_THRESHOLDS } from "@/lib/data";
 
 /**
  * Server-rendered PDF version of the premium report.
@@ -81,12 +82,6 @@ const COLOR = {
   green: "#16A34A",
   cardBorder: "#D1D5DB",
 } as const;
-
-const PASS_THRESHOLD: Record<PredictionResult["step"], number> = {
-  step1: 196,
-  step2: 218,
-  step3: 198,
-};
 
 const STEP_LABEL: Record<PredictionResult["step"], string> = {
   step1: "Step 1",
@@ -247,7 +242,7 @@ export function ReportPdf({
   purchasedAt: Date;
 }) {
   const stepLabel = STEP_LABEL[result.step];
-  const threshold = PASS_THRESHOLD[result.step];
+  const threshold = PASS_THRESHOLDS[result.step];
   const margin = result.pointEstimate - threshold;
   const band = passBand(result.passProbability);
 
