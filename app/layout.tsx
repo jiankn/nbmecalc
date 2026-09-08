@@ -85,8 +85,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${jakarta.variable} ${mono.variable}`}>
-      <body className="font-sans antialiased">
+      <head>
         <AdSenseScript />
+      </head>
+      <body className="font-sans antialiased">
         <FunnelPageView />
         {children}
       </body>
