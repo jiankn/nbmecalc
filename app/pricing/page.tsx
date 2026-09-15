@@ -115,11 +115,16 @@ const jsonLd = {
   description:
     "Transparent USMLE score predictor pricing with one-time payments.",
   mainEntity: {
-    "@type": "Product",
+    // SoftwareApplication, not Product: a Product triggers Google's merchant
+    // listing checks (shipping, returns) that don't apply to a digital tool.
+    "@type": "SoftwareApplication",
     name: "NBMEcalc USMLE Step Score Predictor",
     description:
       "Multi-source USMLE Step score predictor with model-generated planning ranges, PDF reports, and personalized study plans.",
-    brand: { "@type": "Brand", name: "NBMEcalc" },
+    applicationCategory: "EducationalApplication",
+    operatingSystem: "Any",
+    url: "https://nbmecalc.com",
+    publisher: { "@type": "Organization", name: "NBMEcalc", url: "https://nbmecalc.com" },
     offers: [
       {
         "@type": "Offer",
