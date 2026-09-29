@@ -109,8 +109,8 @@ const frozenSeo = new Map([
   [
     "/step-3-predictor",
     {
-      title: "NBME 6 & 7 Step 3 Score Conversion — Limits & Alternatives",
-      description: "There is no official one-to-one CCMSA-to-Step 3 conversion. See the current 10-800 scale, why Forms 6 and 7 are not converted here, and what to use instead.",
+      title: "Free Step 3 Score Predictor + NBME 6 & 7 Conversion Explained",
+      description: "Enter UWSA Step 3 or Free 120 results to get a free 3-digit Step 3 estimate with a planning range. Plus: why NBME 6 & 7 (CCMSA) scores don't convert directly.",
       h1: "Step 3 Predictor: NBME 6 & 7 Conversion Limits",
     },
   ],
