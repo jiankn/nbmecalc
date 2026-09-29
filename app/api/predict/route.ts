@@ -63,7 +63,24 @@ interface PredictBody {
   options?: {
     targetScore?: number;
     selfReportedWeakSubjects?: string[];
+    /** 正确率换算器的原始输入，只存档用于汇总校准，不参与预测计算。 */
+    nbmePercentInput?: NbmePercentInput;
   };
+}
+
+interface NbmePercentInput {
+  form: number;
+  mode: "epc" | "raw";
+  percent: number;
+}
+
+function parseNbmePercentInput(value: unknown): NbmePercentInput | null {
+  if (!value || typeof value !== "object") return null;
+  const v = value as Record<string, unknown>;
+  if (!isFiniteNumber(v.form) || !Number.isInteger(v.form) || v.form < 9 || v.form > 16) return null;
+  if (v.mode !== "epc" && v.mode !== "raw") return null;
+  if (!isFiniteNumber(v.percent) || v.percent < 0 || v.percent > 100) return null;
+  return { form: v.form, mode: v.mode, percent: Math.round(v.percent * 10) / 10 };
 }
 
 const STEP_VALUES: ReadonlySet<StepKind> = new Set([
@@ -194,7 +211,15 @@ function parseBody(raw: unknown): PredictBody | { error: string } {
       }
       selfReportedWeakSubjects = o.selfReportedWeakSubjects as string[];
     }
-    options = { targetScore, selfReportedWeakSubjects };
+    let nbmePercentInput: NbmePercentInput | undefined;
+    if (o.nbmePercentInput !== undefined) {
+      const parsedInput = parseNbmePercentInput(o.nbmePercentInput);
+      if (!parsedInput) {
+        return { error: "`options.nbmePercentInput` is invalid." };
+      }
+      nbmePercentInput = parsedInput;
+    }
+    options = { targetScore, selfReportedWeakSubjects, nbmePercentInput };
   }
 
   return { step, exams, daysUntilExam, options };
@@ -267,7 +292,10 @@ export async function POST(req: Request): Promise<Response> {
     parsed.exams,
     parsed.step,
     parsed.daysUntilExam,
-    parsed.options
+    parsed.options && {
+      targetScore: parsed.options.targetScore,
+      selfReportedWeakSubjects: parsed.options.selfReportedWeakSubjects,
+    }
   );
 
   // 4. Persist (best-effort). A failed write must NOT block the response.

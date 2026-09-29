@@ -12,6 +12,7 @@ import {
   type CcssaForm,
 } from "@/lib/nbme-percent-model";
 import { NORM_INFO, formatPercentile, lookupPercentile } from "@/lib/usmle-norms";
+import { NbmePercentFeedbackOptIn } from "@/components/nbme-percent-feedback-opt-in";
 
 type Mode = "epc" | "percent" | "correct";
 
@@ -204,6 +205,15 @@ export function NbmePercentConverter({ defaultForm = 16 }: { defaultForm?: Ccssa
           </p>
         )}
       </div>
+
+      {est && (
+        <NbmePercentFeedbackOptIn
+          form={form}
+          mode={mode === "epc" ? "epc" : "raw"}
+          percent={est.percent}
+          midpoint={est.midpoint}
+        />
+      )}
 
       <p className="mt-6 text-xs leading-relaxed text-gray-500">
         Independent NBMEcalc estimate built from two reference points in NBME&apos;s published sample CCSSA

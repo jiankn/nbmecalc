@@ -55,6 +55,14 @@ export default function PrivacyPage() {
             and AMBOSS scores you enter into the predictor.
           </li>
           <li>
+            <strong>Optional outcome feedback</strong> — if you opt in to a
+            score-release reminder, we store your reminder email, exam date,
+            the practice input you saved (for example, an NBME form number and
+            percent correct), and the real result you choose to report. These
+            pairs are used only in aggregate to evaluate and recalibrate our
+            estimates; individual records are never published.
+          </li>
+          <li>
             <strong>Payment information</strong> — handled by{" "}
             <a href="https://stripe.com" target="_blank" rel="noopener noreferrer">
               Stripe
