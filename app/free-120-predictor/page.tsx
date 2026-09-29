@@ -110,6 +110,11 @@ const relatedTools = [
     title: "CMS score interpretation guide",
     desc: "Use subject forms to diagnose weak rotations before a comprehensive retest.",
   },
+  {
+    href: "/step-2-ck-percentile",
+    title: "Step 2 CK percentile calculator",
+    desc: "See where an estimated Step 2 CK score ranks in the official 2026 USMLE norm table.",
+  },
 ];
 
 const free120Versions = [
@@ -375,7 +380,7 @@ export default function Free120PredictorPage() {
             Use these pages to check whether your forecast is internally
             consistent.
           </p>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2">
             {relatedTools.map((tool) => (
               <Link
                 key={tool.href}

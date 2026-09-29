@@ -330,6 +330,15 @@ export default function Step2PredictorPage() {
           <ul className="grid sm:grid-cols-2 gap-3 text-mint-700 font-semibold">
             <li>
               <Link
+                href="/step-2-ck-percentile"
+                data-indexing-context="related"
+                className="underline underline-offset-2"
+              >
+                Step 2 CK score percentile calculator
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/nbme-score-conversion"
                 data-indexing-context="related"
                 className="underline underline-offset-2"

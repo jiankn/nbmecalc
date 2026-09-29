@@ -45,6 +45,7 @@ const remediatedPaths = new Set([
   "/educators",
   "/methodology",
   "/nbme-calculator",
+  "/step-2-ck-percentile",
   "/uwsa-1-to-step-1",
 ]);
 const evidenceSensitivePaths = new Set([
@@ -59,6 +60,7 @@ const evidenceSensitivePaths = new Set([
   "/cms-forms-step-2-ck",
   "/nbme-calculator",
   "/step-1-predictor",
+  "/step-2-ck-percentile",
   "/uwsa-1-to-step-1",
 ]);
 // Baseline snapshots that guard already-ranking pages against accidental
@@ -70,7 +72,7 @@ const frozenSeo = new Map([
     "/",
     {
       title: "Free NBME Score Calculator — Step Score Estimate in Seconds",
-      description: "Combine Step 2 CCSSA, UWSA, Free 120, AMBOSS, or CMS results into an independent Step estimate and planning range. Free, no signup.",
+      description: "Combine Step 2 CCSSA, UWSA, Free 120, or AMBOSS results into an independent Step estimate and planning range. Free, no signup.",
       h1: "NBME Score Calculator — Predict Your Step Score in 5 Seconds",
     },
   ],
@@ -101,9 +103,9 @@ const frozenSeo = new Map([
   [
     "/step-2-predictor",
     {
-      title: "Step 2 Score Predictor & CK Calculator | NBMEcalc",
-      description: "Free Step 2 score predictor and CK calculator. Combine CCSSA forms 9-15, UWSA, Free 120, AMBOSS, and CMS inputs with a transparent planning range.",
-      h1: "Step 2 Score Predictor and CK Calculator",
+      title: "Step 2 CK Score Predictor — Free USMLE Calculator | NBMEcalc",
+      description: "Free Step 2 CK score predictor and calculator. Combine CCSSA forms 9-15, UWSA, Free 120, and AMBOSS inputs with a transparent planning range.",
+      h1: "Step 2 CK Score Predictor and Calculator",
     },
   ],
   [
@@ -186,8 +188,8 @@ try {
   ].map((match) => decodeHtml(match[1]));
 
   if (sitemapUrls.length === 0) errors.push("sitemap.xml contains no URLs");
-  if (sitemapUrls.length !== 30) {
-    errors.push(`sitemap.xml contains ${sitemapUrls.length} URLs, expected 30`);
+  if (sitemapUrls.length !== 32) {
+    errors.push(`sitemap.xml contains ${sitemapUrls.length} URLs, expected 32`);
   }
 
   const duplicateSitemapUrls = sitemapUrls.filter(

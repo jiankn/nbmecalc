@@ -17,6 +17,7 @@ const columns = [
     title: "Resources",
     links: [
       { label: "NBME Score Conversion", href: "/nbme-score-conversion" },
+      { label: "Step 2 CK Percentiles", href: "/step-2-ck-percentile" },
       { label: "NBME Score Calculator", href: "/" },
       { label: "NBME Forms Guide", href: "/nbme-calculator" },
       { label: "CMS Forms Step 2 Guide", href: "/cms-forms-step-2-ck" },
