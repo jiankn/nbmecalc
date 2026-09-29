@@ -35,6 +35,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/step-2-predictor`, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-3-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/step-2-ck-percentile`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${SITE_URL}/nbme-step-1-score-conversion`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${SITE_URL}/usmle-pass-rates`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.75 },
 
     // Marketing and trust pages. Legal and utility pages stay reachable from
     // the footer, but are kept out of the XML sitemap so the sitemap only

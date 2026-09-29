@@ -16,6 +16,38 @@ import {
 } from "@/lib/nbme-percent-model";
 import { formatPercentile, lookupPercentile } from "@/lib/usmle-norms";
 
+// 每个表单只写能核实的信息；没有官方说明的表单如实说明，不硬凑内容。
+const CCSSA_FORM_NOTES: Record<number, { note: string; source?: { label: string; href: string } }> = {
+  9: {
+    note: "One of the three CCSSA forms NBME released in July 2021, when self-assessments grew from 184 to 200 questions and Forms 6–8 were retired.",
+    source: { label: "NBME announcement", href: "https://www.nbme.org/news/new-nbmer-comprehensive-clinical-science-self-assessments-now-available/" },
+  },
+  10: {
+    note: "Released with Forms 9 and 11 in July 2021 as part of the first 200-question CCSSA set.",
+    source: { label: "NBME announcement", href: "https://www.nbme.org/news/new-nbmer-comprehensive-clinical-science-self-assessments-now-available/" },
+  },
+  11: {
+    note: "The third form of the July 2021 release. Because scores are equated, an 11 result can be compared directly with later forms.",
+    source: { label: "NBME announcement", href: "https://www.nbme.org/news/new-nbmer-comprehensive-clinical-science-self-assessments-now-available/" },
+  },
+  12: {
+    note: "NBME has not published a separate release note for Form 12, so it is treated like any other equated CCSSA form here.",
+  },
+  13: {
+    note: "No form-specific NBME note is published. Use the report's EPC when you have it; a self-counted percent adds uncertainty.",
+  },
+  14: {
+    note: "No form-specific NBME note is published. If you took Form 14 alongside another CCSSA, compare the two EPC values rather than raw counts.",
+  },
+  15: {
+    note: "Also available with Form 15 preselected on a dedicated page that walks through the Total CCSSA Score workflow.",
+  },
+  16: {
+    note: "The newest CCSSA form. Independent reviewers describe longer, EHR-style vignettes; NBME moved its comprehensive self-assessments to a new Step-style interface on June 8, 2026.",
+    source: { label: "NBME interface update", href: "https://www.nbme.org/news/" },
+  },
+};
+
 const conversionChart = CONVERSION_CHART_PERCENTS.map((percent) => {
   const est = estimateStep2FromPercent(percent, "epc");
   return { ...est, pct: formatPercentile(lookupPercentile("step2ck", est.midpoint).percentile) };
@@ -102,14 +134,14 @@ const formFamilySections = [
     title: "Step 2 CK CCSSA forms 9-16",
     intent: "Use this family for Step 2 CK score conversion and readiness checks.",
     examples: [
-      { label: "NBME 10 Step 2 score conversion" },
-      { label: "NBME 11 score conversion" },
-      { label: "NBME 14 score conversion", href: "#percent-converter" },
+      { label: "NBME 10 Step 2 score conversion", href: "#nbme-10" },
+      { label: "NBME 11 score conversion", href: "#nbme-11" },
+      { label: "NBME 14 score conversion", href: "#nbme-14" },
       {
         label: "NBME 15 Step 2 CK score conversion",
         href: "/nbme-15-score-conversion",
       },
-      { label: "NBME 16 score conversion", href: "#percent-converter" },
+      { label: "NBME 16 score conversion", href: "#nbme-16" },
     ],
     note:
       "Most Form queries remain consolidated here. Form 15 has a dedicated pilot because Search Console and the live SERP both show a distinct calculator-shaped task.",
@@ -117,11 +149,12 @@ const formFamilySections = [
     cta: "Open Step 2 predictor",
   },
   {
-    title: "Step 1 CBSSA forms 26-32",
+    title: "Step 1 CBSSA forms 26-33",
     intent: "Use this family for Step 1 pass-readiness planning.",
     examples: [
-      { label: "NBME 28 score conversion" },
-      { label: "NBME 29 score conversion" },
+      { label: "NBME Step 1 score conversion", href: "/nbme-step-1-score-conversion" },
+      { label: "NBME 28 score conversion", href: "/nbme-step-1-score-conversion#nbme-28" },
+      { label: "NBME 31 score conversion", href: "/nbme-step-1-score-conversion#nbme-31" },
       {
         label: "NBME 30 score conversion",
         href: "/nbme-30-score-conversion",
@@ -130,8 +163,8 @@ const formFamilySections = [
     ],
     note:
       "Step 1 is pass/fail. The Form 30 pilot reads the official CBSSA ranges instead of fabricating a raw-wrong-answer formula; Form 32 stays consolidated here to protect its existing ranking.",
-    href: "/step-1-predictor",
-    cta: "Open Step 1 predictor",
+    href: "/nbme-step-1-score-conversion",
+    cta: "Open Step 1 readiness check",
   },
   {
     title: "Step 3 CCMSA forms 5-7",
@@ -327,8 +360,58 @@ export default function NbmeScoreConversionPage() {
         </div>
       </section>
 
+      {/* 按表单换算：每个表单一个锚点小节，承接 "nbme 14 score conversion" 这类搜索 */}
+      <section id="by-form" className="bg-white py-16 lg:py-20">
+        <div className="container max-w-5xl">
+          <h2 className="mb-4 text-3xl font-extrabold tracking-tight lg:text-4xl">
+            NBME score conversion by form (CCSSA 9–16)
+          </h2>
+          <p className="mb-8 max-w-3xl text-lg leading-relaxed text-gray-700">
+            NBME reports an equated percent correct, so the same percentage means the same estimated Step 2 CK
+            score on every form: about {estimateStep2FromPercent(70, "epc").midpoint} at 70%,{" "}
+            {estimateStep2FromPercent(75, "epc").midpoint} at 75%, and {estimateStep2FromPercent(80, "epc").midpoint}{" "}
+            at 80%. Pick your form below to open the converter with it preselected.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {Object.entries(CCSSA_FORM_NOTES).map(([form, info]) => (
+              <div key={form} id={`nbme-${form}`} className="scroll-mt-24 rounded-2xl border border-gray-200 bg-white p-5">
+                <h3 className="text-lg font-extrabold text-gray-950">NBME {form} score conversion</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-700">{info.note}</p>
+                {info.source && (
+                  <a
+                    href={info.source.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block text-xs font-semibold text-gray-500 underline underline-offset-2"
+                  >
+                    {info.source.label}
+                  </a>
+                )}
+                <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-bold">
+                  <a href={`?form=${form}#percent-converter`} className="text-mint-700 underline underline-offset-4">
+                    Convert NBME {form}
+                  </a>
+                  {form === "15" && (
+                    <Link href="/nbme-15-score-conversion" className="text-mint-700 underline underline-offset-4">
+                      Form 15 page
+                    </Link>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-6 text-sm text-gray-600">
+            Preparing for Step 1 instead? CBSSA Forms 26–33 use a different report. Use the{" "}
+            <Link href="/nbme-step-1-score-conversion" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              NBME Step 1 score conversion and readiness check
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
       {/* 方法说明 */}
-      <section id="how-conversion-works" className="bg-white py-16 lg:py-20">
+      <section id="how-conversion-works" className="border-t border-gray-200 bg-white py-16 lg:py-20">
         <div className="container max-w-3xl">
           <h2 className="mb-4 text-3xl font-extrabold tracking-tight lg:text-4xl">
             How this NBME conversion is calculated

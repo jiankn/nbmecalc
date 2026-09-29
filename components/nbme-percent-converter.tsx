@@ -41,6 +41,12 @@ export function NbmePercentConverter({ defaultForm = 16 }: { defaultForm?: Ccssa
   const started = useRef(false);
   const viewed = useRef(false);
 
+  // 表单小节里的链接带 ?form=14 这类参数，进页面时自动预选对应表单。
+  useEffect(() => {
+    const fromUrl = Number(new URLSearchParams(window.location.search).get("form"));
+    if ((CCSSA_FORMS as readonly number[]).includes(fromUrl)) setForm(fromUrl as CcssaForm);
+  }, []);
+
   const value = Number(raw);
   const max = mode === "correct" ? CCSSA_QUESTIONS : 100;
   const valid = raw.trim() !== "" && Number.isFinite(value) && value >= 0 && value <= max;

@@ -97,6 +97,97 @@ export type BlogBlock =
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "how-many-questions-on-step-2-ck",
+    title: "How Many Questions Are on Step 2 CK? 2026 Format and Unscored Items",
+    description:
+      "Step 2 CK now has sixteen 30-minute blocks of up to 20 questions (from May 7, 2026). See the old vs new format, time per question, break time, and what USMLE says about unscored items.",
+    publishedAt: "2026-09-29",
+    reviewedAt: "2026-09-29",
+    author: "NBMEcalc Editorial Team",
+    category: "step-2-tips",
+    tags: ["step-2-ck", "exam-format", "question-count", "unscored-items"],
+    readingTime: 6,
+    body: [
+      {
+        type: "p",
+        text: "Short answer: if you test on or after May 7, 2026, Step 2 CK is a one-day, 9-hour exam split into sixteen 30-minute blocks, and each block has no more than 20 questions. Before that date the exam used eight 60-minute blocks of up to 40 questions, with a stated maximum of 318 items. The pace per question did not change: both formats work out to about 90 seconds per question.",
+      },
+      { type: "h2", text: "Step 2 CK format: before and after May 7, 2026" },
+      {
+        type: "ul",
+        items: [
+          "Before May 7, 2026: eight 60-minute blocks, up to 40 questions per block, no more than 318 items in total, at least 45 minutes of break time, and a 15-minute optional tutorial.",
+          "On or after May 7, 2026: sixteen 30-minute blocks, up to 20 questions per block, at least 55 minutes of break time, and a 5-minute optional tutorial.",
+          "Both formats are delivered in a single 9-hour testing session.",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "info",
+        text: "USMLE's page for the new format gives the per-block limit (20) but does not restate a total item count. Sixteen blocks of up to 20 questions puts the ceiling at 320; the actual number on your form can be lower because block length varies.",
+      },
+      {
+        type: "chart",
+        variant: "bar",
+        title: "Step 2 CK timing by format",
+        caption: "Source: USMLE Step 2 CK exam page (checked September 29, 2026). Seconds per question = block minutes × 60 ÷ maximum questions per block.",
+        unit: "",
+        data: [
+          { label: "Blocks (old)", value: 8 },
+          { label: "Blocks (new)", value: 16, highlight: true },
+          { label: "Max Qs per block (old)", value: 40 },
+          { label: "Max Qs per block (new)", value: 20, highlight: true },
+          { label: "Min break minutes (old)", value: 45 },
+          { label: "Min break minutes (new)", value: 55, highlight: true },
+        ],
+      },
+      { type: "h2", text: "How much time do you get per question?" },
+      {
+        type: "p",
+        text: "Divide block time by the maximum number of questions. The old format gave 60 minutes for up to 40 questions and the new format gives 30 minutes for up to 20 — both about 90 seconds per question. What changed is rhythm: you now reset every 30 minutes, which means twice as many block transitions and more chances to take short breaks.",
+      },
+      {
+        type: "p",
+        text: "Break time is shared across the day. USMLE says the break allotment grows when you finish a block or the optional tutorial early, so skipping the tutorial if you already know the interface adds a few minutes back.",
+      },
+      { type: "h2", text: "Are there experimental questions on Step 2 CK?" },
+      {
+        type: "p",
+        text: "Some questions on USMLE exams are unscored, but USMLE rejects the idea of 'experimental' questions in the sense of unreviewed or off-blueprint items. In its Common Questions, USMLE says all items — scored or unscored — go through the same multi-step review by subject-matter experts and editors and follow the exam blueprint.",
+      },
+      {
+        type: "quote",
+        text: "All items that appear on the exam - whether scored or unscored - undergo the same rigorous, multi-step review process.",
+        attr: "USMLE Common Questions",
+      },
+      {
+        type: "p",
+        text: "USMLE does not publish how many unscored items are on a form, and they are not labeled. Any specific number you see online is a guess. The practical takeaway: treat every question as if it counts.",
+      },
+      { type: "h2", text: "What this means for practice tests" },
+      {
+        type: "ul",
+        items: [
+          "Match the new rhythm: practice in 30-minute blocks of about 20 questions, not only 40-question blocks.",
+          "Keep your pace near 90 seconds per question and flag long vignettes instead of stalling on them.",
+          "Plan breaks across 16 blocks rather than 8; decide in advance after which blocks you will stop.",
+          "NBME moved its comprehensive self-assessments to a Step-style interface on June 8, 2026, so recent NBME forms are the closest rehearsal of the new screen layout.",
+        ],
+      },
+      { type: "h2", text: "Turn a practice score into a Step 2 CK estimate" },
+      {
+        type: "p",
+        text: "Once you have a practice result, the NBME percent-correct converter estimates a Step 2 CK score from any CCSSA form, and the percentile calculator shows where that score ranks in the official 2026 USMLE norm table. The passing score is 218.",
+      },
+    ],
+    references: [
+      { label: "USMLE: Step 2 CK exam format", href: "https://www.usmle.org/step-exams/step-2-ck" },
+      { label: "USMLE: Common Questions (unscored items)", href: "https://www.usmle.org/common-questions" },
+      { label: "USMLE: Examination results and scoring", href: "https://www.usmle.org/scores-transcripts/examination-results-and-scoring" },
+      { label: "NBME: News (self-assessment interface update)", href: "https://www.nbme.org/news/" },
+    ],
+  },
+  {
     slug: "how-to-read-nbme-score-report",
     title: "How to Read Your NBME Score Report (Without Panicking)",
     description:

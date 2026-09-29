@@ -45,7 +45,9 @@ const remediatedPaths = new Set([
   "/educators",
   "/methodology",
   "/nbme-calculator",
+  "/nbme-step-1-score-conversion",
   "/step-2-ck-percentile",
+  "/usmle-pass-rates",
   "/uwsa-1-to-step-1",
 ]);
 const evidenceSensitivePaths = new Set([
@@ -59,8 +61,10 @@ const evidenceSensitivePaths = new Set([
   "/compare/vs-predictmystepscore",
   "/cms-forms-step-2-ck",
   "/nbme-calculator",
+  "/nbme-step-1-score-conversion",
   "/step-1-predictor",
   "/step-2-ck-percentile",
+  "/usmle-pass-rates",
   "/uwsa-1-to-step-1",
 ]);
 // Baseline snapshots that guard already-ranking pages against accidental
@@ -190,8 +194,8 @@ try {
   ].map((match) => decodeHtml(match[1]));
 
   if (sitemapUrls.length === 0) errors.push("sitemap.xml contains no URLs");
-  if (sitemapUrls.length !== 32) {
-    errors.push(`sitemap.xml contains ${sitemapUrls.length} URLs, expected 32`);
+  if (sitemapUrls.length !== 35) {
+    errors.push(`sitemap.xml contains ${sitemapUrls.length} URLs, expected 35`);
   }
 
   const duplicateSitemapUrls = sitemapUrls.filter(
