@@ -417,7 +417,7 @@ export function Calculator({
         )}
 
         {/* Calculator card */}
-        <div className="rounded-3xl bg-white p-6 sm:p-10 shadow-lg border border-gray-100 overflow-x-hidden">
+        <div className="rounded-3xl bg-white p-4 sm:p-10 shadow-lg border border-gray-100 overflow-x-hidden">
           {/* Step picker */}
           <p className="block text-sm font-semibold text-gray-700 mb-3">
             Select your exam
@@ -451,135 +451,143 @@ export function Calculator({
               return (
                 <div
                   key={exam.id}
-                  className="flex items-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3"
+                  className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white px-3 py-3 sm:flex-row sm:items-center sm:px-4"
                 >
-                  <span
-                    className="h-3 w-3 rounded-full shrink-0"
-                    style={{ background: meta.color }}
-                  />
-                  <label
-                    htmlFor={`${controlIdPrefix}-source`}
-                    className="sr-only"
-                  >
-                    Source for {examLabel}
-                  </label>
-                  <select
-                    id={`${controlIdPrefix}-source`}
-                    value={exam.source}
-                    onChange={(e) =>
-                      updateExam(exam.id, {
-                        source: e.target.value as ExamSource,
-                      })
-                    }
-                    className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer"
-                  >
-                    {EXAM_SOURCES.filter((s) => s.key !== "CMS").map((s) => (
-                      <option
-                        key={s.key}
-                        value={s.key}
-                        disabled={!isExamSourceSupportedForStep(s.key, step)}
-                      >
-                        {s.label}
-                        {!isExamSourceSupportedForStep(s.key, step)
-                          ? " (Step 2 only)"
-                          : ""}
-                      </option>
-                    ))}
-                  </select>
-                  {exam.source === "NBME" &&
-                    isExamSourceSupportedForStep(exam.source, step) && (
-                    <>
-                      <label
-                        htmlFor={`${controlIdPrefix}-form`}
-                        className="sr-only"
-                      >
-                        NBME form for {examLabel}
-                      </label>
-                      <select
-                        id={`${controlIdPrefix}-form`}
-                        value={
-                          exam.formNumber || getDefaultNbmeFormNumber(step)
-                        }
-                        onChange={(e) =>
-                          updateExam(exam.id, {
-                            formNumber: Number(e.target.value),
-                          })
-                        }
-                        className="bg-gray-50 rounded-md text-sm font-medium px-2 py-1 focus:outline-none cursor-pointer"
-                      >
-                        {getNbmeFormNumbers(step).map((n) => (
-                          <option key={n} value={n}>
-                            Form {n}
-                          </option>
-                        ))}
-                      </select>
-                    </>
-                  )}
-                  <span className="ml-auto text-xs text-gray-500">
-                    {meta.unit === "percent" ? "% correct" : "Score"}
-                  </span>
-                  <label
-                    htmlFor={`${controlIdPrefix}-score`}
-                    className="sr-only"
-                  >
-                    Score for {examLabel}
-                  </label>
-                  <input
-                    id={`${controlIdPrefix}-score`}
-                    type="number"
-                    value={exam.score}
-                    onChange={(e) =>
-                      updateExam(exam.id, {
-                        score: Number(e.target.value),
-                      })
-                    }
-                    className={cn(
-                      "w-20 text-right font-mono font-semibold tabular-nums rounded-md px-2 py-1 focus:outline-none focus:ring-2",
-                      isValidScore(exam.score, exam.source, step)
-                        ? "bg-gray-50 focus:ring-mint-500"
-                        : "bg-red-50 ring-2 ring-red-300 focus:ring-red-500"
+                  <div className="flex w-full min-w-0 items-center gap-3 sm:w-auto sm:flex-1">
+                    <span
+                      className="h-3 w-3 shrink-0 rounded-full"
+                      style={{ background: meta.color }}
+                    />
+                    <label
+                      htmlFor={`${controlIdPrefix}-source`}
+                      className="sr-only"
+                    >
+                      Source for {examLabel}
+                    </label>
+                    <select
+                      id={`${controlIdPrefix}-source`}
+                      value={exam.source}
+                      onChange={(e) =>
+                        updateExam(exam.id, {
+                          source: e.target.value as ExamSource,
+                        })
+                      }
+                      className="min-w-0 flex-1 cursor-pointer bg-transparent text-sm font-semibold focus:outline-none sm:flex-none"
+                    >
+                      {EXAM_SOURCES.filter((s) => s.key !== "CMS").map((s) => (
+                        <option
+                          key={s.key}
+                          value={s.key}
+                          disabled={!isExamSourceSupportedForStep(s.key, step)}
+                        >
+                          {s.label}
+                          {!isExamSourceSupportedForStep(s.key, step)
+                            ? " (Step 2 only)"
+                            : ""}
+                        </option>
+                      ))}
+                    </select>
+                    {exam.source === "NBME" &&
+                      isExamSourceSupportedForStep(exam.source, step) && (
+                      <>
+                        <label
+                          htmlFor={`${controlIdPrefix}-form`}
+                          className="sr-only"
+                        >
+                          NBME form for {examLabel}
+                        </label>
+                        <select
+                          id={`${controlIdPrefix}-form`}
+                          value={
+                            exam.formNumber || getDefaultNbmeFormNumber(step)
+                          }
+                          onChange={(e) =>
+                            updateExam(exam.id, {
+                              formNumber: Number(e.target.value),
+                            })
+                          }
+                          className="shrink-0 cursor-pointer rounded-md bg-gray-50 px-2 py-1 text-sm font-medium focus:outline-none"
+                        >
+                          {getNbmeFormNumbers(step).map((n) => (
+                            <option key={n} value={n}>
+                              Form {n}
+                            </option>
+                          ))}
+                        </select>
+                      </>
                     )}
-                    min={meta.scoreRange[0]}
-                    max={meta.scoreRange[1]}
-                    title={meta.hint}
-                  />
-                  {meta.unit === "percent" && (
-                    <span className="text-xs text-gray-400 -ml-2">%</span>
-                  )}
-                  <label
-                    htmlFor={`${controlIdPrefix}-days-ago`}
-                    className="sr-only"
-                  >
-                    Days since taking {examLabel}
-                  </label>
-                  <input
-                    id={`${controlIdPrefix}-days-ago`}
-                    type="number"
-                    inputMode="numeric"
-                    placeholder="d?"
-                    value={
-                      typeof exam.takenDaysAgo === "number" ? exam.takenDaysAgo : ""
-                    }
-                    onChange={(e) => {
-                      const raw = e.target.value;
-                      updateExam(exam.id, {
-                        takenDaysAgo:
-                          raw === "" ? undefined : Math.max(0, Number(raw)),
-                      });
-                    }}
-                    className="w-14 text-right font-mono text-xs tabular-nums rounded-md bg-gray-50 px-2 py-1 focus:outline-none focus:ring-2 focus:ring-mint-500 placeholder:text-gray-300"
-                    title="Days since you took this exam (optional, but unlocks trend analysis)"
-                    min={0}
-                    max={365}
-                  />
-                  <span className="text-[11px] text-gray-600 -ml-1.5">d ago</span>
-                  <button
-                    onClick={() => removeExam(exam.id)}
-                    className="text-gray-400 hover:text-red-600 transition p-1"
-                    aria-label="Remove"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
+                  </div>
+                  <div className="flex w-full min-w-0 items-center gap-1.5 sm:ml-auto sm:w-auto sm:gap-3">
+                    <span className="text-xs text-gray-500">
+                      {meta.unit === "percent" ? "% correct" : "Score"}
+                    </span>
+                    <label
+                      htmlFor={`${controlIdPrefix}-score`}
+                      className="sr-only"
+                    >
+                      Score for {examLabel}
+                    </label>
+                    <input
+                      id={`${controlIdPrefix}-score`}
+                      type="number"
+                      value={exam.score}
+                      onChange={(e) =>
+                        updateExam(exam.id, {
+                          score: Number(e.target.value),
+                        })
+                      }
+                      className={cn(
+                        "min-w-0 w-14 sm:w-20 text-right font-mono font-semibold tabular-nums rounded-md px-2 py-1 focus:outline-none focus:ring-2",
+                        isValidScore(exam.score, exam.source, step)
+                          ? "bg-gray-50 focus:ring-mint-500"
+                          : "bg-red-50 ring-2 ring-red-300 focus:ring-red-500"
+                      )}
+                      min={meta.scoreRange[0]}
+                      max={meta.scoreRange[1]}
+                      title={meta.hint}
+                    />
+                    {meta.unit === "percent" && (
+                      <span className="text-xs text-gray-400 -ml-2">%</span>
+                    )}
+                    <label
+                      htmlFor={`${controlIdPrefix}-days-ago`}
+                      className="sr-only"
+                    >
+                      Days since taking {examLabel}
+                    </label>
+                    <input
+                      id={`${controlIdPrefix}-days-ago`}
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="d?"
+                      value={
+                        typeof exam.takenDaysAgo === "number"
+                          ? exam.takenDaysAgo
+                          : ""
+                      }
+                      onChange={(e) => {
+                        const raw = e.target.value;
+                        updateExam(exam.id, {
+                          takenDaysAgo:
+                            raw === "" ? undefined : Math.max(0, Number(raw)),
+                        });
+                      }}
+                      className="min-w-0 w-12 sm:w-14 text-right font-mono text-xs tabular-nums rounded-md bg-gray-50 px-2 py-1 focus:outline-none focus:ring-2 focus:ring-mint-500 placeholder:text-gray-300"
+                      title="Days since you took this exam (optional, but unlocks trend analysis)"
+                      min={0}
+                      max={365}
+                    />
+                    <span className="whitespace-nowrap text-[11px] text-gray-600 -ml-1.5">
+                      d ago
+                    </span>
+                    <button
+                      onClick={() => removeExam(exam.id)}
+                      className="text-gray-400 hover:text-red-600 transition p-1"
+                      aria-label="Remove"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               );
             })}
