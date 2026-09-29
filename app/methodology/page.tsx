@@ -123,6 +123,14 @@ const sourceRows = [
 
 const changes = [
   {
+    date: "2026-09-29",
+    items: [
+      "Algorithm v1.4: UWSA 1 and UWSA 2 inputs now subtract only the disclosed 5- and 2-point adjustments. v1.3 also passed them through a legacy NBME curve that raised low scores (for example, a UWSA 1 of 200 became 218 on Step 2 CK), contradicting the published adjustment.",
+      "Report pages re-run the current model, so previously purchased reports that include UWSA inputs now show the corrected estimate; saved dashboard snapshots keep their original v1.3 result and version label.",
+      "UWSA 1, UWSA 2, and Free 120 conversion tables are now generated from the calculator itself, removing hand-typed values that had drifted from the model.",
+    ],
+  },
+  {
     date: "2026-09-06",
     items: [
       "Updated AMBOSS input to the 3-digit score shown in the Step 2 Self-Assessment report and removed the unsupported universal five-point correction.",

@@ -5,6 +5,7 @@ import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
+import { convertExam } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Free 120 to Step 2 Score Conversion Calculator (2019/2021/New)",
@@ -44,17 +45,11 @@ export const metadata: Metadata = {
   },
 };
 
-const conversionTable = [
-  { pct: 50, step2: 217 },
-  { pct: 60, step2: 228 },
-  { pct: 65, step2: 234 },
-  { pct: 70, step2: 240 },
-  { pct: 75, step2: 246 },
-  { pct: 80, step2: 252 },
-  { pct: 85, step2: 257 },
-  { pct: 90, step2: 262 },
-  { pct: 95, step2: 268 },
-];
+// 直接调用计算器同一个换算函数，保证表格和计算器结果一致。
+const conversionTable = [50, 60, 65, 70, 75, 80, 85, 90, 95].map((pct) => ({
+  pct,
+  step2: convertExam({ id: "chart", source: "FREE120", score: pct }, "step2"),
+}));
 
 const faqs = [
   {

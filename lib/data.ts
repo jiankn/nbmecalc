@@ -37,7 +37,7 @@
  * version stored alongside the input snapshot lets us re-render a past
  * report under its original algorithm by branching on this string.
  */
-export const ALGORITHM_VERSION = "v1.3" as const;
+export const ALGORITHM_VERSION = "v1.4" as const;
 export type AlgorithmVersion = typeof ALGORITHM_VERSION;
 
 export const PASS_THRESHOLDS: Record<StepKind, number> = {
@@ -260,8 +260,8 @@ export interface PredictOptions {
 // ---------------------------------------------------------------------------
 
 /**
- * Internal three-digit planning curves used for UWSA and legacy report
- * compatibility. Direct NBME input does not share one scale across all Steps:
+ * Internal three-digit planning curves kept only for legacy Step 1/3 NBME
+ * report replays (UWSA stopped using them in v1.4). Direct NBME input does not share one scale across all Steps:
  * current CBSSA reports use 0-100 EPC, CCSSA uses a 1-300 Total Score, and
  * CCMSA uses a 10-800 Assessment Score.
  *
@@ -333,15 +333,20 @@ function percentToEquated(
 /**
  * UWSA score (180-300, 3-digit) → equated USMLE Step.
  * Both UWSAs run hot vs real Step 2 CK; UWSA1 hotter than UWSA2.
+ *
+ * v1.4：只减去公开说明的固定偏差（UWSA 1 −5，UWSA 2 −2），不再套 NBME_TO_STEP
+ * 旧曲线。旧做法会把低分往上抬（例如 UWSA 1 200 → 218），与"扣分"的公开说明相反，
+ * 还会让接近及格线的考生误以为能过。
  */
+export const UWSA_BIAS = { 1: 5, 2: 2 } as const;
+
 function uwsaToEquated(
   rawScore: number,
   step: StepKind,
   uwsaNum: 1 | 2
 ): number {
-  const bias = uwsaNum === 1 ? 5 : 2;
-  // Reuse the internal NBME table after the versioned model adjustment.
-  return interpolate(NBME_TO_STEP[step], rawScore - bias);
+  void step;
+  return Math.min(300, Math.max(1, Math.round(rawScore - UWSA_BIAS[uwsaNum])));
 }
 
 /**

@@ -47,7 +47,7 @@ export default function ValidationPage() {
               icon={CheckCircle2}
               title="Published now"
               items={[
-                "Model version v1.3 and source assumptions",
+                "Model version v1.4 and source assumptions",
                 "Input weighting and range rules",
                 "Outcome inclusion and privacy policy",
                 "Machine-readable validation status",

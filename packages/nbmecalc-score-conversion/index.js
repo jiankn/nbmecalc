@@ -5,7 +5,7 @@
  * USMLE conversions and not a published validation result.
  */
 
-export const ALGORITHM_VERSION = "v1.3";
+export const ALGORITHM_VERSION = "v1.4";
 
 const SOURCES = new Set(["NBME", "UWSA1", "UWSA2", "FREE120", "AMBOSS", "CMS"]);
 const STEPS = new Set(["step1", "step2", "step3"]);
@@ -41,6 +41,12 @@ function assertExam(exam) {
   if (exam.formNumber !== undefined && (!Number.isInteger(exam.formNumber) || exam.formNumber < 1)) {
     throw new TypeError("exam.formNumber must be a positive integer");
   }
+}
+
+// v1.4: UWSA inputs subtract the disclosed bias only; they no longer pass
+// through the legacy NBME curve, which raised low scores (e.g. 200 -> 218).
+function clampScore(value) {
+  return Math.min(300, Math.max(1, Math.round(value)));
 }
 
 function interpolate(anchors, value) {
@@ -81,9 +87,9 @@ export function convertExam(exam, step) {
       return interpolate(NBME_TO_STEP[step], exam.score + bias);
     }
     case "UWSA1":
-      return interpolate(NBME_TO_STEP[step], exam.score - 5);
+      return clampScore(exam.score - 5);
     case "UWSA2":
-      return interpolate(NBME_TO_STEP[step], exam.score - 2);
+      return clampScore(exam.score - 2);
     case "FREE120":
       return percentToEquated(exam.score, step);
     case "AMBOSS":

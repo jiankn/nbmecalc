@@ -5,6 +5,7 @@ import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
+import { convertExam } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "UWSA 2 to Step 2 CK Score Conversion — Free Calculator + Chart",
@@ -38,18 +39,11 @@ export const metadata: Metadata = {
   },
 };
 
-const conversionTable = [
-  { uwsa: 210, step2: 211 },
-  { uwsa: 220, step2: 221 },
-  { uwsa: 230, step2: 231 },
-  { uwsa: 240, step2: 240 },
-  { uwsa: 245, step2: 244 },
-  { uwsa: 250, step2: 248 },
-  { uwsa: 255, step2: 252 },
-  { uwsa: 260, step2: 256 },
-  { uwsa: 265, step2: 260 },
-  { uwsa: 270, step2: 263 },
-];
+// 直接调用计算器同一个换算函数，保证表格和计算器结果一致。
+const conversionTable = [210, 220, 230, 240, 245, 250, 255, 260, 265, 270].map((uwsa) => ({
+  uwsa,
+  step2: convertExam({ id: "chart", source: "UWSA2", score: uwsa }, "step2"),
+}));
 
 const faqs = [
   {

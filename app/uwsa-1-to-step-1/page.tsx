@@ -5,6 +5,8 @@ import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
+import { convertExam } from "@/lib/data";
+import { predictStepScore } from "@/lib/predict";
 
 export const metadata: Metadata = {
   title: "UWSA 1 to Step 1 Predictor — Free Pass Probability Calculator | NBMEcalc",
@@ -35,16 +37,17 @@ export const metadata: Metadata = {
   },
 };
 
-const conversionTable = [
-  { uwsa: 170, step1Equiv: 165, passProb: 0.18, label: "Higher model risk" },
-  { uwsa: 180, step1Equiv: 175, passProb: 0.42, label: "Higher model risk" },
-  { uwsa: 190, step1Equiv: 185, passProb: 0.7, label: "Model borderline" },
-  { uwsa: 200, step1Equiv: 195, passProb: 0.88, label: "Confirm officially" },
-  { uwsa: 210, step1Equiv: 205, passProb: 0.96, label: "Confirm officially" },
-  { uwsa: 220, step1Equiv: 215, passProb: 0.99, label: "Confirm officially" },
-  { uwsa: 230, step1Equiv: 225, passProb: 0.99, label: "Confirm officially" },
-  { uwsa: 240, step1Equiv: 235, passProb: 0.99, label: "Confirm officially" },
-];
+// 直接调用计算器同一套模型生成，保证表格和计算器结果一致。
+const conversionTable = [170, 180, 190, 200, 210, 220, 230, 240].map((uwsa) => {
+  const exam = { id: "chart", source: "UWSA1" as const, score: uwsa };
+  const passProb = predictStepScore([exam], "step1").passProbability;
+  return {
+    uwsa,
+    step1Equiv: convertExam(exam, "step1"),
+    passProb,
+    label: passProb < 0.5 ? "Higher model risk" : passProb < 0.85 ? "Model borderline" : "Confirm officially",
+  };
+});
 
 const faqs = [
   {

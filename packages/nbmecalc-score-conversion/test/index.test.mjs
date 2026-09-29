@@ -3,10 +3,10 @@ import assert from "node:assert/strict";
 import { ALGORITHM_VERSION, computeEstimate, convertExam } from "../index.js";
 
 test("converts representative NBME, UWSA, Free 120, AMBOSS, and CMS inputs", () => {
-  assert.equal(ALGORITHM_VERSION, "v1.3");
+  assert.equal(ALGORITHM_VERSION, "v1.4");
   assert.equal(convertExam({ source: "NBME", score: 240 }, "step2"), 248);
-  assert.equal(convertExam({ source: "UWSA1", score: 250 }, "step2"), 251);
-  assert.equal(convertExam({ source: "UWSA2", score: 250 }, "step2"), 253);
+  assert.equal(convertExam({ source: "UWSA1", score: 250 }, "step2"), 245);
+  assert.equal(convertExam({ source: "UWSA2", score: 250 }, "step2"), 248);
   assert.equal(convertExam({ source: "FREE120", score: 75 }, "step2"), 248);
   assert.equal(convertExam({ source: "AMBOSS", score: 245 }, "step2"), 245);
   assert.equal(convertExam({ source: "CMS", score: 70 }, "step2"), 243);
@@ -18,7 +18,7 @@ test("computes a bounded planning estimate with transparent uncertainty", () => 
     { source: "FREE120", score: 75, takenDaysAgo: 8 },
   ], "step2");
 
-  assert.equal(result.algorithmVersion, "v1.3");
+  assert.equal(result.algorithmVersion, "v1.4");
   assert.equal(result.pointEstimate, 249);
   assert.equal(result.ciLower, 239);
   assert.equal(result.ciUpper, 259);

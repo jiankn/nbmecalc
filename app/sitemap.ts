@@ -11,7 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Update only when search-visible content changes; build time is not a
   // meaningful <lastmod> signal.
   const now = new Date("2026-06-28");
-  const validationUpdate = new Date("2026-08-07");
   const formPilotUpdate = new Date("2026-08-09");
   const indexingRemediationUpdate = new Date("2026-08-09");
   const adsenseTrustUpdate = new Date("2026-08-10");
@@ -43,14 +42,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // advertises pages with standalone search value.
     { url: `${SITE_URL}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/about`, lastModified: adsenseTrustUpdate, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${SITE_URL}/methodology`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.65 },
-    { url: `${SITE_URL}/validation`, lastModified: validationUpdate, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/methodology`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.65 },
+    { url: `${SITE_URL}/validation`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/educators`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.6 },
 
     // Secondary SEO predictors
-    { url: `${SITE_URL}/uwsa-1-to-step-1`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${SITE_URL}/uwsa-2-to-step-2`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${SITE_URL}/free-120-predictor`, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${SITE_URL}/uwsa-1-to-step-1`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${SITE_URL}/uwsa-1-to-step-2`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/uwsa-2-to-step-2`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${SITE_URL}/free-120-predictor`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/amboss-converter`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/cms-converter`, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/cms-forms-step-2-ck`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.78 },

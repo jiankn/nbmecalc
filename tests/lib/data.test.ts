@@ -43,7 +43,7 @@ describe("current NBME score-family handling", () => {
         "step2"
       )
     ).toBe(240);
-    expect(ALGORITHM_VERSION).toBe("v1.3");
+    expect(ALGORITHM_VERSION).toBe("v1.4");
   });
 
   it("uses the current AMBOSS and Step 3 public scales and rejects new CMS inputs", () => {

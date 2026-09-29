@@ -194,8 +194,8 @@ try {
   ].map((match) => decodeHtml(match[1]));
 
   if (sitemapUrls.length === 0) errors.push("sitemap.xml contains no URLs");
-  if (sitemapUrls.length !== 35) {
-    errors.push(`sitemap.xml contains ${sitemapUrls.length} URLs, expected 35`);
+  if (sitemapUrls.length !== 36) {
+    errors.push(`sitemap.xml contains ${sitemapUrls.length} URLs, expected 36`);
   }
 
   const duplicateSitemapUrls = sitemapUrls.filter(
