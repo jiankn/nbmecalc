@@ -84,7 +84,7 @@
  * PDF when the user hits "Save as PDF" from the browser's print dialog.
  *
  * Strategy:
- *   - Hide app chrome (nav, footer, cookie banner, share / print buttons).
+ *   - Hide app chrome (nav, footer, share / print buttons).
  *   - Force white backgrounds and dark text to save ink and avoid weird
  *     gradient bleeding.
  *   - A4 + Letter friendly margins; we let the browser pick page size.
@@ -93,11 +93,10 @@
  * ------------------------------------------------------------------------- */
 @media print {
   /* Hide all the global chrome — Tailwind's `print:hidden` covers most cases
-     but our PageShell renders Nav / Footer / CookieBanner without that class.
+     but our PageShell renders Nav / Footer without that class.
      Targeting the elements directly is more reliable than rewriting them. */
   nav,
   footer,
-  [data-cookie-banner],
   [aria-label="Close"] {
     display: none !important;
   }

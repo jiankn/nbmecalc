@@ -13,7 +13,6 @@ import { BlogGrid } from "@/components/sections/blog-grid";
 import { OptionalUpgrades } from "@/components/sections/optional-upgrades";
 import { AdSlot } from "@/components/ads/ad-slot";
 import { Footer } from "@/components/sections/footer";
-import { CookieBanner } from "@/components/sections/cookie-banner";
 
 const homeTitle = "Free NBME Score Calculator — Step Score Estimate in Seconds";
 const homeDescription =
@@ -109,7 +108,6 @@ export default function HomePage() {
         <OptionalUpgrades />
       </main>
       <Footer />
-      <CookieBanner />
     </>
   );
 }

@@ -187,12 +187,6 @@ export default function PrivacyPage() {
             you logged in. Expires after 30 days. Strictly necessary.
           </li>
           <li>
-            <strong>Disclaimer acknowledgment</strong> (
-            <code>nbmecalc_disclaimer_ack</code>) — remembers for 30 days that
-            you dismissed the educational-use notice. Stored locally in your
-            browser.
-          </li>
-          <li>
             <strong>Analytics</strong> — Cloudflare Web Analytics is designed
             to operate without cross-site tracking cookies. First-party funnel
             events are stored server-side according to the retention period above.
