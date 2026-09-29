@@ -833,7 +833,7 @@ export const NBME_FORM_NUMBERS_BY_STEP: Record<
   readonly number[]
 > = {
   step1: [26, 27, 28, 29, 30, 31, 32],
-  step2: [9, 10, 11, 12, 13, 14, 15],
+  step2: [9, 10, 11, 12, 13, 14, 15, 16],
   step3: [5, 6, 7],
 };
 

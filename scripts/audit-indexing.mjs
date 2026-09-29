@@ -67,6 +67,8 @@ const evidenceSensitivePaths = new Set([
 // metadata drift. Rebase an entry only alongside a deliberate rewrite.
 // `/` and `/nbme-score-conversion` were rebased on 2026-08-10 after the
 // Search Console export showed page-one positions with near-zero CTR.
+// `/nbme-score-conversion` was rebased again on 2026-09-29 when the page
+// gained the percent-correct converter and conversion chart.
 const frozenSeo = new Map([
   [
     "/",
@@ -79,9 +81,9 @@ const frozenSeo = new Map([
   [
     "/nbme-score-conversion",
     {
-      title: "NBME Score Conversion Chart — Step 2 CK, Step 1 & Step 3 Forms",
-      description: "Read NBME score reports without mixing scales: Step 2 CCSSA Total Scores, Step 1 CBSSA EPC and pass probability, and Step 3 CCMSA limits.",
-      h1: "NBME Score Conversion and Report Guide",
+      title: "NBME Score Conversion Step 2: % Correct to Score (Forms 9–16)",
+      description: "Convert NBME CCSSA percent correct to an estimated Step 2 CK score for Forms 9–16, with a conversion chart, likely range, 2026 percentile, and the 218 passing line.",
+      h1: "NBME Score Conversion: Percent Correct to Step 2 CK Score",
     },
   ],
   [

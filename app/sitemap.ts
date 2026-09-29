@@ -27,7 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: SITE_URL, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 1.0 },
 
     // Core SEO landing pages
-    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/nbme-15-score-conversion`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "monthly", priority: 0.72 },
     { url: `${SITE_URL}/nbme-30-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
     { url: `${SITE_URL}/nbme-calculator`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.95 },

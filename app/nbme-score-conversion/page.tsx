@@ -5,18 +5,35 @@ import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
+import { NbmePercentConverter } from "@/components/nbme-percent-converter";
+import {
+  CONVERSION_CHART_PERCENTS,
+  EPC_ANCHORS,
+  NBME_PERCENT_MODEL_SOURCE,
+  POINTS_PER_PERCENT,
+  REPORT_SCORE_PRECISION,
+  estimateStep2FromPercent,
+} from "@/lib/nbme-percent-model";
+import { formatPercentile, lookupPercentile } from "@/lib/usmle-norms";
+
+const conversionChart = CONVERSION_CHART_PERCENTS.map((percent) => {
+  const est = estimateStep2FromPercent(percent, "epc");
+  return { ...est, pct: formatPercentile(lookupPercentile("step2ck", est.midpoint).percentile) };
+});
 
 export const metadata: Metadata = {
-  title:
-    "NBME Score Conversion Chart — Step 2 CK, Step 1 & Step 3 Forms",
+  title: "NBME Score Conversion Step 2: % Correct to Score (Forms 9–16)",
   description:
-    "Read NBME score reports without mixing scales: Step 2 CCSSA Total Scores, Step 1 CBSSA EPC and pass probability, and Step 3 CCMSA limits.",
+    "Convert NBME CCSSA percent correct to an estimated Step 2 CK score for Forms 9–16, with a conversion chart, likely range, 2026 percentile, and the 218 passing line.",
   keywords: [
     "nbme score converter",
     "nbme score conversion",
+    "nbme score calculator",
+    "nbme percent correct to score",
     "nbme to usmle conversion",
     "nbme score conversion step 2",
     "nbme step 2 score converter",
+    "nbme 16 score conversion",
     "nbme step 1 conversion",
     "nbme conversion chart",
     "nbme 32 score conversion",
@@ -25,9 +42,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://nbmecalc.com/nbme-score-conversion" },
   openGraph: {
-    title: "NBME Score Conversion Chart — Step 2 CK, Step 1 & Step 3 Forms",
+    title: "NBME Score Conversion Step 2: % Correct to Score (Forms 9–16)",
     description:
-      "Read CCSSA, CBSSA, and CCMSA reports without treating their different score scales as interchangeable.",
+      "Turn an NBME CCSSA percent correct into an estimated Step 2 CK score, range, and 2026 percentile.",
     url: "https://nbmecalc.com/nbme-score-conversion",
     type: "article",
     images: [
@@ -82,16 +99,17 @@ const step1ReportChecklist = [
 
 const formFamilySections = [
   {
-    title: "Step 2 CK CCSSA forms 9-15",
+    title: "Step 2 CK CCSSA forms 9-16",
     intent: "Use this family for Step 2 CK score conversion and readiness checks.",
     examples: [
       { label: "NBME 10 Step 2 score conversion" },
       { label: "NBME 11 score conversion" },
-      { label: "NBME 14 score conversion" },
+      { label: "NBME 14 score conversion", href: "#percent-converter" },
       {
         label: "NBME 15 Step 2 CK score conversion",
         href: "/nbme-15-score-conversion",
       },
+      { label: "NBME 16 score conversion", href: "#percent-converter" },
     ],
     note:
       "Most Form queries remain consolidated here. Form 15 has a dedicated pilot because Search Console and the live SERP both show a distinct calculator-shaped task.",
@@ -172,8 +190,16 @@ const conversionHubLinks = [
 
 const faqs = [
   {
+    q: "How do I convert my NBME percent correct to a Step 2 CK score?",
+    a: `Choose your CCSSA form, enter your percent correct (or the number of questions correct out of 200), and the converter returns an estimated three-digit Step 2 CK score with a likely range. As a rule of thumb from the model, 65% correct is about ${estimateStep2FromPercent(65, "epc").midpoint}, 75% is about ${estimateStep2FromPercent(75, "epc").midpoint}, and 85% is about ${estimateStep2FromPercent(85, "epc").midpoint}.`,
+  },
+  {
+    q: "What percent correct do I need to pass Step 2 CK on an NBME?",
+    a: `The Step 2 CK passing score is 218. In this model that corresponds to roughly 65% correct (EPC). Because every estimate has a range, a result in the mid-60s should be treated as borderline rather than a safe pass.`,
+  },
+  {
     q: "How accurate is NBME score conversion?",
-    a: "NBMEcalc does not currently publish a reproducible holdout cohort or a verified error rate. Treat the conversion as an independent planning heuristic, use the full displayed range, and keep the official NBME score report as the primary readiness source.",
+    a: "NBME does not publish a percent-to-score table, and NBMEcalc does not yet publish a verified error rate. The converter connects two reference points from NBME's official sample CCSSA report, so treat it as an independent planning estimate, use the full displayed range, and rely on the Total CCSSA Score on your official report when you have it.",
   },
   {
     q: "Which NBME forms are most predictive of my Step 2 CK score?",
@@ -241,29 +267,130 @@ export default function NbmeScoreConversionPage() {
       />
 
       <PageHero
-        badge="NBME → Step conversion"
-        title="NBME Score Conversion and Report Guide"
-        description="Start with the score scale printed on the report. Current CCSSA, CBSSA, and CCMSA reports are different products, so this page shows what can be entered and what should be read directly."
+        badge="NBME → Step 2 CK conversion"
+        title="NBME Score Conversion: Percent Correct to Step 2 CK Score"
+        description={`Enter your CCSSA percent correct for Forms 9–16 and get an estimated Step 2 CK score, likely range, and 2026 percentile. For example, 75% correct is about ${estimateStep2FromPercent(75, "epc").midpoint}.`}
         size="md"
       />
 
+      {/* 正确率换算器放在最前面：对应搜索意图 */}
+      <section id="percent-converter" className="bg-white py-10 lg:py-12">
+        <div className="container max-w-4xl">
+          <NbmePercentConverter />
+        </div>
+      </section>
+
+      {/* 换算对照表 */}
+      <section id="conversion-chart" className="border-t border-gray-200 bg-mint-50/30 py-16 lg:py-20">
+        <div className="container max-w-4xl">
+          <h2 className="mb-4 text-3xl font-extrabold tracking-tight lg:text-4xl">
+            NBME score conversion chart: percent correct to Step 2 CK
+          </h2>
+          <p className="mb-8 text-lg leading-relaxed text-gray-700">
+            Estimated Step 2 CK scores for CCSSA equated percent correct (EPC). The same chart applies to Forms
+            9–16 because EPC is already adjusted for form difficulty. If you counted your own percent correct,
+            expect the true value to sit a little higher or lower than the row shown.
+          </p>
+          <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="border-b border-gray-200 bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-5 py-3 text-left font-bold text-gray-900">Percent correct</th>
+                    <th scope="col" className="px-5 py-3 text-left font-bold text-gray-900">Estimated Step 2 CK score</th>
+                    <th scope="col" className="px-5 py-3 text-left font-bold text-gray-900">Likely range</th>
+                    <th scope="col" className="px-5 py-3 text-left font-bold text-gray-900">2026 percentile</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 font-mono">
+                  {conversionChart.map((row) => (
+                    <tr key={row.percent}>
+                      <td className="px-5 py-2.5 font-bold text-gray-950">{row.percent}%</td>
+                      <td className="px-5 py-2.5 text-gray-800">{row.midpoint}</td>
+                      <td className="px-5 py-2.5 text-gray-600">
+                        {row.low}–{row.high}
+                      </td>
+                      <td className="px-5 py-2.5 text-gray-600">{row.pct}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p className="mt-4 text-sm text-gray-600">
+            Percentiles come from the{" "}
+            <Link href="/step-2-ck-percentile" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              official 2026 USMLE Step 2 CK percentile table
+            </Link>
+            . The passing score is 218.
+          </p>
+        </div>
+      </section>
+
+      {/* 方法说明 */}
+      <section id="how-conversion-works" className="bg-white py-16 lg:py-20">
+        <div className="container max-w-3xl">
+          <h2 className="mb-4 text-3xl font-extrabold tracking-tight lg:text-4xl">
+            How this NBME conversion is calculated
+          </h2>
+          <p className="mb-4 leading-relaxed text-gray-700">
+            NBME does not publish a percent-to-score table. Its{" "}
+            <a
+              href={NBME_PERCENT_MODEL_SOURCE.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-evidence-source="primary"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              official sample CCSSA score report
+            </a>{" "}
+            does, however, print both scales side by side, which gives two reference points:
+          </p>
+          <ul className="mb-4 list-disc space-y-2 pl-6 leading-relaxed text-gray-700">
+            <li>
+              The Step 2 CK comparison group averages about <strong>{EPC_ANCHORS.mean.epc}% EPC</strong> across
+              disciplines (weighted by NBME&apos;s published question share), and the report lists that
+              group&apos;s mean Step 2 CK score as <strong>{EPC_ANCHORS.mean.score}</strong>.
+            </li>
+            <li>
+              The sample examinee scores about <strong>{EPC_ANCHORS.low.epc}% EPC</strong> with the same weighting
+              and a Total CCSSA Score of <strong>{EPC_ANCHORS.low.score}</strong>.
+            </li>
+          </ul>
+          <p className="mb-4 leading-relaxed text-gray-700">
+            Connecting those points gives roughly {Math.round(POINTS_PER_PERCENT * 10) / 10} Step 2 CK points per
+            percentage point. The likely range starts from the report&apos;s own ±{REPORT_SCORE_PRECISION}-point
+            precision, adds a model allowance, and widens further outside the 58%–77% band and for self-counted
+            percentages.
+          </p>
+          <p className="leading-relaxed text-gray-700">
+            This is an independent estimate, not an official NBME conversion, and it has not been externally
+            validated. When your report shows a Total CCSSA Score, that is NBME&apos;s own Step 2 CK estimate —
+            enter it unchanged in the multi-exam calculator below.
+          </p>
+        </div>
+      </section>
+
       {/* Calculator first — high intent users want the tool */}
-      <section id="calculator" className="bg-mint-50/30 py-8 lg:py-12 border-b border-gray-200">
+      <section id="calculator" className="bg-mint-50/30 py-8 lg:py-12 border-y border-gray-200">
         <div className="container max-w-4xl mb-6">
+          <h2 className="mb-4 text-2xl font-extrabold tracking-tight lg:text-3xl">
+            Combine several practice exams
+          </h2>
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="font-bold text-gray-950 mb-1">
-                Converting for Step 2 CK?
-              </h2>
+              <h3 className="font-bold text-gray-950 mb-1">
+                Have a Total CCSSA Score?
+              </h3>
               <p className="text-sm text-gray-600">
-                Choose Step 2 CK and enter the CCSSA form number shown on your
-                NBME score report. Current supported forms are 9–15.
+                Choose Step 2 CK and enter the three-digit score and form number
+                from your NBME report. Supported forms are 9–16.
               </p>
             </div>
             <div className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="font-bold text-gray-950 mb-1">
+              <h3 className="font-bold text-gray-950 mb-1">
                 Checking Step 1 readiness?
-              </h2>
+              </h3>
               <p className="text-sm text-gray-600">
                 Current CBSSA reports use EPC and provide an official pass
                 probability. Read those fields directly; do not enter EPC in
@@ -367,13 +494,14 @@ export default function NbmeScoreConversionPage() {
               Official report first
             </div>
             <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-              NBME to Step 2 CK Conversion Chart
+              Already have a Total CCSSA Score?
             </h2>
             <p className="text-gray-600 text-lg max-w-3xl">
-              The quick answer is that a current CCSSA Total Score already
-              estimates Step 2 CK performance. Enter that 1-300 score unchanged;
-              converting 240 into a different midpoint would double-transform
-              the report&apos;s estimate.
+              A current CCSSA Total Score already estimates Step 2 CK
+              performance. Enter that 1-300 score unchanged; converting 240 into
+              a different midpoint would double-transform the report&apos;s
+              estimate. The percent-correct converter above is for when you only
+              have a percentage.
             </p>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-600">
               If your goal is to test one weak clinical area rather than overall
