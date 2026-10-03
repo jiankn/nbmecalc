@@ -123,6 +123,13 @@ const sourceRows = [
 
 const changes = [
   {
+    date: "2026-10-03",
+    items: [
+      "Stopped accepting Free 120 as a Step 1 predictor input. Free 120 reports only a raw percent, and USMLE publishes no Step 1 conversion or passing percent for it; the previous internal planning curve could show a high pass probability for a percent below the CBSSA low-pass range. Step 1 Free 120 results now go to the Free 120 Step 1 readiness check, which compares the percent and its sampling error with that range without producing a probability.",
+      "Previously purchased Step 1 reports that include a Free 120 input still open and keep their original calculation (model v1.4), with a notice that the Free 120 part is not a pass probability.",
+    ],
+  },
+  {
     date: "2026-09-29",
     items: [
       "Algorithm v1.4: UWSA 1 and UWSA 2 inputs now subtract only the disclosed 5- and 2-point adjustments. v1.3 also passed them through a legacy NBME curve that raised low scores (for example, a UWSA 1 of 200 became 218 on Step 2 CK), contradicting the published adjustment.",

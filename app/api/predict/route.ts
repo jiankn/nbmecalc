@@ -146,6 +146,12 @@ function parseBody(raw: unknown): PredictBody | { error: string } {
             "CMS scores are not accepted for new predictions because NBME does not publish a direct CMS-to-Step conversion.",
         };
       }
+      if (source === "FREE120" && step === "step1") {
+        return {
+          error:
+            "Free 120 is not accepted for Step 1 predictions because USMLE publishes no Step 1 conversion or passing percent for it. Use the Free 120 Step 1 readiness check at /free-120-step-1.",
+        };
+      }
       return {
         error: `exams[${i}] uses ${source} with ${step}, but that source is supported for Step 2 CK only.`,
       };

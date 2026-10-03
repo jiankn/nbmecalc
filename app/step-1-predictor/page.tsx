@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title:
     "Step 1 Predictor — Pass Probability Calculator (Free) | NBMEcalc",
   description:
-    "Estimate Step 1 pass readiness from compatible UWSA and Free 120 inputs. For a current NBME CBSSA, use the probability and EPC range on the official report.",
+    "Estimate Step 1 pass readiness from a UWSA score. For a current NBME CBSSA, use the probability and EPC range on the official report; for Free 120, use the Free 120 Step 1 readiness check.",
   keywords: [
     "step 1 predictor",
     "usmle step 1 calculator",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Step 1 Predictor — Pass Probability Calculator (Free)",
     description:
-      "Estimate Step 1 pass readiness from UWSA and Free 120 inputs, with official-report-first guidance for current NBME CBSSA results.",
+      "Estimate Step 1 pass readiness from UWSA scores, with official-report-first guidance for current NBME CBSSA results.",
     url: "https://nbmecalc.com/step-1-predictor",
     type: "website",
     images: [
@@ -116,7 +116,7 @@ export default function Step1PredictorPage() {
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free USMLE Step 1 planning calculator for compatible UWSA and Free 120 inputs, with official-report-first guidance for current NBME CBSSA results.",
+              "Free USMLE Step 1 planning calculator for UWSA inputs, with official-report-first guidance for current NBME CBSSA results and a separate Free 120 readiness check.",
           }),
         }}
       />
@@ -351,10 +351,10 @@ export default function Step1PredictorPage() {
             </li>
             <li>
               <Link
-                href="/free-120-predictor"
+                href="/free-120-step-1"
                 className="underline underline-offset-2"
               >
-                Free 120 predictor
+                Free 120 Step 1 readiness check
               </Link>
             </li>
             <li>

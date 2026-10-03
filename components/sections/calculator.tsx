@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Plus, X, ArrowRight, Lock, Sparkles, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import {
   getNbmeFormNumbers,
   getSubjectTaxonomy,
   isExamSourceSupportedForStep,
+  unsupportedSourceLabel,
   type PracticeExam,
   type ExamSource,
   type StepKind,
@@ -439,6 +441,20 @@ export function Calculator({
             ))}
           </div>
 
+          {step === "step1" && (
+            <p className="-mt-4 mb-6 flex gap-2 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-950">
+              <Info className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>
+                Step 1 is pass/fail. Free 120 reports only a raw percent with no official Step 1 conversion, so it
+                is not used here. Check it with the{" "}
+                <Link href="/free-120-step-1" className="font-semibold underline underline-offset-4">
+                  Free 120 Step 1 readiness check
+                </Link>
+                , and read a CBSSA&apos;s pass probability from its official report.
+              </span>
+            </p>
+          )}
+
           {/* Exams list */}
           <p className="block text-sm font-semibold text-gray-700 mb-3">
             Your practice exams
@@ -481,9 +497,7 @@ export function Calculator({
                           disabled={!isExamSourceSupportedForStep(s.key, step)}
                         >
                           {s.label}
-                          {!isExamSourceSupportedForStep(s.key, step)
-                            ? " (Step 2 only)"
-                            : ""}
+                          {unsupportedSourceLabel(s.key, step)}
                         </option>
                       ))}
                     </select>
@@ -667,7 +681,9 @@ export function Calculator({
           {!allInputsValid && exams.length > 0 && (
             <p className="mt-3 text-xs text-center text-red-600 font-medium">
               {hasUnsupportedSource
-                ? "That assessment source uses a Step 2-specific report scale. For Step 1 or Step 3, use a supported input and read the official comprehensive-assessment report for the target exam."
+                ? step === "step1" && exams.some((e) => e.source === "FREE120")
+                  ? "Free 120 has no official Step 1 conversion. Remove it here and use the Free 120 Step 1 readiness check instead."
+                  : "That assessment source uses a Step 2-specific report scale. For Step 1 or Step 3, use a supported input and read the official comprehensive-assessment report for the target exam."
                 : "One or more scores are outside the valid range for their source. Hover the input for the expected range."}
             </p>
           )}

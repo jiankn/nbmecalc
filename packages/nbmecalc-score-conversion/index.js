@@ -74,6 +74,10 @@ export function convertExam(exam, step) {
   if (["NBME", "AMBOSS", "CMS"].includes(exam.source) && step !== "step2") {
     throw new TypeError(`${exam.source} input is supported only for Step 2`);
   }
+  // Step 1 是通过/不通过：Free 120 只有原始正确率，官方没有换算或及格线，不再换算成三位数。
+  if (exam.source === "FREE120" && step === "step1") {
+    throw new TypeError("FREE120 input is not supported for Step 1: no official conversion or passing percent exists");
+  }
   if (exam.source === "AMBOSS" && (exam.score < 100 || exam.score > 300)) {
     throw new RangeError("AMBOSS input must be the 3-digit reported score");
   }

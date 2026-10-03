@@ -121,9 +121,12 @@ export default function UWSA1ToStep1Page() {
             Convert UWSA 1 to Step 1
           </h2>
           <p className="text-gray-600">
-            Pick <strong>Step 1</strong> below and enter your UWSA 1 score. Add
-            Free 120 only when you want another model input, and use the
-            official CBSSA report for current Step 1 readiness guidance.
+            Pick <strong>Step 1</strong> below and enter your UWSA 1 score. Check a
+            Free 120 result separately with the{" "}
+            <Link href="/free-120-step-1" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              Free 120 Step 1 readiness check
+            </Link>
+            , and use the official CBSSA report for current Step 1 readiness guidance.
           </p>
         </div>
         <Calculator defaultStep="step1" defaultSource="UWSA1" singleAssessment />

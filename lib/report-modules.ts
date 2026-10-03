@@ -315,6 +315,17 @@ export function buildAntiPatterns(input: {
   const days = input.daysUntilExam ?? 21;
   const sources = new Set(input.exams.map((e) => e.source));
 
+  // 旧版允许 Step 1 输入 Free 120，现已停用。已付费的旧报告仍按原输入重算，
+  // 所以放在第一条明确提示，避免最多 5 条的截断把它挤掉。
+  if (input.step === "step1" && sources.has("FREE120")) {
+    items.push({
+      title: "Do not treat the Free 120 part of this estimate as a pass probability",
+      reason:
+        "Free 120 reports only a raw percent, and USMLE publishes no Step 1 conversion or passing percent for it. New Step 1 predictions no longer accept Free 120; compare your percent with the low-pass range on a CBSSA report instead.",
+      basedOn: "This Step 1 report includes a Free 120 input entered before that change.",
+    });
+  }
+
   // Final week: no full exams. Highest priority — overrides earlier rules.
   if (days <= 5) {
     items.push({

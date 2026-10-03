@@ -35,3 +35,8 @@ test("rejects unsupported or empty input", () => {
   assert.throws(() => convertExam({ source: "CMS", score: 150 }, "step2"), /0-100/);
   assert.throws(() => convertExam({ source: "AMBOSS", score: 245 }, "step3"), /only for Step 2/);
 });
+
+test("rejects Free 120 for Step 1", () => {
+  assert.throws(() => convertExam({ source: "FREE120", score: 65 }, "step1"), TypeError);
+  assert.equal(typeof convertExam({ source: "FREE120", score: 65 }, "step3"), "number");
+});

@@ -2,7 +2,7 @@
 
 Small, dependency-free JavaScript helpers for interpreting NBME-style practice-assessment inputs during USMLE study planning.
 
-This package supports UWSA 1/2 and Free 120 inputs across Step workflows. Direct NBME CCSSA, AMBOSS Step 2 Self-Assessment, and CMS inputs are supported only for Step 2 CK because the current assessment families use different report scales. It returns an internally equated three-digit planning value and a model-generated interval so downstream tools can show uncertainty instead of a falsely precise single number.
+This package supports UWSA 1/2 inputs across Step workflows and Free 120 inputs for Step 2 CK and Step 3. Free 120 is rejected for Step 1, which is pass/fail and has no official Free 120 conversion or passing percent. Direct NBME CCSSA, AMBOSS Step 2 Self-Assessment, and CMS inputs are supported only for Step 2 CK because the current assessment families use different report scales. It returns an internally equated three-digit planning value and a model-generated interval so downstream tools can show uncertainty instead of a falsely precise single number.
 
 The mappings are independent assumptions. They are not official NBME or USMLE conversions, do not represent NBME endorsement, and have not been evaluated in a published independent holdout cohort. Read the [NBME score conversion](https://nbmecalc.com/nbme-score-conversion) page for the browser workflow and the public [methodology and assumptions](https://nbmecalc.com/methodology) before using the output.
 

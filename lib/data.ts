@@ -862,7 +862,19 @@ export function isExamSourceSupportedForStep(
   step: StepKind
 ): boolean {
   if (source === "CMS") return false;
+  // Step 1 是通过/不通过考试，Free 120 只有原始正确率，官方没有换算也没有及格线。
+  // 旧版用无来源的内部曲线（75% → 232）算通过概率，会把 55% 显示成约 84% 能过，
+  // 与 NBME CBSSA 低通过区间（约 62–68%）矛盾。新预测不再接受，改用 /free-120-step-1 的就绪度检查；
+  // convertExam 里的分支保留，只为已付费的旧报告还能正常重算显示。
+  if (source === "FREE120" && step === "step1") return false;
   return !["NBME", "AMBOSS"].includes(source) || step === "step2";
+}
+
+/** 计算器下拉框里，某个来源对当前 Step 不可用时附在名字后面的说明。 */
+export function unsupportedSourceLabel(source: ExamSource, step: StepKind): string {
+  if (isExamSourceSupportedForStep(source, step)) return "";
+  if (source === "FREE120" && step === "step1") return " (use Free 120 Step 1 check)";
+  return " (Step 2 only)";
 }
 
 /**

@@ -24,6 +24,7 @@ import {
   computeBaseline,
   convertExam,
   isExamSourceSupportedForStep,
+  unsupportedSourceLabel,
   type CohortSubjectAverage,
   type PracticeExam,
 } from "@/lib/data";
@@ -372,5 +373,30 @@ describe("predictStepScore", () => {
     expect(r.pointEstimate).toBeLessThanOrEqual(r.ciUpper);
     expect(r.passProbability).toBeGreaterThanOrEqual(0);
     expect(r.passProbability).toBeLessThanOrEqual(1);
+  });
+});
+
+describe("Free 120 for Step 1", () => {
+  it("is rejected for new Step 1 predictions but kept for Step 2 and Step 3", () => {
+    expect(isExamSourceSupportedForStep("FREE120", "step1")).toBe(false);
+    expect(isExamSourceSupportedForStep("FREE120", "step2")).toBe(true);
+    expect(isExamSourceSupportedForStep("FREE120", "step3")).toBe(true);
+    expect(isExamSourceSupportedForStep("UWSA1", "step1")).toBe(true);
+  });
+
+  it("explains why it is unavailable in the source picker", () => {
+    expect(unsupportedSourceLabel("FREE120", "step1")).toContain("Free 120 Step 1 check");
+    expect(unsupportedSourceLabel("NBME", "step1")).toBe(" (Step 2 only)");
+    expect(unsupportedSourceLabel("FREE120", "step2")).toBe("");
+  });
+
+  it("still replays a legacy Step 1 report and flags the Free 120 input first", () => {
+    const exams: PracticeExam[] = [
+      { id: "f", source: "FREE120", score: 60, takenDaysAgo: 3 },
+      { id: "u", source: "UWSA1", score: 230, takenDaysAgo: 5 },
+    ];
+    const result = predictStepScore(exams, "step1", 10);
+    expect(result.pointEstimate).toBeGreaterThan(0);
+    expect(result.antiPatterns.items[0].title).toContain("Free 120");
   });
 });
