@@ -196,7 +196,23 @@ export default function Step1PredictorPage() {
             >
               methodology
             </Link>{" "}
-            for the assumptions behind the model.
+            for the assumptions behind the model, the{" "}
+            <Link
+              href="/validation"
+              data-indexing-context="related"
+              className="text-mint-700 underline underline-offset-2"
+            >
+              validation status
+            </Link>{" "}
+            for what has and has not been measured, and the official{" "}
+            <Link
+              href="/usmle-pass-rates"
+              data-indexing-context="related"
+              className="text-mint-700 underline underline-offset-2"
+            >
+              USMLE pass rates
+            </Link>{" "}
+            for how first-time Step 1 takers actually perform.
           </p>
         </div>
       </section>

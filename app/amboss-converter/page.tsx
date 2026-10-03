@@ -198,6 +198,14 @@ export default function AmbossConverterPage() {
               className="font-semibold text-mint-800 underline underline-offset-4"
             >
               methodology and limitations
+            </Link>{" "}
+            and the current{" "}
+            <Link
+              href="/validation"
+              data-indexing-context="related"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              validation status
             </Link>
             .
           </p>

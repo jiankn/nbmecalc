@@ -224,6 +224,17 @@ export default function Free120PredictorPage() {
                   alongside a recent CCSSA or UWSA instead of treating Free 120
                   as a standalone prediction.
                 </p>
+                <p>
+                  Studying for Step 1 instead? Compare your Free 120 with a{" "}
+                  <Link href="/uwsa-1-to-step-1" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+                    UWSA 1 to Step 1 pass estimate
+                  </Link>
+                  , and read{" "}
+                  <Link href="/blog/how-to-read-nbme-score-report" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+                    how to read an NBME score report
+                  </Link>{" "}
+                  before deciding what a single form result means.
+                </p>
               </div>
             </div>
             <div className="rounded-2xl border border-mint-200 bg-mint-50 p-5">

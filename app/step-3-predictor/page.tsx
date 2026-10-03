@@ -302,6 +302,15 @@ export default function Step3PredictorPage() {
             >
               NBME score report guide
             </Link>
+            . For context on how first-time Step 3 takers perform, see the
+            official{" "}
+            <Link
+              href="/usmle-pass-rates"
+              data-indexing-context="related"
+              className="text-mint-800 underline underline-offset-4 font-semibold"
+            >
+              USMLE pass rates by Step
+            </Link>
             .
           </p>
 

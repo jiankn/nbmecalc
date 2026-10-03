@@ -266,7 +266,16 @@ export default function CmsConverterPage() {
                 CMS Forms for Step 2 CK guide
               </Link>{" "}
               to compare the eight official content areas, pacing modes, and
-              legal purchase path before opening this score tool.
+              legal purchase path before opening this score tool. To see how
+              much each discipline counts on the real exam, read the{" "}
+              <Link
+                href="/blog/most-tested-topics-step-2-ck"
+                data-indexing-context="related"
+                className="font-semibold text-mint-700 underline underline-offset-4"
+              >
+                Step 2 CK high-yield priorities from the official content outline
+              </Link>
+              .
             </p>
             <p>
               <strong>Recommended workflow:</strong> start with the content
