@@ -109,16 +109,16 @@ const frozenSeo = new Map([
   [
     "/step-2-predictor",
     {
-      title: "Step 2 CK Score Predictor — Free USMLE Calculator | NBMEcalc",
-      description: "Free Step 2 CK score predictor and calculator. Combine CCSSA forms 9-15, UWSA, Free 120, and AMBOSS inputs with a transparent planning range.",
-      h1: "Step 2 CK Score Predictor and Calculator",
+      title: "Step 2 CK Score Predictor: Combine NBME, UWSA & Free 120 (Free)",
+      description: "Free Step 2 CK score predictor that combines several practice tests (CCSSA forms 9–16, UWSA, Free 120, AMBOSS) into one estimate, plus what research says about how well each one predicts.",
+      h1: "Step 2 CK Score Predictor: Combine Your Practice Tests",
     },
   ],
   [
     "/step-3-predictor",
     {
-      title: "Free Step 3 Score Predictor + NBME 6 & 7 Conversion Explained",
-      description: "Enter UWSA Step 3 or Free 120 results to get a free 3-digit Step 3 estimate with a planning range. Plus: why NBME 6 & 7 (CCMSA) scores don't convert directly.",
+      title: "NBME 6 & 7 Step 3 Score Conversion + Free Step 3 Predictor",
+      description: "Why NBME 6 & 7 (CCMSA) scores don't convert directly to Step 3, what the 10-800 scale means, and a free 3-digit Step 3 estimate from UWSA Step 3 or Free 120.",
       h1: "Step 3 Predictor: NBME 6 & 7 Conversion Limits",
     },
   ],

@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title:
-    "Free Step 3 Score Predictor + NBME 6 & 7 Conversion Explained",
+    "NBME 6 & 7 Step 3 Score Conversion + Free Step 3 Predictor",
   description:
-    "Enter UWSA Step 3 or Free 120 results to get a free 3-digit Step 3 estimate with a planning range. Plus: why NBME 6 & 7 (CCMSA) scores don't convert directly.",
+    "Why NBME 6 & 7 (CCMSA) scores don't convert directly to Step 3, what the 10-800 scale means, and a free 3-digit Step 3 estimate from UWSA Step 3 or Free 120.",
   keywords: [
     "nbme 6 step 3 score conversion",
     "nbme 7 step 3 score conversion",
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://nbmecalc.com/step-3-predictor" },
   openGraph: {
-    title: "Free Step 3 Score Predictor + NBME 6 & 7 Conversion Explained",
+    title: "NBME 6 & 7 Step 3 Score Conversion + Free Step 3 Predictor",
     description:
-      "Get a free 3-digit Step 3 estimate from UWSA Step 3 or Free 120 results, and see why NBME 6 & 7 (CCMSA) scores don't convert directly.",
+      "Why NBME 6 & 7 (CCMSA) scores don't convert directly to Step 3, plus a free 3-digit estimate from UWSA Step 3 or Free 120.",
     url: "https://nbmecalc.com/step-3-predictor",
     type: "website",
     images: [
