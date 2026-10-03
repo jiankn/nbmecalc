@@ -25,6 +25,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const scoreGuidesLaunch = new Date("2026-10-03");
   // Cannibalization fix (titles, anchors), Step 2 predictor evidence, Form 15/16 pages.
   const rankingFixUpdate = new Date("2026-10-03");
+  // Step 3 title reverted to lead with NBME 6 & 7 conversion; Step 1 no longer
+  // takes Free 120 as a pass-probability input.
+  const predictorFixUpdate = new Date("2026-10-03");
 
   const liveRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 1.0 },
@@ -35,9 +38,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/nbme-16-score-conversion`, lastModified: rankingFixUpdate, changeFrequency: "monthly", priority: 0.78 },
     { url: `${SITE_URL}/nbme-30-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
     { url: `${SITE_URL}/nbme-calculator`, lastModified: scoreGuidesLaunch, changeFrequency: "weekly", priority: 0.95 },
-    { url: `${SITE_URL}/step-1-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/step-1-predictor`, lastModified: predictorFixUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-2-predictor`, lastModified: rankingFixUpdate, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${SITE_URL}/step-3-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${SITE_URL}/step-3-predictor`, lastModified: predictorFixUpdate, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/step-2-ck-percentile`, lastModified: scoreGuidesLaunch, changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE_URL}/nbme-step-1-score-conversion`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE_URL}/usmle-pass-rates`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.75 },
