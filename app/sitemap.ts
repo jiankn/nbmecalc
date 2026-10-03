@@ -31,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/nbme-score-conversion`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/nbme-15-score-conversion`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "monthly", priority: 0.72 },
     { url: `${SITE_URL}/nbme-30-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
-    { url: `${SITE_URL}/nbme-calculator`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${SITE_URL}/nbme-calculator`, lastModified: scoreGuidesLaunch, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/step-1-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-2-predictor`, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-3-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },

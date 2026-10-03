@@ -369,7 +369,7 @@ export default function Step3PercentilePage() {
           <ul className="grid gap-3 font-semibold text-mint-700 sm:grid-cols-2">
             <li>
               <Link href="/step-3-predictor" data-indexing-context="related" className="underline underline-offset-2">
-                Step 3 score predictor (CCMSA forms 6, 7, 8)
+                Step 3 score predictor (UWSA and Free 120)
               </Link>
             </li>
             <li>

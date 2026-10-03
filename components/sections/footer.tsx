@@ -24,7 +24,7 @@ const columns = [
       { label: "NBME Step 1 Conversion", href: "/nbme-step-1-score-conversion" },
       { label: "USMLE Pass Rates", href: "/usmle-pass-rates" },
       { label: "NBME Score Calculator", href: "/" },
-      { label: "NBME Forms Guide", href: "/nbme-calculator" },
+      { label: "NBME Self-Assessments", href: "/nbme-calculator" },
       { label: "CMS Forms Step 2 Guide", href: "/cms-forms-step-2-ck" },
       { label: "Methodology & Sources", href: "/methodology" },
       { label: "Validation Status", href: "/validation" },
