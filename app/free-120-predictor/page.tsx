@@ -74,7 +74,7 @@ const faqs = [
   },
   {
     q: "Does Free 120 also predict Step 1?",
-    a: "Yes for Step 1 candidates — there is a separate Step 1 Free 120. Use the Step 1 selector in the calculator below.",
+    a: "There is a separate Step 1 Free 120, and it is interpreted differently because Step 1 is pass/fail. Use the Free 120 Step 1 readiness check at nbmecalc.com/free-120-step-1, which compares your percent with the low-pass range on NBME CBSSA reports.",
   },
   {
     q: "What is the difference between the current, 2021, and 2019 Free 120?",
@@ -225,7 +225,11 @@ export default function Free120PredictorPage() {
                   as a standalone prediction.
                 </p>
                 <p>
-                  Studying for Step 1 instead? Compare your Free 120 with a{" "}
+                  Studying for Step 1 instead? Use the{" "}
+                  <Link href="/free-120-step-1" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+                    Free 120 Step 1 readiness check
+                  </Link>
+                  , compare it with a{" "}
                   <Link href="/uwsa-1-to-step-1" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
                     UWSA 1 to Step 1 pass estimate
                   </Link>

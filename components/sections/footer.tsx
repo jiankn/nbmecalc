@@ -9,6 +9,7 @@ const columns = [
       { label: "Step 2 CK Predictor", href: "/step-2-predictor" },
       { label: "Step 3 Predictor", href: "/step-3-predictor" },
       { label: "Free 120 Predictor", href: "/free-120-predictor" },
+      { label: "Free 120 Step 1 Check", href: "/free-120-step-1" },
       { label: "AMBOSS Converter", href: "/amboss-converter" },
       { label: "CMS Score Guide", href: "/cms-converter" },
     ],

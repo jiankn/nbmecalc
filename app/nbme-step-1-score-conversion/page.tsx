@@ -303,6 +303,11 @@ export default function NbmeStep1ScoreConversionPage() {
               </Link>
             </li>
             <li>
+              <Link href="/free-120-step-1" data-indexing-context="related" className="underline underline-offset-2">
+                Free 120 Step 1 readiness check
+              </Link>
+            </li>
+            <li>
               <Link href="/nbme-30-score-conversion" data-indexing-context="related" className="underline underline-offset-2">
                 NBME 30 report reader
               </Link>
