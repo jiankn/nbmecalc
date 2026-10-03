@@ -43,9 +43,16 @@ export function ResourceHub() {
               href="/step-2-predictor"
               className="font-semibold text-mint-700 underline underline-offset-2"
             >
-              Step 2 CK predictor
+              Step 2 CK score predictor
             </Link>
-            . Not sure which assessment family you took? Start with the{" "}
+            . Have a percent correct from an NBME form? Use the{" "}
+            <Link
+              href="/nbme-score-conversion"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              NBME score conversion
+            </Link>{" "}
+            page. Not sure which assessment family you took? Start with the{" "}
             <Link
               href="/nbme-calculator"
               className="font-semibold text-mint-700 underline underline-offset-2"

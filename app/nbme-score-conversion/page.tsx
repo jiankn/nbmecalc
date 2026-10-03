@@ -40,11 +40,11 @@ const CCSSA_FORM_NOTES: Record<number, { note: string; source?: { label: string;
     note: "No form-specific NBME note is published. If you took Form 14 alongside another CCSSA, compare the two EPC values rather than raw counts.",
   },
   15: {
-    note: "Also available with Form 15 preselected on a dedicated page that walks through the Total CCSSA Score workflow.",
+    note: "One of the two newest forms. Its own page covers the Form 15 conversion chart and how it pairs with Form 16.",
   },
   16: {
-    note: "The newest CCSSA form. Independent reviewers describe longer, EHR-style vignettes; NBME moved its comprehensive self-assessments to a new Step-style interface on June 8, 2026.",
-    source: { label: "NBME interface update", href: "https://www.nbme.org/news/" },
+    note: "The newest CCSSA form, often saved for the final week. NBME announced its updated, USMLE-style interface would reach the comprehensive self-assessments by the end of March 2026.",
+    source: { label: "NBME interface update", href: "https://www.nbme.org/news/new-examinee-interface-nbmer-self-assessments/" },
   },
 };
 
@@ -54,9 +54,9 @@ const conversionChart = CONVERSION_CHART_PERCENTS.map((percent) => {
 });
 
 export const metadata: Metadata = {
-  title: "NBME Score Conversion Step 2: % Correct to Score (Forms 9–16)",
+  title: "NBME Score Conversion Step 2: % Correct to Score Converter (Forms 9–16)",
   description:
-    "Convert NBME CCSSA percent correct to an estimated Step 2 CK score for Forms 9–16, with a conversion chart, likely range, 2026 percentile, and the 218 passing line.",
+    "Free NBME score converter: turn a CCSSA percent correct (Forms 9–16) into an estimated Step 2 CK score, with a conversion chart, likely range, 2026 percentile, and the 218 passing line.",
   keywords: [
     "nbme score converter",
     "nbme score conversion",
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://nbmecalc.com/nbme-score-conversion" },
   openGraph: {
-    title: "NBME Score Conversion Step 2: % Correct to Score (Forms 9–16)",
+    title: "NBME Score Conversion Step 2: % Correct to Score Converter (Forms 9–16)",
     description:
       "Turn an NBME CCSSA percent correct into an estimated Step 2 CK score, range, and 2026 percentile.",
     url: "https://nbmecalc.com/nbme-score-conversion",
@@ -302,7 +302,7 @@ export default function NbmeScoreConversionPage() {
       <PageHero
         badge="NBME → Step 2 CK conversion"
         title="NBME Score Conversion: Percent Correct to Step 2 CK Score"
-        description={`Enter your CCSSA percent correct for Forms 9–16 and get an estimated Step 2 CK score, likely range, and 2026 percentile. For example, 75% correct is about ${estimateStep2FromPercent(75, "epc").midpoint}.`}
+        description={`Enter one NBME form's percent correct (CCSSA Forms 9–16) and get an estimated Step 2 CK score, likely range, and 2026 percentile. For example, 75% correct is about ${estimateStep2FromPercent(75, "epc").midpoint}. Combining several practice tests? Use the Step 2 CK score predictor.`}
         size="md"
       />
 
@@ -391,9 +391,9 @@ export default function NbmeScoreConversionPage() {
                   <a href={`?form=${form}#percent-converter`} className="text-mint-700 underline underline-offset-4">
                     Convert NBME {form}
                   </a>
-                  {form === "15" && (
-                    <Link href="/nbme-15-score-conversion" className="text-mint-700 underline underline-offset-4">
-                      Form 15 page
+                  {(form === "15" || form === "16") && (
+                    <Link href={`/nbme-${form}-score-conversion`} className="text-mint-700 underline underline-offset-4">
+                      NBME {form} score conversion page
                     </Link>
                   )}
                 </div>
@@ -405,7 +405,11 @@ export default function NbmeScoreConversionPage() {
             <Link href="/nbme-step-1-score-conversion" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
               NBME Step 1 score conversion and readiness check
             </Link>
-            .
+            . Have more than one practice test? The{" "}
+            <Link href="/step-2-predictor" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              Step 2 CK score predictor
+            </Link>{" "}
+            combines several NBME, UWSA, and Free 120 results into one estimate.
           </p>
         </div>
       </section>

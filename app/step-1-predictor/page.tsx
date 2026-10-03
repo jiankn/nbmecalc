@@ -363,7 +363,7 @@ export default function Step1PredictorPage() {
                 data-indexing-context="related"
                 className="underline underline-offset-2"
               >
-                NBME score report guide
+                NBME score conversion
               </Link>
             </li>
             <li>

@@ -7,13 +7,12 @@ import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title:
-    "Step 2 CK Score Predictor — Free USMLE Calculator | NBMEcalc",
+  title: "Step 2 CK Score Predictor: Combine NBME, UWSA & Free 120 (Free)",
   description:
-    "Free Step 2 CK score predictor and calculator. Combine CCSSA forms 9-15, UWSA, Free 120, and AMBOSS inputs with a transparent planning range.",
+    "Free Step 2 CK score predictor that combines several practice tests (CCSSA forms 9–16, UWSA, Free 120, AMBOSS) into one estimate, plus what research says about how well each one predicts.",
   alternates: { canonical: "https://nbmecalc.com/step-2-predictor" },
   openGraph: {
-    title: "Step 2 CK Score Predictor — Free USMLE Calculator",
+    title: "Step 2 CK Score Predictor: Combine NBME, UWSA & Free 120",
     description:
       "Free Step 2 CK score predictor. Combine compatible practice inputs and review the model's assumptions, planning range, and official-source study priorities.",
     url: "https://nbmecalc.com/step-2-predictor",
@@ -54,6 +53,64 @@ const sourceCorrections = [
   { src: "UWSA 2", note: "Internal source adjustment", adj: "−2" },
   { src: "Free 120", note: "Percentage input; internal mapping", adj: "0" },
   { src: "AMBOSS SA", note: "Preserve reported 3-digit estimate; lower source weight", adj: "0" },
+];
+
+// 预测效力证据，2026-10-03 核对：同行评审结论取自 Jacobparayil 等人的系统综述（Cureus 2022，纳入 52 项研究），
+// NBME 的说法取自官方 CCSSA 样例报告。没有找到同行评审研究的来源如实写"未找到"，不引用网上自报数据。
+const EVIDENCE_SOURCES = {
+  review: {
+    label: "Jacobparayil et al., Predictors of Performance on USMLE Step 2 CK: A Systematic Literature Review (Cureus, 2022)",
+    href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8933259/",
+  },
+  ccssaSample: {
+    label: "NBME CCSSA sample score report",
+    href: "https://www.nbme.org/wp-content/uploads/2026/04/Comprehensive_Clinical_Science_Self-Assessment_Sample.pdf",
+  },
+} as const;
+
+const predictiveEvidence = [
+  {
+    source: "NBME CCSSA (Forms 9–16)",
+    evidence:
+      "NBME says the Total CCSSA Score estimates your Step 2 CK score if both were taken with the same knowledge and conditions. The report adds a likely range (about ±8 points in NBME's sample) and a pass probability modeled on examinees who tested within a week. A 52-study review found CCSSA a good predictor, and low CCSSA scores flagged risk of failing (Morrison et al., 2014).",
+    type: "Official statement + peer-reviewed",
+    use: "Kept as the midpoint with full weight. No extra curve is applied.",
+  },
+  {
+    source: "NBME CCSE (school-administered)",
+    evidence:
+      "Correlation of r = 0.57 with Step 2 CK (Guiot et al., 2018). A CCSE score above 90 corresponded to a near-100% chance of passing (Morrison et al., 2018).",
+    type: "Peer-reviewed",
+    use: "Not a calculator input; its scale differs from CCSSA.",
+  },
+  {
+    source: "NBME clinical subject (shelf) exams",
+    evidence:
+      "The same review reports clinical NBME exam grades correlating with Step 2 CK at r = 0.77, and each extra point on the surgery exam raising the odds of passing about 1.2 times.",
+    type: "Peer-reviewed",
+    use: "Not an input; useful for spotting weak subjects early.",
+  },
+  {
+    source: "UWorld UWSA 1 and UWSA 2",
+    evidence:
+      "We found no peer-reviewed study of how well UWSA predicts Step 2 CK. Students widely report that UWSA scores run higher than the real exam, more so for UWSA 1.",
+    type: "No independent study found",
+    use: "Internal assumption: subtract 5 points (UWSA 1) and 2 points (UWSA 2); UWSA 1 gets a lower weight.",
+  },
+  {
+    source: "Free 120 (USMLE sample questions)",
+    evidence:
+      "USMLE offers these questions for familiarization and reports only a raw percent. No official conversion or peer-reviewed validation exists.",
+    type: "No independent study found",
+    use: "Converted with an internal planning curve and best read alongside a CCSSA.",
+  },
+  {
+    source: "AMBOSS Step 2 Self-Assessment",
+    evidence:
+      "AMBOSS reports its own 3-digit predicted score. We found no independent peer-reviewed validation.",
+    type: "Vendor-reported",
+    use: "Kept as reported, but weighted lower than CCSSA when combined.",
+  },
 ];
 
 const faqs = [
@@ -115,8 +172,8 @@ export default function Step2PredictorPage() {
 
       <PageHero
         badge="Free Step 2 CK score predictor"
-        title="Step 2 CK Score Predictor and Calculator"
-        description="Free USMLE Step 2 CK score predictor. Combine CCSSA, UWSA, Free 120, and AMBOSS inputs into one independent estimate. Review the midpoint together with its estimated planning range."
+        title="Step 2 CK Score Predictor: Combine Your Practice Tests"
+        description="One practice score is a checkpoint; several make a prediction. Enter any mix of CCSSA, UWSA, Free 120, and AMBOSS results to get one Step 2 CK estimate with a planning range. Converting a single NBME form? Use the NBME score conversion page."
         size="md"
       />
 
@@ -249,6 +306,77 @@ export default function Step2PredictorPage() {
         </div>
       </section>
 
+      {/* 各来源的预测证据 */}
+      <section id="predictive-evidence" className="py-16 lg:py-20 bg-white border-b border-gray-200">
+        <div className="container max-w-5xl">
+          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
+            How well does each practice test predict Step 2 CK?
+          </h2>
+          <p className="text-gray-700 text-lg leading-relaxed max-w-3xl mb-8">
+            Not every input deserves the same trust. This table separates what NBME states, what peer-reviewed
+            research found, and where no independent evidence exists. It is why the predictor weights sources
+            differently.
+          </p>
+          <div className="overflow-hidden rounded-3xl border border-gray-200">
+            <div className="overflow-x-auto">
+              <table className="min-w-[720px] text-sm">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th scope="col" className="px-4 py-3 text-left font-bold text-gray-900">Practice test</th>
+                    <th scope="col" className="px-4 py-3 text-left font-bold text-gray-900">What the evidence says</th>
+                    <th scope="col" className="px-4 py-3 text-left font-bold text-gray-900">Evidence type</th>
+                    <th scope="col" className="px-4 py-3 text-left font-bold text-gray-900">How this predictor uses it</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 align-top">
+                  {predictiveEvidence.map((row) => (
+                    <tr key={row.source}>
+                      <td className="px-4 py-3 font-bold text-gray-950">{row.source}</td>
+                      <td className="px-4 py-3 text-gray-700">{row.evidence}</td>
+                      <td className="px-4 py-3 text-gray-700">{row.type}</td>
+                      <td className="px-4 py-3 text-gray-700">{row.use}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-relaxed text-amber-950">
+            <strong>About the correlation numbers you see online.</strong> Figures such as &ldquo;r = 0.9 with real
+            Step 2 CK&rdquo; usually come from score-sharing surveys and spreadsheets where students volunteer their
+            results. People who did well are more likely to report, so these numbers tend to look better than the
+            truth. They are not peer-reviewed, and this page does not repeat them as evidence.
+          </div>
+          <p className="mt-4 text-sm text-gray-600">
+            Sources:{" "}
+            <a
+              href={EVIDENCE_SOURCES.review.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-evidence-source="primary"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              {EVIDENCE_SOURCES.review.label}
+            </a>
+            ;{" "}
+            <a
+              href={EVIDENCE_SOURCES.ccssaSample.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-evidence-source="primary"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              {EVIDENCE_SOURCES.ccssaSample.label}
+            </a>
+            . Model assumptions for each source are listed on the{" "}
+            <Link href="/methodology" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              methodology page
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
       {/* Timeline */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-4xl">
@@ -343,7 +471,7 @@ export default function Step2PredictorPage() {
                 data-indexing-context="related"
                 className="underline underline-offset-2"
               >
-                How to read CCSSA Total Scores
+                NBME score conversion for CCSSA forms
               </Link>
             </li>
             <li>
@@ -456,7 +584,7 @@ export default function Step2PredictorPage() {
             </Button>
             <Button variant="outline" size="lg" asChild>
               <Link href="/nbme-score-conversion">
-                Learn how to read CCSSA scores
+                Open the NBME score converter
               </Link>
             </Button>
           </div>

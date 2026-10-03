@@ -228,7 +228,7 @@ export default function Nbme30ScoreConversionPage() {
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Button asChild>
               <Link href="/nbme-score-conversion">
-                Open the NBME conversion hub
+                Open the NBME score conversion page
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>

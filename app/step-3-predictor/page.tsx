@@ -300,7 +300,7 @@ export default function Step3PredictorPage() {
               href="/nbme-score-conversion"
               className="text-mint-800 underline underline-offset-4 font-semibold"
             >
-              NBME score report guide
+              NBME score conversion guide
             </Link>
             . For context on how first-time Step 3 takers perform, see the
             official{" "}

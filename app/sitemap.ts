@@ -23,17 +23,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const percentileLaunch = new Date("2026-09-29");
   // Step 3 score guide and USMLE score release date calculator.
   const scoreGuidesLaunch = new Date("2026-10-03");
+  // Cannibalization fix (titles, anchors), Step 2 predictor evidence, Form 15/16 pages.
+  const rankingFixUpdate = new Date("2026-10-03");
 
   const liveRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 1.0 },
 
     // Core SEO landing pages
-    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.95 },
-    { url: `${SITE_URL}/nbme-15-score-conversion`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "monthly", priority: 0.72 },
+    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: rankingFixUpdate, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${SITE_URL}/nbme-15-score-conversion`, lastModified: rankingFixUpdate, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${SITE_URL}/nbme-16-score-conversion`, lastModified: rankingFixUpdate, changeFrequency: "monthly", priority: 0.78 },
     { url: `${SITE_URL}/nbme-30-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
     { url: `${SITE_URL}/nbme-calculator`, lastModified: scoreGuidesLaunch, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/step-1-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${SITE_URL}/step-2-predictor`, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/step-2-predictor`, lastModified: rankingFixUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-3-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/step-2-ck-percentile`, lastModified: scoreGuidesLaunch, changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE_URL}/nbme-step-1-score-conversion`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.85 },
@@ -58,7 +61,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/uwsa-2-to-step-2`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/free-120-predictor`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/amboss-converter`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${SITE_URL}/cms-converter`, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${SITE_URL}/cms-converter`, lastModified: rankingFixUpdate, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/cms-forms-step-2-ck`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.78 },
 
     // Comparison pages

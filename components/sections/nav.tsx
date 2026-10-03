@@ -21,7 +21,8 @@ const navItems = [
     label: "Step 1",
     children: [
       { label: "Step 1 Predictor", href: "/step-1-predictor" },
-      { label: "NBME → Step 1", href: "/nbme-score-conversion#step1" },
+      { label: "NBME → Step 1", href: "/nbme-step-1-score-conversion" },
+      { label: "Free 120 → Step 1", href: "/free-120-step-1" },
       { label: "UWSA → Step 1", href: "/uwsa-1-to-step-1" },
     ],
   },
@@ -29,15 +30,17 @@ const navItems = [
     label: "Step 2 CK",
     children: [
       { label: "Step 2 Predictor", href: "/step-2-predictor" },
-      { label: "NBME → Step 2", href: "/nbme-score-conversion" },
+      { label: "NBME Score Conversion", href: "/nbme-score-conversion" },
       { label: "Free 120 → Step 2", href: "/free-120-predictor" },
       { label: "AMBOSS → Step 2", href: "/amboss-converter" },
+      { label: "Step 2 CK Percentile", href: "/step-2-ck-percentile" },
     ],
   },
   {
     label: "Step 3",
     children: [
       { label: "Step 3 Predictor", href: "/step-3-predictor" },
+      { label: "Step 3 Percentile & Passing", href: "/step-3-percentile" },
       { label: "Step 3 CCS Cases", href: "/blog/step-3-ccs-cases-complete-walkthrough" },
     ],
   },

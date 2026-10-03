@@ -425,7 +425,7 @@ export default function Step2CkPercentilePage() {
             </li>
             <li>
               <Link href="/nbme-score-conversion" data-indexing-context="related" className="underline underline-offset-2">
-                NBME CCSSA score conversion guide
+                NBME score conversion (CCSSA)
               </Link>
             </li>
             <li>

@@ -87,3 +87,11 @@ export function percentFromCorrect(correct: number, total = CCSSA_QUESTIONS) {
 
 /** 换算对照表的行：50%–90%，每 2 个百分点一行。 */
 export const CONVERSION_CHART_PERCENTS = Array.from({ length: 21 }, (_, i) => 50 + i * 2);
+
+/** 反推：换算中值达到某个 Step 2 CK 分数所需的最低整数等值正确率（EPC）。 */
+export function percentForScore(score: number): number {
+  for (let p = 0; p <= 100; p++) {
+    if (estimateStep2FromPercent(p, "epc").midpoint >= score) return p;
+  }
+  return 100;
+}

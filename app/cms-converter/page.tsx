@@ -9,12 +9,12 @@ const insightsGuideUrl =
   "https://www.nbme.org/sites/default/files/2024-01/INSIGHTS_User_Guide.pdf";
 
 export const metadata: Metadata = {
-  title: "CMS Score Conversion: Read the NBME 1–30 Score | NBMEcalc",
+  title: "CMS Score Conversion: Read Your 1–30 Clinical Mastery Series Score",
   description:
-    "Learn how to read the NBME CMS 1–30 total score, find the approximate Subject Exam score on your report, and avoid unsupported Step 2 CK conversions.",
+    "Read a Clinical Mastery Series (CMS) 1–30 total score, find the approximate Subject Exam score on your report, and see why CMS forms have no direct Step 2 CK conversion.",
   alternates: { canonical: "https://nbmecalc.com/cms-converter" },
   openGraph: {
-    title: "CMS Score Conversion: Read the NBME 1–30 Score",
+    title: "CMS Score Conversion: Read Your 1–30 Clinical Mastery Series Score",
     description:
       "Read the official CMS total score and its approximate Subject Exam equivalent without treating a subject form as a Step 2 CK prediction.",
     url: "https://nbmecalc.com/cms-converter",
@@ -137,7 +137,7 @@ export default function CmsConverterPage() {
 
       <PageHero
         badge="Official CMS score scale"
-        title="CMS Score Conversion: How to Read the NBME 1–30 Score"
+        title="CMS Score Conversion: How to Read Your 1–30 CMS Score"
         description="Clinical Science Mastery Series reports use a 1–30 total score and provide an approximate score on the matching NBME Subject Exam scale. They do not provide a direct Step 2 CK conversion."
         size="md"
       />

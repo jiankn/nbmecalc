@@ -335,7 +335,7 @@ export default function NbmeCalculatorPage() {
                 {CCSSA_FORMS.map((n) => (
                   <Link
                     key={n}
-                    href={`/nbme-score-conversion#nbme-${n}`}
+                    href={n === 15 || n === 16 ? `/nbme-${n}-score-conversion` : `/nbme-score-conversion#nbme-${n}`}
                     className="rounded-full border border-gray-200 px-4 py-1.5 font-mono text-sm font-semibold text-gray-900 transition hover:border-mint-500 hover:text-mint-800"
                   >
                     NBME {n}
@@ -524,7 +524,7 @@ export default function NbmeCalculatorPage() {
             </Button>
             <Button variant="outline" size="lg" asChild>
               <Link href="/nbme-score-conversion" data-indexing-context="related">
-                Read the NBME score report guide
+                Open the NBME score converter
               </Link>
             </Button>
           </div>

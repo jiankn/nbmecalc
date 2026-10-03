@@ -55,3 +55,12 @@ describe("CONVERSION_CHART_PERCENTS", () => {
     expect(CONVERSION_CHART_PERCENTS).toHaveLength(21);
   });
 });
+
+describe("percentForScore", () => {
+  it("returns the lowest percent whose midpoint reaches the score", async () => {
+    const { percentForScore, estimateStep2FromPercent } = await import("@/lib/nbme-percent-model");
+    const p = percentForScore(218);
+    expect(estimateStep2FromPercent(p, "epc").midpoint).toBeGreaterThanOrEqual(218);
+    expect(estimateStep2FromPercent(p - 1, "epc").midpoint).toBeLessThan(218);
+  });
+});
