@@ -280,7 +280,12 @@ export default function Step2CkPercentilePage() {
           </p>
           <p className="mb-4 leading-relaxed text-gray-700">
             A 220 on Step 3 is at the {pct3(220)} percentile, a 230 at the {pct3(230)}, and a 240 at the{" "}
-            {pct3(240)}. Switch the calculator above to <strong>Step 3</strong> to check any other score.
+            {pct3(240)}. Switch the calculator above to <strong>Step 3</strong> to check any other score, or see the
+            full{" "}
+            <Link href="/step-3-percentile" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              Step 3 percentile table, passing score, and pass rates
+            </Link>
+            .
           </p>
           <p className="leading-relaxed text-gray-700">
             Step 2 CK and Step 3 share a 1–300 scale but are not comparable: a 220 on Step 2 CK is not equivalent
@@ -379,6 +384,11 @@ export default function Step2CkPercentilePage() {
             <li>
               <Link href="/step-3-predictor" data-indexing-context="related" className="underline underline-offset-2">
                 Step 3 score predictor
+              </Link>
+            </li>
+            <li>
+              <Link href="/usmle-score-release-dates" data-indexing-context="related" className="underline underline-offset-2">
+                When will my Step 2 CK score come out?
               </Link>
             </li>
           </ul>

@@ -311,7 +311,15 @@ export default function Step3PredictorPage() {
             >
               USMLE pass rates by Step
             </Link>
-            .
+            , and check where a Step 3 score ranks with the{" "}
+            <Link
+              href="/step-3-percentile"
+              data-indexing-context="related"
+              className="text-mint-800 underline underline-offset-4 font-semibold"
+            >
+              Step 3 percentile, passing score, and average score
+            </Link>
+            {" "}page.
           </p>
 
           <h3 className="text-2xl font-extrabold tracking-tight mb-3">

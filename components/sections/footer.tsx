@@ -18,6 +18,8 @@ const columns = [
     links: [
       { label: "NBME Score Conversion", href: "/nbme-score-conversion" },
       { label: "Step 2 CK Percentiles", href: "/step-2-ck-percentile" },
+      { label: "Step 3 Percentile & Passing Score", href: "/step-3-percentile" },
+      { label: "USMLE Score Release Dates", href: "/usmle-score-release-dates" },
       { label: "NBME Step 1 Conversion", href: "/nbme-step-1-score-conversion" },
       { label: "USMLE Pass Rates", href: "/usmle-pass-rates" },
       { label: "NBME Score Calculator", href: "/" },

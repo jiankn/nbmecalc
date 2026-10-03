@@ -201,7 +201,15 @@ export default function UsmlePassRatesPage() {
               <strong>Passing scores:</strong> Step 2 CK {NORM_INFO.step2ck.passingScore} and Step 3{" "}
               {NORM_INFO.step3.passingScore}; Step 1 is reported pass/fail. To see where a numeric score ranks, use the{" "}
               <Link href="/step-2-ck-percentile" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
-                Step 2 CK and Step 3 percentile calculator
+                Step 2 CK percentile calculator
+              </Link>{" "}
+              or the{" "}
+              <Link href="/step-3-percentile" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+                Step 3 percentile page
+              </Link>
+              . To estimate when a result will arrive, use the{" "}
+              <Link href="/usmle-score-release-dates" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+                USMLE score release date calculator
               </Link>
               .
             </li>
