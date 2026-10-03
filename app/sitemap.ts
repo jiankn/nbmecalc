@@ -35,12 +35,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/step-1-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-2-predictor`, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-3-predictor`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${SITE_URL}/step-2-ck-percentile`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${SITE_URL}/step-2-ck-percentile`, lastModified: scoreGuidesLaunch, changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE_URL}/nbme-step-1-score-conversion`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE_URL}/usmle-pass-rates`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.75 },
     { url: `${SITE_URL}/step-3-percentile`, lastModified: scoreGuidesLaunch, changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE_URL}/usmle-score-release-dates`, lastModified: scoreGuidesLaunch, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/free-120-step-1`, lastModified: scoreGuidesLaunch, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${SITE_URL}/step-2-score-by-specialty`, lastModified: scoreGuidesLaunch, changeFrequency: "monthly", priority: 0.85 },
 
     // Marketing and trust pages. Legal and utility pages stay reachable from
     // the footer, but are kept out of the XML sitemap so the sitemap only

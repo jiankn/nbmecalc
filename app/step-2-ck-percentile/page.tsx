@@ -11,7 +11,9 @@ import {
   USMLE_SCORING_URL,
   formatPercentile,
   lookupPercentile,
+  summarizeScore,
 } from "@/lib/usmle-norms";
+import { SPECIALTY_STEP2, countAtOrAboveMedian } from "@/lib/nrmp-step2-specialty";
 
 const PAGE_URL = "https://nbmecalc.com/step-2-ck-percentile";
 const title = "Step 2 CK Percentile Calculator: 2026 USMLE Score Table";
@@ -50,6 +52,7 @@ const pct3 = (score: number) => formatPercentile(lookupPercentile("step3", score
 const visibleRows = NORM_TABLE.filter(([score]) => score <= 280 && score >= 190);
 
 const ckBenchmarks = [230, 240, 250, 260, 270];
+const scoreCards = [230, 235, 240, 245, 250, 255, 260, 265, 270];
 
 const faqs = [
   {
@@ -191,6 +194,54 @@ export default function Step2CkPercentilePage() {
         </div>
       </section>
 
+      {/* 按具体分数 */}
+      <section id="by-score" className="bg-white py-16 lg:py-20">
+        <div className="container max-w-5xl">
+          <h2 className="mb-4 text-3xl font-extrabold tracking-tight lg:text-4xl">
+            Step 2 CK percentile by score: 230 to 270
+          </h2>
+          <p className="mb-8 max-w-3xl text-lg leading-relaxed text-gray-700">
+            The scores people ask about most, read from the {USMLE_NORMS_SOURCE.updatedLabel} table. The last line
+            of each card counts the {SPECIALTY_STEP2.length} specialties in NRMP&apos;s 2026 data where that score is at
+            or above the median of matched U.S. MD seniors.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {scoreCards.map((score) => {
+              const r = summarizeScore("step2ck", score);
+              return (
+                <div key={score} id={`score-${score}`} className="scroll-mt-24 rounded-3xl border border-gray-200 bg-mint-50/30 p-6">
+                  <h3 className="font-bold text-gray-950">What percentile is a {score} on Step 2 CK?</h3>
+                  <p className="mt-2 font-mono text-3xl font-extrabold text-gray-950">{formatPercentile(r.percentile)}</p>
+                  <ul className="mt-3 space-y-1 text-sm text-gray-700">
+                    <li>
+                      {r.pointsVsMean === 0
+                        ? `Equal to the national mean (${ckMean.mean})`
+                        : `${Math.abs(r.pointsVsMean)} points ${r.pointsVsMean > 0 ? "above" : "below"} the national mean (${ckMean.mean})`}
+                    </li>
+                    <li>
+                      {r.pointsVsPassing} points above passing ({ck.passingScore})
+                    </li>
+                    <li>
+                      ±1 SEM band ({r.semRange[0]}–{r.semRange[1]}): {formatPercentile(r.semLow)} to {formatPercentile(r.semHigh)}
+                    </li>
+                    <li>
+                      At or above the matched median in {countAtOrAboveMedian(score)} of {SPECIALTY_STEP2.length} specialties
+                    </li>
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+          <p className="mt-6 text-gray-700">
+            See where your score sits for each specialty on the{" "}
+            <Link href="/step-2-score-by-specialty" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              Step 2 CK score by specialty
+            </Link>{" "}
+            page.
+          </p>
+        </div>
+      </section>
+
       {/* 平均分与分数范围 */}
       <section id="average-score" className="bg-white py-16 lg:py-20">
         <div className="container max-w-3xl">
@@ -251,17 +302,13 @@ export default function Step2CkPercentilePage() {
             ))}
           </ul>
           <p className="leading-relaxed text-gray-700">
-            Specialty expectations differ and change every Match cycle. For the score distributions of matched and
-            unmatched applicants in a specific specialty, use the NRMP&apos;s{" "}
-            <a
-              href="https://www.nrmp.org/match-data/2024/08/charting-outcomes-usmle-step-2-ck-exam-baseline/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-mint-800 underline underline-offset-4"
-            >
-              Charting Outcomes report
-            </a>
-            . USMLE itself cautions that small score differences alone should not drive selection decisions.
+            Specialty expectations differ and change every Match cycle. Compare your score with matched and
+            unmatched U.S. MD seniors in 23 specialties on the{" "}
+            <Link href="/step-2-score-by-specialty" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              Step 2 CK score by specialty
+            </Link>{" "}
+            page, built from NRMP&apos;s 2026 Charting Outcomes report. USMLE itself cautions that small score
+            differences alone should not drive selection decisions.
           </p>
         </div>
       </section>
