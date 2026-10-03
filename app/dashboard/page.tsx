@@ -73,7 +73,7 @@ export default function DashboardOverview() {
         <StatCard
           label="Plan"
           value={
-            session.status === "loading" ? "…" : hasLifetime ? "Lifetime" : "Free"
+            session.status === "loading" ? "…" : hasLifetime ? "Lifetime · ad-free" : "Free"
           }
           icon={
             <Image

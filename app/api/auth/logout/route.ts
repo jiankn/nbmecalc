@@ -11,6 +11,7 @@ import {
   destroySession,
   readSessionCookie,
 } from "@/lib/auth/session";
+import { buildClearAdFreeCookie } from "@/lib/ad-free";
 
 export const runtime = "edge";
 
@@ -27,11 +28,10 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const url = new URL(req.url);
-  return NextResponse.json(
-    { ok: true },
-    {
-      status: 200,
-      headers: { "Set-Cookie": buildClearSessionCookie(url.protocol === "https:") },
-    }
-  );
+  const secure = url.protocol === "https:";
+  // 同时清掉登录 cookie 和 Lifetime 免广告标记：退出登录后恢复广告。
+  const headers = new Headers();
+  headers.append("Set-Cookie", buildClearSessionCookie(secure));
+  headers.append("Set-Cookie", buildClearAdFreeCookie(secure));
+  return NextResponse.json({ ok: true }, { status: 200, headers });
 }

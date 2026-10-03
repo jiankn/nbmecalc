@@ -118,3 +118,8 @@
     margin: 0.5in;
   }
 }
+
+/* Lifetime 免广告：头部脚本已暂停广告请求时，收起空的广告占位框（占位框里没有请求过广告）。 */
+html[data-ad-free="1"] aside[data-ad-placement] {
+  display: none;
+}

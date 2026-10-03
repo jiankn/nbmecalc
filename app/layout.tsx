@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { FunnelPageView } from "@/components/funnel-page-view";
 import { AdSenseScript } from "@/components/ads/adsense-script";
+import { AdFreeVerifier } from "@/components/ads/ad-free-verifier";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -84,12 +85,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${jakarta.variable} ${mono.variable}`}>
+    // suppressHydrationWarning：免广告脚本会在 React 接管前给 <html> 加 data-ad-free 属性。
+    <html lang="en" className={`${jakarta.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <AdSenseScript />
       </head>
       <body className="font-sans antialiased">
         <FunnelPageView />
+        <AdFreeVerifier />
         {children}
       </body>
     </html>

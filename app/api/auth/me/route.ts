@@ -13,6 +13,7 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db/client";
 import { loadSession } from "@/lib/auth/session";
+import { buildAdFreeCookie, buildClearAdFreeCookie, hasAdFreeCookie } from "@/lib/ad-free";
 
 export const runtime = "edge";
 
@@ -22,9 +23,16 @@ export async function GET(req: Request): Promise<Response> {
     return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
   }
 
+  const secure = new URL(req.url).protocol === "https:";
+  const hadAdFree = hasAdFreeCookie(req.headers.get("cookie"));
+
   const session = await loadSession(db, req);
   if (!session) {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+    // 未登录时清掉免广告标记（如果有），广告照常显示。
+    return NextResponse.json(
+      { error: "Not authenticated." },
+      { status: 401, headers: hadAdFree ? { "Set-Cookie": buildClearAdFreeCookie(secure) } : undefined }
+    );
   }
 
   const u = session.user;
@@ -43,7 +51,15 @@ export async function GET(req: Request): Promise<Response> {
     {
       status: 200,
       // Hint to the browser/CDN: cookies make this per-user, never share.
-      headers: { "Cache-Control": "private, no-store" },
+      headers: {
+        "Cache-Control": "private, no-store",
+        // Lifetime 会员续写免广告标记；不是会员但带着标记（退款、伪造）则清除。
+        ...(u.lifetimeAccess
+          ? { "Set-Cookie": buildAdFreeCookie(secure) }
+          : hadAdFree
+            ? { "Set-Cookie": buildClearAdFreeCookie(secure) }
+            : {}),
+      },
     }
   );
 }

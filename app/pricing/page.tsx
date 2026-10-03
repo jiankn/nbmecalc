@@ -65,6 +65,7 @@ const detailedFeatures = [
   { name: "Unlimited predictions & refreshes", free: false, single: false, lifetime: true },
   { name: "Multi-Step tracking (1, 2 CK, 3)", free: false, single: false, lifetime: true },
   { name: "Real-time score timeline", free: false, single: false, lifetime: true },
+  { name: "Ad-free browsing while signed in", free: false, single: false, lifetime: true },
   { name: "Priority email support", free: false, single: false, lifetime: true },
   { name: "Ongoing updates to core features", free: false, single: false, lifetime: true },
 ];
@@ -93,6 +94,10 @@ const refundFAQ = [
   {
     q: "What does Lifetime include in the future?",
     a: "Lifetime includes ongoing updates to NBMEcalc's core prediction, tracking, and reporting features. Major standalone products or services introduced later may be priced separately.",
+  },
+  {
+    q: "Does Lifetime remove ads?",
+    a: "Yes. While you are signed in to your Lifetime account, NBMEcalc does not request or show ads on any page. If you sign out or use a browser where you are not signed in, ads appear as usual until you sign in again.",
   },
   {
     q: "Are there any hidden fees?",

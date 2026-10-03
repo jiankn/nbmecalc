@@ -29,7 +29,7 @@ export default function PrivacyPage() {
         size="sm"
       />
 
-      <LegalContent lastUpdated="August 10, 2026">
+      <LegalContent lastUpdated="October 3, 2026">
         <h2>1. Who we are</h2>
         <p>
           nbmecalc.com (&quot;NBMEcalc&quot;, &quot;we&quot;, &quot;us&quot;,
@@ -185,6 +185,12 @@ export default function PrivacyPage() {
           <li>
             <strong>Session cookie</strong> (<code>nb_session</code>) — keeps
             you logged in. Expires after 30 days. Strictly necessary.
+          </li>
+          <li>
+            <strong>Ad-free preference</strong> (<code>nb_adfree</code>) — set
+            only for signed-in Lifetime members so pages skip ad requests. It
+            contains no personal data, is cleared when you sign out, and expires
+            after 30 days.
           </li>
           <li>
             <strong>Analytics</strong> — Cloudflare Web Analytics is designed

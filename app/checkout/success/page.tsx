@@ -41,7 +41,7 @@ export default async function CheckoutSuccessPage({
             </h1>
             <p className="text-lg text-gray-600 mb-8">
               {isLifetime
-                ? "Thank you for becoming a Lifetime member. Your account now has permanent access to NBMEcalc's core features."
+                ? "Thank you for becoming a Lifetime member. Your account now has permanent access to NBMEcalc's core features, and the site is ad-free whenever you are signed in."
                 : "Thank you for your purchase. Your full Step report is being generated and will arrive by email shortly."}
             </p>
 

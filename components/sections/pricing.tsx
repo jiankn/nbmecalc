@@ -50,6 +50,7 @@ const standardPlans = [
 
 const lifetimeFeatures = [
   "Everything in Single Report",
+  "Ad-free while signed in",
   "Saved predictions & refreshes",
   "Multi-Step tracking (1, 2 CK, 3)",
   "Real-time score timeline",
