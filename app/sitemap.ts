@@ -28,12 +28,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Step 3 title reverted to lead with NBME 6 & 7 conversion; Step 1 no longer
   // takes Free 120 as a pass-probability input.
   const predictorFixUpdate = new Date("2026-10-03");
+  // Bing Copilot citation follow-up: quick-answer block on the conversion page,
+  // 215–225 percentile cards (around the 218 passing score).
+  const aiCitationUpdate = new Date("2026-10-14");
 
   const liveRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 1.0 },
 
     // Core SEO landing pages
-    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: rankingFixUpdate, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: aiCitationUpdate, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/nbme-15-score-conversion`, lastModified: rankingFixUpdate, changeFrequency: "monthly", priority: 0.75 },
     { url: `${SITE_URL}/nbme-16-score-conversion`, lastModified: rankingFixUpdate, changeFrequency: "monthly", priority: 0.78 },
     { url: `${SITE_URL}/nbme-30-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
@@ -41,7 +44,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/step-1-predictor`, lastModified: predictorFixUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-2-predictor`, lastModified: rankingFixUpdate, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/step-3-predictor`, lastModified: predictorFixUpdate, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${SITE_URL}/step-2-ck-percentile`, lastModified: scoreGuidesLaunch, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${SITE_URL}/step-2-ck-percentile`, lastModified: aiCitationUpdate, changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE_URL}/nbme-step-1-score-conversion`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE_URL}/usmle-pass-rates`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.75 },
     { url: `${SITE_URL}/step-3-percentile`, lastModified: scoreGuidesLaunch, changeFrequency: "monthly", priority: 0.85 },

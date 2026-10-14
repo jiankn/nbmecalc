@@ -141,10 +141,10 @@ const formFamilySections = [
         label: "NBME 15 Step 2 CK score conversion",
         href: "/nbme-15-score-conversion",
       },
-      { label: "NBME 16 score conversion", href: "#nbme-16" },
+      { label: "NBME 16 score conversion", href: "/nbme-16-score-conversion" },
     ],
     note:
-      "Most Form queries remain consolidated here. Form 15 has a dedicated pilot because Search Console and the live SERP both show a distinct calculator-shaped task.",
+      "Most Form queries remain consolidated here. Forms 15 and 16 have dedicated pages because Search Console and the live SERP both show a distinct calculator-shaped task.",
     href: "/step-2-predictor",
     cta: "Open Step 2 predictor",
   },
@@ -208,6 +208,11 @@ const conversionHubLinks = [
     href: "/nbme-15-score-conversion",
     title: "NBME 15 score conversion",
     desc: "Open Step 2 CK with CCSSA Form 15 preselected.",
+  },
+  {
+    href: "/nbme-16-score-conversion",
+    title: "NBME 16 score conversion",
+    desc: "Open Step 2 CK with CCSSA Form 16 preselected.",
   },
   {
     href: "/nbme-30-score-conversion",
@@ -313,6 +318,59 @@ export default function NbmeScoreConversionPage() {
         </div>
       </section>
 
+      {/* 快速答案：泛词 "nbme score conversion" 可能指 Step 1/2/3 任一门，一段话分别回答，方便 AI 摘要直接引用 */}
+      <section id="quick-answer" className="border-t border-gray-200 bg-white py-12 lg:py-14">
+        <div className="container max-w-4xl">
+          <h2 className="mb-4 text-2xl font-extrabold tracking-tight lg:text-3xl">
+            NBME score conversion: quick answer by exam
+          </h2>
+          <p className="mb-6 leading-relaxed text-gray-700">
+            NBME does not publish one conversion table for every exam. How you convert depends on which
+            self-assessment you took:
+          </p>
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-2xl border border-gray-200 bg-mint-50/30 p-5">
+              <h3 className="font-bold text-gray-950">Step 2 CK (CCSSA Forms 9–16)</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                Each 1% of equated percent correct is worth about {Math.round(POINTS_PER_PERCENT * 10) / 10} points
+                in this model: 65% ≈ {estimateStep2FromPercent(65, "epc").midpoint} (passing is 218), 75% ≈{" "}
+                {estimateStep2FromPercent(75, "epc").midpoint}, 80% ≈ {estimateStep2FromPercent(80, "epc").midpoint}.
+                A Total CCSSA Score on your report is already NBME&apos;s own Step 2 CK estimate.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-gray-200 bg-mint-50/30 p-5">
+              <h3 className="font-bold text-gray-950">Step 1 (CBSSA Forms 26–33)</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                Step 1 is pass/fail, so there is no three-digit score to convert to. Read the estimated probability
+                of passing and the low-pass range on your report, or use the{" "}
+                <Link href="/nbme-step-1-score-conversion" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+                  Step 1 readiness check
+                </Link>
+                .
+              </p>
+            </div>
+            <div className="rounded-2xl border border-gray-200 bg-mint-50/30 p-5">
+              <h3 className="font-bold text-gray-950">Step 3 (CCMSA)</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                The current CCMSA reports a 10–800 assessment score, not a Step 3 score, and NBME does not publish a
+                conversion. The{" "}
+                <Link href="/step-3-predictor" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+                  Step 3 score predictor
+                </Link>{" "}
+                explains how to read NBME 6 and 7 results.
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm text-gray-600">
+            Took the Free 120 instead? Use the{" "}
+            <Link href="/free-120-predictor" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              Free 120 score conversion
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
       {/* 换算对照表 */}
       <section id="conversion-chart" className="border-t border-gray-200 bg-mint-50/30 py-16 lg:py-20">
         <div className="container max-w-4xl">
@@ -388,13 +446,15 @@ export default function NbmeScoreConversionPage() {
                   </a>
                 )}
                 <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-bold">
-                  <a href={`?form=${form}#percent-converter`} className="text-mint-700 underline underline-offset-4">
-                    Convert NBME {form}
-                  </a>
-                  {(form === "15" || form === "16") && (
+                  {/* 15、16 有专门页面：链接直接指过去，让搜索引擎把引用归到专门页面而不是 ?form= 参数版本 */}
+                  {form === "15" || form === "16" ? (
                     <Link href={`/nbme-${form}-score-conversion`} className="text-mint-700 underline underline-offset-4">
-                      NBME {form} score conversion page
+                      Convert NBME {form}
                     </Link>
+                  ) : (
+                    <a href={`?form=${form}#percent-converter`} className="text-mint-700 underline underline-offset-4">
+                      Convert NBME {form}
+                    </a>
                   )}
                 </div>
               </div>

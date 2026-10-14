@@ -93,6 +93,14 @@ export type BlogBlock =
       unit?: string;
       /** Data points in display order. */
       data: ChartDatum[];
+    }
+  | {
+      /** 简单数据表：速查类事实用表格呈现，便于读者扫读和 AI 摘要引用。 */
+      type: "table";
+      headers: string[];
+      rows: string[][];
+      /** 表格下方的来源说明。 */
+      caption?: string;
     };
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -1561,16 +1569,35 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "Learn how official USMLE CCS software handles orders, simulated time, location, monitoring, case endings, and sample-case feedback.",
     publishedAt: "2026-05-22",
-    updatedAt: "2026-08-09",
-    reviewedAt: "2026-08-09",
+    updatedAt: "2026-10-14",
+    reviewedAt: "2026-10-14",
     author: "NBMEcalc Editorial Team",
     category: "study-plans",
     tags: ["step-3", "ccs", "study-plan"],
-    readingTime: 11,
+    readingTime: 12,
     body: [
       {
         type: "p",
         text: "Short answer: CCS is a dynamic patient-management simulation. You enter orders, request examinations, choose locations, advance simulated time, review results, monitor change, and respond until the case ends. The safest preparation is to practice the official software and study the official sample-case feedback—not memorize a universal order list.",
+      },
+      {
+        type: "h2",
+        text: "Step 3 CCS cases at a glance",
+      },
+      {
+        type: "table",
+        headers: ["Question", "Official answer"],
+        rows: [
+          ["When are CCS cases given?", "Day 2 (Advanced Clinical Medicine), after the 180 multiple-choice items"],
+          ["How many CCS cases are on Step 3?", "13 to 14 case simulations"],
+          ["How long is each case?", "A maximum of 10 or 20 minutes of real time, depending on the case"],
+          ["Is there a tutorial?", "Yes, an optional 6-minute CCS tutorial before the cases"],
+          ["What happens when a case ends?", "Real time permitting, a case-end screen gives a few minutes to finalize orders and review the chart"],
+          ["How is CCS scored?", "Indicated management actions earn credit; actions that are not indicated and add risk lower the score"],
+          ["How much does CCS count toward the total score?", "USMLE does not publish a separate CCS weight"],
+          ["Are there official practice cases?", "Yes. USMLE publishes sample cases with feedback (six cases on the CCS page)"],
+        ],
+        caption: "Source: USMLE Step 3 Exam Content and Computer-based Case Simulations pages, checked October 14, 2026.",
       },
       {
         type: "h2",
@@ -1665,6 +1692,10 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         label: "USMLE — Step 3 sample test questions and practice materials",
         href: "https://www.usmle.org/prepare-your-exam/step-3-materials/step-3-sample-test-questions",
+      },
+      {
+        label: "USMLE — Step 3 exam content and test format",
+        href: "https://www.usmle.org/step-exams/step-3/step-3-exam-content",
       },
     ],
   },

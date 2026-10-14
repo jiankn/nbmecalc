@@ -52,9 +52,14 @@ const pct3 = (score: number) => formatPercentile(lookupPercentile("step3", score
 const visibleRows = NORM_TABLE.filter(([score]) => score <= 280 && score >= 190);
 
 const ckBenchmarks = [230, 240, 250, 260, 270];
-const scoreCards = [230, 235, 240, 245, 250, 255, 260, 265, 270];
+// 215–225 覆盖及格线（218）附近：Bing Copilot 数据显示有人直接问 "220 是多少百分位"。
+const scoreCards = [215, 220, 225, 230, 235, 240, 245, 250, 255, 260, 265, 270];
 
 const faqs = [
+  {
+    q: "What percentile is a 220 on Step 2 CK?",
+    a: `A 220 is at the ${pct(220)} percentile in the official USMLE norm table updated ${USMLE_NORMS_SOURCE.updatedLabel}. It is ${220 - ck.passingScore} points above the ${ck.passingScore} passing score, so it passes, but about ${100 - lookupPercentile("step2ck", 220).percentile}% of first-time takers from LCME-accredited schools scored higher. A 215 (${pct(215)}) is below passing, and a 225 is at the ${pct(225)} percentile.`,
+  },
   {
     q: "What percentile is a 250 on Step 2 CK?",
     a: `A 250 is at the ${pct(250)} percentile in the official USMLE norm table updated ${USMLE_NORMS_SOURCE.updatedLabel}. That means about ${lookupPercentile("step2ck", 250).percentile}% of first-time takers from LCME-accredited schools scored lower.`,
@@ -198,7 +203,7 @@ export default function Step2CkPercentilePage() {
       <section id="by-score" className="bg-white py-16 lg:py-20">
         <div className="container max-w-5xl">
           <h2 className="mb-4 text-3xl font-extrabold tracking-tight lg:text-4xl">
-            Step 2 CK percentile by score: 230 to 270
+            Step 2 CK percentile by score: 215 to 270
           </h2>
           <p className="mb-8 max-w-3xl text-lg leading-relaxed text-gray-700">
             The scores people ask about most, read from the {USMLE_NORMS_SOURCE.updatedLabel} table. The last line
@@ -219,7 +224,9 @@ export default function Step2CkPercentilePage() {
                         : `${Math.abs(r.pointsVsMean)} points ${r.pointsVsMean > 0 ? "above" : "below"} the national mean (${ckMean.mean})`}
                     </li>
                     <li>
-                      {r.pointsVsPassing} points above passing ({ck.passingScore})
+                      {r.pointsVsPassing >= 0
+                        ? `${r.pointsVsPassing} points above passing (${ck.passingScore})`
+                        : `${Math.abs(r.pointsVsPassing)} points below passing (${ck.passingScore}): not a passing score`}
                     </li>
                     <li>
                       ±1 SEM band ({r.semRange[0]}–{r.semRange[1]}): {formatPercentile(r.semLow)} to {formatPercentile(r.semHigh)}

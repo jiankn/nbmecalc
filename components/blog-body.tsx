@@ -105,6 +105,41 @@ export function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
               </div>
             );
           }
+          case "table":
+            return (
+              <figure key={i} className="not-prose my-6">
+                <div className="overflow-x-auto rounded-2xl border border-gray-200">
+                  <table className="min-w-full text-sm">
+                    <thead className="border-b border-gray-200 bg-gray-50">
+                      <tr>
+                        {block.headers.map((h, j) => (
+                          <th key={j} scope="col" className="px-4 py-3 text-left font-bold text-gray-900">
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {block.rows.map((row, r) => (
+                        <tr key={r}>
+                          {row.map((cell, c) => (
+                            <td
+                              key={c}
+                              className={`px-4 py-3 leading-relaxed ${c === 0 ? "font-semibold text-gray-950" : "text-gray-700"}`}
+                            >
+                              {cell}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {block.caption && (
+                  <figcaption className="mt-2 text-xs text-gray-500">{block.caption}</figcaption>
+                )}
+              </figure>
+            );
           case "chart":
             return (
               <DataChart
