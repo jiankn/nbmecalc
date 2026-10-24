@@ -54,7 +54,7 @@ const conversionChart = CONVERSION_CHART_PERCENTS.map((percent) => {
 });
 
 export const metadata: Metadata = {
-  title: "NBME Score Conversion Step 2: % Correct to Score Converter (Forms 9–16)",
+  title: "NBME Score Conversion: % Correct to Step 2 CK + Chart",
   description:
     "Free NBME score converter: turn a CCSSA percent correct (Forms 9–16) into an estimated Step 2 CK score, with a conversion chart, likely range, 2026 percentile, and the 218 passing line.",
   keywords: [
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://nbmecalc.com/nbme-score-conversion" },
   openGraph: {
-    title: "NBME Score Conversion Step 2: % Correct to Score Converter (Forms 9–16)",
+    title: "NBME Score Conversion: % Correct to Step 2 CK + Chart",
     description:
       "Turn an NBME CCSSA percent correct into an estimated Step 2 CK score, range, and 2026 percentile.",
     url: "https://nbmecalc.com/nbme-score-conversion",

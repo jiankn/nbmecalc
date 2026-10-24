@@ -338,6 +338,15 @@ export default function Step3PercentilePage() {
             </a>
             .
           </p>
+          <p className="mt-4 text-sm leading-relaxed text-gray-700">
+            Have practice-test results rather than a final Step 3 score? The{" "}
+            <Link href="/step-3-predictor" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              Step 3 score predictor
+            </Link>{" "}
+            combines supported UWSA and Free 120 inputs into an independent
+            planning estimate. This percentile table interprets scores; it does
+            not predict an exam result.
+          </p>
         </div>
       </section>
 

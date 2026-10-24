@@ -1569,7 +1569,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "Learn how official USMLE CCS software handles orders, simulated time, location, monitoring, case endings, and sample-case feedback.",
     publishedAt: "2026-05-22",
-    updatedAt: "2026-10-14",
+    updatedAt: "2026-10-24",
     reviewedAt: "2026-10-14",
     author: "NBMEcalc Editorial Team",
     category: "study-plans",
@@ -1677,6 +1677,10 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "p",
         text: "This guide does not claim that there are ten guaranteed case archetypes, that one commercial case count is required, or that a single universal order sequence works across patients. The official sample cases and software are the source of truth for the tested interaction model.",
+      },
+      {
+        type: "p",
+        text: "NBMEcalc does not score CCS cases. If you also have UWSA Step 3 or Free 120 results, the <a href=\"/step-3-predictor\" data-indexing-context=\"related\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 3 score predictor</a> can combine those supported inputs into an independent planning estimate. Keep that estimate separate from your CCS practice feedback; the model does not measure case-simulation performance.",
       },
       {
         type: "callout",

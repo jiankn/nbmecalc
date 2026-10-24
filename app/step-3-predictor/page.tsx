@@ -5,6 +5,13 @@ import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
+import { ALGORITHM_VERSION, predictPreview, type PracticeExam } from "@/lib/data";
+
+const exampleExams: PracticeExam[] = [
+  { id: "example-uwsa2", source: "UWSA2", score: 230, takenDaysAgo: 7 },
+  { id: "example-free120", source: "FREE120", score: 75, takenDaysAgo: 5 },
+];
+const exampleResult = predictPreview(exampleExams, "step3", 14);
 
 export const metadata: Metadata = {
   title:
@@ -218,6 +225,49 @@ export default function Step3PredictorPage() {
           </p>
         </div>
         <Calculator defaultStep="step3" />
+        <div className="container max-w-3xl mt-8">
+          <h3 className="text-2xl font-extrabold mb-3">A worked Step 3 example</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            These are illustrative inputs, not a real examinee or a validation
+            result. The example uses the same model as the calculator, with
+            14 days until the exam.
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-gray-200">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-4 py-3">Practice test</th>
+                  <th scope="col" className="px-4 py-3">Reported result</th>
+                  <th scope="col" className="px-4 py-3">Taken</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {exampleExams.map((exam) => (
+                  <tr key={exam.id}>
+                    <th scope="row" className="px-4 py-3 font-semibold">
+                      {exam.source === "UWSA2" ? "UWSA 2 Step 3" : "Free 120 Step 3"}
+                    </th>
+                    <td className="px-4 py-3">
+                      {exam.score}{exam.source === "FREE120" ? "% correct" : " (3-digit score)"}
+                    </td>
+                    <td className="px-4 py-3">{exam.takenDaysAgo} days ago</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 leading-relaxed text-gray-700">
+            Model {ALGORITHM_VERSION} produces a midpoint of{" "}
+            <strong>{exampleResult.pointEstimate}</strong> and a planning range
+            of <strong>{exampleResult.ciLower}–{exampleResult.ciUpper}</strong>.
+            This range is not a validated confidence interval. CCS performance
+            is not an input. Read the{" "}
+            <Link href="/methodology" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+              source adjustments and range assumptions
+            </Link>{" "}
+            before interpreting the result.
+          </p>
+        </div>
       </section>
 
       {/* CCMSA score-scale answer */}
