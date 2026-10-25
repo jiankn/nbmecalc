@@ -12,6 +12,11 @@ function detailPrompt(scene) {
 
 const articles = [
   {
+    slug: "nbme-shelf-exams-explained",
+    summary: `A neat row of seven identical plain closed exam booklets in muted mint, cream, charcoal, and blue standing on a light oak shelf, with a stethoscope draped in front and a simple analog clock face with tick marks only at one end. The visual communicates a series of clerkship exams taken one rotation at a time.`,
+    detail: `A third-year medical student in a white coat sits in a quiet hospital study room after a shift, reviewing a plain blank sheet with a single horizontal bar beside a closed laptop, a stethoscope, and a short stack of plain booklets. Calm, focused end-of-rotation preparation.`,
+  },
+  {
     slug: "nbme-cbse-ccse-explained",
     summary: `Two plain closed exam booklets side by side on a light oak desk, one with a muted mint cover and one with a muted blue cover, each beside a small stack of blank cream cards; a simple horizontal acrylic bar with a translucent highlighted band lies in front of them. The visual communicates two related exams and reading a score against a target range.`,
     detail: `A medical student at a calm desk compares a plain blank report sheet showing only one horizontal bar with a translucent shaded band, holding a pencil over it, while two closed plain exam booklets in mint and blue sit nearby. Focused, reassured interpretation rather than stress.`,

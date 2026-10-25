@@ -105,6 +105,114 @@ export type BlogBlock =
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "nbme-shelf-exams-explained",
+    title: "NBME Shelf Exams Explained: Length, Scoring, and Percentiles",
+    description:
+      "NBME shelf exams are 110-question clerkship subject exams scored as equated percent correct. See each exam's length, how scores and percentiles work, whether shelves are curved, and when results arrive.",
+    publishedAt: "2026-10-25",
+    reviewedAt: "2026-10-25",
+    author: "NBMEcalc Editorial Team",
+    category: "step-2-tips",
+    tags: ["shelf-exam", "nbme", "clerkship", "score-report"],
+    readingTime: 7,
+    body: [
+      {
+        type: "p",
+        text: "Short answer: \"shelf exam\" is the everyday name for an NBME Clinical Science Subject Exam, the test many schools give at the end of a clerkship. Most shelves have 110 questions and run 2 hours 45 minutes. Your score is an equated percent correct (EPC) on a 0–100 scale, and your school, not NBME, decides what counts as passing or honors.",
+      },
+      { type: "h2", text: "How many shelf exams are there, and how long is each?" },
+      {
+        type: "p",
+        text: "NBME lists eight Clinical Science Subject Exams plus two Advanced Clinical exams that some schools use for sub-internships and emergency medicine rotations. Which ones you take depends on your school's curriculum.",
+      },
+      {
+        type: "table",
+        headers: ["Exam", "Questions", "Exam length"],
+        rows: [
+          ["Medicine", "110", "2 hours 45 minutes"],
+          ["Surgery", "110", "2 hours 45 minutes"],
+          ["Pediatrics", "110", "2 hours 45 minutes"],
+          ["Obstetrics & Gynecology", "110", "2 hours 45 minutes"],
+          ["Psychiatry", "110", "2 hours 45 minutes"],
+          ["Clinical Neurology", "110", "2 hours 45 minutes"],
+          ["Ambulatory Care", "110", "2 hours 45 minutes"],
+          ["Family Medicine (modular)", "90, 100, or 110 depending on modules", "2 hours 15 minutes to 2 hours 45 minutes"],
+          ["Emergency Medicine (Advanced Clinical)", "110", "2 hours 45 minutes"],
+          ["Internal Medicine (Advanced Clinical)", "100", "2 hours 30 minutes"],
+        ],
+        caption: "Source: NBME Subject Examination Timing Chart (dated July 2021, still linked from NBME's subject exam page on October 25, 2026). Web-based exams add a 15-minute tutorial to the length shown.",
+      },
+      {
+        type: "p",
+        text: "Each exam works out to 90 seconds per question. The family medicine exam is built from a core module plus optional chronic care and musculoskeletal modules, which is why its length varies.",
+      },
+      { type: "h2", text: "Are shelf exams part of the USMLE?" },
+      {
+        type: "p",
+        text: "No. Shelves are NBME subject exams that your school orders and proctors, either on campus or at a Prometric test center. NBME says the questions are written and reviewed by national test committees and each form is checked by a panel of course directors in that discipline. The clinical content overlaps with Step 2 CK, but the result feeds your clerkship grade, not a USMLE score.",
+      },
+      { type: "h2", text: "How shelf exams are scored" },
+      {
+        type: "p",
+        text: "NBME reports your total score as an equated percent correct: an estimate of the percentage of the exam's content you have mastered, adjusted for small differences in form difficulty. It can be slightly higher or lower than the share of questions you actually answered right. The report also gives content-area EPC scores and marks each area as statistically lower, about the same, or higher than a national comparison group.",
+      },
+      {
+        type: "ul",
+        items: [
+          "Precision: if you retook the exam without learning or forgetting anything, your total EPC would land within 4 points of your score two-thirds of the time.",
+          "Comparison group: first-time takers from LCME-accredited schools who took the exam at the end of a clerkship with standard timing in the most recent academic year.",
+          "Content areas are less precise than the total, so NBME warns against over-reading small differences between them.",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "info",
+        text: "In NBME's sample psychiatry report, the student's total EPC is 86 and the comparison group's mean and standard deviation are listed as 84 and 6. That is a sample report, not current norms for every exam; your own report shows the figures for your exam and testing period.",
+      },
+      { type: "h2", text: "Are shelf exams curved?" },
+      {
+        type: "p",
+        text: "Not in the sense of a fixed share of students failing. EPC scores are equated so that a given score means the same thing on any form. What schools do is compare scores with NBME's norm tables, which turn an EPC score into a national percentile. NBME publishes academic-year norms and also quarterly norms, because on some exams students of equal ability score progressively higher later in the academic year.",
+      },
+      {
+        type: "p",
+        text: "NBME also provides grading guidelines, developed with a national group of clerkship directors, to help schools set passing and honors cutoffs. Each school then sets its own rules, often combining the shelf with clinical evaluations. That is why the same EPC score can earn different grades at different schools.",
+      },
+      { type: "h2", text: "What is a good shelf score, and where do percentiles come from?" },
+      {
+        type: "p",
+        text: "There is no universal good score. The useful comparison is your EPC against the comparison group on your report and against your school's posted cutoffs. NBME's norm tables and grading guidelines are distributed to schools and examinees through the MyNBME portals rather than published openly, so percentile charts you find online are usually a specific school's tables or older versions. Use the ones your clerkship provides.",
+      },
+      { type: "h2", text: "When do shelf results come out?" },
+      {
+        type: "p",
+        text: "NBME says results are often posted to schools the day after the testing window ends, and can take up to three business days. Students get their score report and question-level feedback through INSIGHTS, NBME's dashboard in the MyNBME Examinee Portal, with an email when results are available. Your school may also release grades on its own schedule.",
+      },
+      { type: "h2", text: "How to practice for a shelf" },
+      {
+        type: "p",
+        text: "NBME's own practice option is the Clinical Science Mastery Series, often called CMS forms, which are self-assessments written for each clerkship subject. The <a href=\"/cms-forms-step-2-ck\" class=\"font-semibold text-mint-700 underline underline-offset-4\">CMS forms guide</a> explains which forms exist and how to use them, and the <a href=\"/cms-converter\" class=\"font-semibold text-mint-700 underline underline-offset-4\">CMS score interpretation guide</a> shows how to read a CMS result. When your clerkships are done and Step 2 CK is next, the <a href=\"/blog/nbme-cbse-ccse-explained\" class=\"font-semibold text-mint-700 underline underline-offset-4\">CBSE and CCSE guide</a> covers the comprehensive exams many schools use as a Step 2 CK readiness check.",
+      },
+      { type: "h2", text: "Quick answers" },
+      {
+        type: "ul",
+        items: [
+          "<strong>Which shelf is the hardest?</strong> NBME does not rank them. Scores are only comparable within the same exam, so judge yours against that exam's comparison group.",
+          "<strong>How long is the surgery shelf?</strong> 110 questions in 2 hours 45 minutes, plus a 15-minute tutorial for web-based delivery.",
+          "<strong>Is a shelf score a percentile?</strong> No. It is an equated percent correct; your school converts it to a percentile with NBME's norm tables.",
+          "<strong>Who sees my shelf score?</strong> NBME reports it to your school and to you through INSIGHTS. It is not part of your USMLE score report.",
+        ],
+      },
+    ],
+    references: [
+      { label: "NBME: Subject Examinations for examinees (exam list and score reports)", href: "https://www.nbme.org/examinees/subject-exams/" },
+      { label: "NBME: Subject Examination Timing Chart", href: "https://www.nbme.org/wp-content/uploads/2026/04/Subject_Exam_Timing_Chart_July_2021.pdf" },
+      { label: "NBME: Clinical Science Subject Exam score interpretation guide", href: "https://www.nbme.org/wp-content/uploads/2026/04/Clinical_Science_Score_Interpretation_Guide.pdf" },
+      { label: "NBME: Sample Clinical Science Examinee Performance Report", href: "https://www.nbme.org/wp-content/uploads/2026/04/Clinical_Science_Examinee_Performance_Report.pdf" },
+      { label: "NBME: Subject Exam Program Guide (results timing, norms, grading guidelines)", href: "https://www.nbme.org/wp-content/uploads/2026/04/NBME_Subject_Exam_Program_Guide.pdf" },
+    ],
+  },
+  {
     slug: "nbme-cbse-ccse-explained",
     title: "NBME CBSE and CCSE: What They Are and How to Read Your Score",
     description:
@@ -127,6 +235,7 @@ export const BLOG_POSTS: BlogPost[] = [
         rows: [
           ["Full name", "Comprehensive Basic Science Examination", "Comprehensive Clinical Science Examination"],
           ["Mirrors", "USMLE Step 1 content and item formats", "USMLE Step 2 CK content"],
+          ["Length (NBME timing chart)", "200 questions, 5 hours 15 minutes including a 15-minute optional break", "200 questions, 5 hours 15 minutes including a 15-minute optional break"],
           ["Total score", "Equated percent correct (0–100)", "1–300 scale, the same scale as Step 2 CK"],
           ["Likely score range on the report", "About ±4 points", "About ±8 points"],
           ["Readiness estimate", "Probability of passing Step 1 within a week (1–99%)", "Probability of passing Step 2 CK within a week (1–99%)"],
@@ -194,7 +303,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { type: "h2", text: "The CBSE for dental applicants (OMS and dental anesthesiology)" },
       {
         type: "p",
-        text: "The CBSE is also used outside medical school. AAOMS registers dental students for the CBSE as part of applying to oral and maxillofacial surgery programs; its FAQ describes 200 multiple-choice questions in four 60-minute sections within a 4-hour, 15-minute session, says you may take it as many times as you wish, and says scores stay valid for several years unless AAOMS states otherwise. ASDA offers the CBSE to dental anesthesiology applicants in two Prometric windows each year, February 1–14 and July 1–14.",
+        text: "The CBSE is also used outside medical school. AAOMS registers dental students for the CBSE as part of applying to oral and maxillofacial surgery programs; its FAQ describes 200 multiple-choice questions in four 60-minute sections within a 4-hour, 15-minute session (NBME's own timing chart lists 5 hours 15 minutes, so confirm the length on your scheduling permit), says you may take it as many times as you wish, and says scores stay valid for several years unless AAOMS states otherwise. ASDA offers the CBSE to dental anesthesiology applicants in two Prometric windows each year, February 1–14 and July 1–14.",
       },
       {
         type: "p",
@@ -225,6 +334,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { label: "NBME: Sample CBSE Examinee Performance Report", href: "https://www.nbme.org/wp-content/uploads/2023/06/CBSE_Examinee_Performance_Report-2ed.pdf" },
       { label: "AAOMS: NBME CBSE FAQ for OMS applicants", href: "https://aaoms.org/education-meetings/academics/dental-students/nbme-for-oms-applicants/national-board-of-medical-examiners-comprehensive-basic-science-examination-faq/" },
       { label: "ASDA: CBSE for dental anesthesiology applicants", href: "https://www.asda.org/cbse/" },
+      { label: "NBME: Subject Examination Timing Chart", href: "https://www.nbme.org/wp-content/uploads/2026/04/Subject_Exam_Timing_Chart_July_2021.pdf" },
     ],
   },
   {
