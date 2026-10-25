@@ -105,6 +105,124 @@ export type BlogBlock =
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "usmle-score-report-and-transcript",
+    title: "USMLE Score Report vs Transcript: How to Read and Send Yours",
+    description:
+      "Your USMLE score report is for you; programs and boards need your transcript. See what each shows, how long the score report stays online, and how to send your transcript to ERAS through FSMB ($70 per cycle).",
+    publishedAt: "2026-10-25",
+    reviewedAt: "2026-10-25",
+    author: "NBMEcalc Editorial Team",
+    category: "score-conversion",
+    tags: ["usmle", "score-report", "transcript", "eras"],
+    readingTime: 7,
+    body: [
+      {
+        type: "p",
+        text: "Short answer: the score report is your personal copy of one exam result, posted by the organization that registered you and kept online for about 365 days. The USMLE transcript is the official record of every Step you have taken, and it is the only version residency programs, licensing boards, and other third parties accept. Since June 4, 2026, all transcript requests for ERAS go through FSMB's USMLE portal for $70 per application cycle.",
+      },
+      { type: "h2", text: "Score report vs transcript at a glance" },
+      {
+        type: "table",
+        headers: ["", "Score report", "USMLE transcript"],
+        rows: [
+          ["Who it is for", "You only", "Third parties: residency programs, licensing boards, and others"],
+          ["What it covers", "One exam attempt", "Your complete USMLE exam history"],
+          ["Performance graphics", "Included", "Not included"],
+          ["Where you get it", "Website of the organization that registered you", "FSMB's USMLE portal (ERAS and ResidencyCAS requests included)"],
+          ["How long it is available", "About 365 days after the score email", "On request, for a fee"],
+        ],
+        caption: "Source: USMLE Bulletin of Information, Scoring & Score Reporting, and USMLE Transcripts page (checked October 25, 2026).",
+      },
+      { type: "h2", text: "How to read your USMLE score report" },
+      {
+        type: "p",
+        text: "What you see depends on the Step. Step 1 has been reported as pass/fail only since January 26, 2022. Step 2 CK and Step 3 reports show a three-digit score and a pass/fail outcome; the minimum passing scores are 218 for Step 2 CK and 200 for Step 3.",
+      },
+      {
+        type: "ul",
+        items: [
+          "<strong>Performance comparison (Step 2 CK and Step 3):</strong> a histogram of scores from a recent group of first-time takers from U.S. and Canadian medical schools, with your score marked by an orange rectangle and solid line and the minimum passing score by a black rectangle and dashed line.",
+          "<strong>Passing Step 1:</strong> the report shows the pass outcome without performance feedback.",
+          "<strong>Failing Step 1:</strong> the report shows, for each content area, whether you scored below, about the same as, or above a low-pass, meaning performance just above the passing standard. Use it to target the weakest areas before a retake.",
+          "<strong>Two-day Step 3:</strong> the report and transcript show only the first test day, but both days are scored.",
+        ],
+      },
+      {
+        type: "p",
+        text: "The score report does not print a percentile. To see where a Step 2 CK score ranks in the official USMLE norm table, use the <a href=\"/step-2-ck-percentile\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 2 CK percentile calculator</a>; for Step 3, use the <a href=\"/step-3-percentile\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 3 percentile calculator</a>.",
+      },
+      { type: "h2", text: "What percent correct do you need to pass?" },
+      {
+        type: "p",
+        text: "USMLE says the percentage of questions you need to answer correctly varies by Step and from form to form, but that examinees typically need about 60% correct to pass. Scores are equated across forms and are not set on a curve, so there is no fixed percentage that guarantees a pass on your form.",
+      },
+      { type: "h2", text: "When your score report arrives and how long it stays" },
+      {
+        type: "ul",
+        items: [
+          "Results typically post two to four weeks after your test date; USMLE advises allowing at least eight weeks. You get an email from the organization that registered you.",
+          "USMLE does not give scores by phone, email, or fax, and does not speed up scoring for anyone.",
+          "The score report stays on the registering organization's website for about 365 days from that email. Download a copy; after it is removed, your results are available only as an official transcript, for a fee.",
+        ],
+      },
+      {
+        type: "p",
+        text: "For a date estimate based on your test day, use the <a href=\"/usmle-score-release-dates\" class=\"font-semibold text-mint-700 underline underline-offset-4\">USMLE score release dates</a> calculator.",
+      },
+      { type: "h2", text: "What is on your USMLE transcript" },
+      {
+        type: "ul",
+        items: [
+          "Your name, date of birth, and other identifying information.",
+          "Your complete history of all Steps you have taken, including attempts with no reported result.",
+          "Whether you previously took the former NBME Parts, FLEX, or the ECFMG Clinical Skills Assessment.",
+          "Any annotations for indeterminate scores, findings of irregular behavior, or actions reported to the FSMB Physician Data Center.",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "warning",
+        text: "Unopened blocks show up here. USMLE says an exam with unopened blocks may not be scored and can be reported as incomplete on your transcript; for Step 3, taking Day 1 without Day 2 can also be reported as incomplete.",
+      },
+      { type: "h2", text: "How to send your USMLE transcript to ERAS" },
+      {
+        type: "ol",
+        items: [
+          "Create or sign in to your account in FSMB's USMLE portal. Since June 4, 2026, this applies to every examinee, whatever the location of your medical school.",
+          "Submit the ERAS transcript request and pay the $70 fee, which covers the whole residency application cycle.",
+          "In MyERAS, open Additional Documents and choose Initiate Score Retrieval. The transcript usually arrives the same day.",
+          "Assign programs in MyERAS. ERAS then sends your USMLE transcript to the programs you apply to.",
+        ],
+      },
+      {
+        type: "p",
+        text: "Double-check the USMLE ID in your MyERAS account: USMLE says a wrong ID, or a name or date-of-birth mismatch, can delay processing. Programs that use ResidencyCAS, such as obstetrics and gynecology and emergency medicine, get your transcript through a separate request in the same FSMB portal.",
+      },
+      { type: "h2", text: "Transcripts for licensing boards and other recipients" },
+      {
+        type: "p",
+        text: "FSMB now handles every USMLE transcript request. International medical graduates moved from ECFMG to FSMB on August 21, 2024, and non-residency transcripts are now delivered electronically by email rather than on paper. Send transcripts to state medical boards and any other third party through FSMB, since a score report you forward yourself is not accepted as official.",
+      },
+      { type: "h2", text: "Score rechecks and who else sees your result" },
+      {
+        type: "ul",
+        items: [
+          "<strong>Score recheck:</strong> request it, with a fee, within 90 days of your result. The recheck rescores your responses on a separate system; USMLE says it has never changed a score.",
+          "<strong>Your medical school:</strong> NBME reports Step 1 and Step 2 CK results to LCME- and COCA-accredited schools. To opt out, email the request at least 10 business days before your test date. For Step 3, set the preference on your application.",
+          "<strong>International schools:</strong> NBME may report results to them; you set the preference on your FSMB application.",
+        ],
+      },
+    ],
+    references: [
+      { label: "USMLE: Bulletin of Information, Scoring & Score Reporting", href: "https://www.usmle.org/bulletin-information/scoring-and-score-reporting" },
+      { label: "USMLE: Transcripts", href: "https://www.usmle.org/scores-transcripts/transcripts" },
+      { label: "USMLE: FSMB to process USMLE transcripts for ERAS starting June 4, 2026", href: "https://www.usmle.org/fsmb-process-usmler-transcripts-erasr-service-starting-june-4-2026" },
+      { label: "USMLE: Change in process for requesting USMLE transcripts (IMGs, August 2024)", href: "https://www.usmle.org/important-update-change-process-requesting-usmle-transcripts" },
+      { label: "USMLE: Examination results and scoring", href: "https://www.usmle.org/scores-transcripts/examination-results-and-scoring" },
+      { label: "USMLE: Common questions (score report layout)", href: "https://www.usmle.org/common-questions" },
+    ],
+  },
+  {
     slug: "nbme-shelf-exams-explained",
     title: "NBME Shelf Exams Explained: Length, Scoring, and Percentiles",
     description:
@@ -423,7 +541,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { type: "h2", text: "Is 60% enough to pass Step 3?" },
       {
         type: "p",
-        text: "USMLE does not publish a percent-correct passing mark, so no fixed percentage converts to 200. Scores on different exam forms are equated, which means small adjustments for forms that are harder or easier, and USMLE states that its scores and pass/fail decisions are not set on a curve. Any percentage you see quoted as the Step 3 pass line is an estimate, not an official number.",
+        text: "Roughly, yes. The USMLE Bulletin says the percentage of questions needed to pass varies by Step and from form to form, but examinees typically need about 60% correct. That is a rule of thumb, not a guaranteed cutoff: scores on different forms are equated, meaning small adjustments for forms that are harder or easier, and USMLE states that its scores and pass/fail decisions are not set on a curve. Case simulations also count toward the Step 3 score.",
       },
       {
         type: "p",
@@ -446,6 +564,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { label: "USMLE: Examination results and scoring", href: "https://www.usmle.org/scores-transcripts/examination-results-and-scoring" },
       { label: "USMLE: Scheduled review of the Step 3 passing standard", href: "https://www.usmle.org/scheduled-review-usmle-step-3-passing-standard-0" },
       { label: "USMLE: Common questions (scoring, equating, multi-day exams)", href: "https://www.usmle.org/common-questions" },
+      { label: "USMLE: Bulletin of Information, Scoring & Score Reporting", href: "https://www.usmle.org/bulletin-information/scoring-and-score-reporting" },
     ],
   },
   {
@@ -2054,7 +2173,7 @@ export const BLOG_POSTS: BlogPost[] = [
     body: [
       {
         type: "p",
-        text: "Short answer: Step 3 has 13 to 14 computer-based case simulations (CCS), all on Day 2 after 180 multiple-choice questions. Each case gets a maximum of 10 or 20 minutes of real time. You manage one patient per case by typing orders, choosing locations, and advancing simulated time. USMLE scores timing, sequencing, and appropriateness, and it does not publish a separate CCS weight.",
+        text: "Short answer: Step 3 has 13 to 14 computer-based case simulations (CCS), all on Day 2 after 180 multiple-choice questions. Each case gets a maximum of 10 or 20 minutes of real time. You manage one patient per case by typing orders, choosing locations, and advancing simulated time. USMLE scores timing, sequencing, and appropriateness, and says the cases count for no more than their share of Step 3 testing time.",
       },
       {
         type: "h2",
@@ -2069,10 +2188,10 @@ export const BLOG_POSTS: BlogPost[] = [
           ["How long is each case?", "A maximum of 10 or 20 minutes of real time, depending on the case"],
           ["Is there a tutorial?", "Yes, an optional 6-minute CCS tutorial right before the cases"],
           ["Are practice cases available at the test center?", "No. Only the optional tutorial is offered on test day"],
-          ["How much does CCS count toward the total score?", "USMLE does not publish a separate CCS weight"],
+          ["How much does CCS count toward the total score?", "No more than its share of Step 3 testing time; USMLE gives no exact percentage, and CCS can affect whether you pass"],
           ["Are there official practice cases?", "Yes, six cases with written feedback on the USMLE site"],
         ],
-        caption: "Source: USMLE Step 3 Exam Content and Computer-based Case Simulations pages, checked October 25, 2026.",
+        caption: "Source: USMLE Step 3 Exam Content and Computer-based Case Simulations pages, and the USMLE Bulletin of Information (Scoring & Score Reporting), checked October 25, 2026.",
       },
       {
         type: "h2",
@@ -2244,6 +2363,10 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         label: "USMLE — Step 3 exam content and test format",
         href: "https://www.usmle.org/step-exams/step-3/step-3-exam-content",
+      },
+      {
+        label: "USMLE — Bulletin of Information, Scoring & Score Reporting (CCS contribution to the score)",
+        href: "https://www.usmle.org/bulletin-information/scoring-and-score-reporting",
       },
       {
         label: "USMLE — Step 3 common questions (CCS practice and responsibilities)",

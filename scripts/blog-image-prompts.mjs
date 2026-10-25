@@ -12,6 +12,11 @@ function detailPrompt(scene) {
 
 const articles = [
   {
+    slug: "usmle-score-report-and-transcript",
+    summary: `Two plain blank sheets side by side on a light oak desk: one single sheet with a simple horizontal bar in mint, and one thicker sealed plain cream envelope beside a small stack of matching sheets, with a laptop closed nearby. The visual communicates a personal result versus an official record sent to others.`,
+    detail: `A medical graduate at a home desk in daylight uploads documents on an unbranded laptop whose screen shows only large plain color blocks, with a plain sealed envelope and a single blank sheet with one mint bar beside the keyboard. Organized, confident application preparation.`,
+  },
+  {
     slug: "nbme-shelf-exams-explained",
     summary: `A neat row of seven identical plain closed exam booklets in muted mint, cream, charcoal, and blue standing on a light oak shelf, with a stethoscope draped in front and a simple analog clock face with tick marks only at one end. The visual communicates a series of clerkship exams taken one rotation at a time.`,
     detail: `A third-year medical student in a white coat sits in a quiet hospital study room after a shift, reviewing a plain blank sheet with a single horizontal bar beside a closed laptop, a stethoscope, and a short stack of plain booklets. Calm, focused end-of-rotation preparation.`,
