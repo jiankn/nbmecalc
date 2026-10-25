@@ -105,6 +105,129 @@ export type BlogBlock =
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "nbme-cbse-ccse-explained",
+    title: "NBME CBSE and CCSE: What They Are and How to Read Your Score",
+    description:
+      "The CBSE is NBME's school-administered Step 1-style exam; the CCSE is its Step 2 CK counterpart. See how each is scored, why old CBSE conversion charts no longer apply, and what the scores mean for readiness.",
+    publishedAt: "2026-10-25",
+    reviewedAt: "2026-10-25",
+    author: "NBMEcalc Editorial Team",
+    category: "score-conversion",
+    tags: ["cbse", "ccse", "nbme", "score-report"],
+    readingTime: 7,
+    body: [
+      {
+        type: "p",
+        text: "Short answer: the CBSE (Comprehensive Basic Science Examination) and CCSE (Comprehensive Clinical Science Examination) are NBME subject exams that schools and other programs administer under proctored conditions. The CBSE mirrors Step 1 and reports an equated percent correct score with an estimated probability of passing Step 1. The CCSE mirrors Step 2 CK and reports a score on the same 1–300 scale as Step 2 CK.",
+      },
+      { type: "h2", text: "CBSE vs CCSE at a glance" },
+      {
+        type: "table",
+        headers: ["", "CBSE", "CCSE"],
+        rows: [
+          ["Full name", "Comprehensive Basic Science Examination", "Comprehensive Clinical Science Examination"],
+          ["Mirrors", "USMLE Step 1 content and item formats", "USMLE Step 2 CK content"],
+          ["Total score", "Equated percent correct (0–100)", "1–300 scale, the same scale as Step 2 CK"],
+          ["Likely score range on the report", "About ±4 points", "About ±8 points"],
+          ["Readiness estimate", "Probability of passing Step 1 within a week (1–99%)", "Probability of passing Step 2 CK within a week (1–99%)"],
+          ["Self-assessment twin you can buy yourself", "CBSSA", "CCSSA"],
+        ],
+        caption: "Sources: NBME Comprehensive Subject Exam content outlines, CBSSA/CBSE guidance (October 2024), and CCSSA/CCSE guidance (March 2025), checked October 25, 2026.",
+      },
+      { type: "h2", text: "Is the CBSE the same as an NBME practice test?" },
+      {
+        type: "p",
+        text: "Not quite. The CBSE and CCSE are subject exams that an institution orders and proctors, either at the school or at a Prometric test center, and NBME says they are not meant for practice use. The versions you buy on your own are the self-assessments: CBSSA for Step 1 and CCSSA for Step 2 CK. Both pairs use the same score-reporting approach, so the guidance below applies to either.",
+      },
+      { type: "h2", text: "How the CBSE is scored now" },
+      {
+        type: "p",
+        text: "Your report gives a total equated percent correct (EPC) score. NBME describes it as the percentage of the content you have mastered, adjusted for small differences in form difficulty, so it can sit slightly above or below the raw share of questions you got right. The report also shows a likely score range of about 4 points either way, the Step 1 low-pass range, and your estimated probability of passing Step 1 if you test within a week.",
+      },
+      {
+        type: "callout",
+        tone: "info",
+        text: "In NBME's sample CBSE report, an EPC score of 53 has a likely range of 49–57 and an estimated 52% probability of passing Step 1 within a week. The probability is not the same as the percent of content mastered.",
+      },
+      { type: "h2", text: "Is there a CBSE score conversion to Step 1?" },
+      {
+        type: "p",
+        text: "Not anymore. Before 2022 the CBSE reported a three-digit score meant to estimate Step 1 performance, which is where the CBSE conversion and equivalency charts still circulating online come from. When Step 1 moved to pass/fail on January 26, 2022, NBME replaced the CBSE three-digit score with the equated percent correct score; the new reports were planned for February 23, 2022. A three-digit number made from a current CBSE score is an unofficial estimate of a score Step 1 no longer reports.",
+      },
+      {
+        type: "p",
+        text: "What replaces the conversion is the comparison NBME prints on the report. Look at where your likely score range sits against the Step 1 low-pass range:",
+      },
+      {
+        type: "table",
+        headers: ["Where your likely score range falls", "NBME's guidance"],
+        rows: [
+          ["Completely below the low-pass range", "At risk of failing Step 1; additional preparation strongly recommended"],
+          ["Partly below the low-pass range", "Borderline; still at risk, additional preparation strongly recommended"],
+          ["Partly within and partly above it", "Close to the minimum passing level; additional preparation may be recommended"],
+          ["Completely above the low-pass range", "Likely ready to take Step 1, though not a guarantee"],
+        ],
+        caption: "Source: NBME, Gauging Readiness for USMLE Step 1 (CBSSA and CBSE), October 2024. The CCSSA/CCSE guidance uses the same four scenarios for Step 2 CK.",
+      },
+      {
+        type: "p",
+        text: "NBME adds that results are most useful when you test under Step-like conditions, in one sitting and without resources, and that two or more results in the borderline-to-above zone are more reassuring than one. To check a CBSSA percent against the same low-pass logic, use the <a href=\"/nbme-step-1-score-conversion\" class=\"font-semibold text-mint-700 underline underline-offset-4\">NBME Step 1 score conversion</a>; for a CBSE, read the low-pass range printed on your own report.",
+      },
+      { type: "h2", text: "How the CCSE is scored" },
+      {
+        type: "p",
+        text: "The CCSE needs no conversion: NBME reports it on the same 1–300 scale as Step 2 CK, as an estimate of how you would have scored on Step 2 CK with the same knowledge and conditions. The likely score range is about 8 points either way, and the report shows the Step 2 CK low-pass range and an estimated probability of passing within a week, read with the same four scenarios as the CBSE.",
+      },
+      {
+        type: "p",
+        text: "If you also have CCSSA forms, the <a href=\"/nbme-score-conversion\" class=\"font-semibold text-mint-700 underline underline-offset-4\">NBME score conversion</a> covers each form, and the <a href=\"/step-2-ck-percentile\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 2 CK percentile calculator</a> shows where a score at that level ranks in the official USMLE norm table.",
+      },
+      { type: "h2", text: "What the CBSE and CCSE cover" },
+      {
+        type: "p",
+        text: "NBME says the CBSE covers material typically learned in the basic science years, with somewhat more weight on second-year courses, and reflects Step 1 content using the same item formats. Its system ranges match the Step 1 outline, led by reproductive and endocrine (12–16%), respiratory and renal (11–15%), and behavioral health and nervous systems (10–14%). By physician task, 60–70% of questions test applying foundational science concepts.",
+      },
+      {
+        type: "p",
+        text: "The CCSE covers material from the core clinical clerkships and reflects Step 2 CK content. Most systems carry 5–10% each, social sciences including ethics and patient safety carry 10–15%, and by physician task the exam splits mostly between diagnosis (40–50%) and pharmacotherapy, intervention, and management (40–50%), with health maintenance at 10–20%.",
+      },
+      { type: "h2", text: "The CBSE for dental applicants (OMS and dental anesthesiology)" },
+      {
+        type: "p",
+        text: "The CBSE is also used outside medical school. AAOMS registers dental students for the CBSE as part of applying to oral and maxillofacial surgery programs; its FAQ describes 200 multiple-choice questions in four 60-minute sections within a 4-hour, 15-minute session, says you may take it as many times as you wish, and says scores stay valid for several years unless AAOMS states otherwise. ASDA offers the CBSE to dental anesthesiology applicants in two Prometric windows each year, February 1–14 and July 1–14.",
+      },
+      {
+        type: "p",
+        text: "One mismatch to know about: the AAOMS FAQ still says a table of approximate Step 1 equivalents comes with the score report, while NBME's current CBSE documentation describes the equated percent correct format. Go by the report you actually receive, and ask AAOMS or your target programs which number they review.",
+      },
+      {
+        type: "callout",
+        tone: "warning",
+        text: "The AAOMS and ASDA pages we checked do not list a passing or recommended CBSE score for applicants. What counts as competitive is set by each residency program, so check the requirements of the programs you are applying to.",
+      },
+      { type: "h2", text: "Quick answers" },
+      {
+        type: "ul",
+        items: [
+          "<strong>Is the CBSE harder than Step 1?</strong> NBME does not compare difficulty. The CBSE follows the Step 1 content outline and item formats, and scores are equated across forms.",
+          "<strong>What is a good CBSE score?</strong> For Step 1 readiness, a likely score range completely above the low-pass range on your report. For dental residency applications, ask each program.",
+          "<strong>Can I take the CBSE on my own?</strong> For medical students the CBSE is ordered by the school; the self-purchase version is the CBSSA. Dental applicants register through AAOMS or ASDA.",
+          "<strong>Does CCSE need converting to a Step 2 CK score?</strong> No. It already uses the 1–300 Step 2 CK scale.",
+        ],
+      },
+    ],
+    references: [
+      { label: "NBME: Comprehensive Subject Exams (administration and score reports)", href: "https://www.nbme.org/institutions/assess-learn/subject-exams/comprehensive/" },
+      { label: "NBME: Comprehensive Basic Science Subject Exam content outline", href: "https://www.nbme.org/institutions/assess-learn/subject-exams/comprehensive/basic-science/" },
+      { label: "NBME: Comprehensive Clinical Science Subject Exam content outline", href: "https://www.nbme.org/institutions/assess-learn/subject-exams/comprehensive/clinical-science/" },
+      { label: "NBME: Gauging Readiness for USMLE Step 1 (CBSSA and CBSE guidance)", href: "https://www.nbme.org/wp-content/uploads/2024/10/CBSSA_CBSE_Guidance-f43.pdf" },
+      { label: "NBME: CCSSA and CCSE guidance for Step 2 CK", href: "https://www.nbme.org/wp-content/uploads/2025/04/CCSSA_CCSE_Guidance-506.pdf" },
+      { label: "NBME: Sample CBSE Examinee Performance Report", href: "https://www.nbme.org/wp-content/uploads/2023/06/CBSE_Examinee_Performance_Report-2ed.pdf" },
+      { label: "AAOMS: NBME CBSE FAQ for OMS applicants", href: "https://aaoms.org/education-meetings/academics/dental-students/nbme-for-oms-applicants/national-board-of-medical-examiners-comprehensive-basic-science-examination-faq/" },
+      { label: "ASDA: CBSE for dental anesthesiology applicants", href: "https://www.asda.org/cbse/" },
+    ],
+  },
+  {
     slug: "step-3-exam-format",
     title: "Step 3 Exam Format: How Long Is Step 3 and How Many Questions?",
     description:

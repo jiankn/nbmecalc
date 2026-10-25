@@ -12,6 +12,11 @@ function detailPrompt(scene) {
 
 const articles = [
   {
+    slug: "nbme-cbse-ccse-explained",
+    summary: `Two plain closed exam booklets side by side on a light oak desk, one with a muted mint cover and one with a muted blue cover, each beside a small stack of blank cream cards; a simple horizontal acrylic bar with a translucent highlighted band lies in front of them. The visual communicates two related exams and reading a score against a target range.`,
+    detail: `A medical student at a calm desk compares a plain blank report sheet showing only one horizontal bar with a translucent shaded band, holding a pencil over it, while two closed plain exam booklets in mint and blue sit nearby. Focused, reassured interpretation rather than stress.`,
+  },
+  {
     slug: "step-3-exam-format",
     summary: `Two plain desk calendars side by side, each with a single blank page, beside two neat stacks of plain cream cards of unequal height and a simple analog clock face with tick marks only on a light oak desk. The visual communicates one exam split across two long test days.`,
     detail: `A resident physician in scrubs reviews a plan at a quiet desk in the evening, with two plain unmarked folders side by side, a stethoscope, and a simple analog clock face with tick marks only. Calm, focused preparation for a two-day exam.`,
