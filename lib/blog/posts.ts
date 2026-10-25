@@ -105,6 +105,245 @@ export type BlogBlock =
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "step-3-exam-format",
+    title: "Step 3 Exam Format: How Long Is Step 3 and How Many Questions?",
+    description:
+      "Step 3 is a two-day exam: 232 questions on Day 1 (about 7 hours) and 180 questions plus 13–14 CCS cases on Day 2 (about 9 hours). See the block layout, breaks, scoring, and what each day tests.",
+    publishedAt: "2026-10-25",
+    reviewedAt: "2026-10-25",
+    author: "NBMEcalc Editorial Team",
+    category: "study-plans",
+    tags: ["step-3", "exam-format", "question-count", "test-day"],
+    readingTime: 7,
+    body: [
+      {
+        type: "p",
+        text: "Short answer: Step 3 is a two-day exam with 412 multiple-choice questions and 13 to 14 computer-based case simulations (CCS). Day 1 has 232 questions in 12 blocks and runs about 7 hours. Day 2 has 180 questions in 9 blocks, followed by the case simulations, and runs about 9 hours. Every question block is 30 minutes long.",
+      },
+      { type: "h2", text: "Step 3 format at a glance" },
+      {
+        type: "table",
+        headers: ["", "Day 1: Foundations of Independent Practice", "Day 2: Advanced Clinical Medicine"],
+        rows: [
+          ["Test session", "About 7 hours", "About 9 hours"],
+          ["Multiple-choice questions", "232", "180"],
+          ["Blocks", "12 blocks of 18–20 questions", "9 blocks of 20 questions"],
+          ["Time per block", "30 minutes", "30 minutes"],
+          ["Case simulations (CCS)", "None", "13 to 14 cases, up to 10 or 20 minutes each"],
+          ["Tutorials", "5-minute optional tutorial", "5-minute optional tutorial plus 6-minute CCS tutorial"],
+          ["Break time", "55 minutes", "At least 45 minutes"],
+        ],
+        caption: "Source: USMLE Step 3 Exam Content page (checked October 25, 2026).",
+      },
+      { type: "h2", text: "How long is Step 3?" },
+      {
+        type: "p",
+        text: "About 16 hours of test sessions across two days. Day 1 adds up neatly: 12 blocks of 30 minutes is 360 minutes of questions, plus 55 minutes of break and the 5-minute tutorial, for 420 minutes, or 7 hours. Day 2 has 270 minutes of question blocks (9 × 30), two tutorials, and at least 45 minutes of break before the case simulations, which take up most of the remaining time in the roughly 9-hour session.",
+      },
+      {
+        type: "chart",
+        variant: "bar",
+        title: "Minutes of multiple-choice blocks by test day",
+        caption: "Block minutes = number of blocks × 30 minutes, from the USMLE Step 3 Exam Content page (checked October 25, 2026). Day 2 also includes 13 to 14 case simulations, not shown here.",
+        unit: " min",
+        data: [
+          { label: "Day 1 (12 blocks)", value: 360, highlight: true },
+          { label: "Day 2 (9 blocks)", value: 270 },
+        ],
+      },
+      {
+        type: "p",
+        text: "As on the other Step exams, break time is a pool you manage across the day, and USMLE says it grows when you finish a block or a tutorial before its time runs out.",
+      },
+      { type: "h2", text: "How many questions are on Step 3?" },
+      {
+        type: "p",
+        text: "412 multiple-choice questions in total: 232 on Day 1 and 180 on Day 2. Day 1 blocks hold 18 to 20 questions each, so the pace there is 90 to 100 seconds per question. Day 2 blocks hold 20, which is 90 seconds per question. The 13 to 14 case simulations on Day 2 are timed separately, case by case.",
+      },
+      { type: "h2", text: "What each day tests" },
+      {
+        type: "h3",
+        text: "Day 1: Foundations of Independent Practice (FIP)",
+      },
+      {
+        type: "p",
+        text: "Multiple-choice questions only. USMLE lists foundational science, biostatistics and epidemiology, reading the medical literature, communication, ethics, systems-based practice, and patient safety, along with history, physical examination, diagnosis, and use of diagnostic studies. This day also includes newer item formats built around scientific abstracts and pharmaceutical advertisements, so practice reading both.",
+      },
+      {
+        type: "h3",
+        text: "Day 2: Advanced Clinical Medicine (ACM)",
+      },
+      {
+        type: "p",
+        text: "Multiple-choice questions plus the case simulations. The focus shifts to managing patients over time: prognosis and outcome, health maintenance and screening, therapeutics, and medical decision making. For how the cases work and how USMLE scores them, see the <a href=\"/blog/step-3-ccs-cases-complete-walkthrough\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 3 CCS cases guide</a>, which also lists the six official practice cases.",
+      },
+      { type: "h2", text: "How is Step 3 scored?" },
+      {
+        type: "p",
+        text: "You receive one three-digit score for the whole exam, and the minimum passing score is 200. Both days count toward that score, although USMLE notes that the score report and transcript show only the first day of testing. Results usually arrive within four weeks, but USMLE advises allowing at least eight weeks.",
+      },
+      {
+        type: "callout",
+        tone: "warning",
+        text: "The passing score may change. On September 2, 2026, USMLE announced that it will review the Step 3 passing standard at its November 2026 meeting, and any new standard would apply to exams taken on or after January 1, 2027. If you test in 2027, check the official scoring page before your exam.",
+      },
+      { type: "h2", text: "Is 60% enough to pass Step 3?" },
+      {
+        type: "p",
+        text: "USMLE does not publish a percent-correct passing mark, so no fixed percentage converts to 200. Scores on different exam forms are equated, which means small adjustments for forms that are harder or easier, and USMLE states that its scores and pass/fail decisions are not set on a curve. Any percentage you see quoted as the Step 3 pass line is an estimate, not an official number.",
+      },
+      {
+        type: "p",
+        text: "To estimate where you stand, enter UWSA Step 3 and Free 120 results in the <a href=\"/step-3-predictor\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 3 score predictor</a>. If you already have a score, the <a href=\"/step-3-percentile\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 3 percentile calculator</a> shows where it ranks in the official norm table, and the <a href=\"/usmle-score-release-dates\" class=\"font-semibold text-mint-700 underline underline-offset-4\">USMLE score release dates</a> guide estimates when your result will arrive.",
+      },
+      { type: "h2", text: "How to plan for two test days" },
+      {
+        type: "ul",
+        items: [
+          "Practice in 30-minute blocks. Every Step 3 question block uses that length on both days.",
+          "On Day 1, pace for 18 to 20 questions per block and leave room for long abstract and drug-advertisement items.",
+          "On Day 2, save energy and break time for the case simulations at the end of a 9-hour day.",
+          "Run the official CCS practice cases before test day; no practice cases are available at the test center.",
+          "Open every block on both days. USMLE warns that an exam with unopened blocks may not be scored and can be reported as incomplete.",
+        ],
+      },
+    ],
+    references: [
+      { label: "USMLE: Step 3 exam content and test format", href: "https://www.usmle.org/step-exams/step-3/step-3-exam-content" },
+      { label: "USMLE: Examination results and scoring", href: "https://www.usmle.org/scores-transcripts/examination-results-and-scoring" },
+      { label: "USMLE: Scheduled review of the Step 3 passing standard", href: "https://www.usmle.org/scheduled-review-usmle-step-3-passing-standard-0" },
+      { label: "USMLE: Common questions (scoring, equating, multi-day exams)", href: "https://www.usmle.org/common-questions" },
+    ],
+  },
+  {
+    slug: "how-many-questions-on-step-1",
+    title: "How Many Questions Are on Step 1? 2026 Format, Length and Breaks",
+    description:
+      "Step 1 is an 8-hour exam of fourteen 30-minute blocks with up to 20 questions each (from May 14, 2026). See the old vs new format, time per question, breaks, and what the exam covers.",
+    publishedAt: "2026-10-25",
+    reviewedAt: "2026-10-25",
+    author: "NBMEcalc Editorial Team",
+    category: "step-1-tips",
+    tags: ["step-1", "exam-format", "question-count", "test-day"],
+    readingTime: 6,
+    body: [
+      {
+        type: "p",
+        text: "Short answer: if you test on or after May 14, 2026, Step 1 is a one-day, 8-hour exam split into fourteen 30-minute blocks, and no block has more than 20 questions. Before that date it used seven 60-minute blocks of up to 40 questions, with no more than 280 items in total. The pace did not change: both formats work out to about 90 seconds per question.",
+      },
+      { type: "h2", text: "Step 1 format: before and after May 14, 2026" },
+      {
+        type: "table",
+        headers: ["", "Before May 14, 2026", "On or after May 14, 2026"],
+        rows: [
+          ["Blocks", "7 blocks of 60 minutes", "14 blocks of 30 minutes"],
+          ["Questions per block", "Up to 40", "Up to 20"],
+          ["Total questions", "No more than 280", "Not restated (14 × 20 = 280 at most)"],
+          ["Minimum break time", "45 minutes", "55 minutes"],
+          ["Optional tutorial", "15 minutes", "5 minutes"],
+          ["Testing session", "8 hours, one day", "8 hours, one day"],
+        ],
+        caption: "Source: USMLE Step 1 exam page (checked October 25, 2026).",
+      },
+      {
+        type: "callout",
+        tone: "info",
+        text: "USMLE's description of the new format gives the per-block limit but does not restate a total question count. Fourteen blocks of up to 20 questions caps the exam at 280, the same ceiling as before. Your form can have fewer, because the number of questions per block varies.",
+      },
+      { type: "h2", text: "How long is Step 1?" },
+      {
+        type: "p",
+        text: "Eight hours in a single session. The block time and the minimum break and tutorial allotments add up to exactly that. In the new format, 14 blocks of 30 minutes give 420 minutes of question time; add 55 minutes of break and the 5-minute tutorial and you reach 480 minutes. The old format got to the same total with 7 blocks of 60 minutes, 45 minutes of break, and a 15-minute tutorial.",
+      },
+      {
+        type: "chart",
+        variant: "bar",
+        title: "How the 8-hour Step 1 day is split (new format)",
+        caption: "Minutes from the allotments on the USMLE Step 1 exam page (checked October 25, 2026): 420 + 55 + 5 = 480.",
+        unit: " min",
+        data: [
+          { label: "Question blocks (14 × 30)", value: 420, highlight: true },
+          { label: "Minimum break time", value: 55 },
+          { label: "Optional tutorial", value: 5 },
+        ],
+      },
+      {
+        type: "p",
+        text: "Break time works as a pool you manage across the day. USMLE says the break allowance grows when you finish a block or the optional tutorial before its time runs out, so moving quickly through the tutorial when you already know the interface puts those minutes back into your breaks.",
+      },
+      { type: "h2", text: "How much time do you get per question?" },
+      {
+        type: "p",
+        text: "Thirty minutes for up to 20 questions is 90 seconds a question, the same rate as the old 60 minutes for up to 40. The difference is rhythm. You now reset every 30 minutes, which means twice as many block transitions and more natural points to stop for a short break.",
+      },
+      { type: "h2", text: "Is Step 1 scored or pass/fail?" },
+      {
+        type: "p",
+        text: "Pass/fail. For exams taken on or after January 26, 2022, USMLE reports Step 1 only as a pass or fail outcome. USMLE states that the passing standard is 196 on the three-digit scale, and that future reviews of the standard will not be reported as a three-digit number.",
+      },
+      {
+        type: "callout",
+        tone: "warning",
+        text: "Open every block. USMLE warns that if you do not open every block of the exam, it may not be scored and the attempt may be reported as incomplete on your USMLE transcript.",
+      },
+      { type: "h2", text: "What does Step 1 cover?" },
+      {
+        type: "p",
+        text: "USMLE builds Step 1 from an integrated outline organized by organ system, and also sets ranges by discipline and by physician task. The organ-system ranges are below.",
+      },
+      {
+        type: "table",
+        headers: ["System", "Share of Step 1"],
+        rows: [
+          ["Reproductive & Endocrine Systems", "12–16%"],
+          ["Respiratory & Renal/Urinary Systems", "11–15%"],
+          ["Behavioral Health & Nervous Systems/Special Senses", "10–14%"],
+          ["Blood & Lymphoreticular/Immune Systems", "9–13%"],
+          ["Musculoskeletal, Skin & Subcutaneous Tissue", "8–12%"],
+          ["Multisystem Processes & Disorders", "8–12%"],
+          ["Cardiovascular System", "7–11%"],
+          ["Gastrointestinal System", "6–10%"],
+          ["Social Sciences: Communication and Interpersonal Skills", "6–9%"],
+          ["Biostatistics & Epidemiology/Population Health", "4–6%"],
+          ["Human Development", "1–3%"],
+        ],
+        caption: "Source: USMLE Step 1 content outline and specifications (checked October 25, 2026). USMLE notes that percentages are subject to change at any time.",
+      },
+      {
+        type: "p",
+        text: "By discipline, pathology (45–55%) and physiology (30–40%) lead, followed by nutrition (15–20%) and then gross anatomy and embryology, microbiology, and pharmacology (10–20% each). These ranges add up to more than 100% because many questions are classified under more than one discipline. By physician task, 60–70% of questions test applying foundational science concepts and 20–25% test diagnosis.",
+      },
+      { type: "h2", text: "What the new format means for practice" },
+      {
+        type: "ul",
+        items: [
+          "Practice in 30-minute blocks of about 20 questions, so the rhythm on test day feels familiar.",
+          "Hold a pace near 90 seconds per question. Flag long vignettes and come back to them instead of stalling.",
+          "Decide before test day after which of the 14 blocks you will take breaks, and keep some break time for the last few blocks.",
+          "Use the free sample questions on USMLE's Step 1 materials page to get used to the official question style.",
+        ],
+      },
+      { type: "h2", text: "Check your readiness before you book" },
+      {
+        type: "p",
+        text: "Step 1 has no three-digit score to predict, so readiness tools work with percent correct. The <a href=\"/free-120-step-1\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Free 120 Step 1 readiness check</a> shows your Free 120 percent and its margin of error next to the low-pass range NBME draws on CBSSA reports. The <a href=\"/nbme-step-1-score-conversion\" class=\"font-semibold text-mint-700 underline underline-offset-4\">NBME Step 1 score conversion</a> reads a CBSSA Form 26–33 percent the same way.",
+      },
+      {
+        type: "p",
+        text: "For first-attempt pass rates, see <a href=\"/usmle-pass-rates\" class=\"font-semibold text-mint-700 underline underline-offset-4\">USMLE pass rates</a>. For when your result arrives, see the <a href=\"/usmle-score-release-dates\" class=\"font-semibold text-mint-700 underline underline-offset-4\">USMLE score release dates</a> guide. Taking Step 2 CK next? Its format changed on May 7, 2026; see <a href=\"/blog/how-many-questions-on-step-2-ck\" class=\"font-semibold text-mint-700 underline underline-offset-4\">how many questions are on Step 2 CK</a>.",
+      },
+    ],
+    references: [
+      { label: "USMLE: Step 1 exam format", href: "https://www.usmle.org/step-exams/step-1" },
+      {
+        label: "USMLE: Step 1 content outline and specifications",
+        href: "https://www.usmle.org/exam-resources/step-1-materials/step-1-content-outline-and-specifications",
+      },
+      { label: "USMLE: Examination results and scoring", href: "https://www.usmle.org/scores-transcripts/examination-results-and-scoring" },
+      { label: "USMLE: Step 1 materials (sample questions)", href: "https://www.usmle.org/exam-resources/step-1-materials" },
+    ],
+  },
+  {
     slug: "how-many-questions-on-step-2-ck",
     title: "How Many Questions Are on Step 2 CK? 2026 Format and Unscored Items",
     description:
@@ -186,6 +425,10 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "p",
         text: "Once you have a practice result, the NBME percent-correct converter estimates a Step 2 CK score from any CCSSA form, and the percentile calculator shows where that score ranks in the official 2026 USMLE norm table. The passing score is 218.",
+      },
+      {
+        type: "p",
+        text: "Still preparing for Step 1? Its format changed a week later, on May 14, 2026; see <a href=\"/blog/how-many-questions-on-step-1\" class=\"font-semibold text-mint-700 underline underline-offset-4\">how many questions are on Step 1</a>.",
       },
     ],
     references: [
@@ -1565,20 +1808,20 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "step-3-ccs-cases-complete-walkthrough",
-    title: "Step 3 CCS Cases: An Official-Source Walkthrough",
+    title: "Step 3 CCS Cases: How Many, How They're Scored, and How to Practice",
     description:
-      "Learn how official USMLE CCS software handles orders, simulated time, location, monitoring, case endings, and sample-case feedback.",
+      "Step 3 has 13–14 CCS cases on Day 2, each capped at 10 or 20 minutes of real time. See how USMLE scores them, the six official practice cases, and a case-by-case review checklist.",
     publishedAt: "2026-05-22",
-    updatedAt: "2026-10-24",
-    reviewedAt: "2026-10-14",
+    updatedAt: "2026-10-25",
+    reviewedAt: "2026-10-25",
     author: "NBMEcalc Editorial Team",
     category: "study-plans",
     tags: ["step-3", "ccs", "study-plan"],
-    readingTime: 12,
+    readingTime: 11,
     body: [
       {
         type: "p",
-        text: "Short answer: CCS is a dynamic patient-management simulation. You enter orders, request examinations, choose locations, advance simulated time, review results, monitor change, and respond until the case ends. The safest preparation is to practice the official software and study the official sample-case feedback—not memorize a universal order list.",
+        text: "Short answer: Step 3 has 13 to 14 computer-based case simulations (CCS), all on Day 2 after 180 multiple-choice questions. Each case gets a maximum of 10 or 20 minutes of real time. You manage one patient per case by typing orders, choosing locations, and advancing simulated time. USMLE scores timing, sequencing, and appropriateness, and it does not publish a separate CCS weight.",
       },
       {
         type: "h2",
@@ -1588,30 +1831,111 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "table",
         headers: ["Question", "Official answer"],
         rows: [
-          ["When are CCS cases given?", "Day 2 (Advanced Clinical Medicine), after the 180 multiple-choice items"],
           ["How many CCS cases are on Step 3?", "13 to 14 case simulations"],
+          ["When are CCS cases given?", "Day 2 (Advanced Clinical Medicine), after 180 multiple-choice items"],
           ["How long is each case?", "A maximum of 10 or 20 minutes of real time, depending on the case"],
-          ["Is there a tutorial?", "Yes, an optional 6-minute CCS tutorial before the cases"],
-          ["What happens when a case ends?", "Real time permitting, a case-end screen gives a few minutes to finalize orders and review the chart"],
-          ["How is CCS scored?", "Indicated management actions earn credit; actions that are not indicated and add risk lower the score"],
+          ["Is there a tutorial?", "Yes, an optional 6-minute CCS tutorial right before the cases"],
+          ["Are practice cases available at the test center?", "No. Only the optional tutorial is offered on test day"],
           ["How much does CCS count toward the total score?", "USMLE does not publish a separate CCS weight"],
-          ["Are there official practice cases?", "Yes. USMLE publishes sample cases with feedback (six cases on the CCS page)"],
+          ["Are there official practice cases?", "Yes, six cases with written feedback on the USMLE site"],
         ],
-        caption: "Source: USMLE Step 3 Exam Content and Computer-based Case Simulations pages, checked October 14, 2026.",
+        caption: "Source: USMLE Step 3 Exam Content and Computer-based Case Simulations pages, checked October 25, 2026.",
       },
       {
         type: "h2",
-        text: "What the official CCS page confirms",
+        text: "Where CCS fits in the Step 3 Day 2 schedule",
+      },
+      {
+        type: "p",
+        text: "Day 2 is a test session of about 9 hours. The case simulations come at the end, after you have already worked through nine blocks of multiple-choice questions, so plan your break time with the cases in mind. For the full two-day layout, see the <a href=\"/blog/step-3-exam-format\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 3 exam format guide</a>.",
+      },
+      {
+        type: "table",
+        headers: ["Day 2 section", "What USMLE allots"],
+        rows: [
+          ["Optional tutorial", "5 minutes"],
+          ["Multiple-choice questions", "180 items in 9 blocks of 20, 30 minutes per block"],
+          ["Optional CCS tutorial", "6 minutes"],
+          ["Case simulations", "13 to 14 cases, a maximum of 10 or 20 minutes each"],
+          ["Break time", "At least 45 minutes for the day"],
+          ["End-of-day survey", "Optional, if time allows"],
+        ],
+        caption: "Source: USMLE Step 3 Exam Content page (checked October 25, 2026). Day 1 is a separate session of 232 multiple-choice items in 12 blocks.",
+      },
+      {
+        type: "callout",
+        tone: "info",
+        text: "Cases end at different points. A case can end when you reach its maximum real time or earlier, once you have shown enough. USMLE says reaching the case-end screen before you feel finished does not by itself mean you did something right or wrong.",
+      },
+      {
+        type: "h2",
+        text: "How USMLE scores CCS cases",
+      },
+      {
+        type: "p",
+        text: "USMLE evaluates each case across diagnosis (including physical examination and tests), therapy, monitoring, timing, sequencing, and location. Scoring uses algorithms built from criteria set by expert generalist and specialist physicians, and more than one correct approach can earn a high score. These are the scoring rules USMLE states directly:",
       },
       {
         type: "ul",
         items: [
-          "Each case presents one patient in a consistent software interface.",
-          "The simulation evaluates diagnosis, treatment, monitoring, timing, sequencing, and location.",
-          "You place tests, therapies, procedures, consultations, nursing orders, and counseling through the order sheet.",
-          "Advancing the clock is required to receive results and observe treatment effects.",
-          "A patient's condition can change because of the underlying condition, your management, or both.",
+          "Indicated actions earn credit. Actions that are not indicated and carry more risk to the patient lower the score.",
+          "Timing and order matter. A correct decision made in the wrong sequence, or after a delay in simulated time, may earn no credit.",
+          "Restraint is scored. When observation is the standard of care, an aggressive workup or treatment scores lower.",
+          "Cost counts indirectly. Unnecessary or excessive orders, including an overly intensive care location, can reduce the score.",
+          "Counseling, diet, and ambulation orders carry little or no weight unless they are relevant to the case, such as a specific diet for a patient with diabetes.",
+          "Consultants are usually not helpful, though a consultation at the right moment can add to the score.",
         ],
+      },
+      {
+        type: "h2",
+        text: "Orders the software will not place for you",
+      },
+      {
+        type: "p",
+        text: "You act as the patient's primary physician in every location, and USMLE warns not to assume that nurses or consultants will write orders for you. Vital signs are taken at the start of a case and when the patient changes location. Routine monitoring, such as a cardiac monitor and pulse oximetry, is not added automatically; you have to order it.",
+      },
+      {
+        type: "ul",
+        items: [
+          "Orders go only on the order sheet. You cannot place them from progress notes, vital signs, labs, imaging, or the treatment record.",
+          "The order sheet accepts free text, and you can type a short name or acronym; if it is ambiguous, the software shows a list to choose from.",
+          "Some office or inpatient cases open with existing orders. They stay active until you cancel them.",
+          "Results and treatment effects appear only after you advance the simulated clock.",
+          "Surgery and labor and delivery transfers are arranged by staff; you cannot move the patient there directly.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "The six official practice cases",
+      },
+      {
+        type: "p",
+        text: "USMLE publishes six practice cases that run in the same software as the exam, each with written feedback on what adds to, subtracts from, or does not affect the score. Work through them before any commercial case bank, so your habits match the official interface and scoring logic.",
+      },
+      {
+        type: "table",
+        headers: ["Case", "Presentation", "Maximum real time", "Diagnosis in the feedback"],
+        rows: [
+          ["1", "65-year-old man, acute chest pain and respiratory distress", "10 minutes", "Tension pneumothorax"],
+          ["2", "32-year-old woman, knee pain and swelling", "20 minutes", "Rheumatoid arthritis"],
+          ["3", "65-year-old woman, chest pain", "20 minutes", "Ascending aortic dissection"],
+          ["4", "4-year-old boy, shortness of breath", "20 minutes", "Asthma"],
+          ["5", "31-year-old woman, lethargy, nausea, and vomiting", "20 minutes", "Diabetic ketoacidosis with E. coli sepsis"],
+          ["6", "25-year-old pregnant woman, seizure and loss of consciousness", "Not stated", "Eclampsia"],
+        ],
+        caption: "Source: USMLE Computer-based Case Simulations page, Feedback on Sample CCS Cases (checked October 25, 2026). Try each case before reading its feedback.",
+      },
+      {
+        type: "h2",
+        text: "Worked example: what official Case 1 rewards",
+      },
+      {
+        type: "p",
+        text: "Case 1 shows why timing dominates acute cases. A man arrives by ambulance with sudden right-sided chest pain, respiratory distress, and low blood pressure, and the examination points to tension pneumothorax. In USMLE's feedback, the highest-scoring approach is a targeted chest and cardiovascular examination, cardiac monitoring and pulse oximetry, immediate needle decompression, then a chest tube, a chest x-ray to confirm placement and re-expansion, and continued monitoring until the patient is stable.",
+      },
+      {
+        type: "p",
+        text: "The feedback lowers the score for skipping the chest exam, admitting before treatment, delaying decompression, or ordering tests that hold up treatment before the patient is stable, such as an ECG, blood gases, or a portable x-ray. Some orders, such as analgesics or routine blood counts, neither help nor hurt. The lesson carries over to other cases: stabilize first, then confirm, then monitor.",
       },
       {
         type: "h2",
@@ -1620,26 +1944,26 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "ol",
         items: [
-          "Read the reason for encounter, appearance, vital signs, and history before forming the first action set.",
-          "Request a focused examination when it would be appropriate in real patient care.",
-          "Place necessary diagnostic, therapeutic, monitoring, location, and counseling orders.",
-          "Advance simulated time to the next meaningful result or reassessment point.",
-          "Review the new information, cancel an order that became inappropriate, and update management.",
-          "At the case-end screen, use the remaining permitted actions to finalize care; do not assume an early ending proves success or failure.",
+          "Read the reason for the encounter, appearance, vital signs, and history before writing the first set of orders.",
+          "Request a focused physical examination when you would examine a real patient at that point.",
+          "Place the diagnostic, therapeutic, monitoring, location, and counseling orders the presentation calls for.",
+          "Advance simulated time to the next result or reassessment point you actually need.",
+          "Review new information, cancel any order that is no longer appropriate, and update management.",
+          "At the case-end screen, finalize orders in the minutes you have; you can no longer examine the patient, change location, or see pending results.",
         ],
       },
       {
-        type: "callout",
-        tone: "info",
-        text: "USMLE states that the CCS database contains thousands of possible tests and treatments, so it is not feasible to publish every action that may affect a score. Sample feedback gives examples, not a universal checklist for every patient.",
-      },
-      {
         type: "h2",
-        text: "What sample feedback teaches",
+        text: "How many CCS cases should you practice?",
       },
       {
         type: "p",
-        text: "The official examples reward clinically appropriate examination, diagnosis, treatment, monitoring, timing, sequencing, and location. They also identify actions that delay necessary care, add avoidable risk, or fail to follow the patient's response. Use those principles to review your reasoning after each practice case.",
+        text: "USMLE does not set a number. What it does say is that practicing the format and mechanics improves performance and that examinees who skip this practice are likely to be at a disadvantage. A practical target is to finish all six official cases with their feedback, then keep doing timed cases until entering orders, advancing the clock, and changing location take no conscious effort. Any specific count you see online is a study-plan preference, not a USMLE requirement.",
+      },
+      {
+        type: "callout",
+        tone: "warning",
+        text: "The official practice software runs best in Chrome at a 1920 × 1080 screen resolution, and USMLE says it cannot be used on phones. Plan to practice on a laptop or desktop.",
       },
       {
         type: "h2",
@@ -1648,11 +1972,11 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "ul",
         items: [
-          "Entering an order outside the order-sheet section.",
-          "Failing to advance time, so results and treatment effects never appear.",
-          "Assuming nurses or consultants will place monitoring or treatment orders for you.",
-          "Ignoring a message or change in condition after advancing the clock.",
-          "Treating the case-end screen as proof that every prior action was correct or incorrect.",
+          "Entering an order anywhere other than the order sheet.",
+          "Forgetting to advance the clock, so results and treatment effects never appear.",
+          "Assuming monitoring, IV access, or consultant orders will be placed for you.",
+          "Ignoring a message about a change in the patient's condition after the clock moves.",
+          "Treating an early case-end screen as proof that your management was right or wrong.",
         ],
       },
       {
@@ -1662,44 +1986,39 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "ul",
         items: [
-          "Did the examination and diagnostic work match the presentation?",
-          "Was urgent treatment sequenced before actions that could delay it?",
-          "Were monitoring and reassessment orders present after treatment?",
-          "Was the patient kept in or moved to an appropriate care location?",
-          "Did any order add risk or discomfort without useful information?",
-          "Did you practice using the current official interface rather than relying only on notes?",
+          "Did the examination and first tests match the presentation?",
+          "Was urgent treatment ordered before anything that could delay it?",
+          "Were monitoring and reassessment ordered after treatment?",
+          "Was the patient in the right care location at each stage?",
+          "Did any order add risk, discomfort, or cost without useful information?",
+          "In a stable patient, did you hold back when observation was the right call?",
         ],
       },
       {
         type: "h2",
-        text: "What this guide does not claim",
+        text: "Estimate the rest of your Step 3 score",
       },
       {
         type: "p",
-        text: "This guide does not claim that there are ten guaranteed case archetypes, that one commercial case count is required, or that a single universal order sequence works across patients. The official sample cases and software are the source of truth for the tested interaction model.",
-      },
-      {
-        type: "p",
-        text: "NBMEcalc does not score CCS cases. If you also have UWSA Step 3 or Free 120 results, the <a href=\"/step-3-predictor\" data-indexing-context=\"related\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 3 score predictor</a> can combine those supported inputs into an independent planning estimate. Keep that estimate separate from your CCS practice feedback; the model does not measure case-simulation performance.",
-      },
-      {
-        type: "callout",
-        tone: "success",
-        text: "Practice until placing orders, advancing time, reviewing results, changing location, and responding to the case-end screen no longer consume attention that should be used for clinical reasoning.",
+        text: "NBMEcalc does not score CCS cases. For the multiple-choice side, the <a href=\"/step-3-predictor\" data-indexing-context=\"related\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 3 score predictor</a> combines UWSA Step 3 and Free 120 results into an independent planning estimate; that model does not measure case-simulation performance. To see where a Step 3 score ranks against the official norm table and the passing score of 200, use the <a href=\"/step-3-percentile\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Step 3 percentile calculator</a>. For when results usually arrive, see the <a href=\"/usmle-score-release-dates\" class=\"font-semibold text-mint-700 underline underline-offset-4\">USMLE score release dates</a> guide.",
       },
     ],
     references: [
       {
-        label: "USMLE — Official Computer-based Case Simulations overview and sample feedback",
+        label: "USMLE — Computer-based Case Simulations overview and sample case feedback",
         href: "https://www.usmle.org/exam-resources/step-3-materials/step-3-test-question-formats/computer-based-case-simulations",
-      },
-      {
-        label: "USMLE — Step 3 sample test questions and practice materials",
-        href: "https://www.usmle.org/prepare-your-exam/step-3-materials/step-3-sample-test-questions",
       },
       {
         label: "USMLE — Step 3 exam content and test format",
         href: "https://www.usmle.org/step-exams/step-3/step-3-exam-content",
+      },
+      {
+        label: "USMLE — Step 3 common questions (CCS practice and responsibilities)",
+        href: "https://www.usmle.org/common-questions/step-3",
+      },
+      {
+        label: "USMLE — Step 3 sample test questions and practice materials",
+        href: "https://www.usmle.org/prepare-your-exam/step-3-materials/step-3-sample-test-questions",
       },
     ],
   },

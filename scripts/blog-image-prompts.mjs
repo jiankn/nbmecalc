@@ -12,6 +12,21 @@ function detailPrompt(scene) {
 
 const articles = [
   {
+    slug: "step-3-exam-format",
+    summary: `Two plain desk calendars side by side, each with a single blank page, beside two neat stacks of plain cream cards of unequal height and a simple analog clock face with tick marks only on a light oak desk. The visual communicates one exam split across two long test days.`,
+    detail: `A resident physician in scrubs reviews a plan at a quiet desk in the evening, with two plain unmarked folders side by side, a stethoscope, and a simple analog clock face with tick marks only. Calm, focused preparation for a two-day exam.`,
+  },
+  {
+    slug: "how-many-questions-on-step-1",
+    summary: `A tidy test-day still life: fourteen identical plain mint wooden tiles laid in two even rows of seven beside a simple analog clock face with tick marks only, a clear water bottle, and a closed plain notebook. The visual communicates one long exam day divided into many short, equal blocks.`,
+    detail: `A medical student at a quiet desk rehearses a timed practice block, a simple analog timer with tick marks only beside a closed unbranded laptop. Fourteen small plain wooden tiles line the desk edge, a few already flipped to a darker side, showing steady progress through a long day of short blocks.`,
+  },
+  {
+    slug: "how-many-questions-on-step-2-ck",
+    summary: `Sixteen identical plain charcoal wooden tiles arranged in two even rows of eight next to a stethoscope and a simple analog clock face with tick marks only on a light oak desk. The visual communicates a long clinical exam day split into many short, equal blocks.`,
+    detail: `A senior medical student pauses between practice blocks at a calm desk near a window, stretching briefly beside a stethoscope and a simple analog timer with tick marks only. Sixteen small plain tiles along the desk edge show half of the blocks completed.`,
+  },
+  {
     slug: "how-to-read-nbme-score-report",
     summary: `Top-down still life of a blank medical assessment report with several unlabeled horizontal performance bands, a magnifying glass isolating one important band, and a plain pencil on a light oak desk. The scene communicates extracting signal from a dense score report without panic.`,
     detail: `A medical student at a quiet desk calmly reviews a blank assessment report beside a laptop showing only abstract horizontal performance bars. Their posture shifts from tension to clarity as they mark two weak areas with plain color tabs; face shown naturally in three-quarter profile.`,
