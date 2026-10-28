@@ -126,6 +126,9 @@ jobs:
           # live in Cloudflare Pages and are read at runtime by the Worker.
           NEXT_PUBLIC_SITE_URL: https://nbmecalc.com
           NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT: ca-pub-3562784107542460
+          NEXT_PUBLIC_GOOGLE_ADSENSE_SLOT_CALCULATOR_RESULT: "3149757497"
+          NEXT_PUBLIC_GOOGLE_ADSENSE_SLOT_HOME_CONTENT: "9523594152"
+          NEXT_PUBLIC_GOOGLE_ADSENSE_SLOT_BLOG_INLINE: "2823996423"
           NEXT_PUBLIC_LIFETIME_FOUNDING_OFFER_ENABLED: ${{ vars.NEXT_PUBLIC_LIFETIME_FOUNDING_OFFER_ENABLED || 'true' }}
 
       - name: Deploy to Cloudflare Pages
