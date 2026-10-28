@@ -123,3 +123,8 @@
 html[data-ad-free="1"] aside[data-ad-placement] {
   display: none;
 }
+
+/* Google 没给广告时会把 <ins> 标成 data-ad-status="unfilled"：收起整个占位框，不留带 Advertisement 字样的空灰框。 */
+aside[data-ad-placement]:has(ins[data-ad-status="unfilled"]) {
+  display: none;
+}
