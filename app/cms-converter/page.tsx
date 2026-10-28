@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LayoutGrid, Microscope } from "lucide-react";
+import { AdSlot } from "@/components/ads/ad-slot";
 import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Button } from "@/components/ui/button";
@@ -204,6 +205,8 @@ export default function CmsConverterPage() {
           </div>
         </div>
       </section>
+
+      <AdSlot placement="home-content" className="container my-8 max-w-4xl lg:my-10" />
 
       <section className="py-16 lg:py-20 bg-white border-b border-gray-200">
         <div className="container max-w-4xl">
