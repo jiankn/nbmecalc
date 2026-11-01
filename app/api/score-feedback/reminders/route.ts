@@ -11,6 +11,9 @@ import {
   type ScoreFeedbackAction,
 } from "@/lib/score-feedback";
 import { getSiteUrlFromRuntime, readRuntimeEnv } from "@/lib/runtime-env";
+import { isCcmsaSessionId } from "@/lib/ccmsa-submission";
+import { loadCcmsaSubmissionForSession } from "@/lib/ccmsa-submission-store";
+import { buildCcmsaReminderEmail } from "@/lib/ccmsa-reminder-email";
 
 export const runtime = "edge";
 
@@ -66,15 +69,24 @@ export async function POST(req: Request) {
 
   for (const row of rows) {
     if (!row.email) continue;
-    const email = await buildReminderEmail({
-      siteUrl,
-      secret,
-      sessionId: row.stripeSessionId,
-      step: row.step ?? "step3",
-      predictedScore: row.predictedScore,
-      ciLower: row.ciLower,
-      ciUpper: row.ciUpper,
-    });
+    // CCMSA 研究提交没有预测分数，走单独的“请回填真实 Step 3 分数”文案。
+    const isCcmsa = isCcmsaSessionId(row.stripeSessionId);
+    const email = isCcmsa
+      ? await buildCcmsaReminderEmail({
+          siteUrl,
+          secret,
+          sessionId: row.stripeSessionId,
+          ccmsa: await loadCcmsaSubmissionForSession(db, row.stripeSessionId),
+        })
+      : await buildReminderEmail({
+          siteUrl,
+          secret,
+          sessionId: row.stripeSessionId,
+          step: row.step ?? "step3",
+          predictedScore: row.predictedScore,
+          ciLower: row.ciLower,
+          ciUpper: row.ciUpper,
+        });
 
     const result = await sendEmail({
       to: row.email,
@@ -82,7 +94,11 @@ export async function POST(req: Request) {
       html: email.html,
       text: email.text,
       replyTo: "hello@nbmecalc.com",
-      headers: { "X-NBMEcalc-Email-Type": "score-feedback-reminder" },
+      headers: {
+        "X-NBMEcalc-Email-Type": isCcmsa
+          ? "ccmsa-score-feedback-reminder"
+          : "score-feedback-reminder",
+      },
     });
 
     if (result.delivered) {

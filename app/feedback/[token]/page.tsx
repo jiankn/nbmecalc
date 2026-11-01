@@ -56,6 +56,8 @@ export default async function ScoreFeedbackPage({
   }
 
   const record = loaded.record;
+  // CCMSA 研究提交没有预测分数，标题和说明改成请用户回填真实 Step 3 分数。
+  const isResearchSubmission = record.predictedScore === null;
   const alreadySubmitted = Boolean(record.submittedAt);
   const showThanks = thanks === "1" || alreadySubmitted;
 
@@ -74,18 +76,37 @@ export default async function ScoreFeedbackPage({
               </div>
               <div>
                 <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">
-                  {showThanks ? "Thank you — this helps future students" : "How did your real score compare?"}
+                  {showThanks
+                    ? "Thank you — this helps future students"
+                    : isResearchSubmission
+                      ? "What was your real Step 3 score?"
+                      : "How did your real score compare?"}
                 </h1>
-                <p className="text-gray-600">
-                  Your predicted {record.step.toUpperCase()} score was{" "}
-                  <strong className="text-gray-950">{record.predictedScore}</strong>{" "}
-                  (estimated range {record.ciLower}–{record.ciUpper}).
-                </p>
+                {isResearchSubmission ? (
+                  <p className="text-gray-600">
+                    {record.ccmsa ? (
+                      <>
+                        You shared a CCMSA Form {record.ccmsa.form} Assessment Score of{" "}
+                        <strong className="text-gray-950">{record.ccmsa.assessmentScore}</strong>.{" "}
+                      </>
+                    ) : (
+                      "You shared a CCMSA Assessment Score. "
+                    )}
+                    Your real Step 3 result makes it a paired data point for research. There is no
+                    CCMSA-to-Step 3 conversion today.
+                  </p>
+                ) : (
+                  <p className="text-gray-600">
+                    Your predicted {record.step.toUpperCase()} score was{" "}
+                    <strong className="text-gray-950">{record.predictedScore}</strong>{" "}
+                    (estimated range {record.ciLower}–{record.ciUpper}).
+                  </p>
+                )}
               </div>
             </div>
 
             {showThanks ? (
-              <ThankYouState record={record} />
+              <ThankYouState record={record} isResearchSubmission={isResearchSubmission} />
             ) : (
               <FeedbackForm token={token} examDate={record.examDate} />
             )}
@@ -93,8 +114,9 @@ export default async function ScoreFeedbackPage({
             <div className="mt-8 flex items-start gap-2 rounded-2xl bg-gray-50 border border-gray-200 p-4 text-sm text-gray-600">
               <Lock className="h-4 w-4 text-gray-500 mt-0.5 shrink-0" />
               <p>
-                No login required. We store this as calibration data tied to your report session,
-                not as a public review.
+                {isResearchSubmission
+                  ? "No login required. We store this with your CCMSA research submission and use it only in aggregate. Individual records are never published."
+                  : "No login required. We store this as calibration data tied to your report session, not as a public review."}
               </p>
             </div>
           </div>
@@ -170,7 +192,9 @@ function FeedbackForm({ token, examDate }: { token: string; examDate: number | n
 
 function ThankYouState({
   record,
+  isResearchSubmission,
 }: {
+  isResearchSubmission: boolean;
   record: {
     actualScore: number | null;
     passFail: "pass" | "fail" | null;
@@ -188,7 +212,9 @@ function ThankYouState({
             : "Your feedback was recorded."}
       </p>
       <p className="text-sm text-gray-600 mt-3">
-        This single datapoint helps evaluate future planning ranges and pass-risk estimates.
+        {isResearchSubmission
+          ? "Your CCMSA score and real result are now one paired record in the research dataset."
+          : "This single datapoint helps evaluate future planning ranges and pass-risk estimates."}
       </p>
       <Button variant="outline" className="mt-5" asChild>
         <Link href="/">Back to NBMEcalc</Link>

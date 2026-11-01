@@ -9,6 +9,8 @@ import {
 } from "@/lib/db/schema";
 import { loadReportFromSession, type ReportData } from "@/lib/session-report";
 import type { StepKind } from "@/lib/data";
+import { isCcmsaSessionId } from "@/lib/ccmsa-submission";
+import { loadCcmsaSubmissionForSession } from "@/lib/ccmsa-submission-store";
 import {
   estimateScoreReleaseDate,
   inferOutcomeFromScore,
@@ -23,10 +25,13 @@ export type ScoreFeedbackLoadResult =
 export interface ScoreFeedbackRecordView {
   sessionId: string;
   step: StepKind;
-  predictedScore: number;
-  ciLower: number;
-  ciUpper: number;
-  passProbability: number;
+  /** CCMSA 研究提交没有预测分数，以下四项为 null。 */
+  predictedScore: number | null;
+  ciLower: number | null;
+  ciUpper: number | null;
+  passProbability: number | null;
+  /** 仅 CCMSA 研究提交有值：用户当初提交的表单号和 Assessment Score。 */
+  ccmsa: { form: number; assessmentScore: number } | null;
   examDate: number | null;
   scoreReleaseDate: number | null;
   submittedAt: number | null;
@@ -42,11 +47,14 @@ export async function loadScoreFeedbackRecord(
   const existing = await findScoreReport(db, sessionId);
   const stored = existing ? feedbackDataFromScoreReport(existing) : null;
   if (stored) {
-    return {
-      status: "ok",
-      record: recordFromFeedbackData(sessionId, stored, existing),
-    };
+    const record = recordFromFeedbackData(sessionId, stored, existing);
+    if (isCcmsaSessionId(sessionId)) {
+      record.ccmsa = await loadCcmsaSubmissionForSession(db, sessionId);
+    }
+    return { status: "ok", record };
   }
+  // CCMSA 研究提交只存在于 score_reports，不去 Stripe 查。
+  if (isCcmsaSessionId(sessionId)) return { status: "not_found" };
 
   const loaded = await loadReportFromSession(sessionId);
   if (loaded.status !== "ok") return { status: loaded.status };
@@ -226,6 +234,7 @@ export async function submitScoreFeedback(args: {
 }): Promise<ScoreFeedbackLoadResult> {
   const existing = await findScoreReport(args.db, args.sessionId);
   let data = existing ? feedbackDataFromScoreReport(existing) : null;
+  if (!data && isCcmsaSessionId(args.sessionId)) return { status: "not_found" };
   if (!data) {
     const loaded = await loadReportFromSession(args.sessionId);
     if (loaded.status !== "ok") return { status: loaded.status };
@@ -308,10 +317,10 @@ export async function submitScoreFeedback(args: {
 
 interface ScoreFeedbackData {
   step: StepKind;
-  predictedScore: number;
-  ciLower: number;
-  ciUpper: number;
-  passProbability: number;
+  predictedScore: number | null;
+  ciLower: number | null;
+  ciUpper: number | null;
+  passProbability: number | null;
   predictionId?: string | null;
   customerEmail?: string | null;
 }
@@ -331,6 +340,18 @@ function feedbackDataFromReportData(data: ReportData): ScoreFeedbackData {
 function feedbackDataFromScoreReport(
   row: ScoreReportRow
 ): ScoreFeedbackData | null {
+  // CCMSA 研究提交：没有预测分数也是完整记录。
+  if (row.step && isCcmsaSessionId(row.stripeSessionId)) {
+    return {
+      step: row.step,
+      predictedScore: null,
+      ciLower: null,
+      ciUpper: null,
+      passProbability: null,
+      predictionId: null,
+      customerEmail: row.email,
+    };
+  }
   if (
     !row.step ||
     typeof row.predictedScore !== "number" ||
@@ -364,6 +385,7 @@ function recordFromFeedbackData(
     ciLower: data.ciLower,
     ciUpper: data.ciUpper,
     passProbability: data.passProbability,
+    ccmsa: null,
     examDate: row?.examDate ?? null,
     scoreReleaseDate: row?.scoreReleaseDate ?? null,
     submittedAt: row?.submittedAt ?? null,

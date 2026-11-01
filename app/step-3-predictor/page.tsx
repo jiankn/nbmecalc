@@ -5,6 +5,7 @@ import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
+import { CcmsaResearchForm } from "@/components/ccmsa-research-form";
 import { ALGORITHM_VERSION, predictPreview, type PracticeExam } from "@/lib/data";
 import { NORM_INFO, STEP3_PASSING_REVIEW } from "@/lib/usmle-norms";
 
@@ -379,8 +380,8 @@ export default function Step3PredictorPage() {
           <p className="text-gray-700 leading-relaxed mb-4">
             A conversion table would need paired CCMSA and Step 3 outcomes,
             documented inclusion rules, enough observations across the score
-            range, and out-of-sample error reporting. This repository currently
-            contains none of those ingredients.
+            range, and out-of-sample error reporting. NBMEcalc does not have
+            that paired data yet; the optional form below starts collecting it.
           </p>
           <p className="text-gray-700 leading-relaxed">
             The absence of data supports a limit, not a numerical assumption.
@@ -389,6 +390,8 @@ export default function Step3PredictorPage() {
             error. Until then, the useful answer is the score-scale distinction
             and the official report&apos;s stated purpose.
           </p>
+
+          <CcmsaResearchForm />
         </div>
       </section>
 

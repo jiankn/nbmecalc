@@ -83,7 +83,8 @@ export async function verifyScoreFeedbackToken(
 
   if (
     payload.v !== TOKEN_VERSION ||
-    !/^(cs_|pred_)/.test(payload.sessionId ?? "")
+    // cs_ = 付费报告，pred_ = 免费预测，ccmsa_ = CCMSA 研究提交
+    !/^(cs_|pred_|ccmsa_)/.test(payload.sessionId ?? "")
   ) {
     return { ok: false, reason: "malformed" };
   }

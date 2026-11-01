@@ -29,7 +29,7 @@ export default function PrivacyPage() {
         size="sm"
       />
 
-      <LegalContent lastUpdated="October 3, 2026">
+      <LegalContent lastUpdated="November 1, 2026">
         <h2>1. Who we are</h2>
         <p>
           nbmecalc.com (&quot;NBMEcalc&quot;, &quot;we&quot;, &quot;us&quot;,
@@ -61,6 +61,22 @@ export default function PrivacyPage() {
             percent correct), and the real result you choose to report. These
             pairs are used only in aggregate to evaluate and recalibrate our
             estimates; individual records are never published.
+          </li>
+          <li id="research-data">
+            <strong>Optional CCMSA research submissions</strong> — if you use
+            the &quot;Share your CCMSA score for research&quot; form on the{" "}
+            <Link href="/step-3-predictor">Step 3 predictor</Link> page and
+            check the consent box, we store your CCMSA form number, your
+            Assessment Score (10-800), and, if you add them, your Step 3 exam
+            date and email address, along with the time of your consent, your
+            IP address, and browser user agent for abuse prevention. With an
+            email and exam date, we send one reminder after Step 3 scores are
+            usually released asking for your real Step 3 result, and we store
+            the result you choose to report. We use these pairs only in
+            aggregate to study whether CCMSA results relate to Step 3 scores.
+            We do not publish individual records, do not use your email for
+            marketing, and do not offer a CCMSA-to-Step 3 conversion based on
+            this data unless enough paired results exist to measure its error.
           </li>
           <li>
             <strong>Payment information</strong> — handled by{" "}
@@ -95,6 +111,10 @@ export default function PrivacyPage() {
             and service-related support.
           </li>
           <li>To improve the algorithm — only aggregated, anonymized data.</li>
+          <li>
+            To study, in aggregate, how optional CCMSA research submissions
+            compare with the real Step 3 results that participants report.
+          </li>
           <li>To prevent abuse and rate-limit requests.</li>
           <li>To comply with legal obligations.</li>
         </ul>
@@ -115,7 +135,8 @@ export default function PrivacyPage() {
             prevention.
           </li>
           <li>
-            <strong>Consent</strong> — optional outcome feedback and advertising
+            <strong>Consent</strong> — optional outcome feedback, optional CCMSA
+            research submissions, and advertising
             cookies where consent is required. You can withdraw consent through
             the applicable control.
           </li>
@@ -166,6 +187,14 @@ export default function PrivacyPage() {
             or your account. Anonymous calculation snapshots and first-party
             funnel events are retained for up to 12 months, then deleted or
             aggregated.
+          </li>
+          <li>
+            <strong>CCMSA research submissions</strong> — kept for up to 36
+            months after submission, then deleted or reduced to aggregate
+            statistics with the email removed. You can ask us to delete your
+            submission at any time by emailing{" "}
+            <a href="mailto:privacy@nbmecalc.com">privacy@nbmecalc.com</a>{" "}
+            from the address you used, or by replying to the reminder email.
           </li>
           <li>
             <strong>Payment records</strong> — 7 years (tax law).

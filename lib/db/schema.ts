@@ -221,6 +221,40 @@ export type ScoreReportRow = typeof scoreReports.$inferSelect;
 export type NewScoreReportRow = typeof scoreReports.$inferInsert;
 
 // ---------------------------------------------------------------------------
+// ccmsa_submissions — 用户自愿提交的 CCMSA 成绩（10–800 Assessment Score）。
+// 目前没有 CCMSA→Step 3 换算，这里只收集研究数据；留邮箱的行会在
+// score_reports 里对应一行 `ccmsa_<id>`，出分后用提醒邮件回填真实 Step 3 分数。
+// ---------------------------------------------------------------------------
+
+export const ccmsaSubmissions = sqliteTable(
+  "ccmsa_submissions",
+  {
+    id: text("id").primaryKey(),
+    /** CCMSA 表单号，取值见 NBME_FORM_NUMBERS_BY_STEP.step3。 */
+    form: integer("form").notNull(),
+    /** 成绩单上的 Assessment Score，10–800。 */
+    assessmentScore: integer("assessment_score").notNull(),
+    /** 用户填写的真实 Step 3 考试日期（unix ms，UTC 正午），可选。 */
+    examDate: integer("exam_date"),
+    email: text("email"),
+    /** 对应 score_reports.stripe_session_id；没留邮箱时为 null。 */
+    scoreFeedbackSessionId: text("score_feedback_session_id"),
+    consentedAt: integer("consented_at").notNull(),
+    ip: text("ip"),
+    userAgent: text("user_agent"),
+    createdAt: integer("created_at").notNull(),
+  },
+  (t) => ({
+    byForm: index("idx_ccmsa_submissions_form").on(t.form),
+    byCreated: index("idx_ccmsa_submissions_created").on(t.createdAt),
+    byEmail: index("idx_ccmsa_submissions_email").on(t.email),
+  })
+);
+
+export type CcmsaSubmissionRow = typeof ccmsaSubmissions.$inferSelect;
+export type NewCcmsaSubmissionRow = typeof ccmsaSubmissions.$inferInsert;
+
+// ---------------------------------------------------------------------------
 // rate_limits — fixed-window counter keyed by an arbitrary string.
 // Sized for tens of QPS; if we ever need more we'd swap to Cloudflare's
 // Rate Limiting binding. The schema is intentionally generic ("key", not
