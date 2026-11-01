@@ -32,6 +32,12 @@ const nextConfig = {
         destination: "/nbme-score-conversion",
         permanent: true,
       },
+      {
+        // 2026-11-01 博客并入 CMS 主页面，避免两页抢同一批 "how many cms forms" 词
+        source: "/blog/how-many-cms-forms-step-2-ck",
+        destination: "/cms-forms-step-2-ck",
+        statusCode: 301,
+      },
     ];
   },
 };

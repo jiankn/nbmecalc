@@ -18,14 +18,14 @@ const officialCmsUrl =
   "https://www.nbme.org/examinees/self-assessments/clinical-science-mastery-series/";
 
 export const metadata: Metadata = {
-  title: "CMS Forms for Step 2 CK: Subjects, Timing & Study Plan",
+  title: "CMS Forms for Step 2 CK: How Many, All 8 Subjects & Price",
   description:
-    "See all 8 NBME CMS subjects, the official 50-question format, current $21 price, where to buy, and a focused Step 2 CK study workflow.",
+    "NBME sells CMS forms in 8 subjects, with multiple forms each but no published total. See the 50-question format, $21 price, how to check current forms, and which to take.",
   alternates: { canonical: pageUrl },
   openGraph: {
-    title: "CMS Forms for Step 2 CK: Subjects, Timing & Study Plan",
+    title: "CMS Forms for Step 2 CK: How Many, All 8 Subjects & Price",
     description:
-      "An official-source guide to NBME Clinical Science Mastery Series subjects, format, access, and Step 2 CK use.",
+      "How many CMS forms NBME offers, all 8 Clinical Science Mastery Series subjects, format, price, and how to use them for Step 2 CK.",
     url: pageUrl,
     type: "article",
     images: [
@@ -43,7 +43,22 @@ const officialFacts = [
   { value: "8", label: "clinical subject areas" },
   { value: "50", label: "multiple-choice questions per form" },
   { value: "75 min", label: "standard-paced limit" },
-  { value: "$21", label: "official price checked Aug. 13, 2026" },
+  { value: "$21", label: "official price checked Nov. 1, 2026" },
+];
+
+// NBME 官网只写"每科有多套"，不公布总数或每科套数，所以这里只讲如何自己核实，不写具体数字。
+const formCountSteps = [
+  "Sign in to the MyNBME Examinee Portal and open the self-assessment store.",
+  "Choose Clinical Science Mastery Series, then one subject.",
+  "Read the form choices in that subject's product list. That list is the current inventory for the subject.",
+  "Repeat for each subject you plan to use. Counts differ by subject and can change when NBME adds or retires a form.",
+];
+
+const howManyToTake = [
+  "Start with one form in a subject that a CCSSA, clerkship result, or error log identifies as weak.",
+  "Review every missed question and the official content feedback before deciding whether another form in that subject would add useful evidence.",
+  "For a shelf exam, stay within the matching CMS subject and choose from the forms currently offered in MyNBME.",
+  "For overall Step 2 CK readiness, return to a comprehensive assessment rather than treating a larger CMS count as proof of readiness.",
 ];
 
 const subjects = [
@@ -106,6 +121,14 @@ const studySteps = [
 
 const faqs = [
   {
+    q: "How many CMS forms are there for Step 2 CK?",
+    a: "NBME offers CMS forms in 8 clinical subjects and says multiple forms are available for each one. It does not publish a total count across subjects. Check the product list for each subject in MyNBME to see what is currently for sale.",
+  },
+  {
+    q: "How many Pediatrics, Surgery, Medicine, or Psychiatry CMS forms are there?",
+    a: "NBME does not publish a per-subject count for any of the 8 subjects. Each subject has multiple forms, and the MyNBME product list for that subject shows the forms currently offered. A high form number is not the same as the number of forms for sale, because older forms may be retired.",
+  },
+  {
     q: "What are CMS forms for Step 2 CK?",
     a: "CMS commonly refers to NBME's Clinical Science Mastery Series self-assessments. They are subject-focused assessments designed for students preparing for an NBME Clinical Science Subject Exam. Students also use them to practice clinical reasoning in a weak Step 2 CK subject, but they are not comprehensive Step 2 CK readiness exams.",
   },
@@ -127,7 +150,7 @@ const faqs = [
   },
   {
     q: "Can a CMS score predict my Step 2 CK score?",
-    a: "Not directly. NBME describes CMS score reporting in relation to the corresponding Subject Exam scale. Use CMS results to investigate a subject; use a comprehensive CCSSA and other current Step 2 CK evidence for overall readiness.",
+    a: "Not directly. The CMS total score runs from 1 to 30, and the report shows the Subject Exam score that approximately corresponds to it. Use CMS results to investigate a subject; use a comprehensive CCSSA and other current Step 2 CK evidence for overall readiness.",
   },
 ];
 
@@ -136,11 +159,11 @@ export default function CmsFormsStep2CkPage() {
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      name: "CMS Forms for Step 2 CK: Subjects, Timing, and Study Plan",
+      name: "CMS Forms for Step 2 CK: How Many, Subjects, and Study Plan",
       url: pageUrl,
       description:
-        "An official-source guide to NBME Clinical Science Mastery Series subjects, format, access, and Step 2 CK study use.",
-      dateModified: "2026-09-06",
+        "How many CMS forms NBME offers, plus Clinical Science Mastery Series subjects, format, access, and Step 2 CK study use.",
+      dateModified: "2026-11-01",
       inLanguage: "en-US",
       isPartOf: {
         "@type": "WebSite",
@@ -187,9 +210,9 @@ export default function CmsFormsStep2CkPage() {
       />
 
       <PageHero
-        badge="Official-source CMS guide · Reviewed Sep. 6, 2026"
-        title="CMS Forms for Step 2 CK: Subjects, Timing, and Study Plan"
-        description="NBME lists 8 CMS subjects, with 50 questions per form. Use this guide to choose the right subject, find the official forms, and keep a CMS result separate from overall Step 2 CK readiness."
+        badge="Official-source CMS guide · Reviewed Nov. 1, 2026"
+        title="CMS Forms for Step 2 CK: How Many, Subjects, and Study Plan"
+        description="NBME offers CMS forms in 8 subjects, with multiple forms in each and 50 questions per form. Use this guide to check how many are available, choose the right subject, and keep a CMS result separate from overall Step 2 CK readiness."
         size="md"
       >
         <div className="flex flex-col justify-center gap-3 sm:flex-row">
@@ -223,19 +246,40 @@ export default function CmsFormsStep2CkPage() {
           </div>
           <p className="mt-4 text-center text-xs text-gray-500">
             Format, access, and price checked against NBME&apos;s official Clinical
-            Science Mastery Series page on September 6, 2026. Availability and
+            Science Mastery Series page on November 1, 2026. Availability and
             price can change.
           </p>
-          <p className="mt-3 text-center text-sm text-gray-600">
-            Looking for the current total number of forms? Read{" "}
-            <Link
-              href="/blog/how-many-cms-forms-step-2-ck"
-              className="font-semibold text-mint-800 underline underline-offset-4"
-            >
-              how NBME lists CMS availability
-            </Link>
-            .
+        </div>
+      </section>
+
+      <section id="how-many" className="border-b border-gray-200 bg-white py-14 lg:py-16">
+        <div className="container max-w-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-gray-950 lg:text-4xl">
+            How many CMS forms are there?
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-gray-700">
+            NBME offers CMS forms in <strong>8 clinical subjects</strong> and
+            says <strong>multiple forms</strong> are available for each one.
+            It does not publish a total across subjects or a count for any
+            single subject. The same is true for Pediatrics, Surgery, Medicine,
+            Psychiatry, and the other four subjects.
           </p>
+          <p className="mt-3 leading-relaxed text-gray-700">
+            A form number is not a count of what is for sale. Older forms can be
+            retired, so &quot;Form 8&quot; does not mean eight forms are
+            available today. Lists in forums and social posts are dated
+            snapshots.
+          </p>
+          <div className="mt-7 rounded-2xl border border-mint-200 bg-mint-50/50 p-6">
+            <h3 className="font-bold text-gray-950">
+              Check the current count yourself
+            </h3>
+            <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-gray-700">
+              {formCountSteps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+          </div>
         </div>
       </section>
 
@@ -380,6 +424,38 @@ export default function CmsFormsStep2CkPage() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      <section id="how-many-to-take" className="border-t border-gray-200 bg-gray-50 py-16 lg:py-20">
+        <div className="container max-w-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-gray-950 lg:text-4xl">
+            How many CMS forms should you do for Step 2 CK?
+          </h2>
+          <p className="mt-3 text-lg leading-relaxed text-gray-600">
+            NBME does not set a number. Take another form only when it answers a
+            real study question:
+          </p>
+          <ul className="mt-6 space-y-3">
+            {howManyToTake.map((item) => (
+              <li key={item} className="flex gap-3 rounded-2xl border border-gray-200 bg-white p-5 text-sm leading-relaxed text-gray-700">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-mint-700" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 leading-relaxed text-gray-700">
+            After a form, read the 1–30 CMS total score and the approximate
+            Subject Exam score on your report with the{" "}
+            <Link
+              href="/cms-converter"
+              data-indexing-context="related"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              CMS score interpretation guide
+            </Link>
+            . A CMS score does not convert to a 3-digit Step 2 CK score.
+          </p>
         </div>
       </section>
 
