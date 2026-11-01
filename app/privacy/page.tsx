@@ -157,7 +157,7 @@ export default function PrivacyPage() {
             <strong>Stripe</strong> — payment processing.
           </li>
           <li>
-            <strong>Postal</strong> — transactional email delivery.
+            <strong>Resend</strong> — transactional email delivery.
           </li>
           <li>
             <strong>Cloudflare Web Analytics</strong> — aggregate traffic and

@@ -2,17 +2,16 @@
  * Email transport.
  *
  * Runs on Cloudflare Workers (Edge runtime) so we cannot use nodemailer / raw
- * TCP. We POST to a Postal server's HTTP API (https://docs.postalserver.io/
- * developer/api).
+ * TCP. We POST to Resend's HTTP API (https://resend.com/docs/api-reference/emails/send-email).
+ * 2026-11 起从 Postal 换成 Resend：原 Postal 服务器域名 removexif.com 已过期。
  *
  * Required env vars (set as Cloudflare Pages secrets):
- *   POSTAL_API_URL  Full URL to the Postal `send/message` endpoint,
- *                   e.g. https://mail.removexif.com/api/v1/send/message
- *   POSTAL_API_KEY  Postal API credential value (the X-Server-API-Key header)
- *   SMTP_FROM       Verified sender address, e.g. noreply@nbmecalc.com
+ *   RESEND_API_KEY  Resend API key (re_...), sent as a Bearer token
+ *   EMAIL_FROM      Sender address on a domain verified in Resend,
+ *                   e.g. noreply@nbmecalc.com (falls back to legacy SMTP_FROM)
  *
- * Postal returns 200 with { status: "success", data: { message_id, messages } }
- * on success, or { status: "error", data: { code, message } } on failure.
+ * Resend returns 200 with { id } on success, or a 4xx/5xx with
+ * { statusCode, name, message } on failure.
  */
 
 export type EmailRecipient = string | string[];
@@ -36,14 +35,13 @@ export interface SendEmailResult {
   error?: string;
 }
 
-interface PostalResponse {
-  status?: string;
-  data?: {
-    message_id?: string;
-    code?: string;
-    message?: string;
-    messages?: Record<string, { id: number; token: string }>;
-  };
+const RESEND_ENDPOINT = "https://api.resend.com/emails";
+
+interface ResendResponse {
+  id?: string;
+  statusCode?: number;
+  name?: string;
+  message?: string;
 }
 
 function readEnv(name: string): string | undefined {
@@ -56,21 +54,20 @@ function toRecipientArray(to: EmailRecipient): string[] {
 }
 
 /**
- * Sends an email through Postal. Always resolves — never throws — so callers
+ * Sends an email through Resend. Always resolves — never throws — so callers
  * can decide whether to surface failures to the end user.
  */
 export async function sendEmail(message: EmailMessage): Promise<SendEmailResult> {
-  const endpoint = readEnv("POSTAL_API_URL");
-  const apiKey = readEnv("POSTAL_API_KEY");
-  const fromAddress = readEnv("SMTP_FROM") ?? "noreply@nbmecalc.com";
+  const apiKey = readEnv("RESEND_API_KEY");
+  const fromAddress =
+    readEnv("EMAIL_FROM") ?? readEnv("SMTP_FROM") ?? "noreply@nbmecalc.com";
 
-  if (!endpoint || !apiKey) {
-    const missing = !endpoint ? "POSTAL_API_URL" : "POSTAL_API_KEY";
-    console.error(`[email] missing required env var: ${missing}`);
+  if (!apiKey) {
+    console.error("[email] missing required env var: RESEND_API_KEY");
     return {
       ok: false,
       delivered: false,
-      error: `Email transport not configured (missing ${missing})`,
+      error: "Email transport not configured (missing RESEND_API_KEY)",
     };
   }
 
@@ -78,33 +75,30 @@ export async function sendEmail(message: EmailMessage): Promise<SendEmailResult>
     from: `NBMEcalc <${fromAddress}>`,
     to: toRecipientArray(message.to),
     subject: message.subject,
-    html_body: message.html,
-    ...(message.text ? { plain_body: message.text } : {}),
+    html: message.html,
+    ...(message.text ? { text: message.text } : {}),
     ...(message.replyTo ? { reply_to: message.replyTo } : {}),
-    headers: {
-      "BIMI-Selector": "v=BIMI1; s=default;",
-      ...(message.headers ?? {}),
-    },
+    ...(message.headers ? { headers: message.headers } : {}),
   };
 
   try {
-    const res = await fetch(endpoint, {
+    const res = await fetch(RESEND_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Server-API-Key": apiKey,
+        Authorization: `Bearer ${apiKey}`,
+        // Resend 拒绝没有 User-Agent 的请求，Workers 的 fetch 默认不带
+        "User-Agent": "nbmecalc/1.0",
       },
       body: JSON.stringify(payload),
     });
 
-    const body = (await res.json().catch(() => null)) as PostalResponse | null;
+    const body = (await res.json().catch(() => null)) as ResendResponse | null;
 
-    // Postal returns HTTP 200 even on logical failures; the real status lives
-    // in the JSON body's `status` field.
-    if (!res.ok || !body || body.status !== "success") {
-      const code = body?.data?.code ?? `http_${res.status}`;
-      const detail = body?.data?.message ?? "Postal API rejected message";
-      console.error("[email] Postal rejected message", { code, detail });
+    if (!res.ok || !body?.id) {
+      const code = body?.name ?? `http_${res.status}`;
+      const detail = body?.message ?? "Resend API rejected message";
+      console.error("[email] Resend rejected message", { code, detail });
       return {
         ok: false,
         delivered: false,
@@ -115,7 +109,7 @@ export async function sendEmail(message: EmailMessage): Promise<SendEmailResult>
     return {
       ok: true,
       delivered: true,
-      messageId: body.data?.message_id,
+      messageId: body.id,
     };
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
