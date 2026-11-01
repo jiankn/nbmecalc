@@ -6,6 +6,7 @@ import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 import { ALGORITHM_VERSION, predictPreview, type PracticeExam } from "@/lib/data";
+import { NORM_INFO, STEP3_PASSING_REVIEW } from "@/lib/usmle-norms";
 
 const exampleExams: PracticeExam[] = [
   { id: "example-uwsa2", source: "UWSA2", score: 230, takenDaysAgo: 7 },
@@ -118,7 +119,7 @@ const facts = [
 const faqs = [
   {
     q: "What is the Step 3 passing score?",
-    a: "The current official minimum passing score is 200 for exams administered on or after January 1, 2024. USMLE reviews standards periodically, so verify the current scoring page before relying on this number.",
+    a: `The current official minimum passing score is ${NORM_INFO.step3.passingScore} ${NORM_INFO.step3.passingNote}. ${STEP3_PASSING_REVIEW.text} If you test in 2027, check the official scoring page before your exam.`,
   },
   {
     q: "Is Step 3 harder than Step 2 CK?",
@@ -162,7 +163,7 @@ export default function Step3PredictorPage() {
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
               "Free USMLE Step 3 predictor for residents and IMGs. Estimates a two-day Step 3 score from UWSA Step 3 and Free 120 inputs.",
-            dateModified: "2026-08-11",
+            dateModified: "2026-11-01",
           }),
         }}
       />
