@@ -22,8 +22,12 @@ export const CBSSA_SOURCES = {
   },
 } as const;
 
-export const CBSSA_FORMS = [26, 27, 28, 29, 30, 31, 32, 33] as const;
+export const CBSSA_FORMS = [26, 27, 28, 29, 30, 31, 32, 33, 34] as const;
 export type CbssaForm = (typeof CBSSA_FORMS)[number];
+/** 2026 年 9 月 Form 34 上线时 NBME 停售的表单；手里有旧报告的人照样能用本工具解读。 */
+export const RETIRED_CBSSA_FORMS: readonly CbssaForm[] = [26, 27];
+export const LATEST_CBSSA_FORM: CbssaForm = CBSSA_FORMS[CBSSA_FORMS.length - 1];
+export const isRetiredCbssaForm = (form: number) => (RETIRED_CBSSA_FORMS as readonly number[]).includes(form);
 
 export const CBSSA_QUESTIONS = 200;
 export const CBSSA_REPORT_PRECISION = 4;

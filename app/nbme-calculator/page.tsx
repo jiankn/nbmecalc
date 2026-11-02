@@ -5,7 +5,7 @@ import { PageShell } from "@/components/page-shell";
 import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
-import { CBSSA_FORMS } from "@/lib/cbssa-readiness";
+import { CBSSA_FORMS, RETIRED_CBSSA_FORMS, isRetiredCbssaForm } from "@/lib/cbssa-readiness";
 import { CCSSA_FORMS } from "@/lib/nbme-percent-model";
 
 const PAGE_URL = "https://nbmecalc.com/nbme-calculator";
@@ -317,7 +317,7 @@ export default function NbmeCalculatorPage() {
               <h3 className="text-xl font-extrabold text-gray-950">Step 1 · CBSSA forms</h3>
               <p className="mt-1 text-sm text-gray-600">Readiness check against the official low-pass band.</p>
               <div className="mt-4 flex flex-wrap gap-2">
-                {CBSSA_FORMS.map((n) => (
+                {CBSSA_FORMS.filter((n) => !isRetiredCbssaForm(n)).map((n) => (
                   <Link
                     key={n}
                     href={`/nbme-step-1-score-conversion?form=${n}#readiness-check`}
@@ -327,6 +327,16 @@ export default function NbmeCalculatorPage() {
                   </Link>
                 ))}
               </div>
+              <p className="mt-3 text-sm text-gray-600">
+                Forms {RETIRED_CBSSA_FORMS.join(" and ")} are retired, but an older report still works in the{" "}
+                <Link
+                  href={`/nbme-step-1-score-conversion?form=${RETIRED_CBSSA_FORMS[0]}#readiness-check`}
+                  className="font-semibold text-mint-800 underline underline-offset-4"
+                >
+                  same checker
+                </Link>
+                .
+              </p>
             </div>
             <div className="rounded-3xl border border-gray-200 p-6">
               <h3 className="text-xl font-extrabold text-gray-950">Step 2 CK · CCSSA forms</h3>

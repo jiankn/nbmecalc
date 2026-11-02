@@ -8,8 +8,10 @@ import {
   CBSSA_FORMS,
   CBSSA_QUESTIONS,
   DEFAULT_LOW_PASS,
+  LATEST_CBSSA_FORM,
   READINESS_COPY,
   estimateCbssaReadiness,
+  isRetiredCbssaForm,
   type CbssaForm,
 } from "@/lib/cbssa-readiness";
 
@@ -21,7 +23,7 @@ const MODES: { value: Mode; label: string; help: string }[] = [
   { value: "correct", label: `Number correct (of ${CBSSA_QUESTIONS})`, help: `How many of the ${CBSSA_QUESTIONS} questions you answered correctly.` },
 ];
 
-export function CbssaReadinessChecker({ defaultForm = 32 }: { defaultForm?: CbssaForm }) {
+export function CbssaReadinessChecker({ defaultForm = LATEST_CBSSA_FORM }: { defaultForm?: CbssaForm }) {
   const [form, setForm] = useState<CbssaForm>(defaultForm);
   const [mode, setMode] = useState<Mode>("percent");
   const [raw, setRaw] = useState("68");
@@ -91,9 +93,9 @@ export function CbssaReadinessChecker({ defaultForm = 32 }: { defaultForm?: Cbss
             }}
             className="h-12 w-full rounded-full border border-gray-200 bg-white px-5 text-base focus-visible:border-mint-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint-500 md:w-40"
           >
-            {CBSSA_FORMS.map((f) => (
+            {[...CBSSA_FORMS].reverse().map((f) => (
               <option key={f} value={f}>
-                NBME {f}
+                {`NBME ${f}${isRetiredCbssaForm(f) ? " (retired)" : ""}`}
               </option>
             ))}
           </select>

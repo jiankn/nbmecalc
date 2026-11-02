@@ -678,7 +678,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { type: "h2", text: "Check your readiness before you book" },
       {
         type: "p",
-        text: "Step 1 has no three-digit score to predict, so readiness tools work with percent correct. The <a href=\"/free-120-step-1\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Free 120 Step 1 readiness check</a> shows your Free 120 percent and its margin of error next to the low-pass range NBME draws on CBSSA reports. The <a href=\"/nbme-step-1-score-conversion\" class=\"font-semibold text-mint-700 underline underline-offset-4\">NBME Step 1 score conversion</a> reads a CBSSA Form 26–33 percent the same way.",
+        text: "Step 1 has no three-digit score to predict, so readiness tools work with percent correct. The <a href=\"/free-120-step-1\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Free 120 Step 1 readiness check</a> shows your Free 120 percent and its margin of error next to the low-pass range NBME draws on CBSSA reports. The <a href=\"/nbme-step-1-score-conversion\" class=\"font-semibold text-mint-700 underline underline-offset-4\">NBME Step 1 score conversion</a> reads a CBSSA Form 28–34 percent the same way.",
       },
       {
         type: "p",

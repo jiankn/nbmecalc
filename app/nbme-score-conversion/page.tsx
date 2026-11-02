@@ -149,10 +149,11 @@ const formFamilySections = [
     cta: "Open Step 2 predictor",
   },
   {
-    title: "Step 1 CBSSA forms 26-33",
+    title: "Step 1 CBSSA forms 28-34",
     intent: "Use this family for Step 1 pass-readiness planning.",
     examples: [
       { label: "NBME Step 1 score conversion", href: "/nbme-step-1-score-conversion" },
+      { label: "NBME 34 score conversion", href: "/nbme-step-1-score-conversion#nbme-34" },
       { label: "NBME 28 score conversion", href: "/nbme-step-1-score-conversion#nbme-28" },
       { label: "NBME 31 score conversion", href: "/nbme-step-1-score-conversion#nbme-31" },
       {
@@ -339,7 +340,7 @@ export default function NbmeScoreConversionPage() {
               </p>
             </div>
             <div className="rounded-2xl border border-gray-200 bg-mint-50/30 p-5">
-              <h3 className="font-bold text-gray-950">Step 1 (CBSSA Forms 26–33)</h3>
+              <h3 className="font-bold text-gray-950">Step 1 (CBSSA Forms 28–34)</h3>
               <p className="mt-2 text-sm leading-relaxed text-gray-700">
                 Step 1 is pass/fail, so there is no three-digit score to convert to. Read the estimated probability
                 of passing and the low-pass range on your report, or use the{" "}
@@ -461,7 +462,7 @@ export default function NbmeScoreConversionPage() {
             ))}
           </div>
           <p className="mt-6 text-sm text-gray-600">
-            Preparing for Step 1 instead? CBSSA Forms 26–33 use a different report. Use the{" "}
+            Preparing for Step 1 instead? CBSSA Forms 28–34 use a different report. Use the{" "}
             <Link href="/nbme-step-1-score-conversion" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
               NBME Step 1 score conversion and readiness check
             </Link>

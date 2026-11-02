@@ -5,17 +5,19 @@ import { PageHero } from "@/components/page-hero";
 import { CbssaReadinessChecker } from "@/components/cbssa-readiness-checker";
 import {
   CBSSA_REPORT_PRECISION,
+  CBSSA_FORMS,
   CBSSA_SOURCES,
   DEFAULT_LOW_PASS,
   READINESS_COPY,
   SAMPLE_REFERENCE,
   estimateCbssaReadiness,
+  isRetiredCbssaForm,
 } from "@/lib/cbssa-readiness";
 
 const PAGE_URL = "https://nbmecalc.com/nbme-step-1-score-conversion";
-const title = "NBME Step 1 Score Conversion (Forms 26–33): % to Pass Readiness";
+const title = "NBME Step 1 Score Conversion (Forms 28–34): % to Pass Readiness";
 const description =
-  "Step 1 is pass/fail, so CBSSA reports a percent. Enter your NBME 26–33 percent correct to see where it falls against the Step 1 low-pass range, using NBME's own guidance.";
+  "Step 1 is pass/fail, so CBSSA reports a percent. Enter your NBME 28–34 percent correct (retired 26 and 27 work too) to see where it falls against the Step 1 low-pass range.";
 
 export const metadata: Metadata = {
   title,
@@ -46,12 +48,12 @@ const NBME_2021_RELEASE = "https://www.nbme.org/news/new-versions-nbmer-self-ass
 
 const CBSSA_FORM_NOTES: Record<number, { note: string; source?: { label: string; href: string } }> = {
   26: {
-    note: "Part of the CBSSA set NBME released on March 24, 2021 (Forms 25–30), which retired Forms 18 and 20–24.",
-    source: { label: "NBME announcement", href: NBME_2021_RELEASE },
+    note: "Retired when Form 34 arrived in September 2026. It came from the March 24, 2021 CBSSA release (Forms 25–30). An older Form 26 report still reads the same way here.",
+    source: { label: "NBME 2021 announcement", href: NBME_2021_RELEASE },
   },
   27: {
-    note: "Released with Forms 25–30 in March 2021. Its equated percent is directly comparable with newer forms.",
-    source: { label: "NBME announcement", href: NBME_2021_RELEASE },
+    note: "Retired alongside Form 26 in September 2026. Its equated percent stays directly comparable with the forms NBME still sells.",
+    source: { label: "NBME 2021 announcement", href: NBME_2021_RELEASE },
   },
   28: {
     note: "From the March 2021 release. Older forms stay useful for trend tracking because EPC is adjusted for form difficulty.",
@@ -72,7 +74,10 @@ const CBSSA_FORM_NOTES: Record<number, { note: string; source?: { label: string;
     note: "A newer CBSSA form with no separate NBME release note. Enter the report EPC for the tightest range.",
   },
   33: {
-    note: "The most recent form discussed by independent prep reviewers. Confirm it is listed in your MyNBME account before buying.",
+    note: "The newest form before Form 34. Like 31 and 32, it has no separate NBME release note, so read its EPC like any other equated form.",
+  },
+  34: {
+    note: "The newest CBSSA form, added in September 2026. NBME has not published a release note we could verify; its report uses the same equated percent and low-pass range, so the checker above applies as is.",
   },
 };
 
@@ -95,7 +100,11 @@ const faqs = [
   },
   {
     q: "Which NBME forms are for Step 1?",
-    a: "Step 1 uses the Comprehensive Basic Science Self-Assessment (CBSSA). The forms discussed on this page are 26–33. Step 2 CK uses CCSSA Forms 9–16, and Step 3 uses CCMSA — the numbers are not interchangeable.",
+    a: "Step 1 uses the Comprehensive Basic Science Self-Assessment (CBSSA). NBME currently sells Forms 28–34; Forms 26 and 27 were retired in September 2026, but their reports read the same way on this page. Step 2 CK uses CCSSA Forms 9–16, and Step 3 uses CCMSA — the numbers are not interchangeable.",
+  },
+  {
+    q: "Is there an NBME 34 for Step 1?",
+    a: "Yes. CBSSA Form 34 was added in September 2026 and is the newest Step 1 self-assessment. Its report gives an equated percent correct and a low-pass range like the other forms, so you can enter that percent in the checker above. Check your MyNBME account for the forms available to you.",
   },
 ];
 
@@ -131,7 +140,7 @@ export default function NbmeStep1ScoreConversionPage() {
       <PageHero
         badge="NBME CBSSA → Step 1"
         title="NBME Step 1 Score Conversion: CBSSA Percent to Pass Readiness"
-        description={`Step 1 is pass/fail, so NBME reports a percent instead of a three-digit score. Enter your Form 26–33 percent to see where it falls against the roughly ${DEFAULT_LOW_PASS.low}–${DEFAULT_LOW_PASS.high}% low-pass range.`}
+        description={`Step 1 is pass/fail, so NBME reports a percent instead of a three-digit score. Enter your Form 28–34 percent (or a retired Form 26 or 27) to see where it falls against the roughly ${DEFAULT_LOW_PASS.low}–${DEFAULT_LOW_PASS.high}% low-pass range.`}
         size="md"
       />
 
@@ -202,39 +211,50 @@ export default function NbmeStep1ScoreConversionPage() {
       <section id="by-form" className="bg-white py-16 lg:py-20">
         <div className="container max-w-5xl">
           <h2 className="mb-4 text-3xl font-extrabold tracking-tight lg:text-4xl">
-            NBME Step 1 score conversion by form (CBSSA 26–33)
+            NBME Step 1 score conversion by form (CBSSA 28–34)
           </h2>
           <p className="mb-8 max-w-3xl text-lg leading-relaxed text-gray-700">
             Every CBSSA has 200 questions in four sections of 50, and the report&apos;s percent is equated for form
             difficulty. That is why the same percent leads to the same readiness scenario on every form.
           </p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {Object.entries(CBSSA_FORM_NOTES).map(([form, info]) => (
-              <div key={form} id={`nbme-${form}`} className="scroll-mt-24 rounded-2xl border border-gray-200 bg-white p-5">
-                <h3 className="text-lg font-extrabold text-gray-950">NBME {form} score conversion</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-700">{info.note}</p>
-                {info.source && (
-                  <a
-                    href={info.source.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-block text-xs font-semibold text-gray-500 underline underline-offset-2"
-                  >
-                    {info.source.label}
-                  </a>
-                )}
-                <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-bold">
-                  <a href={`?form=${form}#readiness-check`} className="text-mint-700 underline underline-offset-4">
-                    Check NBME {form}
-                  </a>
-                  {form === "30" && (
-                    <Link href="/nbme-30-score-conversion" className="text-mint-700 underline underline-offset-4">
-                      Form 30 report reader
-                    </Link>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[...CBSSA_FORMS].reverse().map((n) => {
+              const form = String(n);
+              const info = CBSSA_FORM_NOTES[n];
+              return (
+                <div key={form} id={`nbme-${form}`} className="scroll-mt-24 rounded-2xl border border-gray-200 bg-white p-5">
+                  <h3 className="text-lg font-extrabold text-gray-950">
+                    NBME {form} score conversion
+                    {isRetiredCbssaForm(n) && (
+                      <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 align-middle text-xs font-semibold text-gray-600">
+                        Retired
+                      </span>
+                    )}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-700">{info.note}</p>
+                  {info.source && (
+                    <a
+                      href={info.source.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-block text-xs font-semibold text-gray-500 underline underline-offset-2"
+                    >
+                      {info.source.label}
+                    </a>
                   )}
+                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-bold">
+                    <a href={`?form=${form}#readiness-check`} className="text-mint-700 underline underline-offset-4">
+                      Check NBME {form}
+                    </a>
+                    {form === "30" && (
+                      <Link href="/nbme-30-score-conversion" className="text-mint-700 underline underline-offset-4">
+                        Form 30 report reader
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
