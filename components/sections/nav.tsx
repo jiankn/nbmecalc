@@ -32,7 +32,7 @@ const navItems = [
       { label: "Step 2 Predictor", href: "/step-2-predictor" },
       { label: "NBME Score Conversion", href: "/nbme-score-conversion" },
       { label: "Free 120 → Step 2", href: "/free-120-predictor" },
-      { label: "AMBOSS → Step 2", href: "/amboss-converter" },
+      { label: "AMBOSS Score Predictor", href: "/amboss-converter" },
       { label: "Step 2 CK Percentile", href: "/step-2-ck-percentile" },
     ],
   },

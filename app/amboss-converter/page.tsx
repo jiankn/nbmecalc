@@ -7,25 +7,22 @@ import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Use Your AMBOSS Step 2 Score — Free Planning Range",
+  title: "AMBOSS Score Predictor for Step 2 — Free Planning Range",
   description:
-    "Enter the 3-digit score from your AMBOSS Step 2 Self-Assessment report and get an independent planning range. Free, no login, with clear limitations.",
+    "Enter the 3-digit score from your AMBOSS Step 2 Self-Assessment. NBMEcalc keeps that reported estimate and shows an independent planning range. Free, no login.",
   keywords: [
+    "amboss score predictor",
     "amboss score predictor step 2",
     "amboss step 2 score predictor",
     "amboss predictor step 2",
-    "amboss calculator step 2",
-    "amboss to step",
-    "amboss to step 2",
     "amboss self assessment",
-    "amboss converter",
     "amboss step 2 prediction",
   ],
   alternates: { canonical: "https://nbmecalc.com/amboss-converter" },
   openGraph: {
-    title: "Use Your AMBOSS Step 2 Score — Free Planning Range",
+    title: "AMBOSS Score Predictor for Step 2 — Free Planning Range",
     description:
-      "Enter the 3-digit score from your AMBOSS Step 2 Self-Assessment report and review it in an independent planning range.",
+      "Enter the 3-digit AMBOSS Step 2 Self-Assessment score and review it in an independent planning range.",
     url: "https://nbmecalc.com/amboss-converter",
     type: "website",
     images: [
@@ -85,13 +82,13 @@ export default function AmbossConverterPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebApplication",
-            name: "AMBOSS to Step 2 CK Converter",
+            name: "AMBOSS Score Predictor for Step 2",
             url: "https://nbmecalc.com/amboss-converter",
             applicationCategory: "EducationalApplication",
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Independent planning estimate from an AMBOSS Self-Assessment input to a Step 2 CK range.",
+              "Enter an AMBOSS Step 2 Self-Assessment score and review an independent planning range.",
           }),
         }}
       />
@@ -111,8 +108,8 @@ export default function AmbossConverterPage() {
       />
 
       <PageHero
-        badge="AMBOSS → Step 2 CK"
-        title="Use Your AMBOSS Step 2 Score Predictor Result"
+        badge="AMBOSS Step 2"
+        title="AMBOSS Score Predictor for Step 2"
         description="Enter the 3-digit score from your AMBOSS Step 2 Self-Assessment report. NBMEcalc keeps that reported estimate as the input and shows an independent planning range with explicit limitations."
         size="md"
       />
@@ -221,6 +218,17 @@ export default function AmbossConverterPage() {
             </Link>
             , which separates verified product features from personal study
             preferences.
+          </p>
+          <p className="mt-4 text-sm text-gray-700">
+            Deciding between products rather than entering a score? Read the{" "}
+            <Link
+              href="/compare/vs-amboss-predictor"
+              data-indexing-context="related"
+              className="font-semibold text-mint-800 underline underline-offset-4"
+            >
+              NBMEcalc vs AMBOSS comparison
+            </Link>
+            .
           </p>
         </div>
       </section>

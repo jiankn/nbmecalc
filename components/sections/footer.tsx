@@ -10,7 +10,7 @@ const columns = [
       { label: "Step 3 Predictor", href: "/step-3-predictor" },
       { label: "Free 120 Predictor", href: "/free-120-predictor" },
       { label: "Free 120 Step 1 Check", href: "/free-120-step-1" },
-      { label: "AMBOSS Converter", href: "/amboss-converter" },
+      { label: "AMBOSS Score Predictor", href: "/amboss-converter" },
       { label: "CMS Score Guide", href: "/cms-converter" },
     ],
   },
@@ -42,7 +42,7 @@ const columns = [
     title: "Compare",
     links: [
       { label: "vs PredictMyStepScore", href: "/compare/vs-predictmystepscore" },
-      { label: "vs AMBOSS Predictor", href: "/compare/vs-amboss-predictor" },
+      { label: "NBMEcalc vs AMBOSS", href: "/compare/vs-amboss-predictor" },
       { label: "vs NBcalc", href: "/compare/vs-nbcalc" },
       { label: "Best USMLE Predictors", href: "/compare/best-usmle-score-predictor" },
     ],

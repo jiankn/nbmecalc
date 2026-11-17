@@ -45,6 +45,13 @@ export function ResourceHub() {
             >
               Step 2 CK score predictor
             </Link>
+            . For a Step 3 UWSA or Free 120, use the{" "}
+            <Link
+              href="/step-3-predictor"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              Step 3 predictor
+            </Link>
             . Have a percent correct from an NBME form? Use the{" "}
             <Link
               href="/nbme-score-conversion"

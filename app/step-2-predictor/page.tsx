@@ -507,7 +507,7 @@ export default function Step2PredictorPage() {
                 data-indexing-context="related"
                 className="underline underline-offset-2"
               >
-                AMBOSS SA → Step 2 CK converter
+                AMBOSS score predictor
               </Link>
             </li>
             <li>

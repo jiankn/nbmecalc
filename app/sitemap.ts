@@ -15,10 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const indexingRemediationUpdate = new Date("2026-08-09");
   const adsenseTrustUpdate = new Date("2026-08-10");
   const seoAlignmentUpdate = new Date("2026-09-06");
-  // Current NBME score-family correction: CCSSA keeps its 1-300 Total Score;
-  // CBSSA EPC and CCMSA 10-800 scores are no longer treated as interchangeable
-  // calculator inputs. Step 3 form demand stays consolidated on one page.
-  const scoreScaleCorrectionUpdate = new Date("2026-08-11");
   // USMLE Score Interpretation Guidelines norm table updated 2026-08-17.
   const percentileLaunch = new Date("2026-09-29");
   // Step 3 score guide and USMLE score release date calculator.
@@ -33,12 +29,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const aiCitationUpdate = new Date("2026-10-14");
   // 本轮仅更新确实修改了标题、示例或正文内链的页面。
   const rankingOptimizationUpdate = new Date("2026-10-24");
+  // AMBOSS predictor query moved to the converter; Step 3 NBME 6/7
+  // conversion links now point only at the Step 3 page.
+  const queryOwnershipUpdate = new Date("2026-11-17");
 
   const liveRoutes: MetadataRoute.Sitemap = [
-    { url: SITE_URL, lastModified: seoAlignmentUpdate, changeFrequency: "weekly", priority: 1.0 },
+    { url: SITE_URL, lastModified: queryOwnershipUpdate, changeFrequency: "weekly", priority: 1.0 },
 
     // Core SEO landing pages
-    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: rankingOptimizationUpdate, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${SITE_URL}/nbme-score-conversion`, lastModified: queryOwnershipUpdate, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/nbme-15-score-conversion`, lastModified: rankingFixUpdate, changeFrequency: "monthly", priority: 0.75 },
     { url: `${SITE_URL}/nbme-16-score-conversion`, lastModified: rankingFixUpdate, changeFrequency: "monthly", priority: 0.78 },
     { url: `${SITE_URL}/nbme-30-score-conversion`, lastModified: formPilotUpdate, changeFrequency: "monthly", priority: 0.72 },
@@ -68,14 +67,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/uwsa-1-to-step-2`, lastModified: percentileLaunch, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/uwsa-2-to-step-2`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/free-120-predictor`, lastModified: percentileLaunch, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${SITE_URL}/amboss-converter`, lastModified: scoreScaleCorrectionUpdate, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${SITE_URL}/amboss-converter`, lastModified: queryOwnershipUpdate, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/cms-converter`, lastModified: rankingFixUpdate, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/cms-forms-step-2-ck`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.78 },
 
     // Comparison pages
     { url: `${SITE_URL}/compare/best-usmle-score-predictor`, lastModified: indexingRemediationUpdate, changeFrequency: "monthly", priority: 0.75 },
     { url: `${SITE_URL}/compare/vs-predictmystepscore`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.65 },
-    { url: `${SITE_URL}/compare/vs-amboss-predictor`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.65 },
+    { url: `${SITE_URL}/compare/vs-amboss-predictor`, lastModified: queryOwnershipUpdate, changeFrequency: "monthly", priority: 0.65 },
     { url: `${SITE_URL}/compare/vs-nbcalc`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.65 },
 
     // The blog hub is an indexable editorial navigation page.

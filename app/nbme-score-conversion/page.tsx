@@ -168,24 +168,13 @@ const formFamilySections = [
     cta: "Open Step 1 readiness check",
   },
   {
-    title: "Step 3 CCMSA forms 5-7",
-    intent: "Use this family for Step 3 planning, especially when paired with CCS practice.",
-    examples: [
-      {
-        label: "NBME 6 Step 3 score conversion",
-        href: "/step-3-predictor#ccmsa-conversion",
-      },
-      {
-        label: "NBME 7 Step 3 score conversion",
-        href: "/step-3-predictor#ccmsa-conversion",
-      },
-      { label: "Step 3 NBME score conversion" },
-      { label: "NBME Step 3 score conversion" },
-    ],
+    title: "Step 3 CCMSA",
+    intent: "Form 6 and Form 7 questions are answered on the Step 3 page. This hub does not convert those scores.",
+    examples: [],
     note:
-      "Step 3 search demand is served on one evidence page. It explains the current 10-800 CCMSA scale and why NBMEcalc does not publish an unsupported Form 6/7 conversion table.",
-    href: "/step-3-predictor",
-    cta: "Open Step 3 predictor",
+      "Current CCMSA reports use a 10–800 Assessment Score. NBME says that score is not a Step 3 prediction, so this page does not publish a Form 6 or Form 7 chart.",
+    href: "/step-3-predictor#ccmsa-conversion",
+    cta: "NBME 6 and 7 Step 3 score conversion",
   },
 ];
 
@@ -354,11 +343,11 @@ export default function NbmeScoreConversionPage() {
               <h3 className="font-bold text-gray-950">Step 3 (CCMSA)</h3>
               <p className="mt-2 text-sm leading-relaxed text-gray-700">
                 The current CCMSA reports a 10–800 assessment score, not a Step 3 score, and NBME does not publish a
-                conversion. The{" "}
-                <Link href="/step-3-predictor" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
-                  Step 3 score predictor
+                conversion. Read Form 6 and Form 7 on the{" "}
+                <Link href="/step-3-predictor#ccmsa-conversion" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+                  NBME 6 and 7 Step 3 score conversion
                 </Link>{" "}
-                explains how to read NBME 6 and 7 results.
+                page.
               </p>
             </div>
           </div>
@@ -580,9 +569,8 @@ export default function NbmeScoreConversionPage() {
             </h2>
             <p className="text-gray-600 text-lg max-w-3xl">
               NBME form numbers are not interchangeable across Step exams.
-              This hub remains the primary page for the family. Dedicated pages
-              are admitted only when the user task is distinct and the page adds
-              a real preset tool or report workflow.
+              This page converts Step 2 CK percent correct. Step 1 readiness
+              and Step 3 each have their own page.
             </p>
           </div>
 
@@ -598,26 +586,30 @@ export default function NbmeScoreConversionPage() {
                 <p className="text-sm text-gray-600 leading-relaxed mb-4">
                   {section.intent}
                 </p>
-                <div className="text-xs font-bold uppercase tracking-wide text-gray-500 mb-2">
-                  Common searches
-                </div>
-                <ul className="space-y-2 text-sm text-gray-700 mb-4">
-                  {section.examples.map((example) => (
-                    <li key={example.label} className="flex gap-2">
-                      <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-mint-600 shrink-0" />
-                      {example.href ? (
-                        <Link
-                          href={example.href}
-                          className="font-semibold text-mint-800 underline underline-offset-4"
-                        >
-                          {example.label}
-                        </Link>
-                      ) : (
-                        <span>{example.label}</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+                {section.examples.length > 0 && (
+                  <>
+                    <div className="text-xs font-bold uppercase tracking-wide text-gray-500 mb-2">
+                      Common searches
+                    </div>
+                    <ul className="space-y-2 text-sm text-gray-700 mb-4">
+                      {section.examples.map((example) => (
+                        <li key={example.label} className="flex gap-2">
+                          <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-mint-600 shrink-0" />
+                          {example.href ? (
+                            <Link
+                              href={example.href}
+                              className="font-semibold text-mint-800 underline underline-offset-4"
+                            >
+                              {example.label}
+                            </Link>
+                          ) : (
+                            <span>{example.label}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
                 <p className="text-sm text-gray-600 leading-relaxed mb-4">
                   {section.note}
                 </p>

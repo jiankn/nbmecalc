@@ -6,20 +6,20 @@ import { CompareTable, type CompareRow } from "@/components/sections/compare-tab
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "NBMEcalc vs AMBOSS Predictor — 2026 Comparison",
+  title: "NBMEcalc vs AMBOSS: 2026 Comparison",
   description:
-    "Compare NBMEcalc and AMBOSS Step 2 CK Predictor across supported inputs, planning ranges, published evidence, mobile UX, and pricing.",
+    "Compare NBMEcalc and the AMBOSS Score Predictor on inputs, planning ranges, published evidence, and access. This page does not calculate a score.",
   keywords: [
     "nbmecalc vs amboss",
+    "nbmecalc vs amboss predictor",
     "amboss predictor alternative",
-    "amboss step predictor",
     "amboss vs nbme calculator",
   ],
   alternates: { canonical: "https://nbmecalc.com/compare/vs-amboss-predictor" },
   openGraph: {
-    title: "NBMEcalc vs AMBOSS Predictor — 2026 Comparison",
+    title: "NBMEcalc vs AMBOSS: 2026 Comparison",
     description:
-      "Side-by-side comparison: multi-source aggregation vs AMBOSS ecosystem.",
+      "Side-by-side comparison of inputs, ranges, evidence, and access. Score entry lives on the AMBOSS score predictor.",
     url: "https://nbmecalc.com/compare/vs-amboss-predictor",
     type: "article",
     images: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
         url: "/images/feature-score-range.png",
         width: 2400,
         height: 1792,
-        alt: "NBMEcalc vs AMBOSS Predictor",
+        alt: "NBMEcalc vs AMBOSS comparison",
       },
     ],
   },
@@ -57,7 +57,7 @@ export default function VsAmbossPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: "NBMEcalc vs AMBOSS Predictor — 2026 Comparison",
+            headline: "NBMEcalc vs AMBOSS: 2026 Comparison",
             url: "https://nbmecalc.com/compare/vs-amboss-predictor",
             author: { "@type": "Organization", name: "NBMEcalc" },
             datePublished: "2026-05-17",
@@ -67,8 +67,8 @@ export default function VsAmbossPage() {
 
       <PageHero
         badge="Head-to-head review"
-        title="NBMEcalc vs AMBOSS Step 2 CK Predictor"
-        description="A source-labeled comparison of access, supported inputs, output ranges, and published evidence. Product facts were checked against AMBOSS's public Score Predictor page."
+        title="NBMEcalc vs AMBOSS: 2026 Comparison"
+        description="A source-labeled comparison of access, supported inputs, output ranges, and published evidence. To enter an AMBOSS Step 2 score, use the AMBOSS score predictor. Product facts were checked against AMBOSS's public Score Predictor page."
         size="md"
       />
 
@@ -138,31 +138,32 @@ export default function VsAmbossPage() {
       <section className="py-16 bg-white">
         <div className="container max-w-3xl text-center">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-3">
-            Try the source-agnostic alternative
+            Already have an AMBOSS score?
           </h2>
           <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-            Works with UWorld, NBME, UWSA, and Free 120 results — run the{" "}
+            This page only compares the two products. Enter a 3-digit AMBOSS
+            Step 2 result on the{" "}
+            <Link
+              href="/amboss-converter"
+              className="font-semibold text-mint-700 underline underline-offset-2"
+            >
+              AMBOSS score predictor
+            </Link>
+            . For several practice tests, use the{" "}
             <Link
               href="/step-2-predictor"
               className="font-semibold text-mint-700 underline underline-offset-2"
             >
               Step 2 CK predictor
-            </Link>{" "}
-            or the{" "}
-            <Link
-              href="/step-1-predictor"
-              className="font-semibold text-mint-700 underline underline-offset-2"
-            >
-              Step 1 predictor
             </Link>
             .
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
             <Button variant="primary" size="lg" asChild>
-              <Link href="/#calculator">Predict my Step score</Link>
+              <Link href="/amboss-converter">AMBOSS score predictor</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/amboss-converter">AMBOSS → Step 2 CK converter</Link>
+              <Link href="/step-2-predictor">Step 2 CK predictor</Link>
             </Button>
           </div>
         </div>
