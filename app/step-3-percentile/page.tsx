@@ -58,7 +58,7 @@ const nonUsFirst = firstTakerRate("Step 3", "non-us");
 const faqs = [
   {
     q: "What is the passing score for Step 3?",
-    a: `The minimum passing score for Step 3 is ${s3.passingScore} ${s3.passingNote}. It was 198 before that date. A ${s3.passingScore} sits at about the ${pct3(s3.passingScore)} percentile of first-time takers from LCME-accredited schools. ${STEP3_PASSING_REVIEW.text} If you test in 2027, check the official scoring page before your exam.`,
+    a: `The minimum passing score for Step 3 is ${s3.passingScore} ${s3.passingNote}. It was 198 before that date. A ${s3.passingScore} sits at about the ${pct3(s3.passingScore)} percentile of first-time takers from LCME-accredited schools. ${STEP3_PASSING_REVIEW.text}`,
   },
   {
     q: "What is the average Step 3 score?",
@@ -142,8 +142,8 @@ export default function Step3PercentilePage() {
             that, it was 198. Because most first-time takers score well above the line, a {s3.passingScore} is only
             at about the {pct3(s3.passingScore)} percentile.
           </p>
-          <p className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 leading-relaxed text-gray-800">
-            <strong>Testing in 2027?</strong> {STEP3_PASSING_REVIEW.text} Check the{" "}
+          <p className="mb-6 rounded-2xl border border-mint-200 bg-white px-5 py-4 leading-relaxed text-gray-800">
+            {STEP3_PASSING_REVIEW.text} See the{" "}
             <a
               href={STEP3_PASSING_REVIEW.url}
               target="_blank"
@@ -151,7 +151,7 @@ export default function Step3PercentilePage() {
               data-evidence-source="primary"
               className="font-semibold text-mint-800 underline underline-offset-4"
             >
-              USMLE review announcement
+              USMLE review result
             </a>{" "}
             and the{" "}
             <a
@@ -162,8 +162,7 @@ export default function Step3PercentilePage() {
               className="font-semibold text-mint-800 underline underline-offset-4"
             >
               official scoring page
-            </a>{" "}
-            before your exam.
+            </a>.
           </p>
           <div className="mb-6 grid gap-3 sm:grid-cols-3">
             {[

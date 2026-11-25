@@ -6,6 +6,7 @@ import { PageHero } from "@/components/page-hero";
 import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 import { CcmsaResearchForm } from "@/components/ccmsa-research-form";
+import { Step3SampleResources } from "@/components/step-3-sample-resources";
 import { ALGORITHM_VERSION, predictPreview, type PracticeExam } from "@/lib/data";
 import { NORM_INFO, STEP3_PASSING_REVIEW } from "@/lib/usmle-norms";
 
@@ -15,31 +16,17 @@ const exampleExams: PracticeExam[] = [
 ];
 const exampleResult = predictPreview(exampleExams, "step3", 14);
 
+const title = "NBME 6, 7 & 8 Step 3 Score Conversion + Free Predictor";
+const description =
+  "Read your NBME 6, 7, or 8 CCMSA report and its 10–800 scale. Use supported UWSA and sample-question results for a separate Step 3 estimate.";
+
 export const metadata: Metadata = {
-  title:
-    "NBME 6 & 7 Step 3 Score Conversion + Free Step 3 Predictor",
-  description:
-    "Why NBME 6 & 7 (CCMSA) scores don't convert directly to Step 3, what the 10-800 scale means, and a free 3-digit Step 3 estimate from UWSA Step 3 or Free 120.",
-  keywords: [
-    "nbme 6 step 3 score conversion",
-    "nbme 7 step 3 score conversion",
-    "nbme step 3 score conversion",
-    "step 3 nbme score conversion",
-    "ccmsa score conversion",
-    "step 3 score predictor",
-    "usmle step 3 score predictor",
-    "step 3 predictor",
-    "step 3 score calculator",
-    "usmle step 3 calculator",
-    "step 3 ccs predictor",
-    "uwsa step 3",
-    "step 3 pass probability",
-  ],
+  title,
+  description,
   alternates: { canonical: "https://nbmecalc.com/step-3-predictor" },
   openGraph: {
-    title: "NBME 6 & 7 Step 3 Score Conversion + Free Step 3 Predictor",
-    description:
-      "Why NBME 6 & 7 (CCMSA) scores don't convert directly to Step 3, plus a free 3-digit estimate from UWSA Step 3 or Free 120.",
+    title,
+    description,
     url: "https://nbmecalc.com/step-3-predictor",
     type: "website",
     images: [
@@ -120,7 +107,7 @@ const facts = [
 const faqs = [
   {
     q: "What is the Step 3 passing score?",
-    a: `The current official minimum passing score is ${NORM_INFO.step3.passingScore} ${NORM_INFO.step3.passingNote}. ${STEP3_PASSING_REVIEW.text} If you test in 2027, check the official scoring page before your exam.`,
+    a: `The official minimum passing score is ${NORM_INFO.step3.passingScore} ${NORM_INFO.step3.passingNote}. ${STEP3_PASSING_REVIEW.text}`,
   },
   {
     q: "Is Step 3 harder than Step 2 CK?",
@@ -137,6 +124,10 @@ const faqs = [
   {
     q: "Is the NBME 7 conversion different from NBME 6?",
     a: "NBMEcalc does not publish a conversion curve for either form. A lack of public form-specific calibration is not evidence that Forms 6 and 7 predict Step 3 identically; use the diagnostic feedback on each official report instead.",
+  },
+  {
+    q: "Can I convert an NBME Form 8 score to a Step 3 score?",
+    a: "If your Form 8 report is labeled CCMSA, read its Assessment Score on the NBME 10–800 scale. The performance bands can guide your review. The report does not provide a conversion to the three-digit Step 3 scale or a probability of passing.",
   },
   {
     q: "Which practice resources are predictive?",
@@ -163,8 +154,8 @@ export default function Step3PredictorPage() {
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             description:
-              "Free USMLE Step 3 predictor for residents and IMGs. Estimates a two-day Step 3 score from UWSA Step 3 and Free 120 inputs.",
-            dateModified: "2026-11-01",
+              "Free USMLE Step 3 predictor for residents and IMGs. Estimates a Step 3 score from UWSA and sample-question percentages.",
+            dateModified: "2026-11-25",
           }),
         }}
       />
@@ -185,10 +176,15 @@ export default function Step3PredictorPage() {
 
       <PageHero
         badge="Predict your two-day exam"
-        title="Step 3 Predictor: NBME 6 & 7 Conversion Limits"
+        title="Step 3 Predictor: NBME 6, 7 & 8 Conversion Limits"
         description="Combine supported UWSA and sample-question inputs into an independent Step 3 planning estimate. Read current CCMSA diagnostic feedback directly from the official report."
         size="md"
-      />
+      >
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 font-semibold text-mint-800">
+          <a href="#ccmsa-form-8" className="underline underline-offset-4">Read your NBME Form 8 score report</a>
+          <a href="#free-137" className="underline underline-offset-4">Find the official Step 3 sample questions</a>
+        </div>
+      </PageHero>
 
       {/* Quick facts */}
       <section className="py-14 lg:py-16 bg-mint-50/40 border-b border-gray-200">
@@ -217,9 +213,9 @@ export default function Step3PredictorPage() {
             Run the Step 3 calculator
           </h2>
           <p className="text-gray-600">
-            Pick <strong>Step 3</strong> below, then enter your UWSA Step 3
-            and Free 120 scores. The calculator outputs a three-digit
-            estimate with a transparent planning range.
+            Pick <strong>Step 3</strong> below, then enter your UWSA Step 3 score or a sample-question
+            percentage in the existing &ldquo;Free 120&rdquo; field. For the official practice formats,
+            see the <a href="#free-137" className="font-semibold text-mint-800 underline underline-offset-4">Step 3 sample questions</a>.
           </p>
           <p className="text-xs text-gray-500 mt-2 italic">
             Note: Step 3 data is sparser than Step 2 CK. Confidence intervals
@@ -247,7 +243,7 @@ export default function Step3PredictorPage() {
                 {exampleExams.map((exam) => (
                   <tr key={exam.id}>
                     <th scope="row" className="px-4 py-3 font-semibold">
-                      {exam.source === "UWSA2" ? "UWSA 2 Step 3" : "Free 120 Step 3"}
+                      {exam.source === "UWSA2" ? "UWSA 2 Step 3" : "Step 3 sample questions"}
                     </th>
                     <td className="px-4 py-3">
                       {exam.score}{exam.source === "FREE120" ? "% correct" : " (3-digit score)"}
@@ -272,7 +268,9 @@ export default function Step3PredictorPage() {
         </div>
       </section>
 
-      {/* CCMSA score-scale answer */}
+      <Step3SampleResources />
+
+      {/* CCMSA 分数刻度说明 */}
       <section id="ccmsa-conversion" className="py-16 lg:py-20 bg-white border-t border-gray-200">
         <div className="container max-w-3xl">
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-4">
@@ -332,6 +330,21 @@ export default function Step3PredictorPage() {
             </a>
             .
           </p>
+
+          <div id="ccmsa-form-8" className="mb-10 scroll-mt-24 rounded-3xl border border-mint-200 bg-mint-50/50 p-6 sm:p-8">
+            <h3 className="text-2xl font-extrabold tracking-tight text-gray-950">How to read an NBME Form 8 Step 3 report</h3>
+            <p className="mt-3 leading-relaxed text-gray-700">
+              Check that the report says <strong>Comprehensive Clinical Medicine Self-Assessment (CCMSA)</strong>.
+              A report with an Assessment Score of 400 places you 100 points below the reference mean of 500 on the
+              CCMSA scale. That comparison describes your practice result. There is no published conversion from
+              that number to a Step 3 score or the Step 3 passing line.
+            </p>
+            <p className="mt-3 leading-relaxed text-gray-700">
+              Look at the lowest content-area bands to decide where to spend review time. Overlapping bands
+              indicate similar performance. If you only counted your correct answers, keep that raw percentage
+              separate from the report&apos;s scaled Assessment Score.
+            </p>
+          </div>
 
           <h3 className="text-2xl font-extrabold tracking-tight mb-3">
             NBME 6 and NBME 7 Step 3 score conversion

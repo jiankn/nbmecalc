@@ -4,6 +4,7 @@ export type ProductEventType =
   | "result_viewed"
   | "paywall_opened"
   | "report_viewed"
+  | "practice_resource_clicked"
   | "lifetime_offer_impression"
   | "lifetime_offer_clicked";
 

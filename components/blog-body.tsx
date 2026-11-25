@@ -5,6 +5,7 @@
 import type { BlogBlock } from "@/lib/blog/posts";
 import { Info, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { DataChart } from "@/components/data-chart";
+import { ShelfScoreChecker } from "@/components/shelf-score-checker";
 
 const TONE_STYLES: Record<
   "info" | "warning" | "success",
@@ -151,6 +152,8 @@ export function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
                 data={block.data}
               />
             );
+          case "shelf-score-checker":
+            return <ShelfScoreChecker key={i} />;
         }
       })}
     </div>

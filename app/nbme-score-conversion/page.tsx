@@ -174,7 +174,7 @@ const formFamilySections = [
     note:
       "Current CCMSA reports use a 10–800 Assessment Score. NBME says that score is not a Step 3 prediction, so this page does not publish a Form 6 or Form 7 chart.",
     href: "/step-3-predictor#ccmsa-conversion",
-    cta: "NBME 6 and 7 Step 3 score conversion",
+    cta: "NBME 6, 7, and 8 CCMSA score interpretation",
   },
 ];
 
@@ -343,15 +343,22 @@ export default function NbmeScoreConversionPage() {
               <h3 className="font-bold text-gray-950">Step 3 (CCMSA)</h3>
               <p className="mt-2 text-sm leading-relaxed text-gray-700">
                 The current CCMSA reports a 10–800 assessment score, not a Step 3 score, and NBME does not publish a
-                conversion. Read Form 6 and Form 7 on the{" "}
+                conversion. See how to read Forms 6, 7, and 8 in the{" "}
                 <Link href="/step-3-predictor#ccmsa-conversion" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
-                  NBME 6 and 7 Step 3 score conversion
+                  Step 3 CCMSA score guide
                 </Link>{" "}
                 page.
               </p>
             </div>
           </div>
           <p className="mt-4 text-sm text-gray-600">
+            Choosing your next comprehensive assessment? Use the{" "}
+            <Link href="/nbme-forms-step-2-ck" className="font-semibold text-mint-800 underline underline-offset-4">
+              Step 2 CK NBME form planner
+            </Link>
+            .
+          </p>
+          <p className="mt-2 text-sm text-gray-600">
             Took the Free 120 instead? Use the{" "}
             <Link href="/free-120-predictor" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
               Free 120 score conversion

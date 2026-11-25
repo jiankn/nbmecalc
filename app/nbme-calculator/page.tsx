@@ -340,7 +340,13 @@ export default function NbmeCalculatorPage() {
             </div>
             <div className="rounded-3xl border border-gray-200 p-6">
               <h3 className="text-xl font-extrabold text-gray-950">Step 2 CK · CCSSA forms</h3>
-              <p className="mt-1 text-sm text-gray-600">Score conversion notes for each form.</p>
+              <p className="mt-1 text-sm leading-relaxed text-gray-700">
+                Planning which forms to take? Use the{" "}
+                <Link href="/nbme-forms-step-2-ck" className="font-semibold text-mint-800 underline underline-offset-4">
+                  Step 2 CK NBME form planner
+                </Link>
+                . If you already have a result, use the score notes below.
+              </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {CCSSA_FORMS.map((n) => (
                   <Link

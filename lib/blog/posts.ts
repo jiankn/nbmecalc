@@ -75,6 +75,7 @@ export type BlogBlock =
   | { type: "ol"; items: string[] }
   | { type: "quote"; text: string; attr?: string }
   | { type: "callout"; tone: "info" | "warning" | "success"; text: string }
+  | { type: "shelf-score-checker" }
   | {
       /**
        * Original SVG data chart. Rendered server-side for SEO and zero JS cost.
@@ -226,8 +227,9 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "nbme-shelf-exams-explained",
     title: "NBME Shelf Exams Explained: Length, Scoring, and Percentiles",
     description:
-      "NBME shelf exams are 110-question clerkship subject exams scored as equated percent correct. See each exam's length, how scores and percentiles work, whether shelves are curved, and when results arrive.",
+      "NBME shelf exams typically have 110 questions. See how scoring and percentiles work, compare your EPC with your school's cutoffs, and check score release timing.",
     publishedAt: "2026-10-25",
+    updatedAt: "2026-11-25",
     reviewedAt: "2026-10-25",
     author: "NBMEcalc Editorial Team",
     category: "step-2-tips",
@@ -237,6 +239,10 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "p",
         text: "Short answer: \"shelf exam\" is the everyday name for an NBME Clinical Science Subject Exam, the test many schools give at the end of a clerkship. Most shelves have 110 questions and run 2 hours 45 minutes. Your score is an equated percent correct (EPC) on a 0–100 scale, and your school, not NBME, decides what counts as passing or honors.",
+      },
+      {
+        type: "p",
+        text: "Already have your report? <a href=\"#shelf-score-checker\" class=\"font-semibold text-mint-700 underline underline-offset-4\">Compare your shelf EPC with your school's cutoffs</a>.",
       },
       { type: "h2", text: "How many shelf exams are there, and how long is each?" },
       {
@@ -301,6 +307,7 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "p",
         text: "There is no universal good score. The useful comparison is your EPC against the comparison group on your report and against your school's posted cutoffs. NBME's norm tables and grading guidelines are distributed to schools and examinees through the MyNBME portals rather than published openly, so percentile charts you find online are usually a specific school's tables or older versions. Use the ones your clerkship provides.",
       },
+      { type: "shelf-score-checker" },
       { type: "h2", text: "When do shelf results come out?" },
       {
         type: "p",
@@ -324,6 +331,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     references: [
       { label: "NBME: Subject Examinations for examinees (exam list and score reports)", href: "https://www.nbme.org/examinees/subject-exams/" },
+      { label: "NBME: Clinical Science Subject Exams (norm tables and grading guidelines)", href: "https://www.nbme.org/institutions/assess-learn/subject-exams/clinical-science/" },
       { label: "NBME: Subject Examination Timing Chart", href: "https://www.nbme.org/wp-content/uploads/2026/04/Subject_Exam_Timing_Chart_July_2021.pdf" },
       { label: "NBME: Clinical Science Subject Exam score interpretation guide", href: "https://www.nbme.org/wp-content/uploads/2026/04/Clinical_Science_Score_Interpretation_Guide.pdf" },
       { label: "NBME: Sample Clinical Science Examinee Performance Report", href: "https://www.nbme.org/wp-content/uploads/2026/04/Clinical_Science_Examinee_Performance_Report.pdf" },
@@ -461,6 +469,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "Step 3 is a two-day exam: 232 questions on Day 1 (about 7 hours) and 180 questions plus 13–14 CCS cases on Day 2 (about 9 hours). See the block layout, breaks, scoring, and what each day tests.",
     publishedAt: "2026-10-25",
+    updatedAt: "2026-11-25",
     reviewedAt: "2026-10-25",
     author: "NBMEcalc Editorial Team",
     category: "study-plans",
@@ -536,7 +545,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "callout",
         tone: "warning",
-        text: "The passing score may change. On September 2, 2026, USMLE announced that it will review the Step 3 passing standard at its November 2026 meeting, and any new standard would apply to exams taken on or after January 1, 2027. If you test in 2027, check the official scoring page before your exam.",
+        text: "USMLE reviewed the Step 3 passing standard in November 2026 and voted to keep the minimum at 200.",
       },
       { type: "h2", text: "Is 60% enough to pass Step 3?" },
       {
@@ -562,7 +571,7 @@ export const BLOG_POSTS: BlogPost[] = [
     references: [
       { label: "USMLE: Step 3 exam content and test format", href: "https://www.usmle.org/step-exams/step-3/step-3-exam-content" },
       { label: "USMLE: Examination results and scoring", href: "https://www.usmle.org/scores-transcripts/examination-results-and-scoring" },
-      { label: "USMLE: Scheduled review of the Step 3 passing standard", href: "https://www.usmle.org/scheduled-review-usmle-step-3-passing-standard-0" },
+      { label: "USMLE: November 2026 decision on the Step 3 passing standard", href: "https://www.usmle.org/no-change-step-3-minimum-passing-standard" },
       { label: "USMLE: Common questions (scoring, equating, multi-day exams)", href: "https://www.usmle.org/common-questions" },
       { label: "USMLE: Bulletin of Information, Scoring & Score Reporting", href: "https://www.usmle.org/bulletin-information/scoring-and-score-reporting" },
     ],

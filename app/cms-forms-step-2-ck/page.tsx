@@ -298,7 +298,11 @@ export default function CmsFormsStep2CkPage() {
                   A CMS form is useful when you can name the clinical subject
                   you need to test. It is not the right instrument for deciding
                   whether your overall Step 2 CK score is ready. For that job,
-                  use a comprehensive CCSSA, then use the{" "}
+                  use the{" "}
+                  <Link href="/nbme-forms-step-2-ck" className="font-semibold text-mint-800 underline underline-offset-4">
+                    Step 2 CK NBME form planner
+                  </Link>{" "}
+                  to schedule a comprehensive CCSSA. Then use the{" "}
                   <Link
                     href="/nbme-score-conversion"
                     data-indexing-context="related"

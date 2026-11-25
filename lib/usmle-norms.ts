@@ -18,11 +18,10 @@ export const USMLE_NORMS_SOURCE = {
 export const USMLE_SCORING_URL =
   "https://www.usmle.org/scores-transcripts/examination-results-and-scoring";
 
-// USMLE 2026-09-02 公告：Step 3 及格线在 2026-11 会议复审，新标准（如有）从 2027-01-01 起生效。
-// 复审结果出来后改这里的文案，并同步 NORM_INFO.step3 的 passingScore。
+// USMLE 2026 年 11 月复审维持 Step 3 及格线 200 分。
 export const STEP3_PASSING_REVIEW = {
-  url: "https://www.usmle.org/scheduled-review-usmle-step-3-passing-standard-0",
-  text: "USMLE will review the Step 3 passing standard at its November 2026 meeting, and any new standard would apply to exams taken on or after January 1, 2027.",
+  url: "https://www.usmle.org/no-change-step-3-minimum-passing-standard",
+  text: "USMLE voted to keep the same passing standard in its November 2026 review.",
 } as const;
 
 type NormInfo = {
