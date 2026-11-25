@@ -74,7 +74,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Comparison pages
     { url: `${SITE_URL}/compare/best-usmle-score-predictor`, lastModified: indexingRemediationUpdate, changeFrequency: "monthly", priority: 0.75 },
     { url: `${SITE_URL}/compare/vs-predictmystepscore`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.65 },
-    { url: `${SITE_URL}/compare/vs-amboss-predictor`, lastModified: queryOwnershipUpdate, changeFrequency: "monthly", priority: 0.65 },
+    { url: `${SITE_URL}/compare/vs-amboss-predictor`, lastModified: new Date("2026-11-25"), changeFrequency: "monthly", priority: 0.65 },
     { url: `${SITE_URL}/compare/vs-nbcalc`, lastModified: seoAlignmentUpdate, changeFrequency: "monthly", priority: 0.65 },
 
     // The blog hub is an indexable editorial navigation page.

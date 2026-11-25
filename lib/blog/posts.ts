@@ -308,10 +308,26 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "There is no universal good score. The useful comparison is your EPC against the comparison group on your report and against your school's posted cutoffs. NBME's norm tables and grading guidelines are distributed to schools and examinees through the MyNBME portals rather than published openly, so percentile charts you find online are usually a specific school's tables or older versions. Use the ones your clerkship provides.",
       },
       { type: "shelf-score-checker" },
-      { type: "h2", text: "When do shelf results come out?" },
+      { type: "h2", text: "When do NBME shelf scores come out?" },
       {
         type: "p",
-        text: "NBME says results are often posted to schools the day after the testing window ends, and can take up to three business days. Students get their score report and question-level feedback through INSIGHTS, NBME's dashboard in the MyNBME Examinee Portal, with an email when results are available. Your school may also release grades on its own schedule.",
+        text: "NBME says students typically see shelf scores in INSIGHTS <strong>four to seven calendar days after the testing window closes</strong>. Count from the end of your school's testing window. If you tested early in a multi-day window, your wait may be longer. NBME sends an email once your score is available.",
+      },
+      {
+        type: "p",
+        text: "Schools often receive scores one or two calendar days after the window closes, though NBME says delivery can take up to three business days. Once NBME makes the scores available to the school, the school's INSIGHTS setting determines whether automatic release to students takes another three or six calendar days. Schools can also release scores early. For example, if the window closes Friday and the school receives scores Saturday, the usual settings would put the student release on Tuesday or the following Friday.",
+      },
+      {
+        type: "h3",
+        text: "Where to check if your shelf score is missing",
+      },
+      {
+        type: "ol",
+        items: [
+          "Sign in to the <a href=\"https://www.mynbme.org/\" class=\"font-semibold text-mint-700 underline underline-offset-4\">MyNBME Examinee Portal</a> and open INSIGHTS. Check your email for the notification.",
+          "Confirm that the email on your MyNBME account matches the one your school used to register you for the exam.",
+          "If your school's expected release window has passed, ask the clerkship coordinator when the window closed and whether the score has been released. Check your school's grade system separately for the final clerkship grade.",
+        ],
       },
       { type: "h2", text: "How to practice for a shelf" },
       {
@@ -336,6 +352,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { label: "NBME: Clinical Science Subject Exam score interpretation guide", href: "https://www.nbme.org/wp-content/uploads/2026/04/Clinical_Science_Score_Interpretation_Guide.pdf" },
       { label: "NBME: Sample Clinical Science Examinee Performance Report", href: "https://www.nbme.org/wp-content/uploads/2026/04/Clinical_Science_Examinee_Performance_Report.pdf" },
       { label: "NBME: Subject Exam Program Guide (results timing, norms, grading guidelines)", href: "https://www.nbme.org/wp-content/uploads/2026/04/NBME_Subject_Exam_Program_Guide.pdf" },
+      { label: "NBME: INSIGHTS for students (shelf score release and access)", href: "https://www.nbme.org/institutions/resources/insights/students/" },
     ],
   },
   {

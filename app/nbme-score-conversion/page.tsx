@@ -15,6 +15,7 @@ import {
   estimateStep2FromPercent,
 } from "@/lib/nbme-percent-model";
 import { formatPercentile, lookupPercentile } from "@/lib/usmle-norms";
+import { CBSSA_QUESTIONS, CBSSA_SOURCES, SAMPLE_REFERENCE } from "@/lib/cbssa-readiness";
 
 // 每个表单只写能核实的信息；没有官方说明的表单如实说明，不硬凑内容。
 const CCSSA_FORM_NOTES: Record<number, { note: string; source?: { label: string; href: string } }> = {
@@ -163,7 +164,7 @@ const formFamilySections = [
       { label: "NBME 32 score calculator", href: "#nbme-32-score-conversion" },
     ],
     note:
-      "Step 1 is pass/fail. The Form 30 pilot reads the official CBSSA ranges instead of fabricating a raw-wrong-answer formula; Form 32 stays consolidated here to protect its existing ranking.",
+      "Step 1 is pass/fail. Use the EPC and readiness ranges on your official CBSSA report.",
     href: "/nbme-step-1-score-conversion",
     cta: "Open Step 1 readiness check",
   },
@@ -549,20 +550,38 @@ export default function NbmeScoreConversionPage() {
       <section id="nbme-32-score-conversion" className="border-b border-gray-200 bg-mint-50/40 py-14">
         <div className="container max-w-4xl">
           <h2 className="text-3xl font-extrabold tracking-tight">
-            NBME 32 score conversion: what to enter
+            NBME 32 score conversion and readiness
           </h2>
           <div className="mt-4 space-y-3 leading-relaxed text-gray-700">
             <p>
-              For a current <strong>NBME 32 score conversion</strong>, start
-              with the equated percent correct, likely range, and estimated
-              probability of passing printed on the CBSSA report. There is no
-              supported reason to force that EPC onto the Step 2 CCSSA scale.
+              NBME Form 32 is a Step 1 CBSSA. If you took the form through MyNBME,
+              start with the <strong>Total Equated Percent Correct (EPC)</strong> on
+              your report. Compare its likely score range with the shaded Step 1
+              low-pass band and read the report&apos;s estimated probability of passing
+              within one week.
             </p>
             <p>
-              NBMEcalc therefore does not accept current Form 32 EPC as a
-              direct NBME calculator input. For a test-date decision, use the
-              official report&apos;s estimated probability of passing and low-pass
-              range, then compare it qualitatively with other recent evidence.
+              <strong>Only have a count of missed questions?</strong> Missing 60 of{" "}
+              {CBSSA_QUESTIONS} gives a raw score of{" "}
+              {100 * (CBSSA_QUESTIONS - 60) / CBSSA_QUESTIONS}%. NBME adjusts its
+              reported EPC for differences in form difficulty. The raw percentage alone
+              cannot give you your official EPC or estimated passing probability.
+            </p>
+            <p>
+              In the{" "}
+              <a href={CBSSA_SOURCES.sample.href} data-evidence-source="primary" className="font-semibold text-mint-800 underline underline-offset-4">
+                official CBSSA sample report
+              </a>
+              , an EPC of {SAMPLE_REFERENCE.epc}% is shown with a likely range of{" "}
+              {SAMPLE_REFERENCE.likelyLow}–{SAMPLE_REFERENCE.likelyHigh}% and an estimated{" "}
+              {SAMPLE_REFERENCE.passProbability}% probability of passing within one week.
+              Those values illustrate how to read a report. Use the probability on your own Form 32 report.
+            </p>
+            <p>
+              <Link href="/nbme-step-1-score-conversion?form=32#readiness-check" data-indexing-context="related" className="font-semibold text-mint-800 underline underline-offset-4">
+                Open the Step 1 readiness checker with Form 32 selected
+              </Link>
+              .
             </p>
           </div>
         </div>

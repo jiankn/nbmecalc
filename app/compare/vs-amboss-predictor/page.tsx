@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "NBMEcalc vs AMBOSS: 2026 Comparison",
   description:
-    "Compare NBMEcalc and the AMBOSS Score Predictor on inputs, planning ranges, published evidence, and access. This page does not calculate a score.",
+    "Find the official AMBOSS Score Predictor for Step 1 or Step 3 and compare its inputs, results, and access requirements with NBMEcalc.",
   keywords: [
     "nbmecalc vs amboss",
     "nbmecalc vs amboss predictor",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "NBMEcalc vs AMBOSS: 2026 Comparison",
     description:
-      "Side-by-side comparison of inputs, ranges, evidence, and access. Score entry lives on the AMBOSS score predictor.",
+      "Find AMBOSS's official Step 1 and Step 3 predictors and compare the two tools' inputs, results, and access requirements.",
     url: "https://nbmecalc.com/compare/vs-amboss-predictor",
     type: "article",
     images: [
@@ -34,14 +34,17 @@ export const metadata: Metadata = {
 };
 
 const competitors = ["NBMEcalc", "AMBOSS Predictor"];
-const REVIEWED_AT = "September 6, 2026";
+const REVIEWED_AT = "November 25, 2026";
+const AMBOSS_PREDICTOR_URL = "https://www.amboss.com/us/score-predictor";
+const AMBOSS_PREDICTOR_HELP_URL =
+  "https://support.amboss.com/hc/en-us/articles/25051203159313-USMLE-Score-Predictor";
 
 const rows: CompareRow[] = [
   { feature: "Use without a paid subscription", values: ["yes", "no"] },
   { feature: "Accepts multiple practice results", values: ["yes", "yes"] },
   { feature: "NBME form inputs", values: ["yes", "yes"] },
   { feature: "Free 120 input", values: ["yes", "yes"] },
-  { feature: "UWSA input named on public product page", values: ["yes", "partial"] },
+  { feature: "UWorld Self-Assessment inputs", values: ["yes", "yes"] },
   { feature: "CMS subject-score guidance", values: ["partial", "partial"] },
   { feature: "Planning range shown", values: ["yes", "yes"] },
   { feature: "Passing probability shown", values: ["yes", "yes"] },
@@ -61,6 +64,7 @@ export default function VsAmbossPage() {
             url: "https://nbmecalc.com/compare/vs-amboss-predictor",
             author: { "@type": "Organization", name: "NBMEcalc" },
             datePublished: "2026-05-17",
+            dateModified: "2026-11-25",
           }),
         }}
       />
@@ -68,17 +72,66 @@ export default function VsAmbossPage() {
       <PageHero
         badge="Head-to-head review"
         title="NBMEcalc vs AMBOSS: 2026 Comparison"
-        description="A source-labeled comparison of access, supported inputs, output ranges, and published evidence. To enter an AMBOSS Step 2 score, use the AMBOSS score predictor. Product facts were checked against AMBOSS's public Score Predictor page."
+        description="Compare access, practice inputs, score ranges, and published evidence. Find the official AMBOSS tool for Step 1 or Step 3, or open NBMEcalc's converter for a Step 2 Self-Assessment score."
         size="md"
       />
+
+      <section id="amboss-step-1-and-step-3" className="scroll-mt-24 border-b border-gray-200 bg-white py-12 lg:py-16">
+        <div className="container max-w-3xl space-y-5">
+          <h2 className="text-2xl font-extrabold tracking-tight lg:text-3xl">
+            How to use the AMBOSS Score Predictor for Step 1 or Step 3
+          </h2>
+          <p className="leading-relaxed text-gray-700">
+            AMBOSS offers its own Score Predictor for both exams. Open the{" "}
+            <a href={AMBOSS_PREDICTOR_URL} data-evidence-source="primary" className="font-semibold text-mint-800 underline underline-offset-4">
+              official AMBOSS Score Predictor
+            </a>
+            , sign in with an active membership, and set your study objective to the Step
+            you plan to take. AMBOSS requires a target exam date and at least two supported
+            practice results, including one taken within four weeks of that date.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border border-gray-200 p-5">
+              <h3 className="font-extrabold text-gray-950">Step 1</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                Read the passing likelihood alongside your recent NBME CBSSA reports.
+                The official Step 1 result is pass/fail. If you have a CBSSA report,
+                use the{" "}
+                <Link href="/nbme-step-1-score-conversion" className="font-semibold text-mint-800 underline underline-offset-4">
+                  Step 1 readiness check
+                </Link>{" "}
+                to compare your reported range with the low-pass band.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-gray-200 p-5">
+              <h3 className="font-extrabold text-gray-950">Step 3</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                AMBOSS lists both UWorld Step 3 self-assessments among its inputs.
+                If you already have one of those reports, the{" "}
+                <Link href="/step-3-predictor#uwsa-step-3" className="font-semibold text-mint-800 underline underline-offset-4">
+                  UWorld Step 3 score guide
+                </Link>{" "}
+                explains which score to use for a separate NBMEcalc estimate.
+              </p>
+            </div>
+          </div>
+          <p className="text-sm text-gray-600">
+            See the full list of accepted results in the{" "}
+            <a href={AMBOSS_PREDICTOR_HELP_URL} data-evidence-source="primary" className="font-semibold text-mint-800 underline underline-offset-4">
+              AMBOSS Score Predictor help guide
+            </a>
+            .
+          </p>
+        </div>
+      </section>
 
       <section className="py-16 lg:py-20 bg-white">
         <div className="container max-w-5xl">
           <div className="mb-8 rounded-2xl border border-gray-200 bg-gray-50 p-5 text-sm leading-relaxed text-gray-700">
             <strong className="text-gray-950">Review method:</strong> public
-            product information checked {REVIEWED_AT}. A partial mark means the
-            feature was not clearly confirmed on the reviewed public page; it
-            does not prove the feature is absent. This is not an accuracy study.
+            product information checked {REVIEWED_AT}. A partial mark means
+            support is limited or unclear in the product documentation.
+            The table compares features and access.
           </div>
           <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight mb-8">
             Feature-by-feature
@@ -123,7 +176,7 @@ export default function VsAmbossPage() {
 
           <div className="mt-8 text-sm font-semibold">
             <a
-              href="https://www.amboss.com/us/usmle/score-predictor"
+              href={AMBOSS_PREDICTOR_URL}
               target="_blank"
               rel="noopener noreferrer"
               data-evidence-source="primary"
@@ -147,7 +200,7 @@ export default function VsAmbossPage() {
               href="/amboss-converter"
               className="font-semibold text-mint-700 underline underline-offset-2"
             >
-              AMBOSS score predictor
+              NBMEcalc AMBOSS Step 2 converter
             </Link>
             . For several practice tests, use the{" "}
             <Link
@@ -160,7 +213,7 @@ export default function VsAmbossPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
             <Button variant="primary" size="lg" asChild>
-              <Link href="/amboss-converter">AMBOSS score predictor</Link>
+              <Link href="/amboss-converter">AMBOSS Step 2 converter</Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
               <Link href="/step-2-predictor">Step 2 CK predictor</Link>

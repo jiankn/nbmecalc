@@ -7,7 +7,7 @@ import { Calculator } from "@/components/sections/calculator";
 import { Button } from "@/components/ui/button";
 import { CcmsaResearchForm } from "@/components/ccmsa-research-form";
 import { Step3SampleResources } from "@/components/step-3-sample-resources";
-import { ALGORITHM_VERSION, predictPreview, type PracticeExam } from "@/lib/data";
+import { ALGORITHM_VERSION, predictPreview, UWSA_BIAS, type PracticeExam } from "@/lib/data";
 import { NORM_INFO, STEP3_PASSING_REVIEW } from "@/lib/usmle-norms";
 
 const exampleExams: PracticeExam[] = [
@@ -213,9 +213,10 @@ export default function Step3PredictorPage() {
             Run the Step 3 calculator
           </h2>
           <p className="text-gray-600">
-            Pick <strong>Step 3</strong> below, then enter your UWSA Step 3 score or a sample-question
-            percentage in the existing &ldquo;Free 120&rdquo; field. For the official practice formats,
-            see the <a href="#free-137" className="font-semibold text-mint-800 underline underline-offset-4">Step 3 sample questions</a>.
+            Choose <strong>UWSA 1</strong> or <strong>UWSA 2</strong> and enter the{" "}
+            <a href="#uwsa-step-3" className="font-semibold text-mint-800 underline underline-offset-4">three-digit score from your Step 3 report</a>.
+            For a sample-question percentage, choose the &ldquo;Free 120&rdquo; field and check which{" "}
+            <a href="#free-137" className="font-semibold text-mint-800 underline underline-offset-4">Step 3 sample set</a> you took.
           </p>
           <p className="text-xs text-gray-500 mt-2 italic">
             Note: Step 3 data is sparser than Step 2 CK. Confidence intervals
@@ -264,6 +265,41 @@ export default function Step3PredictorPage() {
               source adjustments and range assumptions
             </Link>{" "}
             before interpreting the result.
+          </p>
+        </div>
+      </section>
+
+      <section id="uwsa-step-3" className="scroll-mt-24 border-t border-gray-200 bg-mint-50/30 py-12 lg:py-16">
+        <div className="container max-w-3xl space-y-4 leading-relaxed text-gray-700">
+          <h2 className="text-2xl font-extrabold tracking-tight text-gray-950 lg:text-3xl">
+            How do you interpret a UWSA 1 or UWSA 2 score for Step 3?
+          </h2>
+          <p>
+            UWorld reports an estimated three-digit USMLE score for each Step 3 self-assessment.
+            Use that score from the report for <strong>Step 3 Form 1 or Form 2</strong>.
+            Your equated percent correct, percentile, and QBank average each measure something different.
+          </p>
+          <ol className="list-decimal space-y-2 pl-5">
+            <li>Check the exam and form on the report. UWorld also uses the names Form 1 and Form 2 for other Steps.</li>
+            <li>Enter the reported three-digit score as shown under the matching UWSA option. The calculator accepts scores from 180 through 300.</li>
+            <li>Read the planning range alongside the report&apos;s subject breakdown. Set aside separate practice time for computer-based case simulations (CCS), which the UWorld self-assessments do not include.</li>
+          </ol>
+          <p>
+            There is no official UWSA-to-Step 3 conversion chart. In NBMEcalc&apos;s model,
+            an entered score of 230 contributes {230 - UWSA_BIAS[1]} from Form 1 or{" "}
+            {230 - UWSA_BIAS[2]} from Form 2 before other inputs and planning adjustments.
+            These offsets are NBMEcalc assumptions and lack separate validation for Step 3.
+          </p>
+          <p className="text-sm">
+            See{" "}
+            <a href="https://medical.uworld.com/usmle/features/self-assessment/" data-evidence-source="primary" className="font-semibold text-mint-800 underline underline-offset-4">
+              UWorld&apos;s score report and CCS guidance
+            </a>
+            {" "}and the{" "}
+            <a href="https://www.usmle.org/exam-resources/step-3-materials" data-evidence-source="primary" className="font-semibold text-mint-800 underline underline-offset-4">
+              official USMLE Step 3 practice materials
+            </a>
+            .
           </p>
         </div>
       </section>
